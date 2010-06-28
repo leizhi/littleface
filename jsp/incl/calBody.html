@@ -1,0 +1,160 @@
+<html>
+<head>
+<title>Calendar</title>
+<script type="text/javascript">
+<!--
+function retour(nom, valeur){
+        for(i=0;i<parent.opener.document.forms[0].length;i++){
+        x = parent.opener.document.forms[0].elements[i].name;
+                if (x == nom){
+                        parent.opener.document.forms[0].elements[i].value= valeur;
+                        break;
+                }
+        }
+}
+
+function caller(m,d,y){
+var monthArray = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+                           "Oct", "Nov", "Dec")
+var dayOfWeekArray = new Array("Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri")
+
+var day = new Date(y-1900,m,d)
+day = day.getDay()
+
+x = y + '-' + monthArray[m-1] + '-' + d + ' (' + dayOfWeekArray[day] + ')'
+x2 = y + '-' + m + '-' + d
+if(m<10 && d<10){x2 = y + '-0' + m + '-0' + d}
+else{
+if(m<10){x2 = y + '-0' + m + '-' + d}
+if(d<10){x2 = y + '-' + m + '-0' + d}
+}
+
+a = parent.opener.document.forms[0].fieldName.value
+b = parent.opener.document.forms[0].fieldName1.value
+c = parent.opener.document.forms[0].fieldName2.value
+d = parent.opener.document.forms[0].fieldName3.value
+
+retour(a, x)
+
+if (d!=''){
+retour(b, x2.substring(0,4))
+retour(c, x2.substring(5,7))
+retour(d, x2.substring(8,10))
+}
+else{
+retour(b, x2)
+}
+parent.self.close()
+}
+// --></script>
+</head>
+
+<body bgcolor="eeeeee" link="black" vlink="black" alink="gray">
+<script type="text/javascript"><!--
+function getCalendar(month, year){
+  var dayOfWeekArray = new Array("Sun", "Mon", "Tue", "Wed",
+                        "Thu", "Fri", "Sat")
+  var monthArray = new Array("January", "February",
+                   "March", "April", "May", "June",
+                   "July", "August", "September",
+                   "October", "November", "December")
+  var noDaysArray = new Array(31, 28, 31, 30, 31, 30,
+                    31, 31, 30, 31, 30, 31)
+  var firstOfMonth = new Date(month + "/1/" + year )
+  var day = - firstOfMonth.getDay()
+  var today = new Date()
+        var y = today.getYear()
+        if(y < 1000){
+        y += 1900
+        }
+
+
+  // determine number of days in month
+  var noDays = noDaysArray[month-1]
+  if (month == 2){
+    if((year % 4 == 0 && year % 100 != 0) || year % 400 == 0){
+      noDays = 29
+      }
+    }
+
+  //fabricate string for tables
+  var strMonth = "<TABLE border=0 cellpadding=0 cellspacing=1 align=center>"
+  strMonth += "<TR><TD>"
+  strMonth += "<TABLE border=1 cellpadding=3 cellspacing=0>"
+  strMonth += "</TR><TR bgcolor='#d0d0d0' align='center'>"
+  for(var i = 0; i<=6; i++){
+        if (i==0|i==6){strMonth += "<TD width=20><FONT face='arial' size=1 color='red'>"}
+        else{strMonth += "<TD width=20><FONT face='arial' size=1>"}
+    strMonth += dayOfWeekArray[i] + "</FONT></TD>"
+    }
+  strMonth += "</TR><TR align='center'>"
+
+  //fabricate first week of month
+  for (i = 0; i <= 6; i++){
+    strMonth += "<TD width=20>"
+    day++
+    if(day > 0){
+                if (day==today.getDate() && month==today.getMonth()+1 && year==today.getYear()){
+                        strMonth += '<a href="javascript:caller('
+                        strMonth += month +','+ day +','+ year
+                        strMonth += ')">'
+                        strMonth += "<FONT face='arial' size=1 color='blue'>" + day + "</FONT></a>"}
+                else{
+                strMonth += '<a href="javascript:caller('
+                        strMonth += month +','+ day +','+ year
+                        strMonth += ')">'
+                        if (i==0|i==6){strMonth += "<FONT face='arial' size=1 color='red'>" + day + "</FONT>"}
+                        else{strMonth += "<FONT face='arial' size=1>" + day + "</FONT></a>"}
+                        }
+    }
+    else{
+    strMonth += "<FONT face='arial' size=1>&nbsp;</FONT>"
+    }
+    strMonth += "</TD>"
+    }
+    strMonth += "</TR>"
+
+  //fabricate remaining weeks
+  for(var j=1; j < 6; j++){
+    strMonth += "</TR><TR align='center'>"
+    for (i = 0; i <= 6; i++){
+      strMonth += "<TD>"
+      day++
+      if(day <= noDays){
+                if (day==today.getDate() && month==today.getMonth()+1 && year==y){
+                        strMonth += '<a href="javascript:caller('
+                        strMonth += month +','+ day +','+ year
+                        strMonth += ')">'
+                        strMonth += "<FONT face='arial' size=1 color='blue'>" + day + "</FONT></a>"}
+                else{
+                strMonth += '<a href="javascript:caller('
+                        strMonth += month +','+ day +','+ year
+                        strMonth += ')">'
+                        if (i==0|i==6){strMonth += "<FONT face='arial' size=1 color='red'>" + day + "</FONT>"}
+                        else{strMonth += "<FONT face='arial' size=1>" + day + "</FONT></a>"}
+                        }
+        }
+      else{
+        strMonth += "<FONT face='arial' size=1>&nbsp;</FONT>"
+        }
+      strMonth += "</TD>"
+      }
+    if (day >= noDays){
+      break;
+      }
+    }
+  strMonth += "</TR></TABLE>"
+  strMonth += "</TD></TR></TABLE>"
+
+  //return strMonth
+        document.write(strMonth)
+  }
+
+x = parent.opener.document.forms[0].month.value
+x++
+y = parent.opener.document.forms[0].year.value
+getCalendar(x,y)
+//--></script>
+</body>
+</html>
+

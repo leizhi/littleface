@@ -1,0 +1,7 @@
+leizhifesker@gmail.com
+2007/06/19
+http://xpc-web.eicp.net:8080/nick-zlei
+native2ascii MessageBundle.zh_CN MessageBundle_zh_CN.properties
+
+cvs -d :ext:cvs@xpc-web.eicp.net:/srv/cvsroot co -d nick nick-web
+cvs -d :pserver:zlei@xpc-web.eicp.net:/srv/cvsroot login co -d nick nick-web
