@@ -12,7 +12,7 @@
     	</description>
 	<!-- Listeners -->
 	<listener>
-		<listener-class>org.pig.response.SessionCounter</listener-class>
+		<listener-class>com.mooo.mycoz.response.SessionCounter</listener-class>
 	</listener>
 	<!-- distributable/ -->
 	<context-param>
@@ -26,7 +26,7 @@
 
         <servlet>
              <servlet-name>ActionServlet</servlet-name>
-             <servlet-class>org.pig.action.ActionServlet</servlet-class>
+             <servlet-class>com.mooo.mycoz.action.ActionServlet</servlet-class>
       	</servlet>
       	<servlet-mapping>
             <servlet-name>ActionServlet</servlet-name>

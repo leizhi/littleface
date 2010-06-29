@@ -8,7 +8,7 @@
 
        <tag>
          <name>iterate</name>
-         <tagclass>org.pig.taglib.logic.IterateTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.logic.IterateTag</tagclass>
          <bodycontent>JSP</bodycontent>
 	 <info>Tag with Iterate</info>
              <attribute>

@@ -8,7 +8,7 @@
 
        <tag>
          <name>form</name>
-         <tagclass>org.pig.taglib.html.FormTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.FormTag</tagclass>
          <bodycontent>JSP</bodycontent>
 	 <info>Tag with Form</info>
              <attribute>
@@ -35,7 +35,7 @@
 
 	<tag>
          <name>message</name>
-         <tagclass>org.pig.taglib.html.MessageTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.MessageTag</tagclass>
          <bodycontent>empty</bodycontent>
 	 <info>Tag with Message</info>
              <attribute>
@@ -47,7 +47,7 @@
 
        <tag>
          <name>select</name>
-         <tagclass>org.pig.taglib.html.SelectTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.SelectTag</tagclass>
          <bodycontent>empty</bodycontent>
 	 <info>Tag with Select</info>
              <attribute>
@@ -89,7 +89,7 @@
 
        <tag>
          <name>input</name>
-         <tagclass>org.pig.taglib.html.InputTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.InputTag</tagclass>
          <bodycontent>empty</bodycontent>
 	 <info>Tag with Input</info>
              <attribute>
@@ -151,7 +151,7 @@
 
        <tag>
          <name>textarea</name>
-         <tagclass>org.pig.taglib.html.TextareaTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.TextareaTag</tagclass>
          <bodycontent>empty</bodycontent>
 	 <info>Tag with textarea</info>
              <attribute>
@@ -203,7 +203,7 @@
 
        <tag>
          <name>output</name>
-         <tagclass>org.pig.taglib.html.OutputTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.OutputTag</tagclass>
          <bodycontent>empty</bodycontent>
 	 <info>Tag with Output</info>
              <attribute>
@@ -235,7 +235,7 @@
 
        <tag>
          <name>write</name>
-         <tagclass>org.pig.taglib.html.WriteTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.WriteTag</tagclass>
          <bodycontent>JSP</bodycontent>
 	 <info>Tag with Write</info>
                <attribute>
@@ -247,7 +247,7 @@
 
        <tag>
          <name>boxlist</name>
-         <tagclass>org.pig.taglib.html.BoxListTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.BoxListTag</tagclass>
          <bodycontent>empty</bodycontent>
 	 <info>Tag with BoxList</info>
                <attribute>
@@ -259,7 +259,7 @@
 
        <tag>
          <name>menulist</name>
-         <tagclass>org.pig.taglib.html.MenuListTag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.html.MenuListTag</tagclass>
          <bodycontent>empty</bodycontent>
 	 <info>Tag with BoxList</info>
                <attribute>

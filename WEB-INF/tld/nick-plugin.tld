@@ -8,7 +8,7 @@
 
        <tag>
          <name>boxa</name>
-         <tagclass>org.pig.taglib.plugin.BoxATag</tagclass>
+         <tagclass>com.mooo.mycoz.taglib.plugin.BoxATag</tagclass>
          <bodycontent>JSP</bodycontent>
 	 <info>Tag with BoxA</info>
              <attribute>
