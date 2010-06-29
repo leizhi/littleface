@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="/jsp/etc/static.inc" %>
+<%@ include file="/jsp/incl/static.inc" %>
 
 <html>
 <head>
 <title>Nick</title>
-<link rel="stylesheet" type="text/css" href="jsp/etc/styles/default.css" />
+<link rel="stylesheet" type="text/css" href="jsp/styles/default.css" />
 <%-- 
 <script src="" type="text/javascript">
 
@@ -17,11 +17,11 @@
 
 <body>
 <form name="default" Method="Post" action="">
-<%@ include file="/jsp/etc/winHeader.jsp" %>
+<%@ include file="/jsp/incl/winHeader.jsp" %>
 <div class="text">
 
 </div>
-<%@ include file="/jsp/etc/winFooter.jsp" %>
+<%@ include file="/jsp/incl/winFooter.jsp" %>
 </form>
 </body>
 </html>

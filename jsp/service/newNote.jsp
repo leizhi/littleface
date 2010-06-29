@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="/jsp/etc/static.inc" %>
+<%@ include file="/jsp/incl/static.inc" %>
 
 <html>
 <head>
 <title>Nick</title>
-<link rel="stylesheet" type="text/css" href="jsp/etc/styles/default.css" />
-<script type="text/javascript" src="jsp/etc/js/util.js"></script>
+<link rel="stylesheet" type="text/css" href="jsp/styles/default.css" />
+<script type="text/javascript" src="jsp/js/util.js"></script>
 
 <script type="text/javascript"  language="javascript" charset="utf-8">
 function checkAll(obj) {
@@ -47,8 +47,8 @@ document.getElementById("BillAmount").value = quantity*rate;
 
 <body>
 <form id="default" name="default" method="Post" action="<%=request.getContextPath()%>/Accounting.do" >
-<script type="text/javascript" src="jsp/etc/js/calendar.js"></script>
-<%@ include file="/jsp/etc/loginHeader.jsp" %>
+<script type="text/javascript" src="jsp/js/calendar.js"></script>
+<%@ include file="/jsp/incl/loginHeader.jsp" %>
 
 <!-- SearchTable -->
     <div class="SearchTable" >
@@ -113,7 +113,7 @@ document.getElementById("BillAmount").value = quantity*rate;
 </logic:iterate>
       </ul>
     </div>
-<%@ include file="/jsp/etc/winFooter.jsp" %>
+<%@ include file="/jsp/incl/winFooter.jsp" %>
 </form>
 </body>
 </html>

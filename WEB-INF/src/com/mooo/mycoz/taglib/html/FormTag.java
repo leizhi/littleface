@@ -4,22 +4,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
 
 public class FormTag extends TagSupport {
 
-     private static Log log = LogFactory.getLog(FormTag.class);
+     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Log log = LogFactory.getLog(FormTag.class);
 
      private HttpServletRequest request = null;
      private String returnForm = null;

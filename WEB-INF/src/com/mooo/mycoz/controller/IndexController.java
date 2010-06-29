@@ -64,7 +64,7 @@ public class IndexController {
 			HttpServletResponse response) {
 		try {
 			//Example ex = new Example();
-			ParamUtil.add(request, "example");
+			ParamUtil.add(request, "Example");
 			
 			//if (log.isDebugEnabled())log.debug("Age= " + ex.getAge());
 			//if (log.isDebugEnabled())log.debug("Name= " + ex.getName());

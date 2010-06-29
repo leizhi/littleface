@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="/jsp/etc/static.inc" %>
+<%@ include file="/jsp/incl/static.inc" %>
 
 <html>
 <head>
 <title>Nick</title>
-<link rel="stylesheet" type="text/css" href="jsp/etc/styles/default.css" />
-<script type="text/javascript" src="jsp/etc/js/util.js"></script>
+<link rel="stylesheet" type="text/css" href="jsp/styles/default.css" />
+<script type="text/javascript" src="jsp/js/util.js"></script>
 <%-- 
 <script type="text/javascript"  language="javascript" charset="utf-8">
 
@@ -18,7 +18,7 @@
 
 <body>
 <form id="default" name="default" method="Post" action="<%=request.getContextPath()%>/Language.do" >
-<%@ include file="/jsp/etc/adminHeader.jsp" %>
+<%@ include file="/jsp/incl/adminHeader.jsp" %>
 <!-- SearchTable -->
     <div class="SearchTable" >
       <ul>
@@ -62,7 +62,7 @@
       </ul>
     </div>
 
-<%@ include file="/jsp/etc/winFooter.jsp" %>
+<%@ include file="/jsp/incl/winFooter.jsp" %>
 </form>
 </body>
 </html>

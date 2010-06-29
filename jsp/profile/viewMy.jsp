@@ -16,9 +16,9 @@
 
 <body>
 <form name="default" Method="Post" action="">
-<%@ include file="/jsp/etc/loginHeader.jsp" %>
+<%@ include file="/jsp/incl/loginHeader.jsp" %>
 
-<%@ include file="/jsp/etc/winFooter.jsp" %>
+<%@ include file="/jsp/incl/winFooter.jsp" %>
 </form>
 </body>
 </html>

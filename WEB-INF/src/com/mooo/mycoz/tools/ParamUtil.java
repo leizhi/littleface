@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import com.manihot.xpc.jdbc.DbConnectionManager;
+import com.mooo.mycoz.util.Transaction;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,7 +70,7 @@ public class ParamUtil {
 		// get方法
 		Method getMethod = bean.getClass().getMethod("get" + funName, null);
 		// 得到参数类型
-		Class cl = getMethod.getReturnType();
+		Class<?> cl = getMethod.getReturnType();
 		// set方法
 		Method setMethod = bean.getClass().getMethod("set" + funName,
 				new Class[] { cl });
@@ -184,7 +185,7 @@ public class ParamUtil {
 	 *            前缀 只取前缀的
 	 */
 	public static void bindData(HttpServletRequest request, Object bean,
-			List excludes, String prefix) {
+			List<?> excludes, String prefix) {
 		java.util.Enumeration<String> em = request.getParameterNames();
 		for (; em.hasMoreElements();) {
 			try {
@@ -278,32 +279,46 @@ public class ParamUtil {
 			}
 		}
 	}
-
+	//Transaction 
 	public static void add(HttpServletRequest request, String table) {
+
 		java.util.Enumeration<String> em = request.getParameterNames();
-
-
 		Connection con = null;
 		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
 		ResultSet rs = null;
+		ResultSetMetaData rsmd = null;
+		Transaction ts = null;
 
 		try {
 			String sql = "INSERT INTO " + table;
 			String fileds = "";
 			String values = "";
 			
-			List col = new ArrayList();
-
-			con = DbConnectionManager.getConnection();
-			System.out.println("add con=" + con);
+			List<String> col = new ArrayList<String>();
+			
+			ts = new Transaction();
+			ts.start();
+			con = ts.getConnection();
+			
+			con.setCatalog("mycozBranch");
 			stmt = con.createStatement();
+			
+			System.out.println("add con=" + con);
 			rs = stmt.executeQuery("SELECT * FROM " + table);
 			rsmd = rs.getMetaData();
 
 			for (int i = 0; i < rsmd.getColumnCount(); i++) {
-				col.add(rsmd.getColumnName(i + 1));
-				// System.out.print(rsmd.getColumnName(i+1)+"\t");
+				col.add(rsmd.getColumnName(i + 1).toUpperCase());
+				System.out.println(rsmd.getColumnName(i + 1).toUpperCase());
+			}
+			
+			rs = stmt.executeQuery("SELECT * FROM " + table);
+			rsmd = rs.getMetaData();
+			while (rs.next() && rs.getRow()>0) {
+				for(int i=0;i<rsmd.getColumnCount();i++){
+					System.out.print(rs.getString(i+1)+"\t");
+				}
+				System.out.println();
 			}
 
 			while (em.hasMoreElements()) {
@@ -327,39 +342,127 @@ public class ParamUtil {
 			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
 			System.out.println("add sql=" + sql);
 
-			// con.setAutoCommit(false);
-			// con.setCatalog("xpcBranch");
-			stmt = con.createStatement();
 			stmt.executeUpdate(sql);
-
-			// sql = "SELECT  * FROM dm_xzqh_map_bak";
 
 			// rs = stmt.executeQuery(sql);
 			// while (rs.next()) {
 			// System.out.println("Name=" + rs.getString("XZQH_MC"));
 			// }
-			con.commit();
+			ts.commit();
 		} catch (Exception e) {
+			ts.rollback();
 			e.printStackTrace();
-			try {
-				con.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			System.out.println("Exception: " + e.getMessage());
-
 		} finally {
 			try {
-				stmt.close();
-				con.close();
-			} catch (SQLException e) {
+				if(rs != null)
+					rs.close();
+				if(stmt != null)
+					stmt.close();
+				
+				ts.end();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+	public static void addT(HttpServletRequest request, String table) {
+
+		boolean abortTransaction = false;
+		boolean supportsTransactions = false;
+		
+		java.util.Enumeration<String> em = request.getParameterNames();
+		Connection con = null;
+		Statement stmt = null;
+		ResultSetMetaData rsmd = null;
+		ResultSet rs = null;
+
+		try {
+			String sql = "INSERT INTO " + table;
+			String fileds = "";
+			String values = "";
+			
+			List<String> col = new ArrayList<String>();
+
+			con = DbConnectionManager.getConnection();
+			supportsTransactions = con.getMetaData().supportsTransactions();
+			if (supportsTransactions) {
+				con.setAutoCommit(false);
+			}
+			con.setCatalog("mycozBranch");
+
+			System.out.println("add con=" + con);
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM " + table);
+			rsmd = rs.getMetaData();
+
+			for (int i = 0; i < rsmd.getColumnCount(); i++) {
+				col.add(rsmd.getColumnName(i + 1).toUpperCase());
+			}
+			
+			while (em.hasMoreElements()) {
+				String name = em.nextElement();
+				String value = request.getParameter(name);
+				if (col.contains(name.toUpperCase())) {
+					if (fileds.length() > 0) {
+						fileds += "," + name;
+						values += ",'" + value + "'";
+					} else {
+						fileds += "(" + name;
+						values += " VALUES ('" + value + "'";
+					}
+				}
+			}
+			fileds += ") ";
+			values += ")";
+
+			sql += fileds;
+			sql += values;
+			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
+			System.out.println("add sql=" + sql);
+
+			stmt = con.createStatement();
+			stmt.executeUpdate(sql);
+			
+			// rs = stmt.executeQuery(sql);
+			// while (rs.next()) {
+			// System.out.println("Name=" + rs.getString("XZQH_MC"));
+			// }
+		} catch (Exception e) {
+			e.printStackTrace();
+			abortTransaction = true;
+			return;
+		} finally {
+			try {
+				if (supportsTransactions) {
+					if (abortTransaction == true) {
+						con.rollback();
+					} else {
+						con.commit();
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (supportsTransactions) {
+					con.setAutoCommit(true);
+				}
+				if(rs != null)
+					rs.close();
+				if(stmt != null)
+					stmt.close();
+				if(con != null)
+					con.close();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
 
 	}
-
+	
 	public static String WriteUTF8(String input) {
 		try {
 			return new String(input.getBytes("UTF-8"));

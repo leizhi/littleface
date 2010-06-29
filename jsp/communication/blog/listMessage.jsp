@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="/jsp/etc/static.inc" %>
+<%@ include file="/jsp/incl/static.inc" %>
 
 <html>
 <head>
 <title>Nick</title>
-<link rel="stylesheet" type="text/css" href="jsp/etc/styles/default.css" />
-<script type="text/javascript" src="jsp/etc/js/util.js"></script>
+<link rel="stylesheet" type="text/css" href="jsp/styles/default.css" />
+<script type="text/javascript" src="jsp/js/util.js"></script>
 <%-- 
 <script type="text/javascript"  language="javascript" charset="utf-8">
 
@@ -18,7 +18,7 @@
 
 <body>
 <form name="default" Method="Post" action="">
-<%@ include file="/jsp/etc/loginHeader.jsp" %>
+<%@ include file="/jsp/incl/loginHeader.jsp" %>
 <div class="DivListMessage">
 <ul>
 <li class ="liTitle">
@@ -48,7 +48,7 @@
 
 </ul>
 </div>
-<%@ include file="/jsp/etc/winFooter.jsp" %>
+<%@ include file="/jsp/incl/winFooter.jsp" %>
 </form>
 </body>
 </html>

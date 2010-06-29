@@ -16,7 +16,7 @@
 
 <body>
 <form name="default" Method="Post" action="">
-<%@ include file="/jsp/etc/loginHeader.jsp" %>
+<%@ include file="/jsp/incl/loginHeader.jsp" %>
 
 <div align=center class=title><bean:message key="setup.Title" /></div>
 <div class="text" align=center>
@@ -99,7 +99,7 @@
 </table>
 <br>
 </div>
-<%@ include file="/jsp/etc/winFooter.jsp" %>
+<%@ include file="/jsp/incl/winFooter.jsp" %>
 </form>
 </body>
 </html>

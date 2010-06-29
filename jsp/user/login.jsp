@@ -39,7 +39,24 @@
 <body>
 <div id="mainContainer" style="">
 <legend>welcome come </legend>
+<html:form name="default" action="/User.do" method="post">
+<div id="formResponse">
+<table style="font-size:0.9em;">
+<tr><td>UserName:</td><td><input type="text" name="name" /></td></tr>
+<tr><td>Password:</td><td><input type="password" name="password"/></td></tr>
 
+<tr><td></td>
+
+<td>
+<html:input type="submit" value="Login"/>
+<input type="reset" class="formButton" value="Reset"><a href="?state=forgot">Forgot Password?</a>
+</td>
+</tr>
+
+</table>
+</div>
+</html:form>
+<%-- 
 <form  action="<%=request.getContextPath()%>/User.do?state=processLogin" method="post" >
 <div id="formResponse">
  
@@ -50,7 +67,7 @@
 <tr><td></td>
 
 <td>
-<html:input type="submit" value="<html:message key="Login" />" />
+<input type="submit" value="<html:message key="Login" />">
 <input type="reset" class="formButton" value="Reset"><a href="?state=forgot">Forgot Password?</a>
 </td>
 </tr>
@@ -59,6 +76,7 @@
 
 </div>		
 </form>
+--%>
 </div>
 
 </body>

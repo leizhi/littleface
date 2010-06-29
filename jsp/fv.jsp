@@ -3,7 +3,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <body>
-<form action="<%=request.getContextPath()%>/Index.do?state=accept"  method="post">
+<form action="Index.do?state=accept"  method="post">
 hello!
 id:<input name="id" type="text"/><br/>
 age:<input name="age" type="text"/><br/>

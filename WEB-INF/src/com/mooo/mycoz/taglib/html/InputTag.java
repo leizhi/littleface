@@ -3,35 +3,20 @@ package com.mooo.mycoz.taglib.html;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mooo.mycoz.util.I18n;
 
 public class InputTag extends TagSupport {
 
-      private static Log log = LogFactory.getLog(InputTag.class);
+      /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static Log log = LogFactory.getLog(InputTag.class);
 
       private String type = null;
       private String name = null;

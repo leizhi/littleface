@@ -44,11 +44,11 @@ public class JdbcExample {
             System.out.println("打开连接-------------");
             System.out.println(con);
 			con.setAutoCommit(false);
-			//con.setCatalog("xpcBranch");
+			con.setCatalog("mycozBranch");
 			stmt = con.createStatement();
 			//sql = "select * from ClientJob";
 			//sql = "show tables";
-			sql = "SELECT  * FROM example";
+			sql = "SELECT  * FROM Example";
 			rs = stmt.executeQuery(sql);
 			rsmd = rs.getMetaData();
 

@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="/jsp/etc/static.inc" %>
+<%@ include file="/jsp/incl/static.inc" %>
 
 <html>
 <head>
 <title>Nick</title>
-<link rel="stylesheet" type="text/css" href="jsp/etc/styles/default.css" />
-<script type="text/javascript" src="jsp/etc/js/util.js"></script>
+<link rel="stylesheet" type="text/css" href="jsp/styles/default.css" />
+<script type="text/javascript" src="jsp/js/util.js"></script>
 <%-- 
 <<script type="text/javascript"  language="javascript" charset="utf-8">
 
@@ -18,7 +18,7 @@
 
 <body>
 <form name="default" Method="Post" action="<%=request.getContextPath()%>/AccountType.do?state=promptAdd">
-<%@ include file="/jsp/etc/adminHeader.jsp" %>
+<%@ include file="/jsp/incl/adminHeader.jsp" %>
 <!-- AddTable -->
     <div class="SearchTable" >
       <ul>
@@ -37,7 +37,7 @@
      	<li class="Button"><input type="button" id="Add" name="Add" value="Add" onclick="Util.Submit('/AccountType.do?state=processAdd');"/><input type="reset" id="reset" name="reset" value="reset"/></li>
       </ul>
     </div>
-<%@ include file="/jsp/etc/winFooter.jsp" %>
+<%@ include file="/jsp/incl/winFooter.jsp" %>
 </form>
 </body>
 </html>

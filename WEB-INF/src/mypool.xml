@@ -6,26 +6,29 @@
 <entry key="yazdMailFrom">notvalid@forumsoftware.ca</entry>
 <entry key="serverHost">127.0.0.1</entry>
 <entry key="serverPort">10000</entry>
-<!-- <entry key="DbConnectionDefaultPool.server">jdbc:mysql://localhost/manager?useUnicode=true&amp;characterEncoding=utf8</entry> -->
+<!-- configure mysql database -->
+<entry key="DbConnectionDefaultPool.driver">org.gjt.mm.mysql.Driver</entry>
+<entry key="DbConnectionDefaultPool.server">jdbc:mysql://127.0.0.1/manager?useUnicode=true&amp;characterEncoding=utf8</entry>
+<entry key="DbConnectionDefaultPool.username">root</entry>
+<entry key="DbConnectionDefaultPool.password">JZworkb0x</entry>
+<!--
+<entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>
 <entry key="DbConnectionDefaultPool.server">jdbc:oracle:thin:@192.168.0.3:1521:khdb</entry>
+<entry key="DbConnectionDefaultPool.username">spdemo</entry>
+<entry key="DbConnectionDefaultPool.password">spdemo</entry>
+-->
 <entry key="yazdMailSubject">Default Yazd Subject</entry>
-<entry key="yazdMailSMTPServer">localhost</entry>
+<entry key="yazdMailSMTPServer">127.0.0.1</entry>
 <entry key="DbSearchIndexer.lastIndexed">1236019783316</entry>
 <entry key="yazdThreadWatch.MailBody">Default Body - Change it in property manager</entry>
 <entry key="yazdThreadWatch.MailSubject">Default Thread Watch Message</entry>
 <entry key="User.DisableActivation">false</entry>
-<entry key="yazdHome">/home/xpc/webapps/yazd/WEB-INF/yazdHome</entry>
-<!-- <entry key="DbConnectionDefaultPool.username">root</entry>  -->
-<entry key="DbConnectionDefaultPool.username">spdemo</entry>
-<entry key="path">/home/xpc/webapps/yazd/WEB-INF/classes/yazd.xml</entry>
+<entry key="yazdHome"></entry>
+<entry key="path"></entry>
 <entry key="setup">true</entry>
 <entry key="DbConnectionDefaultPool.connectionTimeout">0.5</entry>
-<entry key="yazdUrl">http://localhost/</entry>
+<entry key="yazdUrl">http://127.0.0.1/</entry>
 <entry key="DbConnectionDefaultPool.maxConnections">25</entry>
-<!-- <entry key="DbConnectionDefaultPool.driver">org.gjt.mm.mysql.Driver</entry> -->
-<entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>
 <entry key="Sequence.UseDatabase">false</entry>
-<!--  <entry key="DbConnectionDefaultPool.password">JZworkb0x</entry> -->
-<entry key="DbConnectionDefaultPool.password">spdemo</entry>
 <entry key="connectionProvider.className">com.manihot.xpc.jdbc.DbConnectionDefaultPool</entry>
 </properties>
