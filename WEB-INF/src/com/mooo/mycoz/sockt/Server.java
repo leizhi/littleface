@@ -1,33 +1,27 @@
-﻿package com.mooo.mycoz.sockt;
+package com.mooo.mycoz.sockt;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.manihot.xpc.util.PropertyManager;
+
 public class Server extends ServerSocket {
-	// private static ArrayList<String> User_List = new ArrayList<String>();
+	private static Log log = LogFactory.getLog(Server.class);
+
 	private static ArrayList<CreateServerThread> Threader = new ArrayList<CreateServerThread>();
-	// private static LinkedList<String> Message_Array = new
-	// LinkedList<String>();
-	// private static int Thread_Counter = 0;
-	// private static boolean isClear = true;
-	protected static final int SERVER_PORT = 10000;
-	protected FileOutputStream LOG_FILE = new FileOutputStream(
-			"logs/connect.log", true);
+	protected static final int SERVER_PORT = Integer.valueOf(PropertyManager.getProperty("serverPort")).intValue();
 
-	public Server() throws FileNotFoundException, IOException {
+	public Server() throws IOException {
 		super(SERVER_PORT);
-		// new Broadcast();
 
-		// append connection log
-		Calendar now = Calendar.getInstance();
-		String str = "[" + now.getTime().toString()
-				+ "] Accepted a connection\015\012";
-		byte[] tmp = str.getBytes();
-		LOG_FILE.write(tmp);
-
+		if(log.isDebugEnabled()) log.debug("server start ok");
+		
 		System.out.println("服务器启动");
-
+		
 		try {
 			while (true) {
 				Socket socket = accept();
@@ -36,6 +30,7 @@ public class Server extends ServerSocket {
 		} finally {
 			close();
 		}
+		
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -47,25 +42,28 @@ public class Server extends ServerSocket {
 	class Broadcast extends Thread {
 
 		public void run() {
-			InputStreamReader inr = new InputStreamReader(System.in);
-			BufferedReader buf = new BufferedReader(inr);
-			String str;
 			try {
+				byte[] bytes = new byte[1024];
+				String str="";
+				int readSize=0;
+
 				while (true) {
-					str = buf.readLine();
+					readSize = System.in.read(bytes);
+					
 					System.out.println("Threader Size=" + Threader.size());
 
 					for (int i = 0; i < Threader.size(); i++) {
-						CreateServerThread client = (CreateServerThread) Threader
-								.get(i);
-						client.dout.writeUTF(str);
+						CreateServerThread client = (CreateServerThread) Threader.get(i);
+						client.out.write(bytes);
 					}
-
+					
+					str = new String(bytes).toString();
+					str= str.substring(0,readSize-2);
+					
 					if (str.equals("bye")) {
 
 						for (int i = 0; i < Threader.size(); i++) {
-							CreateServerThread client = (CreateServerThread) Threader
-									.get(i);
+							CreateServerThread client = (CreateServerThread) Threader.get(i);
 							Threader.remove(client);
 						}
 
@@ -83,9 +81,7 @@ public class Server extends ServerSocket {
 	class CreateServerThread extends Thread {
 		private Socket socket;
 		private OutputStream out;
-		DataOutputStream dout;
 		private InputStream in;
-		DataInputStream din;
 
 		// private String Username;
 
@@ -93,35 +89,26 @@ public class Server extends ServerSocket {
 			socket = client;
 
 			in = socket.getInputStream();
-			din = new DataInputStream(in);
-
 			out = socket.getOutputStream();
-			dout = new DataOutputStream(out);
-
-			dout.writeUTF("--- Welcome to this chatroom ---");
-			dout.writeUTF("Input your nickname:");
+			
+			String value="--- Welcome to this chatroom 欢迎---\n";
+			out.write(value.getBytes());
+			value="input your nickname:\n";
+			out.write(value.getBytes());
 
 			start();
 		}
 
-		/*
-		 * public void sendMessage(String msg) { try { dout.writeUTF(msg);
-		 * }catch(IOException e){ } }
-		 * 
-		 * public void readMessage(DataInputStream din) { new ReadMessage(din);
-		 * }
-		 * 
-		 * public void sendMessage(DataOutputStream dout) { new
-		 * SendMessage(dout); }
-		 */
 		public void run() {
-
-			Threader.add(this);
-
-			new ReadMessage(this).start();
+			synchronized (in) {
+				Threader.add(this);
+				new ReadMessage(this).start();
+			}
+			
 			new Broadcast().start();
-		}
 
+		}
+		
 	}
 
 	// 接受客户端信息
@@ -133,44 +120,137 @@ public class Server extends ServerSocket {
 			this.st = st;
 		}
 
-		@SuppressWarnings("deprecation")
 		public void run() {
-			String str;
+			synchronized(st.in){
 			try {
+				String str="";
+				String cmd="";
+
+				int i=0;
+				
 				while (true) {
-					str = st.din.readUTF();
-					System.out.println(new Date().toLocaleString() + "客户端说："
-							+ str);
-					if (str.equals("bye")) {
-						System.out.println("客户端下线！");
-						Threader.remove(this);
-						break;
-					}
-				}
-			} catch (IOException e) {
+					/*byte bt = (byte)st.in.read();
+					System.out.printf("read 0x%02X 0d%3d", bt,bt);
+					System.out.println();
+					
+					//st.out.write(bt);
+					//st.out.flush();
+					*/
+					byte bt = (byte)st.in.read();
+					System.out.printf("\tread 0x%02X 0d%3d", bt,bt);
+					System.out.flush();
+					System.out.println();
+
+					if(bt==(byte)0xAA){
+						//
+						System.out.println("客户端查询数据库...");
+						str = new Service().list();
+						//st.out.write(str.getBytes());
+						System.out.println("sql ruest:"+str);
+						//
+						
+						bt = (byte)st.in.read();
+						
+						System.out.printf("\tcomammd 0x%02X 0d%3d", bt,bt);
+						
+						byte hSize=(byte)st.in.read();
+						byte lSize=(byte)st.in.read();
+						
+						//System.out.printf("\thSize 0x%02X lSize 0x%02X", hSize,lSize);
+						
+						//System.out.printf("\thSize<<8 0x%04X", ((int)hSize<<8)+lSize);
+
+						System.out.printf("\tSize 0x%04X 0d%3d", ((int)(hSize<<8)+lSize),((int)(hSize<<8)+lSize));
+
+						for(i=0;i<((int)(hSize<<8)+lSize);i++){
+							bt = (byte)st.in.read();
+							System.out.printf("\tdate 0x%02X 0d%3d", bt,bt);
+						}
+						
+						bt = (byte)st.in.read();
+						System.out.printf("\tend 0x%02X 0d%3d", bt,bt);
+
+						System.out.println();
+					} else {
+
+						if(bt==13){
+							cmd +=(char)bt;
+							bt = (byte)st.in.read();
+							if(bt==10){
+								cmd +=(char)bt;
+								System.out.println("cmd ="+cmd);
+								cmd = "";
+							}
+						} else {
+							cmd +=(char)bt;
+						}
+						//st.out.write(cmd.getBytes());
+						//st.out.flush();
+						
+						if (cmd.equals("search")) {
+							System.out.println("客户端查询数据库...");
+							str = new Service().list();
+							st.out.write(str.getBytes());
+						}
+						
+						if (cmd.equals("bye")) {
+							System.out.println("客户端下线！");
+							st.in.close();
+							st.out.close();
+							st.socket.close();
+							Threader.remove(st);
+							break;
+						}
+					} 
+				}//end while
+				
+			} catch (Exception e) {
 				e.printStackTrace();
+				try {
+					st.in.close();
+					st.out.close();
+					st.socket.close();
+					Threader.remove(st);
+					
+					System.out.println("客户失去连接...");
+
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
 			}
 		}
+	 }//synchronized
 	}
 
 	// 发出服务器信息
 	class SendMessage extends Thread {
-		// private DataOutputStream dout;
-		CreateServerThread st;
+		private Socket socket;
 
-		public SendMessage(CreateServerThread st /* DataOutputStream dout */) {
-			this.st = st;
+		public SendMessage(Socket socket) {
+			this.socket = socket;
 		}
 
 		public void run() {
-			InputStreamReader inr = new InputStreamReader(System.in);
-			BufferedReader buf = new BufferedReader(inr);
-			String str;
-			try {
-				while (true) {
-					str = buf.readLine();
-					st.dout.writeUTF(str);
+			
+			synchronized(socket){
 
+			try {
+				byte[] bytes = new byte[1024];
+				String str="";
+				int readSize=0;
+				
+				while (socket.isConnected()) {
+					
+					readSize = System.in.read(bytes,0,readSize);
+					
+					str = new String(bytes).toString();
+					str = str.substring(0,readSize);
+					
+					socket.getOutputStream().write(str.getBytes());
+					
+					str= str.substring(0,readSize-2);
+					
 					if (str.equals("bye")) {
 						Threader.remove(this);
 						System.out.println("服务器退出！");
@@ -182,4 +262,6 @@ public class Server extends ServerSocket {
 			}
 		}
 	}
+ }//synchronized
+
 }

@@ -34,8 +34,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.manihot.xpc.util.PropertyManager;
 
-
-
 // import org.nemesis.forum.config.ConfigLoader;
 
 /**

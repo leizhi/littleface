@@ -1,9 +1,6 @@
-package com.manihot.xpc.cache;
-
-import com.manihot.xpc.util.LinkedListNode;
 
 /**
- * $RCSfile: CacheObject.java,v $
+ * $RCSfile: LinkedListNode.java,v $
  * $Revision: 1.3 $
  * $Date: 2006/01/07 00:21:06 $
  *
@@ -59,55 +56,73 @@ import com.manihot.xpc.util.LinkedListNode;
  * on CoolServlets.com, please see <http://www.Yasna.com>.
  */
 
+package com.manihot.xpc.util;
 
 /**
- * Wrapper for all objects put into cache. It's primary purpose is to maintain
- * references to the linked lists that maintain the creation time of the object
- * and the ordering of the most used objects.
+ * Doubly linked node in a LinkedList. Most LinkedList implementations keep the
+ * equivalent of this class private. We make it public so that references
+ * to each node in the list can be maintained externally.
  *
- * This class is optimized for speed rather than strictly correct encapsulation.
+ * Exposing this class lets us make remove operations very fast. Remove is
+ * built into this class and only requires to reference reassignments. If
+ * remove was built into the main LinkedList class, a linear scan would have to
+ * be performed to find the correct node to delete.
+ *
+ * The linked list implementation was specifically written for the CoolServlets
+ * cache system. While it can be used as a general purpose linked list, for
+ * most applications, it is more suitable to use the linked list that is part
+ * of the Java Collections package.
+ *
+ * @see LinkedList
  */
-public final class CacheObject {
+public class LinkedListNode {
 
-   /**
-    * Underlying object wrapped by the CacheObject.
-    */
+    public LinkedListNode previous;
+    public LinkedListNode next;
     public Object object;
 
     /**
-     * The size of the Cacheable object. The size of the Cacheable
-     * object is only computed once when it is added to the cache. This makes
-     * the assumption that once objects are added to cache, they are mostly
-     * read-only and that their size does not change significantly over time.
-     */
-    public int size;
-
-    /**
-     * A reference to the node in the cache order list. We keep the reference
-     * here to avoid linear scans of the list. Every time the object is
-     * accessed, the node is removed from its current spot in the list and
-     * moved to the front.
-     */
-    public LinkedListNode lastAccessedListNode;
-
-    /**
-     * A reference to the node in the age order list. We keep the reference
-     * here to avoid linear scans of the list. The reference is used if the
-     * object has to be deleted from the list.
-     */
-    public LinkedListNode ageListNode;
-
-    /**
-     * Creates a new cache object wrapper. The size of the Cacheable object
-     * must be passed in in order to prevent another possibly expensive
-     * lookup by querying the object itself for its size.<p>
+     * This class is further customized for the CoolServlets cache system. It
+     * maintains a timestamp of when a Cacheable object was first added to
+     * cache. Timestamps are stored as long values and represent the number
+     * of milleseconds passed since January 1, 1970 00:00:00.000 GMT.<p>
      *
-     * @param object the underlying Cacheable object to wrap.
-     * @param size the size of the Cachable object in bytes.
+     * The creation timestamp is used in the case that the cache has a
+     * maximum lifetime set. In that case, when
+     * [current time] - [creation time] > [max lifetime], the object will be
+     * deleted from cache.
      */
-    public CacheObject(Object object, int size) {
+    public long timestamp;
+
+    /**
+     * Constructs a new linked list node.
+     *
+     * @param object the Object that the node represents.
+     * @param next a reference to the next LinkedListNode in the list.
+     * @param previous a reference to the previous LinkedListNode in the list.
+     */
+    public LinkedListNode(Object object, LinkedListNode next,
+            LinkedListNode previous)
+    {
         this.object = object;
-        this.size = size;
+        this.next = next;
+        this.previous = previous;
+    }
+
+    /**
+     * Removes this node from the linked list that it is a part of.
+     */
+    public void remove() {
+        previous.next = next;
+        next.previous = previous;
+    }
+    /**
+     * Returns a String representation of the linked list node by calling the
+     * toString method of the node's object.
+     *
+     * @return a String representation of the LinkedListNode.
+     */
+    public String toString() {
+        return object.toString();
     }
 }
-

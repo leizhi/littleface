@@ -1,31 +1,26 @@
-﻿package com.mooo.mycoz.sockt;
+package com.mooo.mycoz.sockt;
 
 import java.io.InputStream;
-import java.io.DataInputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.DataOutputStream;
-import java.io.BufferedReader;
 import java.net.Socket;
 import java.io.IOException;
 import java.util.Date;
 
-class Client {
+import com.manihot.xpc.util.PropertyManager;
+
+public class Client {
 	public Client() {
 		try {
-			Socket s = new Socket("127.0.0.1", 10000);
-
-			InputStream in = s.getInputStream();
-			DataInputStream din = new DataInputStream(in);
+			Socket s = new Socket(PropertyManager.getProperty("serverHost"), Integer.valueOf(PropertyManager.getProperty("serverPort")).intValue());
 
 			OutputStream out = s.getOutputStream();
-			DataOutputStream dout = new DataOutputStream(out);
 
-			dout.writeUTF("服务器你好！我是客户端");
-			System.out.println(din.readUTF());
+			//out.write("服务器你好！我是客户端".getBytes());
+			
+			out.write((byte)0xAA);
 
-			new Thread(new SenderMessage(dout)).start();
-			new Thread(new ReaderMessage(din)).start();
+			new Thread(new SenderMessage(out)).start();
+			new Thread(new ReaderMessage(s)).start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -37,24 +32,39 @@ class Client {
 }
 
 class ReaderMessage implements Runnable {
-	private DataInputStream din;
+	private Socket socket;
 
-	public ReaderMessage(DataInputStream din) {
-		this.din = din;
+	public ReaderMessage(Socket socket) {
+		this.socket = socket;
 	}
 
 	@SuppressWarnings("deprecation")
 	public void run() {
-		String str;
 		try {
-			while (true) {
-				str = din.readUTF();
+			byte[] buf = new byte[1024];
+			String str;
+			InputStream in = socket.getInputStream();
+
+			//while (true) {
+			while (socket.isConnected()) {
+
+				int byteSize = in.read(buf);
+				str = new String(buf).toString();
+				
+				str= str.substring(0,byteSize);
+				
+				str = new String(str.getBytes(), "UTF-8");
+				
+				System.out.println("read length:"+byteSize);
+				System.out.println("server say length:"+str.length());
+				
 				System.out.println(new Date().toLocaleString() + "服务器说：" + str);
 				if (str.equals("bye")) {
 					System.out.println("服务器已经关闭，此程序自动退出！");
 					break;
 				}
 			}
+			System.exit(0);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,20 +72,28 @@ class ReaderMessage implements Runnable {
 }
 
 class SenderMessage implements Runnable {
-	private DataOutputStream dout;
+	private OutputStream out;
 
-	public SenderMessage(DataOutputStream dout) {
-		this.dout = dout;
+	public SenderMessage(OutputStream out) {
+		this.out = out;
 	}
 
 	public void run() {
-		String str;
-		InputStreamReader inf = new InputStreamReader(System.in);
-		BufferedReader buf = new BufferedReader(inf);
 		try {
+			byte[] buf = new byte[1024];
+			String str;
+
 			while (true) {
-				str = buf.readLine();
-				dout.writeUTF(str);
+				int byteSize =System.in.read(buf);
+				str = new String(buf).toString();
+				str= str.substring(0,byteSize-2);// rm \r\n
+				
+				out.write(str.getBytes());
+				out.flush();
+				
+				System.out.println(str);
+				System.out.println("input length:"+str.length());
+
 				if (str.equals("bye")) {
 					System.out.println("客户端自己退出！");
 					System.exit(1);
@@ -85,4 +103,5 @@ class SenderMessage implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	
 }

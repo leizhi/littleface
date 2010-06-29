@@ -116,8 +116,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.manihot.xpc.util.PropertyManager;
 
-
-
 /**
  * Default Yazd connection provider. It uses the excellent connection pool
  * available from http://www.javaexchange.com. This connection provider is a a

@@ -9,15 +9,15 @@
 	-->
     <appender name="xpcLog" class="org.apache.log4j.RollingFileAppender">
             <param name="MaxFileSize" value="2000KB"/>
-            <param name="File" value="WEB-INF/logs/xpc.log"/>
+            <param name="File" value="logs/xpc.log"/>
             <param name="Append" value="true"/>
             <layout class="org.apache.log4j.PatternLayout">
                     <param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%l) - %m\n"/>
             </layout>
     </appender>
     
-	<appender name="struts2Log" class="org.apache.log4j.FileAppender">
-		<param name="File" value="WEB-INF/logs/struts2.log"/>
+	<appender name="mycozLog" class="org.apache.log4j.FileAppender">
+		<param name="File" value="logs/mycozLog.log"/>
 		<param name="Append" value="true"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%l) - %m\n"/>
@@ -49,9 +49,9 @@
 	</category>
 	
     <!-- The root for struts -->
-    <category name="org.apache.struts2" additivity="false">
-        <priority value="warn"/>
-        <appender-ref ref="struts2Log"/>
+    <category name="com.mooo.mycoz" additivity="false">
+        <priority value="debug"/>
+        <appender-ref ref="mycozLog"/>
     </category>
 
 	<!-- the one and only root category -->

@@ -25,8 +25,6 @@
 
 package com.manihot.xpc.util;
 
-import com.manihot.xpc.lang.LinkedListNode;
-
 /**
  * Simple LinkedList implementation. The main feature is that list nodes are
  * public, which allows very fast delete operations (when one has a reference to

@@ -2,33 +2,30 @@ package com.manihot.xpc.cache;
 
 import java.util.HashMap;
 
+import com.manihot.xpc.util.ConfigureUtil;
+
 public class CacheManager {
     private static Object initLock = new Object();
     private static CacheManager factory = null;
 
-	final public int SECOND = 1000;
-	final public int MINUTE = SECOND*60;
-	final public int HOUR = MINUTE*60;
-	final public int K = 1024;
-	final public int M = 1024 * K;
-
-    protected Cache[] caches;
+	final public static int SECOND = 1000;
+	final public static int MINUTE = SECOND*60;
+	final public static int HOUR = MINUTE*60;
+	final public static int K = 1024;
+	final public static int M = 1024 * K;
 
     private boolean cacheEnabled = true;
-    
-    protected HashMap<String,Cache> cachess;
+
+    protected HashMap<String,Cache> caches;
     
     protected int cacheSize=0;
 
     private CacheManager() {
-    	cachess = new HashMap<String,Cache>();
+    	caches = new HashMap<String,Cache>();
     	
-    	int i=0;
-    	//for(i=0;i<14;i++)
-    	for(i=0;i<1;i++)
-    		cachess.put(i+"", new Cache(128 * M,1 * HOUR));
-
-		cachess.put((cachess.size()+1)+"", new UserPermsCache(128 * K,1 * HOUR));
+    	caches = new ConfigureUtil().confCache();
+    	System.out.println("caches.size="+caches.size());
+		caches.put((caches.size()+1)+"", new UserPermsCache(128 * K,1 * HOUR));
 
     	/*
         caches = new Cache[13];
@@ -104,34 +101,23 @@ public class CacheManager {
         return factory;
     }
 	
-    public Cache getCache(int cacheType) {
-        return caches[cacheType];
+    public Cache getCache(String cacheName) {
+        return caches.get(cacheName);
     }
 
-    public void add(int cacheType, Object key, Object object) {
-        caches[cacheType].add(key, object);
-    }
-    
     public void add(String cacheName, Object key, Object object) {
-    	cachess.get(cacheName).add(key, object);
+    	caches.get(cacheName).add(key, object);
     }
     
-    public Object get(int cacheType, Object key) {
-        if (!cacheEnabled) {
-            return null;
-        }
-        return caches[cacheType].get(key);
-    }
-
     public Object get(String cacheName, Object key) {
         if (!cacheEnabled) {
             return null;
         }
-        return cachess.get(cacheName).get(key);
+        return caches.get(cacheName).get(key);
     }
     
-    public void remove(int cacheType, Object key) {
-        caches[cacheType].remove(key);
+    public void remove(String cacheName, Object key) {
+    	caches.get(cacheName).remove(key);
         //when cache becomes distributed, we'd send out an expire message
         //here to all other yazd servers.
     }
@@ -159,14 +145,8 @@ public class CacheManager {
         //here to all other yazd servers.
     }
 
-    public void clear(int cacheType) {
-        caches[cacheType].clear();
-        //when cache becomes distributed, we'd send out an expire message
-        //here to all other yazd servers.
-    }
-
     public void clear(String cacheName) {
-    	cachess.get(cacheName).clear();
+    	caches.get(cacheName).clear();
         //when cache becomes distributed, we'd send out an expire message
         //here to all other yazd servers.
     }

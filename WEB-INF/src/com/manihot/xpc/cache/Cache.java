@@ -62,8 +62,8 @@ import java.util.HashMap;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.manihot.xpc.lang.LinkedListNode;
 import com.manihot.xpc.util.LinkedList;
+import com.manihot.xpc.util.LinkedListNode;
 
 /**
  * General purpose cache implementation. It stores objects associated with
@@ -132,7 +132,7 @@ public class Cache {
      * Maintains the hash of cached objects. Hashing provides the best
      * performance for fast lookups.
      */
-    protected HashMap cachedObjectsHash;
+    protected HashMap<Object, CacheObject> cachedObjectsHash;
 
     /**
      * Linked list to maintain order that cache objects are accessed
@@ -180,7 +180,7 @@ public class Cache {
     public Cache() {
         //Our primary data structure is a hash map. The default capacity of 11
         //is too small in almost all cases, so we set it bigger.
-        cachedObjectsHash = new HashMap(103);
+        cachedObjectsHash = new HashMap<Object, CacheObject>(103);
 
         lastAccessedList = new LinkedList();
         ageList = new LinkedList();
@@ -381,7 +381,7 @@ public class Cache {
 
         //Now, reset all containers.
         cachedObjectsHash.clear();
-        cachedObjectsHash = new HashMap(103);
+        cachedObjectsHash = new HashMap<Object, CacheObject>(103);
         lastAccessedList.clear();
         lastAccessedList = new LinkedList();
         ageList.clear();
@@ -398,7 +398,7 @@ public class Cache {
      *
      * @return a Collection of the cache entries.
      */
-    public Collection values() {
+    public Collection<CacheObject> values() {
         return Collections.unmodifiableCollection(cachedObjectsHash.values());
     }
 

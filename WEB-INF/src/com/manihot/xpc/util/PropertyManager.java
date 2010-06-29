@@ -63,7 +63,7 @@ public class PropertyManager {
 
 	private static PropertyManager manager = null;
 	private static Object managerLock = new Object();
-	private static String propsName = "/System.xml";
+	private static String propsName = "/mypool.xml";
 
 	/**
 	 * Returns a Yazd property.
