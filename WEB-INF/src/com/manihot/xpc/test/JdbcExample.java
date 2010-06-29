@@ -48,7 +48,7 @@ public class JdbcExample {
 			stmt = con.createStatement();
 			//sql = "select * from ClientJob";
 			//sql = "show tables";
-			sql = "SELECT  * FROM dm_xzqh_map_bak";
+			sql = "SELECT  * FROM example";
 			rs = stmt.executeQuery(sql);
 			rsmd = rs.getMetaData();
 

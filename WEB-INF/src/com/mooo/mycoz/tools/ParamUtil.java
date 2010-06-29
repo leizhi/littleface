@@ -5,15 +5,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import com.manihot.xpc.jdbc.DbConnectionManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -245,7 +249,7 @@ public class ParamUtil {
 		bindData(request, bean, null, null);
 	}
 
-	public static void fillMap(Class c, Object obj, Map params) {
+	public static void fillMap(Class c, Object obj, Map<String, Object> params) {
 		Method[] methods = c.getDeclaredMethods();
 		for (Method m : methods) {
 			if (Modifier.isPublic(m.getModifiers())
@@ -277,35 +281,51 @@ public class ParamUtil {
 
 	public static void add(HttpServletRequest request, String table) {
 		java.util.Enumeration<String> em = request.getParameterNames();
-		String sql = "INSERT INTO " + table;
-		String fileds = "";
-		String values = "";
 
-		while (em.hasMoreElements()) {
-			String name = em.nextElement();
-			String value = request.getParameter(name);
-			if (fileds.length() > 0) {
-				fileds += "," + name;
-				values += ",'" + value + "'";
-			} else {
-				fileds += "(" + name;
-				values += " VALUES ('" + value + "'";
-			}
-		}
-		fileds += ") ";
-		values += ")";
-
-		sql += fileds;
-		sql += values;
-		if (log.isDebugEnabled())
-			log.debug("add sql=" + sql);
-		System.out.println("add sql=" + sql);
 
 		Connection con = null;
 		Statement stmt = null;
+		ResultSetMetaData rsmd = null;
+		ResultSet rs = null;
+
 		try {
-			// con = DbConnectionManager.getConnection();
+			String sql = "INSERT INTO " + table;
+			String fileds = "";
+			String values = "";
+			
+			List col = new ArrayList();
+
+			con = DbConnectionManager.getConnection();
 			System.out.println("add con=" + con);
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM " + table);
+			rsmd = rs.getMetaData();
+
+			for (int i = 0; i < rsmd.getColumnCount(); i++) {
+				col.add(rsmd.getColumnName(i + 1));
+				// System.out.print(rsmd.getColumnName(i+1)+"\t");
+			}
+
+			while (em.hasMoreElements()) {
+				String name = em.nextElement();
+				String value = request.getParameter(name);
+				if (col.contains(name.toUpperCase())) {
+					if (fileds.length() > 0) {
+						fileds += "," + name;
+						values += ",'" + value + "'";
+					} else {
+						fileds += "(" + name;
+						values += " VALUES ('" + value + "'";
+					}
+				}
+			}
+			fileds += ") ";
+			values += ")";
+
+			sql += fileds;
+			sql += values;
+			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
+			System.out.println("add sql=" + sql);
 
 			// con.setAutoCommit(false);
 			// con.setCatalog("xpcBranch");
@@ -324,7 +344,6 @@ public class ParamUtil {
 			try {
 				con.rollback();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			System.out.println("Exception: " + e.getMessage());
@@ -334,7 +353,6 @@ public class ParamUtil {
 				stmt.close();
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -361,11 +379,11 @@ public class ParamUtil {
 			String name = em.nextElement();
 			String value = request.getParameter(name);
 			if (fileds.length() > 0) {
-				fileds += "," + WriteUTF8(name);
-				values += ",'" + WriteUTF8(value) + "'";
+				fileds += "," + name;
+				values += ",'" + value + "'";
 			} else {
-				fileds += "(" + WriteUTF8(name);
-				values += " VALUES ('" + WriteUTF8(value) + "'";
+				fileds += "(" + name;
+				values += " VALUES ('" + value + "'";
 			}
 		}
 		fileds += ") ";

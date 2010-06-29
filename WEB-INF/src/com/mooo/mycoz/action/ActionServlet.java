@@ -76,25 +76,37 @@ public class ActionServlet extends HttpServlet {
 			String execState = request.getParameter("state");
 			PigNode pNode = null;
 			Hashtable<?, ?> forward = null;
-			/* get mvc config */
+			// get mvc config
 			Hashtable<?, ?> mvcList = PigMap.getMvcList();
-			/* set controller,execState for execPath */
+			
+			// set controller,execState for execPath
 			pNode = (PigNode) mvcList.get(execPath);
 			execController = pNode.getType();
 			if (execState == null)
 				execState = pNode.getDefaultState();
 			forward = pNode.getForward();
-			/* set Transition jsp for execState */
-			Object actionJsp = forward.get(execState);
-
+			
+			// exec Controller request aciton
 			Object obj = Class.forName(execController).newInstance();
+			
 			Class<? extends Object> cls = obj.getClass();
-			Class<?>[] paraTypes = new Class[] { HttpServletRequest.class,
-					HttpServletResponse.class };
+			
+			Class<?>[] paraTypes = new Class[] { HttpServletRequest.class,HttpServletResponse.class };
+			
 			Method method = cls.getMethod(execState + "StateRun", paraTypes);
+			
 			Object paraValues[] = new Object[] { request, response };
-			method.invoke(obj, paraValues);
-
+			
+			// set Transition jsp for execState
+			Object actionJsp = forward.get(execState);
+			
+			String resultState = (String) method.invoke(obj, paraValues);
+			if(resultState != null)
+				if(!resultState.equals("success"))
+					actionJsp = forward.get(resultState);
+			else
+				new Exception("RETURN STATE NULL");
+			
 			if (actionJsp != null) {
 				execJsp = (String) actionJsp;
 				if (!execJsp.equals("")) {
@@ -105,7 +117,8 @@ public class ActionServlet extends HttpServlet {
 					// response.setHeader("Location",request.getContextPath()+execJsp);
 				}
 			}
-
+		} catch (Exception ex) {
+			out.println("Exception:" + ex);
 		} catch (Throwable e) {
 			out.println("Throwable:" + e);
 		}
