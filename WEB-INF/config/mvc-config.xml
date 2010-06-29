@@ -8,6 +8,7 @@
 	      scope="request"
 	      validate="false">
         <forward name="promptIndex" path="/jsp/start.jsp" />
+        <forward name="accept" path="/jsp/rust.jsp" />
     </action>
 
       <action path="/User"

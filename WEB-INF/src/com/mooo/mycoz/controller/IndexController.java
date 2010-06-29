@@ -55,9 +55,11 @@ import java.lang.ClassNotFoundException;
 
 import com.mooo.mycoz.action.ActionServlet;
 import com.mooo.mycoz.dbobj.MultiDBObject;
+import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.dbobj.mycozShared.Language;
 import com.mooo.mycoz.dbobj.util.IDGenerator;
 import com.mooo.mycoz.request.Input;
+import com.mooo.mycoz.tools.ParamUtil;
 import com.mooo.mycoz.util.DBLoad;
 import com.mooo.mycoz.util.DBMap;
 import com.mooo.mycoz.util.DBNode;
@@ -103,4 +105,14 @@ public void promptIndexStateRun(HttpServletRequest request, HttpServletResponse 
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
      		}
     }
+public void acceptStateRun(HttpServletRequest request, HttpServletResponse response){
+	try {
+		Example ex = new Example();
+		ParamUtil.bindData(request,ex);
+		ex.add();
+	} catch (Exception e) {
+      			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
+     		}
+    }
+
 }
