@@ -3,7 +3,7 @@
 <mvc-config>
 <action-mappings>
     <action   path="/Index"
-	      type="org.pig.controller.IndexController"
+	      type="com.mooo.mycoz.controller.IndexController"
               name="promptIndex"
 	      scope="request"
 	      validate="false">
@@ -11,7 +11,7 @@
     </action>
 
       <action path="/User"
-	      type="org.pig.controller.user.UserController"
+	      type="com.mooo.mycoz.controller.user.UserController"
               name="promptLogin"
 	      scope="request"
 	      validate="false">
@@ -27,7 +27,7 @@
     </action>
 
       <action path="/Admin"
-	      type="org.pig.controller.admin.AdminController"
+	      type="com.mooo.mycoz.controller.admin.AdminController"
               name="viewMenu"
 	      scope="request"
 	      validate="false">
@@ -38,7 +38,7 @@
     </action>
 <!-- Setup -->
       <action path="/Setup"
-	      type="org.pig.controller.setup.SetupController"
+	      type="com.mooo.mycoz.controller.setup.SetupController"
               name="viewMenu"
 	      scope="request"
 	      validate="false">
@@ -46,7 +46,7 @@
     </action>
 <!-- Blog -->
       <action path="/BlogCategory"
-	      type="org.pig.controller.setup.BlogCategoryController"
+	      type="com.mooo.mycoz.controller.setup.BlogCategoryController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -59,7 +59,7 @@
     </action>
 
       <action path="/BlogType"
-	      type="org.pig.controller.setup.BlogTypeController"
+	      type="com.mooo.mycoz.controller.setup.BlogTypeController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -72,7 +72,7 @@
     </action>
 <!-- locale -->
       <action path="/Country"
-	      type="org.pig.controller.setup.CountryController"
+	      type="com.mooo.mycoz.controller.setup.CountryController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -85,7 +85,7 @@
     </action>
 
       <action path="/Language"
-	      type="org.pig.controller.setup.LanguageController"
+	      type="com.mooo.mycoz.controller.setup.LanguageController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -98,7 +98,7 @@
     </action>
 
       <action path="/Currency"
-	      type="org.pig.controller.setup.CurrencyController"
+	      type="com.mooo.mycoz.controller.setup.CurrencyController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -111,7 +111,7 @@
     </action>
 <!-- DownloadType -->
       <action path="/DownloadType"
-	      type="org.pig.controller.setup.DownloadTypeController"
+	      type="com.mooo.mycoz.controller.setup.DownloadTypeController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -125,7 +125,7 @@
     </action>
 <!-- Account -->
       <action path="/AccountCategory"
-	      type="org.pig.controller.setup.AccountCategoryController"
+	      type="com.mooo.mycoz.controller.setup.AccountCategoryController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -139,7 +139,7 @@
 
 
       <action path="/AccountType"
-	      type="org.pig.controller.setup.AccountTypeController"
+	      type="com.mooo.mycoz.controller.setup.AccountTypeController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -152,7 +152,7 @@
     </action>
 
       <action path="/AccountGroup"
-	      type="org.pig.controller.setup.AccountGroupController"
+	      type="com.mooo.mycoz.controller.setup.AccountGroupController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -165,7 +165,7 @@
     </action>
 
       <action path="/AccountExtension"
-	      type="org.pig.controller.setup.AccountExtensionController"
+	      type="com.mooo.mycoz.controller.setup.AccountExtensionController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -178,7 +178,7 @@
     </action>
 
       <action path="/Account"
-	      type="org.pig.controller.setup.AccountController"
+	      type="com.mooo.mycoz.controller.setup.AccountController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -191,7 +191,7 @@
     </action>
 
       <action path="/NoteType"
-	      type="org.pig.controller.setup.NoteTypeController"
+	      type="com.mooo.mycoz.controller.setup.NoteTypeController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -204,7 +204,7 @@
     </action>
 
       <action path="/OperatorUser"
-	      type="org.pig.controller.setup.OperatorUserController"
+	      type="com.mooo.mycoz.controller.setup.OperatorUserController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -217,7 +217,7 @@
     </action>
 <!-- Profile -->
       <action path="/Profile"
-	      type="org.pig.controller.profile.ProfileController"
+	      type="com.mooo.mycoz.controller.profile.ProfileController"
               name="viewMenu"
 	      scope="request"
 	      validate="false">
@@ -225,7 +225,7 @@
     </action>
 
       <action path="/My"
-	      type="org.pig.controller.profile.MyController"
+	      type="com.mooo.mycoz.controller.profile.MyController"
               name="viewMy"
 	      scope="request"
 	      validate="false">
@@ -235,7 +235,7 @@
     </action>
 
       <action path="/Online"
-	      type="org.pig.controller.online.OnlineController"
+	      type="com.mooo.mycoz.controller.online.OnlineController"
               name="menuBlog"
 	      scope="request"
 	      validate="false">
@@ -245,7 +245,7 @@
     </action>
 
       <action path="/Blog"
-	      type="org.pig.controller.service.BlogController"
+	      type="com.mooo.mycoz.controller.service.BlogController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -271,7 +271,7 @@
 
 <!-- Service -->
       <action path="/Service"
-	      type="org.pig.controller.service.ServiceController"
+	      type="com.mooo.mycoz.controller.service.ServiceController"
               name="viewMenu"
 	      scope="request"
 	      validate="false">
@@ -280,7 +280,7 @@
 
 <!-- Download -->
       <action path="/Download"
-	      type="org.pig.controller.service.DownloadController"
+	      type="com.mooo.mycoz.controller.service.DownloadController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -295,7 +295,7 @@
     </action>
 
       <action path="/Financial"
-	      type="org.pig.controller.service.FinancialController"
+	      type="com.mooo.mycoz.controller.service.FinancialController"
               name="preview"
 	      scope="request"
 	      validate="false">
@@ -303,7 +303,7 @@
     </action>
 
       <action path="/Sale"
-	      type="org.pig.controller.service.SaleController"
+	      type="com.mooo.mycoz.controller.service.SaleController"
               name="preview"
 	      scope="request"
 	      validate="false">
@@ -311,7 +311,7 @@
     </action>
 
       <action path="/Imestment"
-	      type="org.pig.controller.service.ImestmentController"
+	      type="com.mooo.mycoz.controller.service.ImestmentController"
               name="preview"
 	      scope="request"
 	      validate="false">
@@ -319,7 +319,7 @@
     </action>
 
       <action path="/Free"
-	      type="org.pig.controller.service.FreeController"
+	      type="com.mooo.mycoz.controller.service.FreeController"
               name="preview"
 	      scope="request"
 	      validate="false">
@@ -327,7 +327,7 @@
     </action>
 
       <action path="/Accounting"
-	      type="org.pig.controller.service.AccountingController"
+	      type="com.mooo.mycoz.controller.service.AccountingController"
               name="list"
 	      scope="request"
 	      validate="false">
@@ -343,7 +343,7 @@
     </action>
 
       <action path="/AutoComplete"
-	      type="org.pig.ajax.AutoComplete"
+	      type="com.mooo.mycoz.ajax.AutoComplete"
               name="listUser"
 	      scope="request"
 	      validate="false">
@@ -352,7 +352,7 @@
     </action>
 
       <action path="/Error"
-	      type="org.pig.controller.error.ErrorController"
+	      type="com.mooo.mycoz.controller.error.ErrorController"
               name="send"
 	      scope="request"
 	      validate="false">

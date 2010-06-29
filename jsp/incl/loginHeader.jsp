@@ -10,7 +10,7 @@
 		<div>
 			<!-- Start content of pane -->
 			<b>Very Good Administrator</b><br>
-			OnLine:<%=org.pig.response.SessionCounter.getRealCount()%><br><br>
+			OnLine:<%=com.mooo.mycoz.response.SessionCounter.getRealCount()%><br><br>
 			Date modified: Oct. 3rd 2008				
 			<!-- End content -->
 		</div>	

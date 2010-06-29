@@ -62,7 +62,7 @@
 
 <div class="news">
 <ul> 
-<li><a href="#"><%=org.pig.response.SessionCounter.getRealCount()%></a></li>
+<li><a href="#"><%=com.mooo.mycoz.response.SessionCounter.getRealCount()%></a></li>
 <li><a href="#"><html:message key="Test" /></a></li>
 </ul></div>
 

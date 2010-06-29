@@ -479,10 +479,14 @@ document.getElementById("content").style.height=document.getElementById("left").
 	</thead>
 	<tbody>
 		<tr>
-		<% i=0;%>
+		<%
+			i=0;
+		%>
 		<logic:iterate property="Layer">
 			<td><html:select id="<%="BlogCategory"+i%>" name="<%="BlogCategory"+i%>" property="<%="BlogCategory"+i%>"/></td>
-		<% i++;%>
+		<%
+			i++;
+		%>
 		</logic:iterate>
 		</tr>
 	</tbody>
@@ -503,7 +507,9 @@ document.getElementById("content").style.height=document.getElementById("left").
 		</tr>
 	</thead>
 	<tbody>
-<% i=0;%>
+<%
+	i=0;
+%>
 <logic:iterate property="List">
 
 		<tr>
@@ -514,7 +520,9 @@ document.getElementById("content").style.height=document.getElementById("left").
 			<td><a href="">OK</a></td>
 			<td>&nbsp<a href="<%=request.getContextPath()%>/BlogCategory.do?state=promptUpdate&Key=<html:write property="<%="ID"+i%>"/>">OK</a></td>
 		</tr>
-<% i++; %>
+<%
+	i++;
+%>
 </logic:iterate>
 	</tbody>
 	<tfooter> <tr> <td colspan="6"> current of total at <html:input type="text" name="CountPerPage" size="4"/> records per page <html:input type="submit" name="Previous"  value="Previous" styles="submit"/> <html:input type="submit" name="Next" value="Next" styles="submit"/> <html:input type="submit" name="JumpTo" value="JumpTo" styles="submit"/>  <html:input type="text" name="CurrentPage" size="4"/> of total </td> </tr></tfooter>
