@@ -9,7 +9,7 @@
 	-->
     <appender name="xpcLog" class="org.apache.log4j.RollingFileAppender">
             <param name="MaxFileSize" value="2000KB"/>
-            <param name="File" value="logs/xpc.log"/>
+            <param name="File" value="WEB-INF/logs/xpc.log"/>
             <param name="Append" value="true"/>
             <layout class="org.apache.log4j.PatternLayout">
                     <param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%l) - %m\n"/>
@@ -17,7 +17,7 @@
     </appender>
     
 	<appender name="mycozLog" class="org.apache.log4j.FileAppender">
-		<param name="File" value="logs/mycozLog.log"/>
+		<param name="File" value="WEB-INF/logs/mycozLog.log"/>
 		<param name="Append" value="true"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%l) - %m\n"/>
@@ -27,14 +27,6 @@
 	</appender>
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.Out"/>
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%F:%L) - %m\n"/>
-		</layout>
-	</appender>
-
-	<!-- TODO: This will be the Expresso Session Appender -->
-	<appender name="httpSessionLog" class="org.apache.log4j.FileAppender">
-		<param name="File" value="WEB-INF/logs/session.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%F:%L) - %m\n"/>
 		</layout>

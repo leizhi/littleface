@@ -47,7 +47,8 @@ public class JdbcExample {
 			//con.setCatalog("xpcBranch");
 			stmt = con.createStatement();
 			//sql = "select * from ClientJob";
-			sql = "show tables";
+			//sql = "show tables";
+			sql = "SELECT  * FROM dm_xzqh_map_bak";
 			rs = stmt.executeQuery(sql);
 			rsmd = rs.getMetaData();
 

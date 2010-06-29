@@ -155,7 +155,8 @@ private static Log log = LogFactory.getLog(User.class);
     public boolean loginAdminCheck(String chName,String chPassword)
         throws SQLException {
 
-		if(chName == null || chPassword == null)
+		if(chName == null || chName.equals("") 
+				|| chPassword == null || chPassword.equals(""))
 			return false;
 
 		ResultSet rs = null;
@@ -164,6 +165,9 @@ private static Log log = LogFactory.getLog(User.class);
 		       "' AND Password=Password('" +chPassword+"') AND StateID=0";
 
 		rs = getResultSet(sql);
+		if (log.isDebugEnabled()) log.debug("SQL=" + sql);
+		System.out.println("SQL=" + sql);
+
 		if(rs.first())
 			return true;
 		else 

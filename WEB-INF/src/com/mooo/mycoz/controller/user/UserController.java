@@ -108,10 +108,11 @@ try {
 }
 
 public void processLoginStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-try {
+	HttpSession session = request.getSession(true);
+
+	try {
 	String chUser = request.getParameter("userName_V");
 	String chPassword = request.getParameter("password_V");
-	HttpSession session = request.getSession(true);
 	com.mooo.mycoz.response.SessionCounter.put(request.getSession().getId());
 	session.setAttribute(request.getSession().getId(), chUser);
 
@@ -129,8 +130,14 @@ try {
 	//request.getRemoteAddr();
      } catch (SQLException sqlEx) {
        if (log.isDebugEnabled()) log.debug("SQLException: " + sqlEx.getMessage()+"SQLState: " + sqlEx.getSQLState()+"VendorError: " + sqlEx.getErrorCode());
+		//session.removeAttribute(request.getSession().getId());
+		//session.invalidate();
+		response.sendRedirect(request.getContextPath()+"/Index.do");
      } catch (Exception e) {
       if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
+		///session.removeAttribute(request.getSession().getId());
+		//session.invalidate();
+		response.sendRedirect(request.getContextPath()+"/Index.do");
      }
  }
 

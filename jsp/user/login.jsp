@@ -38,7 +38,6 @@
 
 <body>
 <div id="mainContainer" style="">
-<fieldset>
 <legend>welcome come </legend>
 
 <form  action="<%=request.getContextPath()%>/User.do?state=processLogin" method="post" >
@@ -51,7 +50,7 @@
 <tr><td></td>
 
 <td>
-<html:input type="submit" value="<html:message key="Login" />" >
+<html:input type="submit" value="<html:message key="Login" />" />
 <input type="reset" class="formButton" value="Reset"><a href="?state=forgot">Forgot Password?</a>
 </td>
 </tr>
