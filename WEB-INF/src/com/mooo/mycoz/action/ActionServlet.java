@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.xml.DOMConfigurator;
+
 import com.mooo.mycoz.util.DBLoad;
 import com.mooo.mycoz.util.PigConfigNode;
 import com.mooo.mycoz.util.PigLoad;
@@ -35,10 +37,19 @@ public class ActionServlet extends HttpServlet {
 	 */
 	public void init() throws ServletException {
 		super.init();
-		String var = getServletContext().getRealPath("/");
-		PigConfigNode.setRootPath(var);
-		PigConfigNode.setConfigPath(var + "WEB-INF/config/pig-config.xml");
-		PigConfigNode.setMvcPath(var + "WEB-INF/config/mvc-config.xml");
+		// get web app real directory   
+		String prefix = getServletContext().getRealPath("/");
+		String confDir = getServletContext().getInitParameter("configDir");   
+
+		PigConfigNode.setRootPath(prefix);
+		PigConfigNode.setConfigPath(prefix + "/" + confDir +"/pig-config.xml");
+		PigConfigNode.setMvcPath(prefix + "/" + confDir +"/mvc-config.xml");
+		//load log4j configure file
+		// read parameter from web.xml file to set log4j property   
+		// set log4j   
+		if (confDir != null) {   
+			DOMConfigurator.configure(prefix + "/" + confDir+"/log4j.xml");
+		}
 
 		new DBLoad();
 		new PigLoad();
