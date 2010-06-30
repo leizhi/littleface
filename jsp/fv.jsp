@@ -28,8 +28,8 @@ school:<input name="school" type="text"/><br/>
 <input type="submit" name="state" value="accept" /><br/>
 <input type="submit" name="state" value="promptIndex" /><br/>
 
-<input type="submit" value="增加" onclick="doState('accept')"/><br/>
-<input type="submit" value="首页" onclick="doState('promptIndex')"/><br/>
+<input type="submit" value="增加" onclick="document.getElementById('state').value='accept'"/><br/>
+<input type="submit" value="首页" onclick="document.getElementById('state').value='promptIndex'"/><br/>
 
 </html:form>
 </body>
