@@ -1,8 +1,8 @@
--- MySQL dump 10.11
+-- MySQL dump 10.13  Distrib 5.1.47, for redhat-linux-gnu (i386)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.0.45-log
+-- Server version	5.1.47
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,7 +21,7 @@
 
 LOCK TABLES `Blog` WRITE;
 /*!40000 ALTER TABLE `Blog` DISABLE KEYS */;
-INSERT INTO `Blog` VALUES (1,1,4,'2008-01-09','电影',''),(2,2,1,'2008-01-09','调试','项目调试'),(3,2,2,'2008-01-09','老版本维护','xpc'),(4,2,3,'2008-01-09','升级版本','新版本调试'),(5,2,2,'2008-01-10','升级SRG/DPS服务器','准备工作'),(6,2,5,'2008-02-14','setup ebgo database',''),(7,5,4,'2008-02-20','jcao','');
+INSERT INTO `Blog` VALUES (1,2,10,'web开发','来人来人 ok 解放了',NULL,'2008-09-04'),(2,2,12,'H','讨论',NULL,'2008-09-04'),(3,2,10,'桌面','桌面桌面桌面桌面',NULL,'2008-09-04');
 /*!40000 ALTER TABLE `Blog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -31,8 +31,18 @@ UNLOCK TABLES;
 
 LOCK TABLES `Download` WRITE;
 /*!40000 ALTER TABLE `Download` DISABLE KEYS */;
-INSERT INTO `Download` VALUES (1,4,'石榴汁','/ebgo-zlei/upload/石榴汁20080217234501525.wmv','/ebgo-zlei/upload/IMG0269A20080217234501958.jpg','2008-02-17','音乐'),(2,4,'大家一家人','/ebgo-zlei/upload/Blue hills20080217231359391.jpg','/ebgo-zlei/upload/Winter20080217231359408.jpg','2008-02-17','音乐'),(3,4,'test','/ebgo-zlei/upload/坐上火车去拉萨20080217230820078.mp3','/ebgo-zlei/upload/Sunset20080217230823572.jpg','2008-02-17','abcd'),(4,3,'sdfsa','/ebgo-zlei/upload/Winter20080217232907877.jpg','/ebgo-zlei/upload/Sunset20080217232907942.jpg','2008-02-17','dsfsda'),(5,4,'test1','/ebgo-zlei/upload/wy20080218022154656.jpg','/ebgo-zlei/upload/wy20080218022154989.jpg','2008-02-17','');
+INSERT INTO `Download` VALUES (1,4,'verygodd','upload/78620080701070532249.mp3','upload/pub116487412484120080701070532997.mp3','2008-06-30',''),(2,4,'kk','upload/New Stories (Highway Blues)20080701072550052.wma','upload/exp_mbar20080701072550677.jpg','2008-06-30',''),(3,4,'哈哈','upload/Shania Twain - 09 Raining On Our Love 20080706074057287.mp3','upload/120080706074101658.jpg','2008-07-05','very good'),(4,3,'fdsafdsa','upload/2915020090125062224517.mp3','upload/000120090125062226124.jpg','2009-01-25','');
 /*!40000 ALTER TABLE `Download` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `Example`
+--
+
+LOCK TABLES `Example` WRITE;
+/*!40000 ALTER TABLE `Example` DISABLE KEYS */;
+INSERT INTO `Example` VALUES (12,'小猪',12,'七中'),(13,'小猪f',12,'七中'),(14,'小猪猪',12,'七中'),(15,'小猪猪1',12,'七中'),(16,'小猪猪3',12,'七中'),(17,'小猪猪4',12,'七中'),(18,'小猪猪5',12,'七中'),(19,'小猪猪6',12,'七中'),(20,'小猪猪7',12,'七中'),(21,'小猪猪8',12,'七中'),(22,'小猪猪9',12,'七中');
+/*!40000 ALTER TABLE `Example` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -70,7 +80,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `Message` WRITE;
 /*!40000 ALTER TABLE `Message` DISABLE KEYS */;
-INSERT INTO `Message` VALUES (1,2,1,'2008-01-08','公主小妹','有人看过吗?'),(2,2,4,'2008-01-08','数据库整理','现在的数据库等待升级'),(3,2,3,'2008-01-08','jkt稳定','服务器运行稳定'),(4,2,2,'2008-01-08','社区网站','开发讨论'),(5,2,5,'2008-01-09','总部服务器','现在最好不升级.'),(6,2,1,'2008-01-10','zlei ','当然看过了'),(7,2,7,'2008-02-20','test','test'),(8,5,7,'2008-02-20','我来测试一下','看这个功能如何？');
 /*!40000 ALTER TABLE `Message` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,7 +89,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (1,1,0,1,0,'root','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B','','aa','aa','aa',''),(2,3,0,1,1,'zlei','*E2B91693F9EED6BD199AF53AB0E72BCE4435F5CE','','','','',''),(3,1,0,1,1,'小魔女','36947cd0171b6250','','','','',''),(4,1,0,1,1,'kid_lyj','2984941e0e090905','','kid_lyj@126.com','13541066041','614200',''),(5,1,0,1,1,'蕲春人','2648b7361202c38f','','boy.365@126.com','13658241719','400000',''),(6,1,1,1,1,'admin','*4ACFE3202A5FF5CF467898FC58AAB1D615029441','dd','leizhifesker@gmail.com','dd','dd',NULL);
+INSERT INTO `User` VALUES (1,1,0,1,0,'root','67457e226a1a15bd','','aa','aa','aa',''),(2,3,0,1,1,'zlei','*E2B91693F9EED6BD199AF53AB0E72BCE4435F5CE','','','','',''),(3,1,0,1,1,'小魔女','36947cd0171b6250','','','','',''),(4,1,0,1,1,'kid_lyj','2984941e0e090905','','kid_lyj@126.com','13541066041','614200',''),(5,1,0,1,1,'蕲春人','2648b7361202c38f','','boy.365@126.com','13658241719','400000',''),(6,1,1,1,1,'admin','*4ACFE3202A5FF5CF467898FC58AAB1D615029441','dd','leizhifesker@gmail.com','dd','dd',NULL),(7,4,4,3,1,'0252118','*23AE809DDACAF96AF0FD78ED04B6A265E05AA257','','','','',NULL);
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -93,4 +102,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2008-06-11 23:47:26
+-- Dump completed on 2010-06-30  8:02:31

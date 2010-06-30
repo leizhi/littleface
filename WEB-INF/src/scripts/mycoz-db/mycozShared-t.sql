@@ -1,8 +1,8 @@
--- MySQL dump 10.11
+-- MySQL dump 10.13  Distrib 5.1.47, for redhat-linux-gnu (i386)
 --
 -- Host: localhost    Database: mycozShared
 -- ------------------------------------------------------
--- Server version	5.0.45-log
+-- Server version	5.1.47
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -66,13 +66,13 @@ INSERT INTO `AccountType` VALUES (1,1,'现金','现金帐目',2),(2,1,'银行存
 UNLOCK TABLES;
 
 --
--- Dumping data for table `BlogType`
+-- Dumping data for table `BlogCategory`
 --
 
-LOCK TABLES `BlogType` WRITE;
-/*!40000 ALTER TABLE `BlogType` DISABLE KEYS */;
-INSERT INTO `BlogType` VALUES (1,'mycoz','mycoz','mycoz'),(2,'xpc','xpc','xpc'),(3,'xpcw','xpcw','xpcw'),(4,'娱乐','娱乐','娱乐项目4'),(5,'ebgo','ebgo','');
-/*!40000 ALTER TABLE `BlogType` ENABLE KEYS */;
+LOCK TABLES `BlogCategory` WRITE;
+/*!40000 ALTER TABLE `BlogCategory` DISABLE KEYS */;
+INSERT INTO `BlogCategory` VALUES (0,0,0,'',NULL),(1,0,1,'Music',NULL),(2,0,1,'Move','电影'),(3,1,2,'mp3',NULL),(4,1,2,'mp4',NULL),(5,2,2,'HongKong','香港武打'),(6,0,1,'USA',NULL),(7,6,2,'越狱',''),(8,3,3,'孙燕枝',''),(9,0,1,'技术联盟','论坛'),(10,9,2,'java',''),(11,9,2,'c/c++',''),(12,0,1,'股票','财经');
+/*!40000 ALTER TABLE `BlogCategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -111,7 +111,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `DownloadType` WRITE;
 /*!40000 ALTER TABLE `DownloadType` DISABLE KEYS */;
-INSERT INTO `DownloadType` VALUES (1,'手机软件','手机软件'),(2,'手机游戏','手机游戏'),(3,'手机彩铃','手机彩铃'),(4,'MP3/MP4','MP3/MP4');
+INSERT INTO `DownloadType` VALUES (1,'手机软件','手机软件'),(2,'手机游戏','手机游戏'),(3,'手机彩铃','手机彩铃'),(4,'Music','MP3/MP4');
 /*!40000 ALTER TABLE `DownloadType` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -164,4 +164,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2008-06-11 23:47:26
+-- Dump completed on 2010-06-30  8:02:31
