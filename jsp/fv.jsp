@@ -6,31 +6,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <script type="text/javascript">
-	/*
-	These cookie functions are downloaded from 
-	http://www.mach5.com/support/analyzer/manual/html/General/CookiesJavaScript.htm
-	*/	
 	function doState(value) { 
 	   var state = document.getElementById('state');
 		state.value=value;
 	}
 </script>
+<style type="">
+</style>
 </head>
 <body>
 <html:form action="/Index.do"  method="post">
-<input type="hidden" id="state" name="state" value="promptIndex"/>
 hello!
 id:<input name="id" type="text"/><br/>
 age:<input name="age" type="text"/><br/>
 name:<input name="name" type="text"/><br/>
 school:<input name="school" type="text"/><br/>
 
-<input type="submit" name="state" value="accept" /><br/>
-<input type="submit" name="state" value="promptIndex" /><br/>
-
-<input type="submit" value="增加" onclick="document.getElementById('state').value='accept'"/><br/>
-<input type="submit" value="首页" onclick="document.getElementById('state').value='promptIndex'"/><br/>
-
+<html:submit value="增加" state="accept"/>
+<html:submit value="首页" state="promptIndex"/>
 </html:form>
 </body>
 </html>

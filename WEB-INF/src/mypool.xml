@@ -6,19 +6,20 @@
 <entry key="yazdMailFrom">notvalid@forumsoftware.ca</entry>
 <entry key="serverHost">127.0.0.1</entry>
 <entry key="serverPort">10000</entry>
+
 <!-- configure mysql database -->
-<!--
 <entry key="DbConnectionDefaultPool.driver">org.gjt.mm.mysql.Driver</entry>
 <entry key="DbConnectionDefaultPool.server">jdbc:mysql://127.0.0.1/manager?useUnicode=true&amp;characterEncoding=utf8</entry>
 <entry key="DbConnectionDefaultPool.username">mycoz</entry>
 <entry key="DbConnectionDefaultPool.password">xmlpj0#</entry>
--->
+
 <!-- configure oracle database -->
+<!--
 <entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>
 <entry key="DbConnectionDefaultPool.server">jdbc:oracle:thin:@192.168.0.3:1521:khdb</entry>
 <entry key="DbConnectionDefaultPool.username">spdemo</entry>
 <entry key="DbConnectionDefaultPool.password">spdemo</entry>
-
+-->
 <entry key="yazdMailSubject">Default Yazd Subject</entry>
 <entry key="yazdMailSMTPServer">127.0.0.1</entry>
 <entry key="DbSearchIndexer.lastIndexed">1236019783316</entry>
