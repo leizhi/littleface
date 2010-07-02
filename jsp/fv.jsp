@@ -17,7 +17,7 @@
 <body>
 <html:form action="/Index.do"  method="post">
 hello!
-id:<input name="id" type="text"/><br/>
+id:<html:autoField table="Example"/><br/>
 age:<input name="age" type="text"/><br/>
 name:<input name="name" type="text"/><br/>
 school:<input name="school" type="text"/><br/>

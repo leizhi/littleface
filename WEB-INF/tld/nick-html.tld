@@ -325,6 +325,23 @@
 	</tag>
 
 	<tag>
+		<name>autoField</name>
+		<tagclass>com.mooo.mycoz.taglib.html.AutoFieldTag</tagclass>
+		<bodycontent>empty</bodycontent>
+		<info>Tag with AutoField</info>
+		<attribute>
+			<name>table</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>field</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
 		<name>menulist</name>
 		<tagclass>com.mooo.mycoz.taglib.html.MenuListTag</tagclass>
 		<bodycontent>empty</bodycontent>

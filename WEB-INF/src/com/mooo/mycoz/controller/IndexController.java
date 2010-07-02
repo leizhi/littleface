@@ -74,8 +74,7 @@ public class IndexController {
 			//if (log.isDebugEnabled())log.debug("SQL= " + ParamUtil.buildAddSQL(request, "Example"));
 			//ex.add();
 		} catch (Exception e) {
-			if (log.isDebugEnabled())
-				log.debug("Exception Load error of: " + e.getMessage());
+			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 		}
 		return "accept";
 

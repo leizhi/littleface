@@ -34,8 +34,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mooo.mycoz.dbobj.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozShared.Language;
-import com.mooo.mycoz.dbobj.util.IDGenerator;
 import com.mooo.mycoz.util.I18n;
+import com.mooo.mycoz.util.IDGenerator;
 
 public class BoxATag extends TagSupport {
 

@@ -17,7 +17,7 @@ public class FormTag extends TagSupport {
 
 	private static Log log = LogFactory.getLog(FormTag.class);
 
-	private String returnForm = null;
+	private String output = null;
 
 	private String name = null;
 	private String id = null;
@@ -71,23 +71,23 @@ public class FormTag extends TagSupport {
 					.getRequest();
 			String conPath = request.getContextPath();
 
-			returnForm = "<form ";
+			output = "<form ";
 			if (name != null)
-				returnForm += "name=\"" + name + "\" ";
+				output += "name=\"" + name + "\" ";
 			if (id != null)
-				returnForm += "id=\"" + id + "\" ";
+				output += "id=\"" + id + "\" ";
 			if (action != null)
-				returnForm += "action=\"" + conPath + action + "\" ";
+				output += "action=\"" + conPath + action + "\" ";
 			if (method != null)
-				returnForm += "method=\"" + method + "\" ";
-			returnForm += ">";
+				output += "method=\"" + method + "\" ";
+			output += ">";
 			/*
-			  if (state != null && state.equals("")) returnForm +=
+			  if (state != null && state.equals("")) output +=
 			  "<input type=\"hidden\" id=\"state\" name=\"state\" value=\"" +
-			  state + "\"/>"; else returnForm +=
+			  state + "\"/>"; else output +=
 			  "<input type=\"hidden\" id=\"state\" name=\"state\" />";
 			 */
-			pageContext.getOut().write(returnForm);
+			pageContext.getOut().write(output);
 
 			return EVAL_BODY_INCLUDE;// count body content
 		} catch (Exception e) {
