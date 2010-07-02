@@ -10,73 +10,106 @@ import javax.servlet.http.HttpServletRequest;
 
 public class FormTag extends TagSupport {
 
-     /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private static Log log = LogFactory.getLog(FormTag.class);
 
-     private HttpServletRequest request = null;
-     private String returnForm = null;
+	private String returnForm = null;
 
-     private String name = null;
-     private String id = null;
-     private String action = null;
-     private String method = null;
+	private String name = null;
+	private String id = null;
+	private String action = null;
+	private String state = null;
+	private String method = null;
 
-     public FormTag(){
+	public String getName() {
+		return name;
+	}
 
-          }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-      public void setAction(String action){
-            this.action = action;
-         }
+	public String getId() {
+		return id;
+	}
 
-      public void setName(String name){
-             this.name = name;
-            }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-      public void setMethod(String method){
-             this.method = method;
-            }
+	public String getAction() {
+		return action;
+	}
 
-      public int doStartTag() throws JspTagException {
-	    	try{
-			request = (HttpServletRequest)pageContext.getRequest();
-			String var = request.getRequestURI();
+	public void setAction(String action) {
+		this.action = action;
+	}
 
-			var=var.substring(1,var.indexOf("/",1));
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public int doStartTag() throws JspTagException {
+		try {
+			HttpServletRequest request = (HttpServletRequest) pageContext
+					.getRequest();
+			String conPath = request.getContextPath();
+
 			returnForm = "<form ";
-			if (name != null) returnForm += "name=\""+name+"\" ";
-			if (id != null) returnForm += "id=\""+id+"\" ";
-			if (action != null) returnForm += "action=\"/"+var+action+"\" ";
-			if (method != null) returnForm += "method=\""+method+"\" ";
+			if (name != null)
+				returnForm += "name=\"" + name + "\" ";
+			if (id != null)
+				returnForm += "id=\"" + id + "\" ";
+			if (action != null)
+				returnForm += "action=\"" + conPath + action + "\" ";
+			if (method != null)
+				returnForm += "method=\"" + method + "\" ";
 			returnForm += ">";
-			//returnFrom += "</from>";
+			/*
+			  if (state != null && state.equals("")) returnForm +=
+			  "<input type=\"hidden\" id=\"state\" name=\"state\" value=\"" +
+			  state + "\"/>"; else returnForm +=
+			  "<input type=\"hidden\" id=\"state\" name=\"state\" />";
+			 */
 			pageContext.getOut().write(returnForm);
 
-            		return EVAL_BODY_INCLUDE;//count body content
-	     	    } catch(Exception e) {
-                 	if (log.isDebugEnabled()) log.debug(" Error in getting results"+e.toString());
-                 	return EVAL_PAGE;
-               	      }
-                }
-
-      public int doAfterBody() throws JspTagException {
-		return SKIP_BODY; //break
-		//return EVAL_BODY_AGAIN; //lookup
+			return EVAL_BODY_INCLUDE;// count body content
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(" Error in getting results" + e.toString());
+			return EVAL_PAGE;
 		}
+	}
 
-      public int doEndTag() throws JspTagException {
-           try {
+	public int doAfterBody() throws JspTagException {
+		return SKIP_BODY; // break
+		// return EVAL_BODY_AGAIN; //lookup
+	}
 
-		pageContext.getOut().write("</form>");
-               
-           }catch(Exception e) {
-            if (log.isDebugEnabled()) log.debug(" Error in getting results"+e.toString());
-               }
-             return EVAL_PAGE;
-           }
+	public int doEndTag() throws JspTagException {
+		try {
+			pageContext.getOut().write("</form>");
+		} catch (Exception e) {
+			if (log.isErrorEnabled())
+				log.error(" Error in getting results" + e.toString());
+		}
+		return EVAL_PAGE;
+	}
 
 }
