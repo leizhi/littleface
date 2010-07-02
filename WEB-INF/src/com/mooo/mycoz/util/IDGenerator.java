@@ -61,21 +61,21 @@ public class IDGenerator {
 	} /* getDCValues() */
 
 	/*
-	 * public static String getNextID(String table) throws
-	 * Exception,SQLException { String nextID=""; try{ int id = 0; Connection
-	 * DBConection = MysqlConnection.getConection(); Statement stmt =
-	 * DBConection.createStatement(); ResultSet rs = null; String sql =
-	 * "SELECT MAX(ID) AS MaxId FROM "+table; rs = stmt.executeQuery(sql);
-	 * if(rs.first()) id=rs.getInt("MaxId")+1;
-	 * 
-	 * nextID=Integer.toString(id);
-	 * 
-	 * } catch (SQLException sqlE) { if (log.isDebugEnabled())
-	 * log.error("SQLException:" + sqlE.getMessage()); } catch (Exception e) {
-	 * if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage()); }
-	 * 
-	 * return nextID; }
-	 *//* getNextID(String table) */
+	 public static String getNextID(String table) throws
+	 Exception,SQLException { String nextID=""; try{ int id = 0; Connection
+	 DBConection = MysqlConnection.getConection(); Statement stmt =
+	 DBConection.createStatement(); ResultSet rs = null; String sql =
+	 "SELECT MAX(ID) AS MaxId FROM "+table; rs = stmt.executeQuery(sql);
+	  if(rs.first()) id=rs.getInt("MaxId")+1;
+	  
+	 nextID=Integer.toString(id);
+	  
+	  } catch (SQLException sqlE) { if (log.isDebugEnabled())
+	  log.error("SQLException:" + sqlE.getMessage()); } catch (Exception e) {
+	  if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage()); }
+	 
+	  return nextID; }
+	 //* getNextID(String table) */
 
 	public synchronized static String getNextID(String table) throws Exception, SQLException {
 		String nextID = "";
