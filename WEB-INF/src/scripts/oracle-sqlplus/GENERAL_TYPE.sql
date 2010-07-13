@@ -1,3 +1,4 @@
+﻿drop table GENERAL_TYPE cascade constraints;
 -- Create table
 create table GENERAL_TYPE
 (

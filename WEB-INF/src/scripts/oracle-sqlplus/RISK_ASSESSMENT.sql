@@ -1,3 +1,4 @@
+﻿drop table RISK_ASSESSMENT cascade constraints;
 -- Create table
 create table RISK_ASSESSMENT
 (

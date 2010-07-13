@@ -1,3 +1,4 @@
+﻿drop table EXAMPLE cascade constraints;
 -- Create table
 create table EXAMPLE
 (
