@@ -3,7 +3,7 @@ package com.mooo.mycoz.dbobj;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.util.MysqlConnection;
+import com.mooo.mycoz.jdbc.MysqlConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

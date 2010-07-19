@@ -1,163 +1,236 @@
+/**
+ * Copyright (C) 2001 Yasna.com. All rights reserved.
+ *
+ * ===================================================================
+ * The Apache Software License, Version 1.1
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. The end-user documentation included with the redistribution,
+ *    if any, must include the following acknowledgment:
+ *       "This product includes software developed by
+ *        Yasna.com (http://www.yasna.com)."
+ *    Alternately, this acknowledgment may appear in the software itself,
+ *    if and wherever such third-party acknowledgments normally appear.
+ *
+ * 4. The names "Yazd" and "Yasna.com" must not be used to
+ *    endorse or promote products derived from this software without
+ *    prior written permission. For written permission, please
+ *    contact yazd@yasna.com.
+ *
+ * 5. Products derived from this software may not be called "Yazd",
+ *    nor may "Yazd" appear in their name, without prior written
+ *    permission of Yasna.com.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL YASNA.COM OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of Yasna.com. For more information
+ * on Yasna.com, please see <http://www.yasna.com>.
+ */
+
+/**
+ * Copyright (C) 2000 CoolServlets.com. All rights reserved.
+ *
+ * ===================================================================
+ * The Apache Software License, Version 1.1
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. The end-user documentation included with the redistribution,
+ *    if any, must include the following acknowledgment:
+ *       "This product includes software developed by
+ *        CoolServlets.com (http://www.coolservlets.com)."
+ *    Alternately, this acknowledgment may appear in the software itself,
+ *    if and wherever such third-party acknowledgments normally appear.
+ *
+ * 4. The names "Jive" and "CoolServlets.com" must not be used to
+ *    endorse or promote products derived from this software without
+ *    prior written permission. For written permission, please
+ *    contact webmaster@coolservlets.com.
+ *
+ * 5. Products derived from this software may not be called "Jive",
+ *    nor may "Jive" appear in their name, without prior written
+ *    permission of CoolServlets.com.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL COOLSERVLETS.COM OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of CoolServlets.com. For more information
+ * on CoolServlets.com, please see <http://www.coolservlets.com>.
+ */
+
 package com.manihot.xpc.cache;
 
-import java.util.HashMap;
+import java.util.*;
 
-import com.manihot.xpc.util.ConfigureUtil;
-
+/**
+ * Central cache management of all caches used by Yazd.
+ */
 public class CacheManager {
-    private static Object initLock = new Object();
-    private static CacheManager factory = null;
 
-	final public static int SECOND = 1000;
-	final public static int MINUTE = SECOND*60;
-	final public static int HOUR = MINUTE*60;
-	final public static int K = 1024;
-	final public static int M = 1024 * K;
-
-    private boolean cacheEnabled = true;
-
-    protected HashMap<String,Cache> caches;
-    
-    protected int cacheSize=0;
-
-    private CacheManager() {
-    	caches = new HashMap<String,Cache>();
-    	
-    	caches = new ConfigureUtil().confCache();
-    	System.out.println("caches.size="+caches.size());
-		caches.put((caches.size()+1)+"", new UserPermsCache(128 * K,1 * HOUR));
-
-    	/*
-        caches = new Cache[13];
-
-        //Initialize all cache structures
-        caches[0] = new Cache(256*1024, 10*MINUTE);
-        caches[1] = new Cache(128*1024, 10*MINUTE);
-        caches[2] = new Cache(128*1024, 1*HOUR);
-        caches[3] = new Cache(128*1024, 1*HOUR);
-        caches[4] = new Cache(128*1024, 20*MINUTE);
-        caches[5] = new Cache(128*1024, 20*MINUTE);
-        caches[6] = new Cache(128*1024, 20*MINUTE);
-        caches[7] = new Cache(512*1024, 1*HOUR);
-        caches[8] = new Cache(128*1024, 1*HOUR);
-        caches[9] = new Cache(128*1024, 1*HOUR);
-        caches[10] = new Cache(128*1024, 1*HOUR);
-        //The user permissions cache is a special one. It's actually a Cache
-        //of Cache objects. Each of the cache objects in the main cache
-        //corresponds to a particular forum, and is used to cache the
-        //permissions that a user has for a forum. In order to handle this
-        //requirement, we use a special subclass of Cache.
-        caches[12] = new UserPermsCache(256*1024, 2*HOUR);
-        caches[13] = new Cache(128*1024, 1*HOUR);
-        */
-    }
-    
-    /**
-     * Returns a concrete ForumFactory instance. Permissions corresponding
-     * to the Authorization will be used. If getting the factory fails, null
-     * will be returned.
-     *
-     * @param authorization the auth token for the user.
-     * @return a concrete ForumFactory instance.
-     */
-    public static CacheManager getInstance() {
-
-        if (factory == null) {
-            synchronized(initLock) {
-                if (factory == null) {
-                	factory = new CacheManager();
-                	/*
-                    String classNameProp = PropertyManager.getProperty("ForumFactory.className");
-                    if (classNameProp != null) {
-                        className = classNameProp;
-                    }
-                    try {
-                        //Load the class and create an instance.
-                        Class c = Class.forName(className);
-                        factory = (ForumFactory)c.newInstance();
-                    }
-                    catch (Exception e) {
-                        System.err.println("Failed to load ForumFactory class "
-                            + className + ". Yazd cannot function normally.");
-                        e.printStackTrace();
-                        return null;
-                    }
-                    */
-                }
-            }
-        }
-
-        //Wrap the factory with a proxy to provide security. We also pass
-        //in the username and password to the proxy for its special
-        //implementation of the getForum() method. See below for more details.
-        /*
-        ForumFactoryProxy proxy = new ForumFactoryProxy(
-                                    factory,
-                                    authorization,
-                                    factory.getPermissions(authorization)
-                                  );
-        return proxy;
-        */
-        return factory;
-    }
+	private static Object initLock = new Object();
+	private static CacheManager factory = null;
 	
-    public Cache getCache(String cacheName) {
-        return caches.get(cacheName);
-    }
+	public static CacheManager getInstance() {
+		if (factory == null) {
+			synchronized (initLock) {
+				try {
+					factory = new CacheManager();
+				} catch (Exception e) {
+					System.err.println("Exception CacheManager."
+							+ e.getMessage());
+					e.printStackTrace();
+					return null;
+				}
+			}
+		}
+		return factory;
+	}
+	
+	public static final int K = 1024;
+	public static final int M = 1024 * K;
+	public static final int G = 1024 * M;
+	
+	public static final long SEC = 1000;
+	public static final long MINUTE =  60 * SEC;
+	public static final	long HOUR = 60 * MINUTE;
+	
+	//config cache catalog
+	public static final int DBOBJ_CACHE = 0;
+	public static final int USER_PERMS_CACHE = 1;
 
-    public void add(String cacheName, Object key, Object object) {
-    	caches.get(cacheName).add(key, object);
-    }
-    
-    public Object get(String cacheName, Object key) {
-        if (!cacheEnabled) {
-            return null;
-        }
-        return caches.get(cacheName).get(key);
-    }
-    
-    public void remove(String cacheName, Object key) {
-    	caches.get(cacheName).remove(key);
-        //when cache becomes distributed, we'd send out an expire message
-        //here to all other yazd servers.
-    }
+	protected Cache[] caches;
 
-    public void removeUserPerm(Object userID) {
-    	/*
-        Object [] values  = caches[USER_PERMS_CACHE].values().toArray();
-        for (int i=0; i<values.length; i++) {
-            Cache cache = (Cache)((CacheObject)values[i]).object;
-            cache.remove(userID);
-        }
-        */
-        //when cache becomes distributed, we'd send out an expire message
-        //here to all other yazd servers.
-    }
+	private boolean enabled = true;
 
-    public void removeUserPerm(Object userID, Object forumID) {
-    	/*
-        Cache cache = (Cache)caches[USER_PERMS_CACHE].get(forumID);
-        if (cache != null) {
-            cache.remove(userID);
-        }
-        */
-        //when cache becomes distributed, we'd send out an expire message
-        //here to all other yazd servers.
-    }
+	public CacheManager() {
 
-    public void clear(String cacheName) {
-    	caches.get(cacheName).clear();
-        //when cache becomes distributed, we'd send out an expire message
-        //here to all other yazd servers.
-    }
-    
-    public boolean isCacheEnabled() {
-        return cacheEnabled;
-    }
+		caches = new Cache[13];
 
-    public void setCacheEnabled(boolean cacheEnabled) {
-        this.cacheEnabled = cacheEnabled;
-    }
+		// Initialize all cache structures
+		caches[DBOBJ_CACHE] = new Cache(256 * K, 10 * MINUTE);
+		// The user permissions cache is a special one. It's actually a Cache
+		// of Cache objects. Each of the cache objects in the main cache
+		// corresponds to a particular forum, and is used to cache the
+		// permissions that a user has for a forum. In order to handle this
+		// requirement, we use a special subclass of Cache.
+		caches[USER_PERMS_CACHE] = new UserPermsCache(256 * K, 2 * HOUR);
+	}
+
+	public Cache getCache(int cacheType) {
+		return caches[cacheType];
+	}
+
+	public void add(int cacheType, Object key, Cacheable object) {
+		caches[cacheType].add(key, object);
+	}
+
+	public Cacheable get(int cacheType, Object key) {
+		if (!enabled) {
+			return null;
+		}
+		return caches[cacheType].get(key);
+	}
+
+	public void remove(int cacheType, Object key) {
+		caches[cacheType].remove(key);
+		// when cache becomes distributed, we'd send out an expire message
+		// here to all other yazd servers.
+	}
+
+	public void removeUserPerm(Object userID) {
+		Object[] values = caches[USER_PERMS_CACHE].values().toArray();
+		for (int i = 0; i < values.length; i++) {
+			Cache cache = (Cache) ((CacheObject) values[i]).object;
+			cache.remove(userID);
+		}
+		// when cache becomes distributed, we'd send out an expire message
+		// here to all other yazd servers.
+	}
+
+	public void removeUserPerm(Object userID, Object forumID) {
+		Cache cache = (Cache) caches[USER_PERMS_CACHE].get(forumID);
+		if (cache != null) {
+			cache.remove(userID);
+		}
+		// when cache becomes distributed, we'd send out an expire message
+		// here to all other yazd servers.
+	}
+
+	public void clear(int cacheType) {
+		caches[cacheType].clear();
+		// when cache becomes distributed, we'd send out an expire message
+		// here to all other yazd servers.
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public int getSize(int cacheType) {
+		return caches[cacheType].getSize();
+	}
+
+	public Map getCachedObjectsHash(int cacheType) {
+		return caches[cacheType].cachedObjectsHash;
+	}
+	
+	public void setCache(int cacheType, int maxSize,long maxLifetime) {
+		caches[cacheType].setCache(maxSize,maxLifetime);
+	}
+	
+	public int getNumElements(int cacheType) {
+		return caches[cacheType].getNumElements();
+	}
 }
 
 /**
@@ -167,41 +240,58 @@ public class CacheManager {
  */
 class UserPermsCache extends Cache {
 
-    public UserPermsCache(int size, long expireTime) {
-        super(size, expireTime);
-    }
+	public UserPermsCache(int size, long expireTime) {
+		super(size, expireTime);
+	}
 
-    public synchronized Object get(Object key) {
-        Cache subCache = (Cache)super.get(key);
-        if (subCache == null) {
-            //cache has expired, or is not there, so put a new one in there.
-            //Cache objects only need to last as long as a user's session
-            //does. Half an hour is a reasonable amount of time for this.
-            subCache = new Cache(2*1024, 30*1000*60);
-            add(key, subCache);
-        }
-        return subCache;
-    }
+	public synchronized Cacheable get(Object key) {
+		Cache subCache = (Cache) super.get(key);
+		if (subCache == null) {
+			// cache has expired, or is not there, so put a new one in there.
+			// Cache objects only need to last as long as a user's session
+			// does. Half an hour is a reasonable amount of time for this.
+			subCache = new Cache(2 * CacheManager.K, 30 * CacheManager.MINUTE);
+			add(key, subCache);
+		}
+		return subCache;
+	}
 
-    public synchronized void remove(Object key) {
-        CacheObject cacheObject = (CacheObject)cachedObjectsHash.get(key);
-        //If the object is not in cache, stop trying to remove it.
-        if (cacheObject == null) {
-            return;
-        }
-        //remove from the hash map
-        cachedObjectsHash.remove(key);
-        //remove from the cache order list
-        cacheObject.lastAccessedListNode.remove();
-        cacheObject.ageListNode.remove();
-        //remove references to linked list nodes
-        cacheObject.ageListNode = null;
-        cacheObject.lastAccessedListNode = null;
-        //removed the object, so subtract its size from the total.
-        size -= cacheObject.size;
+	public synchronized void remove(Object key) {
+		CacheObject cacheObject = (CacheObject) cachedObjectsHash.get(key);
+		// If the object is not in cache, stop trying to remove it.
+		if (cacheObject == null) {
+			return;
+		}
+		// remove from the hash map
+		cachedObjectsHash.remove(key);
+		// remove from the cache order list
+		cacheObject.lastAccessedListNode.remove();
+		cacheObject.ageListNode.remove();
+		// remove references to linked list nodes
+		cacheObject.ageListNode = null;
+		cacheObject.lastAccessedListNode = null;
+		// removed the object, so subtract its size from the total.
+		size -= cacheObject.size;
 
-        //Finally, clear the sub-cache to make sure memory is released.
-        ((Cache)cacheObject.object).clear();
-    }
+		// Finally, clear the sub-cache to make sure memory is released.
+		((Cache) cacheObject.object).clear();
+	}
 
+	/**
+	 * Returns the current size in bytes of the cache. The base getSize() method
+	 * does not work correctly because the sub-caches are empty when we first
+	 * add them rather than the normal cache assumption that objects are near
+	 * the size that they will always be.
+	 * 
+	 * @return the size of the cache in bytes.
+	 */
+	public int getSize() {
+		int size = 0;
+		Object[] values = values().toArray();
+		for (int i = 0; i < values.length; i++) {
+			Cache cache = (Cache) values[i];
+			size += cache.getSize();
+		}
+		return size;
+	}
 }

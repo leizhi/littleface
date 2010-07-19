@@ -1,48 +1,25 @@
 package com.mooo.mycoz.util;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.sql.Connection;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import com.manihot.xpc.jdbc.DbConnectionManager;
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.dbobj.MultiDBObject;
-import com.mooo.mycoz.dbobj.mycozBranch.Blog;
-import com.mooo.mycoz.dbobj.mycozBranch.Message;
-import com.mooo.mycoz.dbobj.mycozBranch.User;
-import com.mooo.mycoz.dbobj.mycozShared.BlogType;
-import com.mooo.mycoz.dbobj.mycozShared.Country;
-import com.mooo.mycoz.dbobj.mycozShared.Language;
 
 public class IDGenerator {
 

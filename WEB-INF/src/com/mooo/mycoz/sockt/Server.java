@@ -7,7 +7,7 @@ import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.manihot.xpc.util.PropertyManager;
+import com.mooo.mycoz.util.PropertyManager;
 
 public class Server extends ServerSocket {
 	private static Log log = LogFactory.getLog(Server.class);

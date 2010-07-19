@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.manihot.xpc.jdbc.DbConnectionManager;
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 public class Example {
 	/** DATABASE QUERIES **/

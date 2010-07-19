@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.io.IOException;
 import java.util.Date;
 
-import com.manihot.xpc.util.PropertyManager;
+import com.mooo.mycoz.util.PropertyManager;
 
 public class Client {
 	public Client() {

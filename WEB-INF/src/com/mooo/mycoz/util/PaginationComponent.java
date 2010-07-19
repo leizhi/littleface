@@ -54,12 +54,12 @@ import java.lang.ClassNotFoundException;
 
 
 import com.mooo.mycoz.action.ActionServlet;
+import com.mooo.mycoz.jdbc.DBLoad;
+import com.mooo.mycoz.jdbc.DBMap;
+import com.mooo.mycoz.jdbc.DBNode;
+import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.request.Input;
-import com.mooo.mycoz.util.DBLoad;
-import com.mooo.mycoz.util.DBMap;
-import com.mooo.mycoz.util.DBNode;
 import com.mooo.mycoz.util.I18n;
-import com.mooo.mycoz.util.MysqlConnection;
 import com.mooo.mycoz.util.PigConfigNode;
 import com.mooo.mycoz.util.PigLoad;
 import com.mooo.mycoz.util.PigMap;

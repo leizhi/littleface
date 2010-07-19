@@ -3,7 +3,7 @@ package com.mooo.mycoz.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.manihot.xpc.jdbc.DbConnectionManager;
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 public class Transaction {
 	Connection con = null;

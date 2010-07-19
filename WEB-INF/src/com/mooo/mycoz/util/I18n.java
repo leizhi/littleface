@@ -1,14 +1,9 @@
 package com.mooo.mycoz.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
  
 public class I18n {
-
-	private static Log log = LogFactory.getLog(I18n.class);
 
 	private static Locale locale = null;
 	private static ResourceBundle messages = null;

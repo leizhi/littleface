@@ -1,11 +1,7 @@
-package com.manihot.xpc.cache;
-
-import com.manihot.xpc.util.LinkedListNode;
-
 /**
  * $RCSfile: CacheObject.java,v $
- * $Revision: 1.3 $
- * $Date: 2006/01/07 00:21:06 $
+ * $Revision: 1.1.1.1 $
+ * $Date: 2007/03/01 00:17:44 $
  *
  * Copyright (C) 2000 CoolServlets.com. All rights reserved.
  *
@@ -59,55 +55,58 @@ import com.manihot.xpc.util.LinkedListNode;
  * on CoolServlets.com, please see <http://www.Yasna.com>.
  */
 
+package com.manihot.xpc.cache;
 
 /**
  * Wrapper for all objects put into cache. It's primary purpose is to maintain
  * references to the linked lists that maintain the creation time of the object
  * and the ordering of the most used objects.
- *
+ * 
  * This class is optimized for speed rather than strictly correct encapsulation.
  */
 public final class CacheObject {
 
-   /**
-    * Underlying object wrapped by the CacheObject.
-    */
-    public Object object;
+	/**
+	 * Underlying object wrapped by the CacheObject.
+	 */
+	public Cacheable object;
 
-    /**
-     * The size of the Cacheable object. The size of the Cacheable
-     * object is only computed once when it is added to the cache. This makes
-     * the assumption that once objects are added to cache, they are mostly
-     * read-only and that their size does not change significantly over time.
-     */
-    public int size;
+	/**
+	 * The size of the Cacheable object. The size of the Cacheable object is
+	 * only computed once when it is added to the cache. This makes the
+	 * assumption that once objects are added to cache, they are mostly
+	 * read-only and that their size does not change significantly over time.
+	 */
+	public int size;
 
-    /**
-     * A reference to the node in the cache order list. We keep the reference
-     * here to avoid linear scans of the list. Every time the object is
-     * accessed, the node is removed from its current spot in the list and
-     * moved to the front.
-     */
-    public LinkedListNode lastAccessedListNode;
+	/**
+	 * A reference to the node in the cache order list. We keep the reference
+	 * here to avoid linear scans of the list. Every time the object is
+	 * accessed, the node is removed from its current spot in the list and moved
+	 * to the front.
+	 */
+	public LinkedListNode lastAccessedListNode;
 
-    /**
-     * A reference to the node in the age order list. We keep the reference
-     * here to avoid linear scans of the list. The reference is used if the
-     * object has to be deleted from the list.
-     */
-    public LinkedListNode ageListNode;
+	/**
+	 * A reference to the node in the age order list. We keep the reference here
+	 * to avoid linear scans of the list. The reference is used if the object
+	 * has to be deleted from the list.
+	 */
+	public LinkedListNode ageListNode;
 
-    /**
-     * Creates a new cache object wrapper. The size of the Cacheable object
-     * must be passed in in order to prevent another possibly expensive
-     * lookup by querying the object itself for its size.<p>
-     *
-     * @param object the underlying Cacheable object to wrap.
-     * @param size the size of the Cachable object in bytes.
-     */
-    public CacheObject(Object object, int size) {
-        this.object = object;
-        this.size = size;
-    }
+	/**
+	 * Creates a new cache object wrapper. The size of the Cacheable object must
+	 * be passed in in order to prevent another possibly expensive lookup by
+	 * querying the object itself for its size.
+	 * <p>
+	 * 
+	 * @param object
+	 *            the underlying Cacheable object to wrap.
+	 * @param size
+	 *            the size of the Cachable object in bytes.
+	 */
+	public CacheObject(Cacheable object, int size) {
+		this.object = object;
+		this.size = size;
+	}
 }
-

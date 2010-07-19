@@ -7,7 +7,6 @@ import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.util.Date;
@@ -17,7 +16,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
-import com.manihot.xpc.jdbc.DbConnectionManager;
+
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.util.Transaction;
 
 import org.apache.commons.logging.Log;
@@ -146,7 +146,7 @@ public class ParamUtil {
 			IllegalAccessException, ParseException, InstantiationException {
 		String funName = getFunName(objName);
 		Method getMethod = bean.getClass().getMethod("get" + funName, null);
-		Class cls = getMethod.getReturnType();
+		Class<?> cls = getMethod.getReturnType();
 		Object obj = getMethod.invoke(bean, null);
 
 		// 判断参数为空,直接设置NULL值.

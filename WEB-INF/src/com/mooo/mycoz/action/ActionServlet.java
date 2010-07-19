@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.xml.DOMConfigurator;
 
-import com.mooo.mycoz.util.DBLoad;
+import com.mooo.mycoz.jdbc.DBLoad;
 import com.mooo.mycoz.util.PigConfigNode;
 import com.mooo.mycoz.util.PigLoad;
 import com.mooo.mycoz.util.PigMap;
