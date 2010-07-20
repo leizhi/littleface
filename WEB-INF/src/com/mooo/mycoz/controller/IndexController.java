@@ -42,7 +42,7 @@ public class IndexController {
 			}
 
 			HttpSession session = request.getSession(true);
-			com.mooo.mycoz.response.SessionCounter.put(request.getSession()
+			com.mooo.mycoz.util.SessionCounter.put(request.getSession()
 					.getId());
 			session.setAttribute(request.getSession().getId(), "Guest");
 

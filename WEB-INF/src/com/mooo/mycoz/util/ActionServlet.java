@@ -1,4 +1,4 @@
-package com.mooo.mycoz.action;
+package com.mooo.mycoz.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,13 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.xml.DOMConfigurator;
-
-import com.mooo.mycoz.jdbc.DBLoad;
-import com.mooo.mycoz.util.PigConfigNode;
-import com.mooo.mycoz.util.PigLoad;
-import com.mooo.mycoz.util.PigMap;
-import com.mooo.mycoz.util.PigNode;
-
 import java.lang.reflect.Method;
 
 public class ActionServlet extends HttpServlet {
@@ -28,31 +21,29 @@ public class ActionServlet extends HttpServlet {
 	private static final long serialVersionUID = 4119522977670257605L;
 
 	protected String configPig = "WEB-INF/config/mvc-config.xml";
-	protected String configDb = "WEB-INF/config/pig-config.xml";
-
-	/*
-	 * public void destroy() {
-	 * 
-	 * }
-	 */
+	
+	public void destroy() {
+	  
+	}
+	
 	public void init() throws ServletException {
 		super.init();
+		
 		// get web app real directory   
 		String prefix = getServletContext().getRealPath("/");
-		String confDir = getServletContext().getInitParameter("configDir");   
+		String confDir = getServletContext().getInitParameter("configDir");
 
-		PigConfigNode.setRootPath(prefix);
-		PigConfigNode.setConfigPath(prefix + "/" + confDir +"/pig-config.xml");
-		PigConfigNode.setMvcPath(prefix + "/" + confDir +"/mvc-config.xml");
+		//PigConfigNode.setRootPath(prefix);
+		//PigConfigNode.setConfigPath(prefix + "/" + confDir +"/pig-config.xml");
+		//PigConfigNode.setMvcPath(prefix + "/" + confDir +"/mvc-config.xml");
 		//load log4j configure file
 		// read parameter from web.xml file to set log4j property   
-		// set log4j   
-		if (confDir != null) {   
+		// set log4j
+		if (confDir != null) {
 			DOMConfigurator.configure(prefix + "/" + confDir+"/log4j.xml");
 		}
-
-		new DBLoad();
-		new PigLoad();
+		
+		new ConfigureUtil().conf();
 	}
 
 	protected void service(HttpServletRequest request,
@@ -65,12 +56,16 @@ public class ActionServlet extends HttpServlet {
 		try {
 
 			String execPath = request.getServletPath();
+			
 			if (execPath.indexOf(".") > 0) {
 				execPath = execPath.substring(0, execPath.indexOf("."));
 			}
+			
 			if (execPath == null)
 				execPath = request.getParameter("Controller");
+			out.println("Start Servlet:");
 
+			/*
 			String execController = "";
 			String execJsp = null;
 			String execState = request.getParameter("state");
@@ -117,6 +112,7 @@ public class ActionServlet extends HttpServlet {
 					// response.setHeader("Location",request.getContextPath()+execJsp);
 				}
 			}
+			*/
 		} catch (Exception ex) {
 			out.println("Exception:" + ex);
 		} catch (Throwable e) {

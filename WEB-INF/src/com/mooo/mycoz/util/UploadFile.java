@@ -61,7 +61,7 @@ public class UploadFile {
         this.uploadPath = path;
     }
     /**
-     * 文件上传处理主程序。&#65533;&#65533;&#65533;&#65533;&#65533;&#65533;&#65533;B
+     * 文件上传处理主程序
      *
      * @return int 操作结果 0 文件操作成功；1 request对象不存在。 2 没有设定文件保存路径或者文件保存路径不正确；3
      *         没有设定正确的enctype；4 文件操作异常。
@@ -74,7 +74,7 @@ public class UploadFile {
         if (status != 0)
             return status;
         try {
-            // &#65533;&#65533;参数或者文件名&#65533;u&#65533;&#65533;
+            // 参数或者文件名
             String name = null;
             // 参数的value
             String value = null;
@@ -86,7 +86,7 @@ public class UploadFile {
             String fName = null;
             FileOutputStream baos = null;
             BufferedOutputStream bos = null;
-            // &#65533;&#65533;存储参数的Hashtable
+            // 存储参数的Hashtable
             paramHt = new Hashtable();
             updFileArr = new ArrayList();
             int rtnPos = 0;

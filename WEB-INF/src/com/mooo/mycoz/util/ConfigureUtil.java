@@ -3,6 +3,7 @@ package com.mooo.mycoz.util;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -75,8 +76,54 @@ public class ConfigureUtil {
 		}
 		return caches;
 	}
+	
+	private Map<String, ActionNode> actionMap;
 
+	public void conf() {
+		//HashMap<String,Cache> caches = new HashMap<String,Cache>();
+		try {
+			if (log.isDebugEnabled()) log.debug("ConfigureUtil conf loading..");
+
+			SAXReader saxReader = new SAXReader();
+			Document doc = saxReader.read(in);
+			Element root = doc.getRootElement();
+
+			// parse action methods
+			actionMap = new HashMap<String, ActionNode>();
+			// String clzName = null;
+			Iterator<?> itrAction = root.selectNodes("package/action").iterator();
+
+			Element actionNode;
+			Element methodNode;
+			ActionNode aNode;
+			String action;
+			while (itrAction.hasNext()) {
+				aNode = new ActionNode();
+
+				actionNode = (Element) itrAction.next();
+				//set filed
+				action=actionNode.attributeValue("name");
+				aNode.setName(action);
+				aNode.setCls(actionNode.attributeValue("class"));
+				// System.out.println("----------"+action+"----------");
+				for (Iterator<?> itrResult = actionNode.selectNodes("result").iterator();
+						itrResult.hasNext();) {
+					methodNode = (Element) itrResult.next();
+					aNode.addResult(methodNode.attributeValue("name"), methodNode.getTextTrim());
+					//String forwardName = methodNode.attributeValue("name");
+					//System.out.println(methodNode.getTextTrim());
+					//System.out.println(methodNode.getStringValue());
+				}
+				actionMap.put(action, aNode);
+			}
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	private Map<String, List<String>> controllerXmlMap;
+
 	public void parseXML() {
 		try {
 			if (log.isDebugEnabled())
@@ -93,8 +140,7 @@ public class ConfigureUtil {
 			// String clzName = null;
 			List<String> methods = null;
 
-			Iterator<?> itrAction = root.selectNodes("package/action")
-					.iterator();
+			Iterator<?> itrAction = root.selectNodes("package/action").iterator();
 
 			Element actionNode;
 			Element methodNode;
@@ -150,5 +196,32 @@ public class ConfigureUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	public void printConf() {
+		try {
+			Iterator<?> iterator;
+			String key;
+			ActionNode action;
 
+			System.out.println(".............XML...........");
+
+			iterator = actionMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				key = iterator.next().toString();
+				System.out.println("............." + key + "...........");
+
+				action = (ActionNode) actionMap.get(key);
+				System.out.println("name=" + action.getName() + " class="+action.getCls());
+				Hashtable<String, String> results = action.getResults();
+				Iterator<?> resultIterator = results.keySet().iterator();
+				while(resultIterator.hasNext()){
+					key = resultIterator.next().toString();
+					System.out.println("result key="+key+" value="+results.get(key));
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -15,7 +15,6 @@ import org.xml.sax.InputSource;
 
 import com.mooo.mycoz.jdbc.DBMap;
 import com.mooo.mycoz.jdbc.DBNode;
-import com.mooo.mycoz.util.PigConfigNode;
 
 public class DBLoad extends DefaultHandler {
 
@@ -31,7 +30,7 @@ public DBLoad() {
   	try{   
       	SAXParserFactory sf  = SAXParserFactory.newInstance();
       	SAXParser sp = sf.newSAXParser();
-	     	sp.parse(new InputSource(PigConfigNode.getConfigPath()),this);
+	     	sp.parse(new InputSource(""),this);
   	} catch(Exception e){
 		if (log.isDebugEnabled()) log.debug("DBLoad Exception:" + e.getMessage());
    	    	e.printStackTrace();
