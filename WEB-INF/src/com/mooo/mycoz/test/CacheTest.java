@@ -119,7 +119,7 @@ class ReadRun implements Runnable {
 			while (true) {
 				// synchronized (Singleton.name) {
 				//Singleton.setName("start" + (count++));
-				//System.out.println("get cache"+cm.get("tmp3", count));
+				System.out.println("get cache"+cm.get("tmp3", count));
 				System.out.println("get cache"+Single.getInstance().getName());
 
 				if((count++)%100==0)
@@ -146,8 +146,8 @@ class WriteRun implements Runnable {
 		//try {
 			while (true) {
 				// synchronized (Singleton.name) {
-				//System.out.println("add  cache"+count);
-				//cm.add("tmp3", count, "String"+count);
+				System.out.println("add  cache"+count);
+				cm.add("tmp3", count, "String"+count);
 				Single.getInstance().setName("ok"+count);
 				System.out.println("write  cache"+count);
 

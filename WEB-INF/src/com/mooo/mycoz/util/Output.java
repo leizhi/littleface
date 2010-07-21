@@ -1,13 +1,13 @@
-package com.mooo.mycoz.services.html;
+package com.mooo.mycoz.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.Hashtable;
 
-public class Input  {
+public class Output  {
 
-private static Log log = LogFactory.getLog(Input.class);
+private static Log log = LogFactory.getLog(Output.class);
 
      private static Hashtable defaultValues = null;
      private static Hashtable inputValues = null;

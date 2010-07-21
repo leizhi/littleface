@@ -29,7 +29,7 @@ public class ActionFilter implements Filter {
 		HttpServletResponse hResponse = (HttpServletResponse) response;
 		
 		HttpSession session = hRequest.getSession();
-		String accessPath = hRequest.getContextPath();
+		//String accessPath = hRequest.getContextPath();
 		String url = hRequest.getRequestURI();
 
 		Pattern p = Pattern.compile(".jsp");
@@ -43,7 +43,7 @@ public class ActionFilter implements Filter {
 
 			if (!isAuthenticated) {
 				hResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-				hResponse.setHeader("Location", accessPath + "/xpc/loginXpc");
+				//hResponse.setHeader("Location", accessPath + "/xpc/loginXpc");
 			}
 
 		}

@@ -21,35 +21,10 @@ public class CacheManager {
     protected int cacheSize=0;
 
     private CacheManager() {
-    	caches = new HashMap<String,Cache>();
-    	
-    	caches = new ConfigureUtil().confCache();
+
+    	caches = ConfigureUtil.getInstance().confCache();
     	System.out.println("caches.size="+caches.size());
 		caches.put((caches.size()+1)+"", new UserPermsCache(128 * K,1 * HOUR));
-
-    	/*
-        caches = new Cache[13];
-
-        //Initialize all cache structures
-        caches[0] = new Cache(256*1024, 10*MINUTE);
-        caches[1] = new Cache(128*1024, 10*MINUTE);
-        caches[2] = new Cache(128*1024, 1*HOUR);
-        caches[3] = new Cache(128*1024, 1*HOUR);
-        caches[4] = new Cache(128*1024, 20*MINUTE);
-        caches[5] = new Cache(128*1024, 20*MINUTE);
-        caches[6] = new Cache(128*1024, 20*MINUTE);
-        caches[7] = new Cache(512*1024, 1*HOUR);
-        caches[8] = new Cache(128*1024, 1*HOUR);
-        caches[9] = new Cache(128*1024, 1*HOUR);
-        caches[10] = new Cache(128*1024, 1*HOUR);
-        //The user permissions cache is a special one. It's actually a Cache
-        //of Cache objects. Each of the cache objects in the main cache
-        //corresponds to a particular forum, and is used to cache the
-        //permissions that a user has for a forum. In order to handle this
-        //requirement, we use a special subclass of Cache.
-        caches[12] = new UserPermsCache(256*1024, 2*HOUR);
-        caches[13] = new Cache(128*1024, 1*HOUR);
-        */
     }
     
     /**

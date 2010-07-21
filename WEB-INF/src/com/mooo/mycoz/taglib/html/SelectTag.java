@@ -3,6 +3,7 @@ package com.mooo.mycoz.taglib.html;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -78,39 +79,36 @@ public class SelectTag extends TagSupport {
 			writeSelect.append("onchange=\"" + onchange + "\" ");
 
 		writeSelect.append(">");
-
 		if (property != null) {
+			Collection selectColl = null;
+			
 			String defaultKey = "";
 			String key = "", value = "";
-			HashMap<?, ?> selectHashMap = null;
 
-			defaultKey = (String) request.getAttribute("SelectDeaultValue"
-					+ property);
-			selectHashMap = (HashMap<?, ?>) request
-					.getAttribute("SelectHashMap" + property);
-			if (log.isDebugEnabled())
-				log.debug("selectHashMap=" + selectHashMap);
-			if (selectHashMap.containsKey(defaultKey)) {
+			defaultKey = (String) request.getAttribute(name);
+			selectColl = (Collection)request.getAttribute(property);
+			
+			/*
+			if (log.isDebugEnabled())log.debug("selectColl=" + selectColl);
+			if (selectColl.contains(defaultKey)) {
 				key = defaultKey;
-				value = (String) selectHashMap.get(key);
+				value = (String) selectColl.get(key);
 				writeSelect.append("<option value=\"" + key + "\" >" + value
 						+ "</option>");
-				selectHashMap.remove(key);
+				selectColl.remove(key);
 			} else {
 				key = null;
-				value = (String) selectHashMap.get(key);
+				value = (String) selectColl.get(key);
 				writeSelect.append("<option value=\"" + key + "\" >" + value
 						+ "</option>");
-				selectHashMap.remove(key);
+				selectColl.remove(key);
 			}
-
-			for (Iterator<?> it = selectHashMap.entrySet().iterator(); it
-					.hasNext();) {
+			*/
+			for (Iterator<?> it = selectColl.iterator(); it.hasNext();) {
 				Map.Entry<?, ?> tmpMap = (Map.Entry<?, ?>) it.next();
 				key = (String) tmpMap.getKey();
 				value = (String) tmpMap.getValue();
-				writeSelect.append("<option value=\"" + key + "\" >" + value
-						+ "</option>");
+				writeSelect.append("<option value=\"" + key + "\" >" + value + "</option>");
 			}
 		} // end property
 

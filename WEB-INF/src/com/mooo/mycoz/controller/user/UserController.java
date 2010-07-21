@@ -64,9 +64,9 @@ import com.mooo.mycoz.jdbc.DBLoad;
 import com.mooo.mycoz.jdbc.DBMap;
 import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
-import com.mooo.mycoz.request.Input;
 import com.mooo.mycoz.util.ActionServlet;
 import com.mooo.mycoz.util.I18n;
+import com.mooo.mycoz.util.Input;
 
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;

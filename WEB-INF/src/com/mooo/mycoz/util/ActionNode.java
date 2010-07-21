@@ -6,7 +6,9 @@ public class ActionNode {
 
 	public String name;
 	public String cls;
-	public String state;
+	public String method;
+	public String defMethod;
+
 	public Hashtable<String, String> results;
 
 	public String getName() {
@@ -25,12 +27,12 @@ public class ActionNode {
 		this.cls = cls;
 	}
 
-	public String getState() {
-		return state;
+	public String getMethod() {
+		return method;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setMethod(String method) {
+		this.method = method;
 	}
 
 	public Hashtable<String, String> getResults() {
@@ -39,6 +41,14 @@ public class ActionNode {
 
 	public void setResults(Hashtable<String, String> results) {
 		this.results = results;
+	}
+
+	public String getDefMethod() {
+		return defMethod;
+	}
+
+	public void setDefMethod(String defMethod) {
+		this.defMethod = defMethod;
 	}
 
 	public void addResult(String name, String path) {

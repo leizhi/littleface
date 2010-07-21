@@ -5,7 +5,7 @@ import com.mooo.mycoz.util.ConfigureUtil;
 public class Test {
 
 	public static void main(String[] args) {
-		ConfigureUtil cu = new ConfigureUtil();
+		ConfigureUtil cu = ConfigureUtil.getInstance();
 		cu.conf();
 		cu.printConf();
 	}

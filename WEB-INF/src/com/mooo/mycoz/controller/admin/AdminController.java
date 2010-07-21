@@ -61,9 +61,9 @@ import com.mooo.mycoz.jdbc.DBLoad;
 import com.mooo.mycoz.jdbc.DBMap;
 import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
-import com.mooo.mycoz.request.Input;
 import com.mooo.mycoz.util.ActionServlet;
 
+import com.mooo.mycoz.util.Input;
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -99,10 +99,10 @@ public void processUpdateStateRun(HttpServletRequest request, HttpServletRespons
 		Input in = new Input();
 		in.addValue(request,"UserName",request.getParameter("UserName"));
 		in.addValue(request,"Password",request.getParameter("Password"));
-
-     		} catch (Exception e) {
-      			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
-     		}
+		
+     } catch (Exception e) {
+      		if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
+     	}
 	}
 
 public void previewAdminStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

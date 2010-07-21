@@ -3,34 +3,15 @@ package com.mooo.mycoz.taglib.html;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Map;
-import java.util.Set;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
 
 import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import com.mooo.mycoz.util.I18n;
 
 public class MenuListTag extends TagSupport {
 
@@ -46,6 +27,8 @@ public class MenuListTag extends TagSupport {
 
      public int doStartTag() throws JspTagException {
 	    	try{
+	    		
+	    		/*
 			String forward = null;
 			HashMap menuListField = null;
 			List boxA = null;
@@ -76,8 +59,10 @@ public class MenuListTag extends TagSupport {
 					writeList.append("</a></li>\n");
 				    }
 				writeList.append("</ul>\n");
+				
 			} // end property
                  	if (log.isDebugEnabled()) log.debug(" writeList="+writeList);
+                 	*/
 			return EVAL_BODY_INCLUDE;
 
 	     	    } catch(Exception e) {

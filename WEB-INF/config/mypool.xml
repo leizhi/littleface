@@ -20,7 +20,7 @@
 <entry key="DbConnectionDefaultPool.username">spdemo</entry>
 <entry key="DbConnectionDefaultPool.password">spdemo</entry>
  -->
-
+ 
 <entry key="yazdMailSubject">Default Yazd Subject</entry>
 <entry key="yazdMailSMTPServer">127.0.0.1</entry>
 <entry key="DbSearchIndexer.lastIndexed">1236019783316</entry>

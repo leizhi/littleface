@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,103 +21,113 @@ public class ActionServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 4119522977670257605L;
 
-	protected String configPig = "WEB-INF/config/mvc-config.xml";
+	protected ConfigureUtil conf;
 	
 	public void destroy() {
 	  
 	}
 	
 	public void init() throws ServletException {
+		
 		super.init();
 		
 		// get web app real directory   
 		String prefix = getServletContext().getRealPath("/");
 		String confDir = getServletContext().getInitParameter("configDir");
-
-		//PigConfigNode.setRootPath(prefix);
-		//PigConfigNode.setConfigPath(prefix + "/" + confDir +"/pig-config.xml");
-		//PigConfigNode.setMvcPath(prefix + "/" + confDir +"/mvc-config.xml");
+		
 		//load log4j configure file
 		// read parameter from web.xml file to set log4j property   
 		// set log4j
 		if (confDir != null) {
-			DOMConfigurator.configure(prefix + "/" + confDir+"/log4j.xml");
+			DOMConfigurator.configure(prefix + confDir+"/log4j.xml");
 		}
 		
-		new ConfigureUtil().conf();
+		conf = ConfigureUtil.getInstance();
+		conf.setCacheFile(prefix + confDir +"/mypool.xml");
+		conf.setMvcFile(prefix +  confDir +"/myconfig.xml");
+
+		conf.conf();
 	}
 
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
 		PrintWriter out = response.getWriter();
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html; charset=UTF-8");
+		//request.setCharacterEncoding("utf-8");
+		//response.setContentType("text/html; charset=UTF-8");
 
 		try {
-
-			String execPath = request.getServletPath();
-			
-			if (execPath.indexOf(".") > 0) {
-				execPath = execPath.substring(0, execPath.indexOf("."));
-			}
-			
-			if (execPath == null)
-				execPath = request.getParameter("Controller");
 			out.println("Start Servlet:");
 
-			/*
-			String execController = "";
-			String execJsp = null;
-			String execState = request.getParameter("state");
-			PigNode pNode = null;
-			Hashtable<?, ?> forward = null;
-			// get mvc config
-			Hashtable<?, ?> mvcList = PigMap.getMvcList();
+			String execPath = request.getServletPath();
+
+			if (execPath.indexOf(".") > 0) {
+				//execPath = execPath.substring(0, execPath.indexOf("."));
+				execPath = execPath.substring(1, execPath.indexOf("."));
+			}
+
+			if (execPath == null)
+				execPath = request.getParameter("Controller");
 			
+			out.println("execPath:" + execPath);
+
+			String execAction = "";
+			String execResult = "";
+			String execMethod = request.getParameter("state");
+			
+			ActionNode actionNode = null;
+			Hashtable<String, String> results;
+
+			// get mvc configure
+			Map<String, ActionNode> actionMap = conf.getActionMap();
 			// set controller,execState for execPath
-			pNode = (PigNode) mvcList.get(execPath);
-			execController = pNode.getType();
-			if (execState == null)
-				execState = pNode.getDefaultState();
-			forward = pNode.getForward();
+			actionNode = (ActionNode) actionMap.get(execPath);
+			out.println("actionNode:" + actionNode);
+
+			execAction = actionNode.getCls();
+			if (execMethod == null)
+				execMethod = actionNode.getDefMethod();
 			
+			results = actionNode.getResults();
 			// exec Controller request aciton
-			Object obj = Class.forName(execController).newInstance();
+			Object obj = Class.forName(execAction).newInstance();
 			
 			Class<? extends Object> cls = obj.getClass();
 			
 			Class<?>[] paraTypes = new Class[] { HttpServletRequest.class,HttpServletResponse.class };
 			
-			Method method = cls.getMethod(execState + "StateRun", paraTypes);
+			Method method = cls.getMethod(execMethod, paraTypes);
 			
 			Object paraValues[] = new Object[] { request, response };
 			
-			// set Transition jsp for execState
-			Object actionJsp = forward.get(execState);
+			// set Transition jsp for execMethod
+			Object actionJsp = results.get(execMethod);
 			
-			String resultState = (String) method.invoke(obj, paraValues);
-			if(resultState != null)
-				if(!resultState.equals("success"))
-					actionJsp = forward.get(resultState);
+			String resultMethod = (String) method.invoke(obj, paraValues);
+			
+			if(resultMethod != null)
+				if(!resultMethod.equals("success"))
+					actionJsp = results.get(resultMethod);
 			else
 				new Exception("RETURN STATE NULL");
 			
 			if (actionJsp != null) {
-				execJsp = (String) actionJsp;
-				if (!execJsp.equals("")) {
-					response.setContentType("text/html; charset=UTF-8");
+				execResult = (String) actionJsp;
+				if (!execResult.equals("")) {
+					//response.setContentType("text/html; charset=UTF-8");
 					getServletConfig().getServletContext()
-							.getRequestDispatcher(execJsp).forward(request,response);
+							.getRequestDispatcher(execResult).forward(request,response);
 					// response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 					// response.setHeader("Location",request.getContextPath()+execJsp);
 				}
 			}
-			*/
+			out.println("End Servlet:");
 		} catch (Exception ex) {
-			out.println("Exception:" + ex);
+			out.println("Exception:" + ex.getMessage());
+			ex.printStackTrace();
 		} catch (Throwable e) {
-			out.println("Throwable:" + e);
+			out.println("Throwable:" + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

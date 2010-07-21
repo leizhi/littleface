@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mooo.mycoz.request.Input;
 
 //import com.mooo.mycoz.util.Transition;
 
@@ -109,14 +108,14 @@ public class PaginationComponent {
 				currentPage = 1;
 			offset = (currentPage - 1) * countPerPage;
 
-			Input in = new Input();
-			in.addValue(request, "CurrentPage", currentPage);
-			in.addValue(request, "CountPerPage", countPerPage);
-			in.addValue(request, "TotalPage", totalPage);
+			//Input in = new Input();
+			//in.addValue(request, "CurrentPage", currentPage);
+			//in.addValue(request, "CountPerPage", countPerPage);
+			//in.addValue(request, "TotalPage", totalPage);
 
-			in.addSubmit(request, "Next", listController, listState);
-			in.addSubmit(request, "Previous", listController, listState);
-			in.addSubmit(request, "JumpTo", listController, listState);
+			//in.addSubmit(request, "Next", listController, listState);
+			//in.addSubmit(request, "Previous", listController, listState);
+			//in.addSubmit(request, "JumpTo", listController, listState);
 
 			if (log.isDebugEnabled()) {
 				log.debug("buildCom class name = " + getClass().getName());

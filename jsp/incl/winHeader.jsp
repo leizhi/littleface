@@ -1,5 +1,5 @@
 <div id="header">
-<img src="<%=request.getContextPath()%>/jsp/images/xpcLogo.gif" />
+<img src="images/xpcLogo.gif" />
 
 <div id="mainMenu">
 	<a>Products</a>
@@ -62,7 +62,7 @@
 
 <div class="news">
 <ul> 
-<li><a href="#"><%=com.mooo.mycoz.response.SessionCounter.getRealCount()%></a></li>
+<li><a href="#"><%=com.mooo.mycoz.util.SessionCounter.getRealCount()%></a></li>
 <li><a href="#"><html:message key="Test" /></a></li>
 </ul></div>
 
