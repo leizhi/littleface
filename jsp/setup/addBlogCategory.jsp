@@ -478,7 +478,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 <div class="title">Hello:everbody</div>
 <div class="command">
 <ul>
-<li><html:input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
+<li><input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
 </ul>
 </div>
 
@@ -487,30 +487,30 @@ document.getElementById("content").style.height=document.getElementById("left").
 <script type="text/javascript" src="../js/calendar.js"></script>
 
 <div id="formResponse">
-<html:input type="hidden" id="ID" name="ID" property="ID"/>
-<html:input type="hidden" id="ParentID" name="ParentID" property="ParentID"/>
+<input type="hidden" id="ID" name="ID" property="ID"/>
+<input type="hidden" id="ParentID" name="ParentID" property="ParentID"/>
 <table align="left" style="font-size:0.9em;">
 
 <tr>
-<td><html:message key="Name" /></td>
-<td><html:input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></td>
+<td><fmt:message key="Name" /></td>
+<td><input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></td>
 </tr>
 
 <tr>
-<td><html:message key="Parent" /></td>
+<td><fmt:message key="Parent" /></td>
 <td><html:write property="Parent"/></td>
 </tr>
 
 <tr>
-<td><html:message key="Description" /></td>
-<td><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></td>
+<td><fmt:message key="Description" /></td>
+<td><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></td>
 </tr>
 
 
 <tr>
 <td>&nbsp</td>
 <td>
-<html:input type="submit" property="Add" value="Add"/>
+<input type="submit" property="Add" value="Add"/>
 <input type="button" id="Close" name="Close" value="Close" onclick="javascript:window.history.back(1);"/>
 </td>
 </tr>

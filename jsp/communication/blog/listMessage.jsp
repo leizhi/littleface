@@ -40,8 +40,8 @@
 <% i++; %>
 </logic:iterate>
 
-<li class ="liTitle"><html:message key="add.Title" />
-<html:input type="hidden" id="BlogID" name="BlogID" property="BlogID"/></li>
+<li class ="liTitle"><fmt:message key="add.Title" />
+<input type="hidden" id="BlogID" name="BlogID" property="BlogID"/></li>
 <li><input type="text" id="AddTitle" name="AddTitle" size="15" maxlength="255" /></li>
 <li><textarea id="Description" name="Description" cols="28" rows="4"></textarea></li>
 <li><input type="button" value="new" onclick="Util.Submit('/Blog.do?state=processNewMessage');"/><input type="reset" id="reset" name="reset" value="reset"/></li>

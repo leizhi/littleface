@@ -67,7 +67,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.Input;
+
 
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
@@ -80,7 +80,7 @@ private static Log log = LogFactory.getLog(BlogCategoryController.class);
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = "";
-		Input in = new Input();
+		
 		BlogCategory bc = null;
 
 		MultiDBObject myMutil = new MultiDBObject();
@@ -116,7 +116,7 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 if (log.isDebugEnabled()) log.debug("ParentID=" + parentID);
 			if (parentID == null || parentID.equals("null")) parentID="0";
 			myMutil.setField("bc","ParentID",parentID);
-			in.addValue(request,"ParentID",parentID);
+			request.setAttribute("ParentID",parentID);
 			myMutil.setRetrieveField("bc","ID");
 			myMutil.setRetrieveField("bc","Name");
 			myMutil.setRetrieveField("bc","ParentID");
@@ -126,9 +126,9 @@ if (log.isDebugEnabled()) log.debug("ParentID=" + parentID);
 			int i=0;
 			for(Iterator iterator= category.iterator(); iterator.hasNext();){
 				rowRecord = (HashMap)iterator.next();
-				in.addValue(request,"ID"+i,rowRecord.get("bc.ID").toString());
-				in.addValue(request,"Name"+i,rowRecord.get("bc.Name").toString());
-				in.addValue(request,"Parent"+i,bc.getParent(rowRecord.get("bc.ParentID").toString()));
+				request.setAttribute("ID"+i,rowRecord.get("bc.ID").toString());
+				request.setAttribute("Name"+i,rowRecord.get("bc.Name").toString());
+				request.setAttribute("Parent"+i,bc.getParent(rowRecord.get("bc.ParentID").toString()));
 				i++;
 			   }
 			in.addIterateValue(request,"List",i+"");
@@ -145,15 +145,15 @@ if (log.isDebugEnabled()) log.debug("ParentID=" + parentID);
 
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
+		
 
-		in.addValue(request,"Name",request.getParameter("Name"));
+		request.setAttribute("Name",request.getParameter("Name"));
 		if(request.getParameter("Parent") != null)
-			in.addValue(request,"Parent",request.getParameter("Parent"));
+			request.setAttribute("Parent",request.getParameter("Parent"));
 		else 
-			in.addValue(request,"Parent",new BlogCategory().getParent(request.getParameter("ParentID")));
-		in.addValue(request,"Description",request.getParameter("Description"));
-		in.addValue(request,"ParentID",request.getParameter("ParentID"));
+			request.setAttribute("Parent",new BlogCategory().getParent(request.getParameter("ParentID")));
+		request.setAttribute("Description",request.getParameter("Description"));
+		request.setAttribute("ParentID",request.getParameter("ParentID"));
 		if (log.isDebugEnabled()) log.debug("ParentID=" + request.getParameter("ParentID"));
 
 		in.addSubmit(request,"Add","BlogCategory","processAdd");
@@ -192,7 +192,7 @@ public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse
  
 		ResultSet rs = null;
 		String sql = "";
-		Input in = new Input();
+		
 		if (log.isDebugEnabled()) log.debug("Key:"+key);
 		if(key != null) {
 			sql += "SELECT ID,Name,Description,ParentID FROM BlogCategory";
@@ -201,11 +201,11 @@ public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse
 		if (log.isDebugEnabled()) log.debug("SQL:"+sql);
 		if (log.isDebugEnabled()) log.debug("rs.first():"+rs.first());
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addValue(request,"Parent",new BlogCategory().getParent(rs.getString("ParentID")));
-				in.addValue(request,"ParentID",rs.getString("ParentID"));
-				in.addValue(request,"Name",rs.getString("Name"));
-				in.addValue(request,"Description",rs.getString("Description"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("Parent",new BlogCategory().getParent(rs.getString("ParentID")));
+				request.setAttribute("ParentID",rs.getString("ParentID"));
+				request.setAttribute("Name",rs.getString("Name"));
+				request.setAttribute("Description",rs.getString("Description"));
                		}
 
 		}

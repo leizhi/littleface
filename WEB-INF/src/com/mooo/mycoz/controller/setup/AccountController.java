@@ -68,7 +68,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -80,14 +80,14 @@ private static Log log = LogFactory.getLog(AccountController.class);
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = "";
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"ID",request.getParameter("ID"));
-		in.addValue(request,"Code",request.getParameter("Code"));
-		in.addValue(request,"Group",request.getParameter("Group"));
-		in.addValue(request,"Extension",request.getParameter("Extension"));
-		in.addValue(request,"Currency",request.getParameter("Currency"));
-		in.addValue(request,"Description",request.getParameter("Description"));
+		request.setAttribute("ID",request.getParameter("ID"));
+		request.setAttribute("Code",request.getParameter("Code"));
+		request.setAttribute("Group",request.getParameter("Group"));
+		request.setAttribute("Extension",request.getParameter("Extension"));
+		request.setAttribute("Currency",request.getParameter("Currency"));
+		request.setAttribute("Description",request.getParameter("Description"));
 
 		Account ag = new Account();
 		ResultSet rs = null;
@@ -123,12 +123,12 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i,rs.getString("at.ID"));
-			in.addValue(request,"Code"+i,rs.getString("at.Code"));
-			in.addValue(request,"Description"+i,rs.getString("at.Description"));
-			in.addValue(request,"Extension"+i,rs.getString("ae.Code"));
-			in.addValue(request,"Group"+i,rs.getString("ag.Code"));
-			in.addValue(request,"Currency"+i,rs.getString("cy.ISOCode"));
+			request.setAttribute("ID"+i,rs.getString("at.ID"));
+			request.setAttribute("Code"+i,rs.getString("at.Code"));
+			request.setAttribute("Description"+i,rs.getString("at.Description"));
+			request.setAttribute("Extension"+i,rs.getString("ae.Code"));
+			request.setAttribute("Group"+i,rs.getString("ag.Code"));
+			request.setAttribute("Currency"+i,rs.getString("cy.ISOCode"));
 
 			i++;
                	}
@@ -143,9 +143,9 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"Code",request.getParameter("Code"));
-		in.addValue(request,"Description",request.getParameter("Description"));
+		
+		request.setAttribute("Code",request.getParameter("Code"));
+		request.setAttribute("Description",request.getParameter("Description"));
 
 		AccountExtension ae = new AccountExtension();
 		in.addHashMapValues(request,"Extension",ae.getValues());
@@ -164,7 +164,7 @@ public void promptAddStateRun(HttpServletRequest request, HttpServletResponse re
 public void processAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 try {
 	int id=0;
-	Input in = new Input();
+	
 	String var = request.getParameter("Code");
 
 	if ( request.getParameter("Code").equals("") ) 
@@ -200,7 +200,7 @@ try {
 
 public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
+		
 		String key = request.getParameter("Key");
 		Account ac = new Account();
 		AccountExtension ae = new AccountExtension();
@@ -216,14 +216,14 @@ public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse
 			rs = ac.getResultSet(sql);
 
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addValue(request,"Code",rs.getString("Code"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("Code",rs.getString("Code"));
 
 				in.addHashMapValues(request,"Extension",ae.getValues(),rs.getString("ExtensionID"));
 				in.addHashMapValues(request,"Group",ag.getValues(),rs.getString("GroupID"));
 				in.addHashMapValues(request,"Currency",cy.getValues(),rs.getString("CurrencyID"));
 
-				in.addValue(request,"Description",rs.getString("Description"));
+				request.setAttribute("Description",rs.getString("Description"));
                		}
 
 		}

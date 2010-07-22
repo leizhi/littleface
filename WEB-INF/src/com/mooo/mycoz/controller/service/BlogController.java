@@ -69,7 +69,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.PaginationComponent;
 
 import com.mooo.mycoz.util.SAXParserConf;
@@ -83,7 +83,7 @@ private static Log log = LogFactory.getLog(BlogController.class);
 public void previewBlogStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String key = request.getParameter("Key");
-		Input in = new Input();
+		
 		MultiDBObject myMulti = new MultiDBObject();
 		myMulti.addTable("mycozShared.BlogCategory","bc");
 		myMulti.setField("bc","ID",key);
@@ -102,7 +102,7 @@ public void previewBlogStateRun(HttpServletRequest request, HttpServletResponse 
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = null;
-		Input in = new Input();
+		
 		MultiDBObject myMulti = null;
 
 		ArrayList alType = IDGenerator.getBlogTypes();
@@ -133,13 +133,13 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 			for(Iterator iterator= subCategory.iterator(); iterator.hasNext();){
 
 				rowRecord = (HashMap)iterator.next();
-				in.addValue(request,"ID"+recordMax,rowRecord.get("bg.ID").toString());
-				in.addValue(request,"Title"+recordMax,rowRecord.get("bg.Title").toString());
-				in.addValue(request,"Owner"+recordMax,rowRecord.get("user.Name").toString());
-				in.addValue(request,"Date"+recordMax,rowRecord.get("bg.Date").toString());
-				in.addValue(request,"Type"+recordMax,rowRecord.get("bc.Name").toString());
-				in.addValue(request,"Popularity"+recordMax,IDGenerator.getBlogMessages(rowRecord.get("bg.ID").toString()));
-				in.addValue(request,"LastDate"+recordMax,rowRecord.get("bg.LastDate").toString());
+				request.setAttribute("ID"+recordMax,rowRecord.get("bg.ID").toString());
+				request.setAttribute("Title"+recordMax,rowRecord.get("bg.Title").toString());
+				request.setAttribute("Owner"+recordMax,rowRecord.get("user.Name").toString());
+				request.setAttribute("Date"+recordMax,rowRecord.get("bg.Date").toString());
+				request.setAttribute("Type"+recordMax,rowRecord.get("bc.Name").toString());
+				request.setAttribute("Popularity"+recordMax,IDGenerator.getBlogMessages(rowRecord.get("bg.ID").toString()));
+				request.setAttribute("LastDate"+recordMax,rowRecord.get("bg.LastDate").toString());
 
 				recordMax++;
 		   	}
@@ -155,15 +155,15 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 public void promptAddBlogStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String tmp = null;
-		Input in = new Input();
+		
 		HttpSession session = request.getSession(true);
 
       		if (log.isDebugEnabled()) log.debug("Owner=" + session.getAttribute(request.getSession().getId()));
 
-		in.addValue(request,"Title",request.getParameter("Title"));
+		request.setAttribute("Title");
 
 		tmp = (session.getAttribute(request.getSession().getId())).toString();
-		in.addValue(request,"Owner",tmp);
+		request.setAttribute("Owner",tmp);
 		tmp = request.getParameter("Date");
 
         	TimeZone tz = TimeZone.getDefault();
@@ -171,10 +171,10 @@ public void promptAddBlogStateRun(HttpServletRequest request, HttpServletRespons
 		String nowDate = now.get(Calendar.YEAR)+"-"+ (now.get(Calendar.MONTH)+1) +"-"+now.get(Calendar.DAY_OF_MONTH);
 
 		if (tmp == null) tmp = nowDate;
-		in.addValue(request,"Date",tmp);
+		request.setAttribute("Date",tmp);
 
-		in.addHashMapValues(request,"TypeID",IDGenerator.getBlogHashMapTypes(),request.getParameter("TypeID"));
-		in.addValue(request,"Description",request.getParameter("Description"));
+		request.setAttribute("TypeID",IDGenerator.getBlogHashMapTypes());
+		request.setAttribute("Description");
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.error("Exception Load error of: " + e.getMessage());
@@ -191,10 +191,10 @@ public void processAddBlogStateRun(HttpServletRequest request, HttpServletRespon
 		tmp = (session.getAttribute(request.getSession().getId())).toString();
 		myMutil.setChangeField("UserID",new User().getID(tmp));
 
-		myMutil.setChangeField("Date",request.getParameter("Date"));
-		myMutil.setChangeField("CategoryID",request.getParameter("TypeID"));
-		myMutil.setChangeField("Title",request.getParameter("Title"));
-		myMutil.setChangeField("Description",request.getParameter("Description"));
+		myMutil.setChangeField("Date");
+		myMutil.setChangeField("CategoryID");
+		myMutil.setChangeField("Title");
+		myMutil.setChangeField("Description");
 		myMutil.add("Blog");
 
 		response.sendRedirect(request.getContextPath()+"/Blog.do?state=list");
@@ -208,7 +208,7 @@ public void processAddBlogStateRun(HttpServletRequest request, HttpServletRespon
 public void promptUpdateBlogStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String key = request.getParameter("Key");
-		Input in = new Input();
+		
 
 		MultiDBObject myMulti = new MultiDBObject();
 		myMulti.addTable("mycozBranch.Blog","bg");
@@ -234,12 +234,12 @@ public void promptUpdateBlogStateRun(HttpServletRequest request, HttpServletResp
 		for(Iterator iterator= blog.iterator(); iterator.hasNext();){
 
 			rowRecord = (HashMap)iterator.next();
-			in.addValue(request,"ID",rowRecord.get("bg.ID").toString());
-			in.addValue(request,"Title",rowRecord.get("bg.Title").toString());
-			in.addValue(request,"Owner",rowRecord.get("user.Name").toString());
-			in.addValue(request,"Date",rowRecord.get("bg.Date").toString());
-			in.addHashMapValues(request,"TypeID",IDGenerator.getBlogHashMapTypes(),rowRecord.get("bc.ID").toString());
-			in.addValue(request,"Description",rowRecord.get("bg.Description").toString());
+			request.setAttribute("ID",rowRecord.get("bg.ID").toString());
+			request.setAttribute("Title",rowRecord.get("bg.Title").toString());
+			request.setAttribute("Owner",rowRecord.get("user.Name").toString());
+			request.setAttribute("Date",rowRecord.get("bg.Date").toString());
+			request.setAttribute("TypeID",IDGenerator.getBlogHashMapTypes(),rowRecord.get("bc.ID").toString());
+			request.setAttribute("Description",rowRecord.get("bg.Description").toString());
 		   }
 
      		} catch (Exception e) {
@@ -252,12 +252,12 @@ public void processUpdateBlogStateRun(HttpServletRequest request, HttpServletRes
 		String tmp = null;
 		MultiDBObject myMutil = new MultiDBObject();
 if (log.isDebugEnabled()) log.debug("Date=" + request.getParameter("Date"));
-		myMutil.setChangeField("Date",request.getParameter("Date"));
-		myMutil.setChangeField("CategoryID",request.getParameter("TypeID"));
-		myMutil.setChangeField("Title",request.getParameter("Title"));
-		myMutil.setChangeField("Description",request.getParameter("Description"));
+		myMutil.setChangeField("Date");
+		myMutil.setChangeField("CategoryID");
+		myMutil.setChangeField("Title");
+		myMutil.setChangeField("Description");
 
-		myMutil.setField("ID",request.getParameter("ID"));
+		myMutil.setField("ID");
 if (log.isDebugEnabled()) log.debug("ID=" + request.getParameter("ID"));
 		HttpSession session = request.getSession(true);
 		tmp = (session.getAttribute(request.getSession().getId())).toString();
@@ -304,8 +304,8 @@ public void joinBlogStateRun(HttpServletRequest request, HttpServletResponse res
 		String sql = null;
 		String key = request.getParameter("Key");
 if (log.isDebugEnabled()) log.debug("key: " + key);
-		Input in = new Input();
-		in.addValue(request,"BlogID",key);
+		
+		request.setAttribute("BlogID",key);
 
 		Blog blog = new Blog();
 		ResultSet rsBlog = null;
@@ -313,12 +313,12 @@ if (log.isDebugEnabled()) log.debug("key: " + key);
 		rsBlog = blog.getResultSet(sql);
 		
 		if(rsBlog.first()) {
-			//in.addValue(request,"BlogID",rsBlog.getString("BlogID"));
-			in.addValue(request,"BlogUser",rsBlog.getString("BlogUser"));
-			in.addValue(request,"BlogType",rsBlog.getString("BlogType"));
-			in.addValue(request,"BlogDate",rsBlog.getString("BlogDate"));
-			in.addValue(request,"BlogTitle",rsBlog.getString("BlogTitle"));
-			in.addValue(request,"BlogDescription",rsBlog.getString("BlogDescription"));
+			//request.setAttribute("BlogID",rsBlog.getString("BlogID"));
+			request.setAttribute("BlogUser",rsBlog.getString("BlogUser"));
+			request.setAttribute("BlogType",rsBlog.getString("BlogType"));
+			request.setAttribute("BlogDate",rsBlog.getString("BlogDate"));
+			request.setAttribute("BlogTitle",rsBlog.getString("BlogTitle"));
+			request.setAttribute("BlogDescription",rsBlog.getString("BlogDescription"));
 			}
 
 		Message msg = new Message();
@@ -329,11 +329,11 @@ if (log.isDebugEnabled()) log.debug("key: " + key);
 		int i = 0;
 		while(rsMsg.next()) {
 
-			//in.addValue(request,"MsgID"+i,rsMsg.getString("MsgID"));
-			in.addValue(request,"MsgTitle"+i,rsMsg.getString("MsgTitle"));
-			in.addValue(request,"MsgUser"+i,rsMsg.getString("MsgUser"));
-			in.addValue(request,"MessageDate"+i,rsMsg.getString("MessageDate"));
-			in.addValue(request,"MsgDescription"+i,rsMsg.getString("MsgDescription"));
+			//request.setAttribute("MsgID"+i,rsMsg.getString("MsgID"));
+			request.setAttribute("MsgTitle"+i,rsMsg.getString("MsgTitle"));
+			request.setAttribute("MsgUser"+i,rsMsg.getString("MsgUser"));
+			request.setAttribute("MessageDate"+i,rsMsg.getString("MessageDate"));
+			request.setAttribute("MsgDescription"+i,rsMsg.getString("MsgDescription"));
 
 			i++;
                	   }
@@ -389,9 +389,9 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 
 public void promptUpdateMessageStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Password",request.getParameter("Password"));
+		
+		request.setAttribute("UserName");
+		request.setAttribute("Password");
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -400,9 +400,9 @@ public void promptUpdateMessageStateRun(HttpServletRequest request, HttpServletR
 
 public void processUpdateMessageStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Password",request.getParameter("Password"));
+		
+		request.setAttribute("UserName");
+		request.setAttribute("Password");
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -411,9 +411,9 @@ public void processUpdateMessageStateRun(HttpServletRequest request, HttpServlet
 
 public void deleteMessageStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Password",request.getParameter("Password"));
+		
+		request.setAttribute("UserName");
+		request.setAttribute("Password");
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -423,12 +423,12 @@ public void deleteMessageStateRun(HttpServletRequest request, HttpServletRespons
 public void previewAdminBlogStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = "";
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"Title",request.getParameter("Title"));
-		in.addValue(request,"User",request.getParameter("User"));
-		in.addValue(request,"BlogType",request.getParameter("BlogType"));
-		in.addValue(request,"BlogDate",request.getParameter("BlogDate"));
+		request.setAttribute("Title");
+		request.setAttribute("User");
+		request.setAttribute("BlogType");
+		request.setAttribute("BlogDate");
 
 		Message mg = new Message();
 		ResultSet mgRs = null;
@@ -459,14 +459,14 @@ public void previewAdminBlogStateRun(HttpServletRequest request, HttpServletResp
 			sql = "SELECT COUNT(ID) AS MgCount FROM Message WHERE BlogID="+rs.getInt("BlogID");
 			mgRs = mg.getResultSet(sql);
 			if(mgRs.first())
-			in.addValue(request,"Message"+i,mgRs.getString("MgCount"));
+			request.setAttribute("Message"+i,mgRs.getString("MgCount"));
 
-			in.addValue(request,"ID"+i,rs.getString("BlogID"));
-			in.addValue(request,"Title"+i,rs.getString("Title"));
-			in.addValue(request,"User"+i,rs.getString("User"));
-			in.addValue(request,"BlogType"+i,rs.getString("BlogType"));
-			in.addValue(request,"BlogDate"+i,rs.getString("BlogDate"));
-			in.addValue(request,"Description"+i,rs.getString("Description"));
+			request.setAttribute("ID"+i,rs.getString("BlogID"));
+			request.setAttribute("Title"+i,rs.getString("Title"));
+			request.setAttribute("User"+i,rs.getString("User"));
+			request.setAttribute("BlogType"+i,rs.getString("BlogType"));
+			request.setAttribute("BlogDate"+i,rs.getString("BlogDate"));
+			request.setAttribute("Description"+i,rs.getString("Description"));
 
 			i++;
                	   }
@@ -480,12 +480,12 @@ public void previewAdminBlogStateRun(HttpServletRequest request, HttpServletResp
 
 public void promptAddAdminBlogStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"Title",request.getParameter("Title"));
-		in.addValue(request,"BlogType",request.getParameter("BlogType"));
-		in.addValue(request,"User",request.getParameter("User"));
-		in.addValue(request,"BlogDate",request.getParameter("BlogDate"));
-		in.addValue(request,"Description",request.getParameter("Description"));
+		
+		request.setAttribute("Title");
+		request.setAttribute("BlogType");
+		request.setAttribute("User");
+		request.setAttribute("BlogDate");
+		request.setAttribute("Description");
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -531,7 +531,7 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 public void promptUpdateAdminBlogStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String key = request.getParameter("Key");
-		Input in = new Input();
+		
 		User user = new User();
 		BlogType bt = new BlogType();
 
@@ -545,12 +545,12 @@ public void promptUpdateAdminBlogStateRun(HttpServletRequest request, HttpServle
 			rs = bg.getResultSet(sql);
 
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addValue(request,"Title",rs.getString("Title"));
-				in.addValue(request,"BlogType",bt.getName(rs.getInt("BlogTypeID")));
-				in.addValue(request,"User",user.getName(rs.getInt("UserID")));
-				in.addValue(request,"BlogDate",rs.getString("BlogDate"));
-				in.addValue(request,"Description",rs.getString("Description"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("Title",rs.getString("Title"));
+				request.setAttribute("BlogType",bt.getName(rs.getInt("BlogTypeID")));
+				request.setAttribute("User",user.getName(rs.getInt("UserID")));
+				request.setAttribute("BlogDate",rs.getString("BlogDate"));
+				request.setAttribute("Description",rs.getString("Description"));
                		}
 
 		}

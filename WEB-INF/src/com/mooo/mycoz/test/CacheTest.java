@@ -1,6 +1,5 @@
 package com.mooo.mycoz.test;
 
-import com.manihot.xpc.test.Single;
 import com.mooo.mycoz.cache.CacheManager;
 
 public class CacheTest {

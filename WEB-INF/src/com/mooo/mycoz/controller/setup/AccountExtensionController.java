@@ -64,7 +64,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -76,11 +76,11 @@ private static Log log = LogFactory.getLog(AccountExtensionController.class);
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = "";
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"ID",request.getParameter("ID"));
-		in.addValue(request,"Code",request.getParameter("Code"));
-		in.addValue(request,"Description",request.getParameter("Description"));
+		request.setAttribute("ID",request.getParameter("ID"));
+		request.setAttribute("Code",request.getParameter("Code"));
+		request.setAttribute("Description",request.getParameter("Description"));
 
 		AccountExtension bt = new AccountExtension();
 		ResultSet rs = null;
@@ -102,9 +102,9 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i,rs.getString("ID"));
-			in.addValue(request,"Code"+i,rs.getString("Code"));
-			in.addValue(request,"Description"+i,rs.getString("Description"));
+			request.setAttribute("ID"+i,rs.getString("ID"));
+			request.setAttribute("Code"+i,rs.getString("Code"));
+			request.setAttribute("Description"+i,rs.getString("Description"));
 
 			i++;
                	}
@@ -119,9 +119,9 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"Code",request.getParameter("Code"));
-		in.addValue(request,"Description",request.getParameter("Description"));
+		
+		request.setAttribute("Code",request.getParameter("Code"));
+		request.setAttribute("Description",request.getParameter("Description"));
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -159,16 +159,16 @@ public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse
 		AccountExtension bt = new AccountExtension();
 		ResultSet rs = null;
 		String sql = "";
-		Input in = new Input();
+		
 		if(key != null) {
 			sql += "SELECT ID,Code,Description FROM AccountExtension";
 			sql += " WHERE ID = " + key + " LIMIT 1";
 			rs = bt.getResultSet(sql);
 
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addValue(request,"Code",rs.getString("Code"));
-				in.addValue(request,"Description",rs.getString("Description"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("Code",rs.getString("Code"));
+				request.setAttribute("Description",rs.getString("Description"));
                		}
 
 		}

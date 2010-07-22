@@ -64,7 +64,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -76,11 +76,11 @@ private static Log log = LogFactory.getLog(OperatorUserController.class);
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = "";
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"ID",request.getParameter("ID"));
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Email",request.getParameter("Email"));
+		request.setAttribute("ID",request.getParameter("ID"));
+		request.setAttribute("UserName",request.getParameter("UserName"));
+		request.setAttribute("Email",request.getParameter("Email"));
 
 		OperatorUser bt = new OperatorUser();
 		ResultSet rs = null;
@@ -102,9 +102,9 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i,rs.getString("ID"));
-			in.addValue(request,"UserName"+i,rs.getString("UserName"));
-			in.addValue(request,"Email"+i,rs.getString("Email"));
+			request.setAttribute("ID"+i,rs.getString("ID"));
+			request.setAttribute("UserName"+i,rs.getString("UserName"));
+			request.setAttribute("Email"+i,rs.getString("Email"));
 
 			i++;
                	}
@@ -119,19 +119,19 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Password",request.getParameter("Password"));
-		in.addValue(request,"Passwordd",request.getParameter("Passwordd"));
+		
+		request.setAttribute("UserName",request.getParameter("UserName"));
+		request.setAttribute("Password",request.getParameter("Password"));
+		request.setAttribute("Passwordd",request.getParameter("Passwordd"));
 
 		Country ct = new Country();
 		in.addHashMapValues(request,"Country",ct.getValues());
 
-		in.addValue(request,"City",request.getParameter("City"));
-		in.addValue(request,"Address",request.getParameter("Address"));
-		in.addValue(request,"Email",request.getParameter("Email"));
-		in.addValue(request,"Tel",request.getParameter("Tel"));
-		in.addValue(request,"Zip",request.getParameter("Zip"));
+		request.setAttribute("City",request.getParameter("City"));
+		request.setAttribute("Address",request.getParameter("Address"));
+		request.setAttribute("Email",request.getParameter("Email"));
+		request.setAttribute("Tel",request.getParameter("Tel"));
+		request.setAttribute("Zip",request.getParameter("Zip"));
 
 		Language lg = new Language();
 		in.addHashMapValues(request,"Language",lg.getValues());
@@ -180,26 +180,26 @@ public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse
 		OperatorUser bt = new OperatorUser();
 		ResultSet rs = null;
 		String sql = "";
-		Input in = new Input();
+		
 		if(key != null) {
 			sql += "SELECT ID,UserName,CountryID,City,Address,Email,Tel,Zip,LanguageID FROM OperatorUser";
 			sql += " WHERE ID = " + key + " LIMIT 1";
 			rs = bt.getResultSet(sql);
 
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addValue(request,"UserName",rs.getString("UserName"));
-				in.addValue(request,"Password",request.getParameter("Password"));
-				in.addValue(request,"Passwordd",request.getParameter("Passwordd"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("UserName",rs.getString("UserName"));
+				request.setAttribute("Password",request.getParameter("Password"));
+				request.setAttribute("Passwordd",request.getParameter("Passwordd"));
 
 				Country ct = new Country();
 				in.addHashMapValues(request,"Country",ct.getValues(),rs.getString("CountryID"));
 
-				in.addValue(request,"City",rs.getString("City"));
-				in.addValue(request,"Address",rs.getString("Address"));
-				in.addValue(request,"Email",rs.getString("Email"));
-				in.addValue(request,"Tel",rs.getString("Tel"));
-				in.addValue(request,"Zip",rs.getString("Zip"));
+				request.setAttribute("City",rs.getString("City"));
+				request.setAttribute("Address",rs.getString("Address"));
+				request.setAttribute("Email",rs.getString("Email"));
+				request.setAttribute("Tel",rs.getString("Tel"));
+				request.setAttribute("Zip",rs.getString("Zip"));
 
 				Language lg = new Language();
 				in.addHashMapValues(request,"Language",lg.getValues(),rs.getString("LanguageID"));

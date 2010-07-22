@@ -65,18 +65,18 @@
 
 <tr>
 <td>Register Name:</td>
-<td><html:input type="text" id="UserName" name="UserName" /></td>
+<td><input type="text" id="UserName" name="UserName" /></td>
 </tr>
 
 <tr>
 <tr>
 <td>Password:</td>
-<td><html:input type="password" id="Password" name="Password"/></td>
+<td><input type="password" id="Password" name="Password"/></td>
 </tr>
 
 <tr>
 <td>Password (Again):</td>
-<td><html:input type="password" id="Password2" name="Password2" property="Password2"/></td>
+<td><input type="password" id="Password2" name="Password2" property="Password2"/></td>
 </tr>
 
 <tr>
@@ -91,16 +91,16 @@
 
 <tr>
 <td>From Address:</td>
-<td><html:input type="text" id="Address" name="Address" property="Address"/></td>
+<td><input type="text" id="Address" name="Address" property="Address"/></td>
 </tr>
 
 <tr>
 <td>From Tel:</td>
-<td><html:input type="text" id="Tel" name="Tel" property="Tel"/></td>
+<td><input type="text" id="Tel" name="Tel" property="Tel"/></td>
 </tr>
 <tr>
 <td>From Zip:</td>
-<td><html:input type="text" id="Zip" name="Zip" property="Zip"/></td>
+<td><input type="text" id="Zip" name="Zip" property="Zip"/></td>
 </tr>
 <tr>
 <td>From Language:</td>
@@ -109,11 +109,11 @@
 
 <tr>
 <td>E-Mail Address:</td>
-<td><html:input type="text" id="Email" name="Email" property="Email"/></td>
+<td><input type="text" id="Email" name="Email" property="Email"/></td>
 </tr>
 <tr>
 <td>E-Mail Address (Again):</td>
-<td><html:input type="text" id="Emailverify" name="Emailverify" property="Emailverify"/></td>
+<td><input type="text" id="Emailverify" name="Emailverify" property="Emailverify"/></td>
 </tr>
 
 <tr><td>Secret Question</td>

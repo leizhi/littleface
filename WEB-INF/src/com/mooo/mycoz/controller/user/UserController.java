@@ -66,7 +66,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 import com.mooo.mycoz.util.I18n;
-import com.mooo.mycoz.util.Input;
+
 
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
@@ -78,7 +78,7 @@ private static Log log = LogFactory.getLog(UserController.class);
 
 public void viewMenuStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
   try {	
-	Input in = new Input();
+	
 	HttpSession session = request.getSession(true);
 	String chUser = (String) session.getAttribute(request.getSession().getId());
 	if (chUser == null) {
@@ -86,8 +86,8 @@ public void viewMenuStateRun(HttpServletRequest request, HttpServletResponse res
 		response.sendRedirect(request.getContextPath()+"/User.do?state=promptLogin");
 	}
 
-	in.addValue(request,"UserName",request.getParameter("UserName"));
-	in.addValue(request,"Password",request.getParameter("Password"));
+	request.setAttribute("UserName",request.getParameter("UserName"));
+	request.setAttribute("Password",request.getParameter("Password"));
 
 	
 
@@ -98,9 +98,9 @@ public void viewMenuStateRun(HttpServletRequest request, HttpServletResponse res
 
 public void promptLoginStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 try {
-	Input in = new Input();
-	in.addValue(request,"userName_V",request.getParameter("userName_V"));
-	in.addValue(request,"password_V",request.getParameter("password_V"));
+	
+	request.setAttribute("userName_V",request.getParameter("userName_V"));
+	request.setAttribute("password_V",request.getParameter("password_V"));
 	
      	} catch (Exception e) {
       		if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -145,7 +145,7 @@ public void processLogoutStateRun(HttpServletRequest request, HttpServletRespons
 try {
 	String var = "";
 	Language lg = null;
-	Input in = new Input();
+	
 
 	lg = new Language();
 	if((var=request.getParameter("Language")) != null){
@@ -171,10 +171,10 @@ try {
 
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 try {
-	Input in = new Input();
-	in.addValue(request,"UserName",request.getParameter("UserName"));
-	in.addValue(request,"Password",request.getParameter("Password"));
-	in.addValue(request,"Password2",request.getParameter("Password2"));
+	
+	request.setAttribute("UserName",request.getParameter("UserName"));
+	request.setAttribute("Password",request.getParameter("Password"));
+	request.setAttribute("Password2",request.getParameter("Password2"));
 
 	Country ct = new Country();
 	in.addHashMapValues(request,"Country",ct.getValues(),request.getParameter("Country"));
@@ -182,11 +182,11 @@ try {
 	City ci = new City();
 	in.addHashMapValues(request,"City",ci.getValues(),request.getParameter("City"));
 
-	in.addValue(request,"Address",request.getParameter("Address"));
-	in.addValue(request,"Email",request.getParameter("Email"));
-	in.addValue(request,"Emailverify",request.getParameter("Emailverify"));
-	in.addValue(request,"Tel",request.getParameter("Tel"));
-	in.addValue(request,"Zip",request.getParameter("Zip"));
+	request.setAttribute("Address",request.getParameter("Address"));
+	request.setAttribute("Email",request.getParameter("Email"));
+	request.setAttribute("Emailverify",request.getParameter("Emailverify"));
+	request.setAttribute("Tel",request.getParameter("Tel"));
+	request.setAttribute("Zip",request.getParameter("Zip"));
 
 	Language lg = new Language();
 	in.addHashMapValues(request,"Language",lg.getValues(),request.getParameter("Language"));

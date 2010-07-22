@@ -22,17 +22,17 @@
 <!-- SearchTable -->
     <div class="SearchTable" >
       <ul>
-     	<li class="Output"><html:message key="ID" /></li>
-	<li class="Input"><html:input type="text" id="ID" name="ID" property="ID" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="ID" /></li>
+	<li class="Input"><input type="text" id="ID" name="ID" property="ID" size="15" maxlength="255"/></li>
 
-     	<li class="Output" id="flag"><html:message key="ISOCode" /> </li>
-        <li class="Input"><html:input type="text" id="ISOCode" name="ISOCode" property="ISOCode" size="15" maxlength="255"/></li>
+     	<li class="Output" id="flag"><fmt:message key="ISOCode" /> </li>
+        <li class="Input"><input type="text" id="ISOCode" name="ISOCode" property="ISOCode" size="15" maxlength="255"/></li>
 
-     	<li class="Output"><html:message key="Name" /></li>
-	<li class="Input"><html:input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="Name" /></li>
+	<li class="Input"><input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></li>
 
-     	<li class="Output"><html:message key="Country" /></li>
-        <li class="Input"><html:input type="text" id="Country" name="Country" property="Country" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="Country" /></li>
+        <li class="Input"><input type="text" id="Country" name="Country" property="Country" size="15" maxlength="255"/></li>
 
  
      	<li class="Button"><input type="button" id="Find" name="Find" value="Find" onclick="Util.Submit('/Currency.do?state=list');"/><input type="button" id="Add" name="Add" value="Add" onclick="Util.Submit('/Currency.do?state=promptAdd');"/><input type="reset" id="reset" name="reset" value="reset"/></li>
@@ -42,12 +42,12 @@
 <!-- ListTable -->
     <div class="Table6" >
       <ul>
-     	<li class="Title"><html:message key="ID" /></li>
-     	<li class="Title"><html:message key="ISOCode" /></li>
-     	<li class="Title"><html:message key="Name" /></li>
-     	<li class="Title"><html:message key="Country" /></li>
-     	<li class="Title"><html:message key="Symbol" /></li>
-     	<li class="Title"><html:message key="Operation" /></li>
+     	<li class="Title"><fmt:message key="ID" /></li>
+     	<li class="Title"><fmt:message key="ISOCode" /></li>
+     	<li class="Title"><fmt:message key="Name" /></li>
+     	<li class="Title"><fmt:message key="Country" /></li>
+     	<li class="Title"><fmt:message key="Symbol" /></li>
+     	<li class="Title"><fmt:message key="Operation" /></li>
 <%int i=0;%>
 <logic:iterate property="List">
         <li><%=Input.getValue("ID"+i)%></li>
@@ -56,11 +56,11 @@
         <li><%=Input.getValue("Country"+i)%></li>
         <li><%=Input.getValue("Symbol"+i)%></li>
 
-        <li><a href="javascript:Util.Submit('/Currency.do?state=promptUpdate&Key=<%=Input.getValue("ID"+i)%>');"><html:message key="Update" /></a> <a href="javascript:Util.Submit('/Currency.do?state=processDelete&Key=<%=Input.getValue("ID"+i)%>');"><html:message key="Delete" /></a></li>
+        <li><a href="javascript:Util.Submit('/Currency.do?state=promptUpdate&Key=<%=Input.getValue("ID"+i)%>');"><fmt:message key="Update" /></a> <a href="javascript:Util.Submit('/Currency.do?state=processDelete&Key=<%=Input.getValue("ID"+i)%>');"><fmt:message key="Delete" /></a></li>
 <% i++; %>
 </logic:iterate>
 
-	<%-- <li><html:input type="checkbox" id="UserName" name="UserName" value="0"/></li> --%>
+	<%-- <li><input type="checkbox" id="UserName" name="UserName" value="0"/></li> --%>
       </ul>
     </div>
 

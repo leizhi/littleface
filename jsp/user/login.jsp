@@ -48,7 +48,7 @@
 <tr><td></td>
 
 <td>
-<html:input type="submit" value="Login"/>
+<input type="submit" value="Login"/>
 <input type="reset" class="formButton" value="Reset"><a href="?state=forgot">Forgot Password?</a>
 </td>
 </tr>
@@ -61,13 +61,13 @@
 <div id="formResponse">
  
 <table style="font-size:0.9em;">
-<tr><td>UserName:</td><td><html:input type="text" id="userName_V" name="userName_V" property="userName_V"/></td></tr>
-<tr><td>Password:</td><td><html:input type="password" id="password_V" name="password_V" property="password_V"/></td></tr>
+<tr><td>UserName:</td><td><input type="text" id="userName_V" name="userName_V" property="userName_V"/></td></tr>
+<tr><td>Password:</td><td><input type="password" id="password_V" name="password_V" property="password_V"/></td></tr>
 
 <tr><td></td>
 
 <td>
-<input type="submit" value="<html:message key="Login" />">
+<input type="submit" value="<fmt:message key="Login" />">
 <input type="reset" class="formButton" value="Reset"><a href="?state=forgot">Forgot Password?</a>
 </td>
 </tr>

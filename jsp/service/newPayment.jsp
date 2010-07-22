@@ -23,40 +23,40 @@
 <!-- SearchTable -->
     <div class="SearchTable" >
       <ul>
-     	<li class="Output"><html:message key="JobID" /></li>
-	<li class="Input"> <html:output property="JobID"/> <html:input type="hidden" id="JobID" name="JobID" property="JobID"/></li>
-     	<li class="Output"><html:message key="NoteNo" /></li>
-	<li class="Input"> <html:output property="NoteNo"/> <html:input type="hidden" id="NoteNo" name="NoteNo" property="NoteNo"/></li>
+     	<li class="Output"><fmt:message key="JobID" /></li>
+	<li class="Input"> <html:output property="JobID"/> <input type="hidden" id="JobID" name="JobID" property="JobID"/></li>
+     	<li class="Output"><fmt:message key="NoteNo" /></li>
+	<li class="Input"> <html:output property="NoteNo"/> <input type="hidden" id="NoteNo" name="NoteNo" property="NoteNo"/></li>
 
-     	<li class="Output"><html:message key="NoteType" /></li>
-        <li class="Input"> <html:output property="NoteType" /> <html:input type="hidden" id="NoteType" name="NoteType" property="NoteType"/></li>
+     	<li class="Output"><fmt:message key="NoteType" /></li>
+        <li class="Input"> <html:output property="NoteType" /> <input type="hidden" id="NoteType" name="NoteType" property="NoteType"/></li>
 
-     	<li class="Output"><html:message key="Operator" /></li>
-        <li class="Input"> <html:output property="Operator" /> <html:input type="hidden" id="Operator" name="Operator" property="Operator"/></li>
+     	<li class="Output"><fmt:message key="Operator" /></li>
+        <li class="Input"> <html:output property="Operator" /> <input type="hidden" id="Operator" name="Operator" property="Operator"/></li>
 
-     	<li class="Output"><html:message key="ChargeTo" /></li>
-        <li class="Input"><html:output property="ChargeTo" /> <html:input type="hidden" id="ChargeTo" name="ChargeTo" property="ChargeTo"/></li>
+     	<li class="Output"><fmt:message key="ChargeTo" /></li>
+        <li class="Input"><html:output property="ChargeTo" /> <input type="hidden" id="ChargeTo" name="ChargeTo" property="ChargeTo"/></li>
 
-     	<li class="Output"> <html:message key="Date" /></li>
-        <li class="Input"> <html:output property="Date" /> <html:input type="hidden" id="Date" name="Date" property="Date"/></li>
-    	<li class="Output"> <html:message key="DueDate" /></li>
-        <li class="Input"> <html:output property="DueDate" /> <html:input type="hidden" id="Date" name="DueDate" property="DueDate"/></li>
+     	<li class="Output"> <fmt:message key="Date" /></li>
+        <li class="Input"> <html:output property="Date" /> <input type="hidden" id="Date" name="Date" property="Date"/></li>
+    	<li class="Output"> <fmt:message key="DueDate" /></li>
+        <li class="Input"> <html:output property="DueDate" /> <input type="hidden" id="Date" name="DueDate" property="DueDate"/></li>
 
-     	<li class="Output"> <html:message key="Balance" /></li>
-        <li class="Input"> <html:output property="Balance" /> <html:input type="hidden" id="Balance" name="Balance" property="Balance"/></li>
+     	<li class="Output"> <fmt:message key="Balance" /></li>
+        <li class="Input"> <html:output property="Balance" /> <input type="hidden" id="Balance" name="Balance" property="Balance"/></li>
 
-     	<li class="Output"><html:message key="AccountToCredit" /></li>
-        <li class="Input"><html:output property="Account" /> <html:input type="hidden" id="Account" name="Account" property="Account"/></li>
-     	<li class="Output"><html:message key="AmountToCredit" /></li>
-        <li class="Input"><html:input type="text" id="AmountToCredit" name="AmountToCredit" property="AmountToCredit" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="AccountToCredit" /></li>
+        <li class="Input"><html:output property="Account" /> <input type="hidden" id="Account" name="Account" property="Account"/></li>
+     	<li class="Output"><fmt:message key="AmountToCredit" /></li>
+        <li class="Input"><input type="text" id="AmountToCredit" name="AmountToCredit" property="AmountToCredit" size="15" maxlength="255"/></li>
 
-     	<li class="Output"><html:message key="AccountToDebit" /></li>
-        <li class="Input"><html:output property="Account" /> <html:input type="hidden" id="Account" name="Account" property="Account"/></li>
-     	<li class="Output"><html:message key="AmountToDebit" /></li>
-        <li class="Input"><html:input type="text" id="AmountToCredit" name="AmountToCredit" property="AmountToCredit" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="AccountToDebit" /></li>
+        <li class="Input"><html:output property="Account" /> <input type="hidden" id="Account" name="Account" property="Account"/></li>
+     	<li class="Output"><fmt:message key="AmountToDebit" /></li>
+        <li class="Input"><input type="text" id="AmountToCredit" name="AmountToCredit" property="AmountToCredit" size="15" maxlength="255"/></li>
 
-     	<li class="Output"><html:message key="Description" /></li>
-        <li class="Input"><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="Description" /></li>
+        <li class="Input"><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
 
      	<li class="Button"><input type="button" id="ToJournal" name="ToJournal" value="ToJournal" onclick="Util.Submit('/Accounting.do');"/></li>
       </ul>

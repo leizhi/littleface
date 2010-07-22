@@ -457,10 +457,10 @@ document.getElementById("content").style.height=document.getElementById("left").
 
 <div class="command">
 <ul>
-<li><html:input type="submit" styles="submit"  value="List" /></li>
-<li><html:input type="submit" styles="submit" property="Add" value="Add"/></li>
-<li><html:input type="submit" styles="submit" property="Delete" value="Delete"/></li>
-<li><html:input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text" property="SearchValue"/><a href="">Search</a></li>
+<li><input type="submit" styles="submit"  value="List" /></li>
+<li><input type="submit" styles="submit" property="Add" value="Add"/></li>
+<li><input type="submit" styles="submit" property="Delete" value="Delete"/></li>
+<li><input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text" property="SearchValue"/><a href="">Search</a></li>
 </ul>
 </div>
 
@@ -494,7 +494,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 <%--
 <html:boxlist property="Category"/>
 --%>
-<html:input  type="hidden" id="ParentID" name="ParentID" property="ParentID"/>
+<input  type="hidden" id="ParentID" name="ParentID" property="ParentID"/>
 <table id="myTable1">
 	<thead>
 		<tr>
@@ -525,7 +525,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 %>
 </logic:iterate>
 	</tbody>
-	<tfooter> <tr> <td colspan="6"> current of total at <html:input type="text" name="CountPerPage" size="4"/> records per page <html:input type="submit" name="Previous"  value="Previous" styles="submit"/> <html:input type="submit" name="Next" value="Next" styles="submit"/> <html:input type="submit" name="JumpTo" value="JumpTo" styles="submit"/>  <html:input type="text" name="CurrentPage" size="4"/> of total </td> </tr></tfooter>
+	<tfooter> <tr> <td colspan="6"> current of total at <input type="text" name="CountPerPage" size="4"/> records per page <input type="submit" name="Previous"  value="Previous" styles="submit"/> <input type="submit" name="Next" value="Next" styles="submit"/> <input type="submit" name="JumpTo" value="JumpTo" styles="submit"/>  <input type="text" name="CurrentPage" size="4"/> of total </td> </tr></tfooter>
 </table>
 
 <script type="text/javascript">

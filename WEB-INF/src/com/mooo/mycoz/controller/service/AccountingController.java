@@ -74,7 +74,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.Input;
+
 
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
@@ -89,21 +89,21 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 		String var = null;
 		ResultSet rs = null;
 		String sql = null;
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"JobID",request.getParameter("JobID"));
-		in.addValue(request,"JobNoteID",request.getParameter("JobNoteID"));
-		in.addValue(request,"Customer",request.getParameter("Customer"));
+		request.setAttribute("JobID",request.getParameter("JobID"));
+		request.setAttribute("JobNoteID",request.getParameter("JobNoteID"));
+		request.setAttribute("Customer",request.getParameter("Customer"));
 
-		in.addHashMapValues(request,"SearchType",IDGenerator.getReportTypes(),request.getParameter("SearchType"));
+		request.setAttribute("SearchType",IDGenerator.getReportTypes());
 
 		var = request.getParameter("StartDate");
 		if(var == null) var = IDGenerator.getLastMonthToday();
-		in.addValue(request,"StartDate",var);
+		request.setAttribute("StartDate",var);
 
 		var = request.getParameter("EndDate");
 		if(var == null) var = IDGenerator.getToday();
-		in.addValue(request,"EndDate",var);
+		request.setAttribute("EndDate",var);
 
 		JobAccounting ja = new JobAccounting();
 
@@ -126,19 +126,19 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i, rs.getString("jn.ID") );
-			in.addValue(request,"NoteNo"+i, rs.getString("jn.NoteNo") );
-			in.addValue(request,"Amount"+i, rs.getString("Amount")+"("+rs.getString("cy.ISOCode")+")" );
-			in.addValue(request,"Account"+i, rs.getString("ac.Code") );
-			in.addValue(request,"AccountID"+i, rs.getString("ac.ID") );
-			in.addValue(request,"Date"+i, rs.getString("jn.Date") );
-			in.addValue(request,"ChargeTo"+i, rs.getString("us.Name") );
+			request.setAttribute("ID"+i, rs.getString("jn.ID") );
+			request.setAttribute("NoteNo"+i, rs.getString("jn.NoteNo") );
+			request.setAttribute("Amount"+i, rs.getString("Amount")+"("+rs.getString("cy.ISOCode")+")" );
+			request.setAttribute("Account"+i, rs.getString("ac.Code") );
+			request.setAttribute("AccountID"+i, rs.getString("ac.ID") );
+			request.setAttribute("Date"+i, rs.getString("jn.Date") );
+			request.setAttribute("ChargeTo"+i, rs.getString("us.Name") );
 
 			var = rs.getString("nt.Category");
  			if (var.equals("Debit"))
-				in.addValue(request,"Command"+i, "Receipt" );
+				request.setAttribute("Command"+i, "Receipt" );
 			else if (var.equals("Credit"))
-				in.addValue(request,"Command"+i, "Payment" );
+				request.setAttribute("Command"+i, "Payment" );
 			i++; 
 	   	} /* End JobAccounting */
 
@@ -155,7 +155,7 @@ public void promptNewNoteStateRun(HttpServletRequest request, HttpServletRespons
 		String var = "";
 		String sql = "";
 		ResultSet rs = null;
-		Input in = new Input();
+		
 /*
 		String[] SelectItem = request.getParameterValues("SelectItem");
 if (log.isDebugEnabled()) log.debug("SelectItem = " + request.getParameter("SelectItem"));
@@ -164,47 +164,47 @@ for (int i =0; i < SelectItem.length; i++) {
 if (log.isDebugEnabled()) log.debug("SelectItem = " + SelectItem[i]);
   } */
 		// list for this
-		in.addValue(request,"JobNoteID",request.getParameter("JobNoteID"));
-		in.addValue(request,"NoteNo",request.getParameter("NoteNo"));
+		request.setAttribute("JobNoteID");
+		request.setAttribute("NoteNo");
 if (log.isDebugEnabled()) log.debug("NoteNo: " + request.getParameter("NoteNo"));
 		NoteType nt = new NoteType();
-		in.addHashMapValues(request,"NoteType",nt.getValues(),request.getParameter("NoteType"));
+		request.setAttribute("NoteType",nt.getValues());
 
 		OperatorUser ou = new OperatorUser();
-		in.addHashMapValues(request,"Operator",ou.getValues(),request.getParameter("Operator"));
+		request.setAttribute("Operator",ou.getValues());
 
 		User us = new User();
-		in.addHashMapValues(request,"ChargeTo",us.getValues(),request.getParameter("ChargeTo"));
+		request.setAttribute("ChargeTo",us.getValues());
 
 		var = request.getParameter("Date");
 		if(var == null) var = IDGenerator.getToday();
-		in.addValue(request,"Date",var);
+		request.setAttribute("Date",var);
 
 		var = request.getParameter("DueDate");
 		if(var == null) var = IDGenerator.getToday();
-		in.addValue(request,"DueDate",var);
+		request.setAttribute("DueDate",var);
 
-		in.addValue(request,"Description",request.getParameter("Description"));
+		request.setAttribute("Description");
 
 		//Add Item
 		Account ac = new Account();
 		if(request.getParameter("NoteType") != null) {
 			var = request.getParameter("NoteType");
-			in.addHashMapValues(request,"Account",ac.getValues(var),request.getParameter("Account"));
+			request.setAttribute("Account",ac.getValues(var));
 		} else 
-			in.addHashMapValues(request,"Account",ac.getValues(),request.getParameter("Account"));
+			request.setAttribute("Account",ac.getValues());
 
 		var = request.getParameter("Account");
 		if((var != null) && !var.equals("0")) {
-			in.addValue(request,"Currency",ac.getCurrency(request.getParameter("Account")));
+			request.setAttribute("Currency",ac.getCurrency(request.getParameter("Account")));
 		   }
 
-		in.addValue(request,"ItemName",request.getParameter("ItemName"));
-		in.addValue(request,"ItemRate",request.getParameter("ItemRate"));
-		in.addValue(request,"ItemUnit",request.getParameter("ItemUnit"));
-		in.addValue(request,"ItemQuantity",request.getParameter("ItemQuantity"));
+		request.setAttribute("ItemName");
+		request.setAttribute("ItemRate");
+		request.setAttribute("ItemUnit");
+		request.setAttribute("ItemQuantity");
 
-		in.addValue(request,"BillAmount",request.getParameter("BillAmount"));
+		request.setAttribute("BillAmount");
 
 		//List JobAccounting
 		JobNote jn = new JobNote();
@@ -217,18 +217,18 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i, rs.getString("ja.ID") );
-			in.addValue(request,"AccountID"+i, rs.getString("ja.AccountID"));
-			in.addValue(request,"Account"+i, ac.getCode(rs.getString("ja.AccountID")) );
+			request.setAttribute("ID"+i, rs.getString("ja.ID") );
+			request.setAttribute("AccountID"+i, rs.getString("ja.AccountID"));
+			request.setAttribute("Account"+i, ac.getCode(rs.getString("ja.AccountID")) );
 
-			in.addValue(request,"ItemName"+i, rs.getString("ja.ItemName") );
-			in.addValue(request,"ItemRate"+i, rs.getString("ja.ItemRate") );
-			in.addValue(request,"ItemUnit"+i, rs.getString("ja.ItemUnit") );
-			in.addValue(request,"ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
+			request.setAttribute("ItemName"+i, rs.getString("ja.ItemName") );
+			request.setAttribute("ItemRate"+i, rs.getString("ja.ItemRate") );
+			request.setAttribute("ItemUnit"+i, rs.getString("ja.ItemUnit") );
+			request.setAttribute("ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
 
-			in.addValue(request,"CurrencyID"+i, rs.getString("ja.CurrencyID"));
-			in.addValue(request,"Currency"+i, rs.getString("cy.ISOCode") );
-			in.addValue(request,"BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
+			request.setAttribute("CurrencyID"+i, rs.getString("ja.CurrencyID"));
+			request.setAttribute("Currency"+i, rs.getString("cy.ISOCode") );
+			request.setAttribute("BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
 
 			i++;
                	}
@@ -305,43 +305,43 @@ public void promptUpdateNoteStateRun(HttpServletRequest request, HttpServletResp
 		String var = "";
 		String sql = "";
 		ResultSet rs = null;
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"JobNoteID",request.getParameter("JobNoteID"));
-		in.addValue(request,"NoteNo",request.getParameter("NoteNo"));
+		request.setAttribute("JobNoteID");
+		request.setAttribute("NoteNo");
 if (log.isDebugEnabled()) log.debug("NoteNo: " + request.getParameter("NoteNo"));
 		NoteType nt = new NoteType();
-		in.addHashMapValues(request,"NoteType",nt.getValues(),request.getParameter("NoteType"));
+		request.setAttribute("NoteType",nt.getValues());
 
 		OperatorUser ou = new OperatorUser();
-		in.addHashMapValues(request,"Operator",ou.getValues(),request.getParameter("Operator"));
+		request.setAttribute("Operator",ou.getValues());
 
 		User us = new User();
-		in.addHashMapValues(request,"ChargeTo",us.getValues(),request.getParameter("ChargeTo"));
+		request.setAttribute("ChargeTo",us.getValues());
 
 		var = request.getParameter("Date");
 		if(var == null) var = IDGenerator.getToday();
-		in.addValue(request,"Date",var);
+		request.setAttribute("Date",var);
 
 		var = request.getParameter("DueDate");
 		if(var == null) var = IDGenerator.getToday();
-		in.addValue(request,"DueDate",var);
+		request.setAttribute("DueDate",var);
 
-		in.addValue(request,"Description",request.getParameter("Description"));
+		request.setAttribute("Description");
 
 		//Add Item
 		Account at = new Account();
-		in.addHashMapValues(request,"Account",at.getValues(),request.getParameter("Account"));
+		request.setAttribute("Account",at.getValues());
 
-		in.addValue(request,"ItemName",request.getParameter("ItemName"));
-		in.addValue(request,"ItemRate",request.getParameter("ItemRate"));
-		in.addValue(request,"ItemUnit",request.getParameter("ItemUnit"));
-		in.addValue(request,"ItemQuantity",request.getParameter("ItemQuantity"));
+		request.setAttribute("ItemName");
+		request.setAttribute("ItemRate");
+		request.setAttribute("ItemUnit");
+		request.setAttribute("ItemQuantity");
 
 		Currency cy = new Currency();
-		in.addHashMapValues(request,"Currency",cy.getValues(),request.getParameter("Currency"));
+		request.setAttribute("Currency",cy.getValues());
 
-		in.addValue(request,"BillAmount",request.getParameter("BillAmount"));
+		request.setAttribute("BillAmount");
 
 		//List JobAccounting
 		JobNote jn = new JobNote();
@@ -354,16 +354,16 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i, rs.getString("ja.ID") );
-			in.addValue(request,"Account"+i, at.getCode(rs.getString("ja.AccountID")) );
+			request.setAttribute("ID"+i, rs.getString("ja.ID") );
+			request.setAttribute("Account"+i, at.getCode(rs.getString("ja.AccountID")) );
 
-			in.addValue(request,"ItemName"+i, rs.getString("ja.ItemName") );
-			in.addValue(request,"ItemRate"+i, rs.getString("ja.ItemRate") );
-			in.addValue(request,"ItemUnit"+i, rs.getString("ja.ItemUnit") );
-			in.addValue(request,"ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
+			request.setAttribute("ItemName"+i, rs.getString("ja.ItemName") );
+			request.setAttribute("ItemRate"+i, rs.getString("ja.ItemRate") );
+			request.setAttribute("ItemUnit"+i, rs.getString("ja.ItemUnit") );
+			request.setAttribute("ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
 
-			in.addValue(request,"Currency"+i, rs.getString("cy.ISOCode") );
-			in.addValue(request,"BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
+			request.setAttribute("Currency"+i, rs.getString("cy.ISOCode") );
+			request.setAttribute("BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
 if (log.isDebugEnabled()) log.debug("getAmount=" + rs.getDouble("Amount"));
 			i++;
                	}
@@ -441,15 +441,15 @@ try {
 	String noteNo = null;
 	String sql = null;
 	ResultSet rs = null;
-	Input in = new Input();
+	
 
 	noteNo = request.getParameter("NoteNo");
-	in.addValue(request,"NoteNo",noteNo);
+	request.setAttribute("NoteNo",noteNo);
 if (log.isDebugEnabled()) log.debug("NoteNo: " + noteNo);
-	in.addValue(request,"JobNoteID",request.getParameter("JobNoteID"));
+	request.setAttribute("JobNoteID");
 
 	String accountID = request.getParameter("AccountID");
-	in.addValue(request,"AccountID",request.getParameter("AccountID"));
+	request.setAttribute("AccountID");
 
 	/* Receipt */
 	Account at = new Account();
@@ -464,15 +464,15 @@ if (log.isDebugEnabled()) log.debug("NoteNo: " + noteNo);
 if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 	rs = jn.getResultSet(sql);
 	if(rs.first()) {
-		in.addValue(request,"NoteType",rs.getString("nt.Name"));
-		in.addValue(request,"Operator",rs.getString("ou.UserName"));
-		in.addValue(request,"ChargeTo",rs.getString("us.Name"));
-		in.addValue(request,"Date",rs.getString("jn.Date"));
-		in.addValue(request,"DueDate",rs.getString("jn.DueDate"));
-		in.addValue(request,"Description",rs.getString("jn.Description"));
-		in.addValue(request,"Account", at.getCode(rs.getString("ja.AccountID")) );
-		in.addValue(request,"Amount", rs.getDouble("Balance") + rs.getString("cy.Symbol"));
-		in.addValue(request,"Balance", rs.getString("Balance"));
+		request.setAttribute("NoteType",rs.getString("nt.Name"));
+		request.setAttribute("Operator",rs.getString("ou.UserName"));
+		request.setAttribute("ChargeTo",rs.getString("us.Name"));
+		request.setAttribute("Date",rs.getString("jn.Date"));
+		request.setAttribute("DueDate",rs.getString("jn.DueDate"));
+		request.setAttribute("Description",rs.getString("jn.Description"));
+		request.setAttribute("Account", at.getCode(rs.getString("ja.AccountID")) );
+		request.setAttribute("Amount", rs.getDouble("Balance") + rs.getString("cy.Symbol"));
+		request.setAttribute("Balance", rs.getString("Balance"));
 	} // end Receipt
 
      } catch (Exception e) {
@@ -553,22 +553,22 @@ try {
 	ResultSet rs = null;
 
 	noteNo = request.getParameter("NoteNo");
-	in.addValue(request,"NoteNo",noteNo);
+	request.setAttribute("NoteNo",noteNo);
 if (log.isDebugEnabled()) log.debug("NoteNo: " + noteNo);
 	// 
-	in.addValue(request,"JobNoteID",request.getParameter("JobNoteID"));
+	request.setAttribute("JobNoteID");
 
 	JobNote jn = new JobNote();
 	sql = "SELECT jn.ID,jn.NoteNo,jn.Date,jn.DueDate,nt.Name, us.UserName,jn.Description FROM JobNote AS jn,mycozShared.NoteType AS nt,User AS us WHERE jn.NoteTypeID=nt.ID AND jn.ChargeToID=us.ID";
 
 	rs = jn.getResultSet(sql);
 	if(rs.first()) {
-		in.addValue(request,"NoteType",rs.getString("nt.Name"));
-		//in.addValue(request,"Operator",rs.getString("ja.ItemName"));
-		in.addValue(request,"ChargeTo",rs.getString("us.UserName"));
-		in.addValue(request,"Date",rs.getString("jn.Date"));
-		in.addValue(request,"DueDate",rs.getString("jn.DueDate"));
-		in.addValue(request,"Description",rs.getString("jn.Description"));
+		request.setAttribute("NoteType",rs.getString("nt.Name"));
+		//request.setAttribute("Operator",rs.getString("ja.ItemName"));
+		request.setAttribute("ChargeTo",rs.getString("us.UserName"));
+		request.setAttribute("Date",rs.getString("jn.Date"));
+		request.setAttribute("DueDate",rs.getString("jn.DueDate"));
+		request.setAttribute("Description",rs.getString("jn.Description"));
 	}
 
 	// List Receipt
@@ -590,17 +590,17 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 	rs = ja.getResultSet(sql);
 	while(rs.next()) {
 
-		in.addValue(request,"ID"+i, rs.getString("ja.ID") );
-		in.addValue(request,"Account"+i, at.getCode(rs.getString("ja.AccountID")) );
+		request.setAttribute("ID"+i, rs.getString("ja.ID") );
+		request.setAttribute("Account"+i, at.getCode(rs.getString("ja.AccountID")) );
 
-		in.addValue(request,"ItemName"+i, rs.getString("ja.ItemName") );
-		in.addValue(request,"ItemRate"+i, rs.getString("ja.ItemRate") );
-		in.addValue(request,"ItemUnit"+i, rs.getString("ja.ItemUnit") );
-		in.addValue(request,"ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
+		request.setAttribute("ItemName"+i, rs.getString("ja.ItemName") );
+		request.setAttribute("ItemRate"+i, rs.getString("ja.ItemRate") );
+		request.setAttribute("ItemUnit"+i, rs.getString("ja.ItemUnit") );
+		request.setAttribute("ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
 
-		in.addValue(request,"CurrencyID"+i, rs.getString("ja.CurrencyID"));
-		in.addValue(request,"Currency"+i, rs.getString("cy.ISOCode") );
-		in.addValue(request,"BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
+		request.setAttribute("CurrencyID"+i, rs.getString("ja.CurrencyID"));
+		request.setAttribute("Currency"+i, rs.getString("cy.ISOCode") );
+		request.setAttribute("BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
 
 		subTotal += rs.getDouble("Amount");
 if (log.isDebugEnabled()) log.debug("subTotal: " + subTotal);
@@ -621,8 +621,8 @@ if (log.isDebugEnabled()) log.debug("subTotal: " + subTotal);
 
 		key = (String)e.nextElement();
 		value = (String)total.get(key);
-		in.addValue(request,"Total"+i, value + cy.getSymbol(key) );
-		in.addValue(request,"ISOCode"+i, "Total:"+cy.getISOCode(key) );
+		request.setAttribute("Total"+i, value + cy.getSymbol(key) );
+		request.setAttribute("ISOCode"+i, "Total:"+cy.getISOCode(key) );
 	if (log.isDebugEnabled()) log.debug("value="+value);
 		i++;
   	}
@@ -650,22 +650,22 @@ try {
 	ResultSet rs = null;
 
 	noteNo = request.getParameter("NoteNo");
-	in.addValue(request,"NoteNo",noteNo);
+	request.setAttribute("NoteNo",noteNo);
 if (log.isDebugEnabled()) log.debug("NoteNo: " + noteNo);
 	// 
-	in.addValue(request,"JobNoteID",request.getParameter("JobNoteID"));
+	request.setAttribute("JobNoteID");
 
 	JobNote jn = new JobNote();
 	sql = "SELECT jn.ID,jn.NoteNo,jn.Date,jn.DueDate,nt.Name, us.UserName,jn.Description FROM JobNote AS jn,mycozShared.NoteType AS nt,User AS us WHERE jn.NoteTypeID=nt.ID AND jn.ChargeToID=us.ID";
 
 	rs = jn.getResultSet(sql);
 	if(rs.first()) {
-		in.addValue(request,"NoteType",rs.getString("nt.Name"));
-		//in.addValue(request,"Operator",rs.getString("ja.ItemName"));
-		in.addValue(request,"ChargeTo",rs.getString("us.UserName"));
-		in.addValue(request,"Date",rs.getString("jn.Date"));
-		in.addValue(request,"DueDate",rs.getString("jn.DueDate"));
-		in.addValue(request,"Description",rs.getString("jn.Description"));
+		request.setAttribute("NoteType",rs.getString("nt.Name"));
+		//request.setAttribute("Operator",rs.getString("ja.ItemName"));
+		request.setAttribute("ChargeTo",rs.getString("us.UserName"));
+		request.setAttribute("Date",rs.getString("jn.Date"));
+		request.setAttribute("DueDate",rs.getString("jn.DueDate"));
+		request.setAttribute("Description",rs.getString("jn.Description"));
 	}
 
 	// List Receipt
@@ -687,17 +687,17 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 	rs = ja.getResultSet(sql);
 	while(rs.next()) {
 
-		in.addValue(request,"ID"+i, rs.getString("ja.ID") );
-		in.addValue(request,"Account"+i, at.getCode(rs.getString("ja.AccountID")) );
+		request.setAttribute("ID"+i, rs.getString("ja.ID") );
+		request.setAttribute("Account"+i, at.getCode(rs.getString("ja.AccountID")) );
 
-		in.addValue(request,"ItemName"+i, rs.getString("ja.ItemName") );
-		in.addValue(request,"ItemRate"+i, rs.getString("ja.ItemRate") );
-		in.addValue(request,"ItemUnit"+i, rs.getString("ja.ItemUnit") );
-		in.addValue(request,"ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
+		request.setAttribute("ItemName"+i, rs.getString("ja.ItemName") );
+		request.setAttribute("ItemRate"+i, rs.getString("ja.ItemRate") );
+		request.setAttribute("ItemUnit"+i, rs.getString("ja.ItemUnit") );
+		request.setAttribute("ItemQuantity"+i, rs.getString("ja.ItemQuantity") );
 
-		in.addValue(request,"CurrencyID"+i, rs.getString("ja.CurrencyID"));
-		in.addValue(request,"Currency"+i, rs.getString("cy.ISOCode") );
-		in.addValue(request,"BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
+		request.setAttribute("CurrencyID"+i, rs.getString("ja.CurrencyID"));
+		request.setAttribute("Currency"+i, rs.getString("cy.ISOCode") );
+		request.setAttribute("BillAmount"+i, rs.getDouble("Amount") + rs.getString("cy.Symbol"));
 
 		subTotal += rs.getDouble("Amount");
 if (log.isDebugEnabled()) log.debug("subTotal: " + subTotal);
@@ -718,8 +718,8 @@ if (log.isDebugEnabled()) log.debug("subTotal: " + subTotal);
 
 		key = (String)e.nextElement();
 		value = (String)total.get(key);
-		in.addValue(request,"Total"+i, value + cy.getSymbol(key) );
-		in.addValue(request,"ISOCode"+i, "Total:"+cy.getISOCode(key) );
+		request.setAttribute("Total"+i, value + cy.getSymbol(key) );
+		request.setAttribute("ISOCode"+i, "Total:"+cy.getISOCode(key) );
 	if (log.isDebugEnabled()) log.debug("value="+value);
 		i++;
   	}

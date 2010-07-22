@@ -453,7 +453,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 <div class="title">Hello:everbody</div>
 <div class="command">
 <ul>
-<li><a href="<%=request.getContextPath()%>/Blog.do?state=promptAddBlog"><html:message key="NewBlog" /></a></li>
+<li><a href="<%=request.getContextPath()%>/Blog.do?state=promptAddBlog"><fmt:message key="NewBlog" /></a></li>
 <script type="text/javascript">  
   function fnGetValue(){ 
 	for(var i=0;i<document.forms[0].elements.length;i++){  
@@ -464,9 +464,9 @@ document.getElementById("content").style.height=document.getElementById("left").
 
   }  
   </script> 
-<li><a href="javascript:fnGetValue();"><html:message key="Delete" /></a></li>
-<li><html:input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
-<%--<li><a href=""><html:input type="button" styles="button" value="Upload"/></a></li>--%>
+<li><a href="javascript:fnGetValue();"><fmt:message key="Delete" /></a></li>
+<li><input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
+<%--<li><a href=""><input type="button" styles="button" value="Upload"/></a></li>--%>
 
 </ul>
 </div>
@@ -477,14 +477,14 @@ document.getElementById("content").style.height=document.getElementById("left").
 <table id="myTable">
 	<thead>
 		<tr>
-			<td><html:message key="Select" /></td>
-			<td><html:message key="Title" /></td>
-			<td><html:message key="Owner" /></td>
-			<td><html:message key="Date" /></td>
-			<td><html:message key="Type" /></td>
-			<td><html:message key="Popularity" /></td>
-			<td><html:message key="Join" /></td>
-			<td><html:message key="Update" /></td>
+			<td><fmt:message key="Select" /></td>
+			<td><fmt:message key="Title" /></td>
+			<td><fmt:message key="Owner" /></td>
+			<td><fmt:message key="Date" /></td>
+			<td><fmt:message key="Type" /></td>
+			<td><fmt:message key="Popularity" /></td>
+			<td><fmt:message key="Join" /></td>
+			<td><fmt:message key="Update" /></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -492,7 +492,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 <logic:iterate property="ListBlog">
 
 		<tr>
-			<td><input type="checkbox" name="cbx" id="cbx" value="<html:write property="<%="ID"+i%>"/>"/> <%--<html:input type="text" id="Customer" name="Customer" size="15" maxlength="255" styles="text"/> &nbsp --%></td>
+			<td><input type="checkbox" name="cbx" id="cbx" value="<html:write property="<%="ID"+i%>"/>"/> <%--<input type="text" id="Customer" name="Customer" size="15" maxlength="255" styles="text"/> &nbsp --%></td>
 			<td><html:write property="<%="Title"+i%>"/></td>
 			<td><html:write property="<%="Owner"+i%>"/></td>
 			<td><html:write property="<%="Date"+i%>"/></td>

@@ -63,7 +63,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -85,8 +85,8 @@ try {
 		else
 			response.sendRedirect(request.getContextPath()+"/User.do?state=promptLogin");
 */
-		//Input.setValue("UserName",request.getParameter("UserName"));
-		//Input.setValue("Password",request.getParameter("Password"));
+		//Input.setValue("UserName");
+		//Input.setValue("Password");
 
      } catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());

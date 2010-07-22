@@ -28,7 +28,7 @@ public class ConfigureUtil {
 	private InputStream cacheStream = null;
 	private InputStream mvcStream = null;
 
-	private String cacheFile = "/mypool.xml";
+	private String cacheFile = "/myconfig.xml";
 	private String mvcFile = "/myconfig.xml";
 
 	public static ConfigureUtil getInstance() {
@@ -76,24 +76,18 @@ public class ConfigureUtil {
 	public HashMap<String, Cache> confCache() {
 		HashMap<String, Cache> caches = new HashMap<String, Cache>();
 		try {
-			System.out.println(" confCache start..");
 			flush();
 
 			SAXReader saxReader = new SAXReader();
 			Document doc = saxReader.read(cacheStream);
 			Element root = doc.getRootElement();
-			System.out.println(" confCache root..");
 
 			Iterator<?> itrCache = root.selectNodes("package/cache").iterator();
 			Element cacheNode;
 			String value = "K";
-			System.out.println(" confCache loop");
 
 			while (itrCache.hasNext()) {
 				cacheNode = (Element) itrCache.next();
-				System.out.println(" confCache next");
-
-				System.out.println(" confCache loop");
 
 				int size = Integer.valueOf(cacheNode.attributeValue("size"))
 						.intValue();
@@ -103,9 +97,10 @@ public class ConfigureUtil {
 				else if (value.equals("M"))
 					size = size * CacheManager.M;
 
-				int time = Integer.valueOf(cacheNode.attributeValue("time"))
-						.intValue();
+				int time = Integer.valueOf(cacheNode.attributeValue("time")).intValue();
+				
 				value = cacheNode.attributeValue("timeUnit");
+				
 				if (value.equals("SECOND"))
 					time = time * CacheManager.SECOND;
 				else if (value.equals("MINUTE"))
@@ -113,10 +108,7 @@ public class ConfigureUtil {
 				else if (value.equals("HOUR"))
 					time = time * CacheManager.HOUR;
 
-				System.out.println(" confCache add");
-
-				caches.put(cacheNode.attributeValue("name"), new Cache(size,
-						time));
+				caches.put(cacheNode.attributeValue("name"), new Cache(size,time));
 			}
 
 		} catch (DocumentException e) {

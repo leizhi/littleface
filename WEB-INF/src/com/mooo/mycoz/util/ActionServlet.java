@@ -43,10 +43,11 @@ public class ActionServlet extends HttpServlet {
 		}
 		
 		conf = ConfigureUtil.getInstance();
-		conf.setCacheFile(prefix + confDir +"/mypool.xml");
+		conf.setCacheFile(prefix + confDir +"/myconfig.xml");
 		conf.setMvcFile(prefix +  confDir +"/myconfig.xml");
 
 		conf.conf();
+		conf.confCache();
 	}
 
 	protected void service(HttpServletRequest request,
@@ -55,7 +56,10 @@ public class ActionServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		//request.setCharacterEncoding("utf-8");
 		//response.setContentType("text/html; charset=UTF-8");
-
+		
+		out.println("locale:"+request.getLocale());
+		//javax.servlet.jsp.jstl.fmt.LocaleSupport.getLocalizedMessage(pageContext, key);
+		
 		try {
 			out.println("Start Servlet:");
 
@@ -114,11 +118,10 @@ public class ActionServlet extends HttpServlet {
 			if (actionJsp != null) {
 				execResult = (String) actionJsp;
 				if (!execResult.equals("")) {
-					//response.setContentType("text/html; charset=UTF-8");
 					getServletConfig().getServletContext()
 							.getRequestDispatcher(execResult).forward(request,response);
-					// response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-					// response.setHeader("Location",request.getContextPath()+execJsp);
+					 //response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+					 //response.setHeader("Location",request.getContextPath()+execResult);
 				}
 			}
 			out.println("End Servlet:");

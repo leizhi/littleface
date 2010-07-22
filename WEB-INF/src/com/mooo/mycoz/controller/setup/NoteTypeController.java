@@ -64,7 +64,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -76,13 +76,13 @@ private static Log log = LogFactory.getLog(NoteTypeController.class);
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = "";
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"ID",request.getParameter("ID"));
-		in.addValue(request,"Code",request.getParameter("Code"));
-		in.addValue(request,"Name",request.getParameter("Name"));
-		in.addValue(request,"Category",request.getParameter("Category"));
-		in.addValue(request,"Description",request.getParameter("Description"));
+		request.setAttribute("ID",request.getParameter("ID"));
+		request.setAttribute("Code",request.getParameter("Code"));
+		request.setAttribute("Name",request.getParameter("Name"));
+		request.setAttribute("Category",request.getParameter("Category"));
+		request.setAttribute("Description",request.getParameter("Description"));
 
 		NoteType bt = new NoteType();
 		ResultSet rs = null;
@@ -112,11 +112,11 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i,rs.getString("ID"));
-			in.addValue(request,"Code"+i,rs.getString("Code"));
-			in.addValue(request,"Name"+i,rs.getString("Name"));
-			in.addValue(request,"Category"+i,rs.getString("Category"));
-			in.addValue(request,"Description"+i,rs.getString("Description"));
+			request.setAttribute("ID"+i,rs.getString("ID"));
+			request.setAttribute("Code"+i,rs.getString("Code"));
+			request.setAttribute("Name"+i,rs.getString("Name"));
+			request.setAttribute("Category"+i,rs.getString("Category"));
+			request.setAttribute("Description"+i,rs.getString("Description"));
 
 			i++;
                	}
@@ -131,14 +131,14 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"Code",request.getParameter("Code"));
-		in.addValue(request,"Name",request.getParameter("Name"));
+		
+		request.setAttribute("Code",request.getParameter("Code"));
+		request.setAttribute("Name",request.getParameter("Name"));
 
 		NoteType nt = new NoteType();
 		in.addHashMapValues(request,"Category",nt.getDCValues());
 
-		in.addValue(request,"Description",request.getParameter("Description"));
+		request.setAttribute("Description",request.getParameter("Description"));
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -178,20 +178,20 @@ public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse
 		NoteType nt = new NoteType();
 		ResultSet rs = null;
 		String sql = "";
-		Input in = new Input();
+		
 		if(key != null) {
 			sql += "SELECT ID,Code,Name,Category,Description FROM NoteType";
 			sql += " WHERE ID = " + key + " LIMIT 1";
 			rs = nt.getResultSet(sql);
 
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addValue(request,"Code",rs.getString("Code"));
-				in.addValue(request,"Name",rs.getString("Name"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("Code",rs.getString("Code"));
+				request.setAttribute("Name",rs.getString("Name"));
 
 				in.addHashMapValues(request,"Category",nt.getDCValues(),rs.getString("Category"));
 
-				in.addValue(request,"Description",rs.getString("Description"));
+				request.setAttribute("Description",rs.getString("Description"));
                		}
 
 		}

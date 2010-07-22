@@ -22,11 +22,11 @@
 <!-- AddTable -->
     <div class="SearchTable" >
       <ul>
-     	<li class="AddOutput"><html:message key="Name" /></li>
-	<li class="AddInput"><html:input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></li>
+     	<li class="AddOutput"><fmt:message key="Name" /></li>
+	<li class="AddInput"><input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></li>
 
-     	<li class="AddOutput"><html:message key="Description" /></li>
-        <li class="AddInput"><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
+     	<li class="AddOutput"><fmt:message key="Description" /></li>
+        <li class="AddInput"><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
  
      	<li class="Button"><input type="button" id="Add" name="Add" value="Add" onclick="Util.Submit('/DownloadType.do?state=processAdd');"/><input type="reset" id="reset" name="reset" value="reset"/><input type="button" id="Close" name="Close" value="Close" onclick="javascript:window.history.back(1);"/></li>
       </ul>

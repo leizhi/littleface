@@ -22,14 +22,14 @@
 <!-- SearchTable -->
     <div class="SearchTable" >
       <ul>
-     	<li class="Output"><html:message key="ID" /></li>
-	<li class="Input"><html:input type="text" id="ID" name="ID" property="ID" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="ID" /></li>
+	<li class="Input"><input type="text" id="ID" name="ID" property="ID" size="15" maxlength="255"/></li>
 
-     	<li class="Output" id="flag"><html:message key="Code" /> </li>
-        <li class="Input"><html:input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
+     	<li class="Output" id="flag"><fmt:message key="Code" /> </li>
+        <li class="Input"><input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
 
-     	<li class="Output"><html:message key="Description" /></li>
-        <li class="Input"><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
+     	<li class="Output"><fmt:message key="Description" /></li>
+        <li class="Input"><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
  
      	<li class="Output"></li>
 	<li class="Input"></li>
@@ -40,21 +40,21 @@
 <!-- ListTable -->
     <div class="Table" >
       <ul>
-     	<li class="Title"><html:message key="ID" /></li>
-     	<li class="Title"><html:message key="Code" /></li>
-     	<li class="Title"><html:message key="Description" /></li>
-     	<li class="Title"><html:message key="Operation" /></li>
+     	<li class="Title"><fmt:message key="ID" /></li>
+     	<li class="Title"><fmt:message key="Code" /></li>
+     	<li class="Title"><fmt:message key="Description" /></li>
+     	<li class="Title"><fmt:message key="Operation" /></li>
 <%int i=0;%>
 <logic:iterate property="List">
         <li><%=Input.getValue("ID"+i)%></li>
 	<li><%=Input.getValue("Code"+i)%></li>
         <li><%=Input.getValue("Description"+i)%></li>
 
-        <li><a href="javascript:Util.Submit('/AccountCategory.do?state=promptUpdate&Key=<%=Input.getValue("ID"+i)%>');"><html:message key="Update" /></a> <a href="javascript:Util.Submit('/AccountCategory.do?state=processDelete&Key=<%=Input.getValue("ID"+i)%>');"><html:message key="Delete" /></a></li>
+        <li><a href="javascript:Util.Submit('/AccountCategory.do?state=promptUpdate&Key=<%=Input.getValue("ID"+i)%>');"><fmt:message key="Update" /></a> <a href="javascript:Util.Submit('/AccountCategory.do?state=processDelete&Key=<%=Input.getValue("ID"+i)%>');"><fmt:message key="Delete" /></a></li>
 <% i++; %>
 </logic:iterate>
 
-	<%-- <li><html:input type="checkbox" id="UserName" name="UserName" value="0"/></li> --%>
+	<%-- <li><input type="checkbox" id="UserName" name="UserName" value="0"/></li> --%>
       </ul>
     </div>
 

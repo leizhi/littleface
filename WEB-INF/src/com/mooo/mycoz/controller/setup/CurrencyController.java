@@ -64,7 +64,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -76,13 +76,13 @@ private static Log log = LogFactory.getLog(CurrencyController.class);
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		String var = "";
-		Input in = new Input();
+		
 		// list for this
-		in.addValue(request,"ID",request.getParameter("ID"));
-		in.addValue(request,"ISOCode",request.getParameter("Code"));
-		in.addValue(request,"Name",request.getParameter("Name"));
-		in.addValue(request,"Country",request.getParameter("Country"));
-		in.addValue(request,"Symbol",request.getParameter("Symbol"));
+		request.setAttribute("ID",request.getParameter("ID"));
+		request.setAttribute("ISOCode",request.getParameter("Code"));
+		request.setAttribute("Name",request.getParameter("Name"));
+		request.setAttribute("Country",request.getParameter("Country"));
+		request.setAttribute("Symbol",request.getParameter("Symbol"));
 
 		Currency currency = new Currency();
 		ResultSet rs = null;
@@ -108,11 +108,11 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 		int i = 0;
 		while(rs.next()) {
 
-			in.addValue(request,"ID"+i,rs.getString("Currency.ID"));
-			in.addValue(request,"ISOCode"+i,rs.getString("Currency.ISOCode"));
-			in.addValue(request,"Name"+i,rs.getString("Currency.Name"));
-			in.addValue(request,"Country"+i,rs.getString("Country.Code"));
-			in.addValue(request,"Symbol"+i,rs.getString("Currency.Symbol"));
+			request.setAttribute("ID"+i,rs.getString("Currency.ID"));
+			request.setAttribute("ISOCode"+i,rs.getString("Currency.ISOCode"));
+			request.setAttribute("Name"+i,rs.getString("Currency.Name"));
+			request.setAttribute("Country"+i,rs.getString("Country.Code"));
+			request.setAttribute("Symbol"+i,rs.getString("Currency.Symbol"));
 
 			i++;
                	}
@@ -128,13 +128,13 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
 		Country country = new Country();
-		Input in = new Input();
-		in.addValue(request,"ISOCode",request.getParameter("ISOCode"));
-		in.addValue(request,"Name",request.getParameter("Name"));
+		
+		request.setAttribute("ISOCode",request.getParameter("ISOCode"));
+		request.setAttribute("Name",request.getParameter("Name"));
 
 		in.addHashMapValues(request,"Country",country.getValues());
 
-		in.addValue(request,"Symbol",request.getParameter("Symbol"));
+		request.setAttribute("Symbol",request.getParameter("Symbol"));
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -180,17 +180,17 @@ public void promptUpdateStateRun(HttpServletRequest request, HttpServletResponse
 		Currency currency = new Currency();
 		ResultSet rs = null;
 		String sql = "";
-		Input in = new Input();
+		
 		if(key != null) {
 			sql += "SELECT ID,ISOCode,Name,Symbol,CountryID FROM Currency";
 			sql += " WHERE ID = " + key + " LIMIT 1";
 			rs = currency.getResultSet(sql);
 
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addValue(request,"ISOCode",rs.getString("ISOCode"));
-				in.addValue(request,"Name",rs.getString("Name"));
-				in.addValue(request,"Symbol",rs.getString("Symbol"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("ISOCode",rs.getString("ISOCode"));
+				request.setAttribute("Name",rs.getString("Name"));
+				request.setAttribute("Symbol",rs.getString("Symbol"));
 
 				in.addHashMapValues(request,"Country",country.getValues(),rs.getString("CountryID"));
                		}

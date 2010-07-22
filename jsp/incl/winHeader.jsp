@@ -48,14 +48,14 @@
 
 <div id="container">
 <div id="left">
-<form>
+<form method="post">
 <div class="news">
 <ul>
-<li><html:message key="UserName" /><html:input type="text" id="userName_V" name="userName_V" styles="text"/></li>
-<li><html:message key="Passsword" /><html:input type="password" id="password_V" name="password_V" styles="text"/></li>
+<li><fmt:message key="UserName"/><input type="text" id="userName_V" name="userName_V" styles="text"/></li>
+<li><fmt:message key="Passsword" /><input type="password" id="password_V" name="password_V" styles="text"/></li>
 <li>
-<input type="submit" class="submit" name="Login" value="<html:message key="Login" />" onclick="document.forms[0].action='<%=request.getContextPath()%>/User.do?state=processLogin';document.forms[0].method='post';document.forms[0].submit();"/>
-<input type="submit" class="submit" name="Login" value="<html:message key="Register" />" onclick="document.forms[0].action='<%=request.getContextPath()%>/User.do?state=promptAdd';document.forms[0].method='post';document.forms[0].submit();"/>
+<input type="submit" class="submit" name="Login" value="<fmt:message key="Login" />" onclick="document.forms[0].action='<c:url value="/User.do?method=login" />';document.forms[0].method='post';document.forms[0].submit();"/>
+<input type="submit" class="submit" name="Login" value="<fmt:message key="Register" />" onclick="document.forms[0].action='<c:url value="/User.do?method=promptAdd" />';document.forms[0].method='post';document.forms[0].submit();"/>
 </li>
 </ul></div>
 </form>
@@ -63,21 +63,21 @@
 <div class="news">
 <ul> 
 <li><a href="#"><%=com.mooo.mycoz.util.SessionCounter.getRealCount()%></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 
 <div class="news"><ul> 
-<li><a href="#"><html:message key="Test" /></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 
 <div class="news"><ul> 
-<li><a href="#"><html:message key="Test" /></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 
 <div class="news"><ul> 
-<li><a href="#"><html:message key="Test" /></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 </div>

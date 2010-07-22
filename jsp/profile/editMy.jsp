@@ -29,23 +29,23 @@
 <!--  -->
 <table align=center width=90% border=0 cellspacing=0 cellpadding=0>
 <tr><td  colspan=3 class=col2>
-        <html:message key="setup.Location" />......</td></tr>
+        <fmt:message key="setup.Location" />......</td></tr>
 
 <tr><td width=20% nowrap>&nbsp;</td>
 <td valign=top>
   <ul id=small>
         <li><a href="<%=request.getContextPath()%>/Region.do?state=listAllRegion">
-<html:message key="setup.Region"/></a></li>
+<fmt:message key="setup.Region"/></a></li>
         <li><a href="<%=request.getContextPath()%>/Country.do?state=listAllCountry">
-<html:message key="setup.Country" /></a></li>
+<fmt:message key="setup.Country" /></a></li>
   </ul>
 </td>
 <td valign=top nowrap>
   <ul id=small>
         <li><a href="<%=request.getContextPath()%>/Branch.do?state=listAllBranch">
-<html:message key="setup.Branch" /></a></li>
+<fmt:message key="setup.Branch" /></a></li>
         <li><a href="<%=request.getContextPath()%>/Principle.do?state=listAllPrinciple">
-<html:message key="setup.Principle" /></a></li>
+<fmt:message key="setup.Principle" /></a></li>
   </ul>
 </td></tr>
 </table>
@@ -66,27 +66,27 @@
 <!--  -->
 <table align=center width=90% border=0 cellspacing=0 cellpadding=0>
 <tr><td colspan=3 class=col2>
- <html:message key="setup.TypeDefinition"/>......</td></tr>
+ <fmt:message key="setup.TypeDefinition"/>......</td></tr>
 <tr><td width=20%>&nbsp;</td>
 <td valign=top>
   <ul id=small>
         <li><a href="<%=request.getContextPath()%>/JobType.do">
-<html:message key="setup.JobType" /></a></li>
+<fmt:message key="setup.JobType" /></a></li>
         <li><a href="<%=request.getContextPath()%>/PartnerType.do">
-<html:message key="setup.PartnerType" /></a></li>
+<fmt:message key="setup.PartnerType" /></a></li>
         <li><a href="<%=request.getContextPath()%>/WeightType.do">
-<html:message key="setup.WeightType" /></a></li>
+<fmt:message key="setup.WeightType" /></a></li>
         <li><a href="<%=request.getContextPath()%>/ChargeableType.do">
-<html:message key="setup.ChargeableType" /></a></li>
+<fmt:message key="setup.ChargeableType" /></a></li>
   </ul>
 </td>
 <td valign=top nowrap>
   <ul id=small>
         <li><a href="<%=request.getContextPath()%>/InlandType.do">
-<html:message key="setup.InlandType" /></a></li>
+<fmt:message key="setup.InlandType" /></a></li>
         <li><a href="<%=request.getContextPath()%>/ContainerType.do">
-<html:message key="setup.ContainerType"/></a></li>
-                       <li><a href="<%=request.getContextPath()%>/DocNoteTemplate.do"><html:message key="DocNoteTemplates"/></a></li>
+<fmt:message key="setup.ContainerType"/></a></li>
+                       <li><a href="<%=request.getContextPath()%>/DocNoteTemplate.do"><fmt:message key="DocNoteTemplates"/></a></li>
   </ul>
 </td>
 </tr>

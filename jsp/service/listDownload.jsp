@@ -455,8 +455,8 @@ document.getElementById("content").style.height=document.getElementById("left").
 <ul>
 <li><a href="<%=request.getContextPath()%>/Download.do?state=promptAdd">Upload</a></li>
 <li><a href="javascript:window.alert('hh');">Delete</a></li>
-<li><html:input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
-<%--<li><a href=""><html:input type="button" styles="button" value="Upload"/></a></li>--%>
+<li><input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
+<%--<li><a href=""><input type="button" styles="button" value="Upload"/></a></li>--%>
 
 </ul>
 </div>
@@ -480,7 +480,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 <logic:iterate property="List">
 
 		<tr>
-			<td><input type="checkbox" name="cbx"/><%--<html:input type="text" id="Customer" name="Customer" size="15" maxlength="255" styles="text"/> &nbsp --%></td>
+			<td><input type="checkbox" name="cbx"/><%--<input type="text" id="Customer" name="Customer" size="15" maxlength="255" styles="text"/> &nbsp --%></td>
 			<td><html:write property="<%="Name"+i%>"/></td>
 			<td><html:write property="<%="Date"+i%>"/></td>
 			<td><html:write property="<%="Type"+i%>"/></td>

@@ -481,7 +481,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 <li><a href="">Upload</a></li>
 <li><a href="javascript:window.alert('hh');">Create</a></li>
 <li><a href="javascript:window.alert('hh');">Delete</a></li>
-<li><html:input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
+<li><input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
 
 </ul>
 </div>
@@ -491,38 +491,38 @@ document.getElementById("content").style.height=document.getElementById("left").
 <script type="text/javascript" src="jsp/js/calendar.js"></script>
 
 <div id="formResponse">
-<html:input type="hidden" id="ID" name="ID" property="ID"/>
+<input type="hidden" id="ID" name="ID" property="ID"/>
 
 <table align="left" style="font-size:0.9em;">
 
 <tr>
-<td><html:message key="Name" /></td>
-<td><html:input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></td>
+<td><fmt:message key="Name" /></td>
+<td><input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></td>
 </tr>
 
 <tr>
-<td><html:message key="Type" /></td>
+<td><fmt:message key="Type" /></td>
 <td><html:select id="TypeID" name="TypeID" property="TypeID"/></td>
 </tr>
 
 <tr>
-<td><html:message key="File" /></td>
+<td><fmt:message key="File" /></td>
 <td><input type="file" id="DownloadPath" name="DownloadPath" property="DownloadPath"/></td>
 </tr>
 
 <tr>
-<td><html:message key="Image" /></td>
-<td><html:input type="file" id="ImagePath" name="ImagePath" property="ImagePath"/></td>
+<td><fmt:message key="Image" /></td>
+<td><input type="file" id="ImagePath" name="ImagePath" property="ImagePath"/></td>
 </tr>
 
 <tr>
-<td><html:message key="DownloadDate" /></td>
-<td><html:input type="text" id="Date" name="Date" property="Date" size="15" maxlength="255"/> <a href="javascript:window.open('<%=request.getContextPath()%>/jsp/incl/calendar.jsp','Remote', 'width=220,height=252,scrollbars');setParams('Date');"><img src="jsp/images/miniDate.gif" border=0 alt="<html:message key="ChooseDate"/>"></a></td>
+<td><fmt:message key="DownloadDate" /></td>
+<td><input type="text" id="Date" name="Date" property="Date" size="15" maxlength="255"/> <a href="javascript:window.open('<%=request.getContextPath()%>/jsp/incl/calendar.jsp','Remote', 'width=220,height=252,scrollbars');setParams('Date');"><img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="ChooseDate"/>"></a></td>
 </tr>
 
 <tr>
-<td><html:message key="Description" /></td>
-<td><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></td>
+<td><fmt:message key="Description" /></td>
+<td><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></td>
 </tr>
 
 <tr>

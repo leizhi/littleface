@@ -478,7 +478,7 @@ document.getElementById("content").style.height=document.getElementById("left").
 <div class="title">Hello:everbody</div>
 <div class="command">
 <ul>
-<li><html:input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
+<li><input type="text" id="SearchValue" name="SearchValue" size="15" maxlength="255" styles="text"/><a href="">Search</a></li>
 
 </ul>
 </div>
@@ -488,32 +488,32 @@ document.getElementById("content").style.height=document.getElementById("left").
 <script type="text/javascript" src="jsp/js/calendar.js"></script>
 
 <div id="formResponse">
-<html:input type="hidden" id="ID" name="ID" property="ID"/>
+<input type="hidden" id="ID" name="ID" property="ID"/>
 
 <table align="left" style="font-size:0.9em;">
 
 <tr>
-<td><html:message key="Title" /></td>
-<td><html:input type="text" id="Title" name="Title" property="Title" size="15" maxlength="255"/></td>
+<td><fmt:message key="Title" /></td>
+<td><input type="text" id="Title" name="Title" property="Title" size="15" maxlength="255"/></td>
 </tr>
 
 <tr>
-<td><html:message key="Type" /></td>
+<td><fmt:message key="Type" /></td>
 <td><html:select id="TypeID" name="TypeID" property="TypeID" /></td>
 </tr>
 
 <tr>
-<td><html:message key="Owner" /></td>
+<td><fmt:message key="Owner" /></td>
 <td><html:output id="Owner" name="Owner" property="Owner"/> </td>
 </tr>
 
 <tr>
-<td><html:message key="Date" /></td>
-<td><html:input type="text" id="Date" name="Date" property="Date" size="15" maxlength="255"/> <a href="javascript:window.open('<%=request.getContextPath()%>/jsp/incl/calendar.jsp','Remote', 'width=220,height=252,scrollbars');setParams('Date');"><img src="jsp/images/miniDate.gif" border=0 alt="<html:message key="ChooseDate"/>"></a></td>
+<td><fmt:message key="Date" /></td>
+<td><input type="text" id="Date" name="Date" property="Date" size="15" maxlength="255"/> <a href="javascript:window.open('<%=request.getContextPath()%>/jsp/incl/calendar.jsp','Remote', 'width=220,height=252,scrollbars');setParams('Date');"><img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="ChooseDate"/>"></a></td>
 </tr>
 
 <tr>
-<td><html:message key="Description" /></td>
+<td><fmt:message key="Description" /></td>
 <td>
 <textarea cols="50" rows="10" id="Description" name="Description"></textarea>
 </td>

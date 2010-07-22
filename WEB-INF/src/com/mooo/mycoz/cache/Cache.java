@@ -62,8 +62,8 @@ import java.util.HashMap;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.manihot.xpc.util.LinkedList;
-import com.manihot.xpc.util.LinkedListNode;
+import com.mooo.mycoz.util.LinkedList;
+import com.mooo.mycoz.util.LinkedListNode;
 
 /**
  * General purpose cache implementation. It stores objects associated with

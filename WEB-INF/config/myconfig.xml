@@ -4,23 +4,25 @@
 	<package name="xpc" namespace="/xpc" extends="struts-default">
 
 		<cache name="dbobj" size="1024" sizeUnit="K" time="24" timeUnit="HOUR" />
+		<cache name="input" size="1024" sizeUnit="K" time="24" timeUnit="HOUR" />
 
 		<global-results>
 			<result name="login" type="redirectAction">LoginXpc</result>
 			<result name="error" type="redirect">error.jsp</result>
 		</global-results>
+		
+		<!-- Add actions here -->
 
 		<action name="Index" default="promptIndex"
-			class="com.mooo.mycoz.controller.IndexController">
+			class="com.mooo.mycoz.action.IndexAction">
 			<result name="promptIndex">/jsp/start.jsp</result>
 			<result name="accept">/jsp/rust.jsp</result>
 		</action>
 		
 		<action name="Menu" default="show"
-			class="com.mooo.mycoz.controller.IndexController">
+			class="com.mooo.mycoz.action.IndexAction">
 			<result name="show">/jsp/default.jsp</result>
 		</action>
-		<!-- Add actions here -->
 		
 	</package>
 </struts>

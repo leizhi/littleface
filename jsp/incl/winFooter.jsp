@@ -25,23 +25,23 @@ ieslider.onmouseout=new Function("ieslider.scrollAmount=2")
 
 
 <div class="news"><ul> 
-<li><a href="#"><html:message key="Test" /></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 
 <div class="news"><ul> 
-<li><a href="#"><html:message key="Test" /></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 
 <div class="news"><ul> 
-<li><a href="#"><html:message key="Test" /></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 
 <div class="news"><ul> 
-<li><a href="#"><html:message key="Test" /></a></li>
-<li><a href="#"><html:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
+<li><a href="#"><fmt:message key="Test" /></a></li>
 </ul></div>
 
 

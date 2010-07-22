@@ -24,20 +24,20 @@
 <!-- UpdateTable -->
     <div class="SearchTable" >
       <ul>
-	<html:input type="hidden" id="ID" name="ID" property="ID"/>
-     	<li class="AddOutput"><html:message key="Code" /></li>
-	<li class="AddInput"><html:input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
+	<input type="hidden" id="ID" name="ID" property="ID"/>
+     	<li class="AddOutput"><fmt:message key="Code" /></li>
+	<li class="AddInput"><input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
 
-     	<li class="AddOutput"><html:message key="Extension" /></li>
+     	<li class="AddOutput"><fmt:message key="Extension" /></li>
 	<li class="AddInput"><html:select id="Extension" name="Extension" property="Extension" /></li>
-     	<li class="AddOutput"><html:message key="Group" /></li>
+     	<li class="AddOutput"><fmt:message key="Group" /></li>
 	<li class="AddInput"><html:select id="Group" name="Group" property="Group" /></li>
 
-     	<li class="AddOutput"><html:message key="Currency" /></li>
+     	<li class="AddOutput"><fmt:message key="Currency" /></li>
 	<li class="AddInput"><html:select id="Currency" name="Currency" property="Currency" /></li>
 
-     	<li class="AddOutput"><html:message key="Description" /></li>
-        <li class="AddInput"><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
+     	<li class="AddOutput"><fmt:message key="Description" /></li>
+        <li class="AddInput"><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
 
      	<li class="Button"><input type="button" id="Update" name="Update" value="Update" onclick="Util.Submit('/Account.do?state=processUpdate');"/><input type="button" id="Update" name="Update" value="Update" onclick="Util.Submit('/Account.do?state=processUpdate');"/></li>
       </ul>

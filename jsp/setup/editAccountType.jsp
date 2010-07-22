@@ -24,17 +24,17 @@
 <!-- UpdateTable -->
     <div class="SearchTable" >
       <ul>
-	<html:input type="hidden" id="ID" name="ID" property="ID"/>
-     	<li class="AddOutput"><html:message key="Code" /></li>
-	<li class="AddInput"><html:input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
+	<input type="hidden" id="ID" name="ID" property="ID"/>
+     	<li class="AddOutput"><fmt:message key="Code" /></li>
+	<li class="AddInput"><input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
 
-     	<li class="AddOutput"><html:message key="NoteType" /></li>
+     	<li class="AddOutput"><fmt:message key="NoteType" /></li>
 	<li class="AddInput"><html:select id="NoteType" name="NoteType" property="NoteType" /></li>
-     	<li class="AddOutput"><html:message key="Category" /></li>
+     	<li class="AddOutput"><fmt:message key="Category" /></li>
 	<li class="AddInput"><html:select id="Category" name="Category" property="Category" /></li>
 
-     	<li class="AddOutput"><html:message key="Description" /></li>
-        <li class="AddInput"><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
+     	<li class="AddOutput"><fmt:message key="Description" /></li>
+        <li class="AddInput"><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/></li>
      	<li class="AddOutput"></li>
         <li class="AddInput"></li>
 

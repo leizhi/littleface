@@ -63,7 +63,7 @@ import com.mooo.mycoz.jdbc.DBNode;
 import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 
-import com.mooo.mycoz.util.Input;
+
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
 
@@ -74,9 +74,9 @@ private static Log log = LogFactory.getLog(MyController.class);
 
 public void viewMyStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Password",request.getParameter("Password"));
+		
+		request.setAttribute("UserName",request.getParameter("UserName"));
+		request.setAttribute("Password",request.getParameter("Password"));
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -85,9 +85,9 @@ public void viewMyStateRun(HttpServletRequest request, HttpServletResponse respo
 
 public void promptUpdateMyStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Password",request.getParameter("Password"));
+		
+		request.setAttribute("UserName",request.getParameter("UserName"));
+		request.setAttribute("Password",request.getParameter("Password"));
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -96,9 +96,9 @@ public void promptUpdateMyStateRun(HttpServletRequest request, HttpServletRespon
 
 public void processUpdateMyStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	try {
-		Input in = new Input();
-		in.addValue(request,"UserName",request.getParameter("UserName"));
-		in.addValue(request,"Password",request.getParameter("Password"));
+		
+		request.setAttribute("UserName",request.getParameter("UserName"));
+		request.setAttribute("Password",request.getParameter("Password"));
 
      		} catch (Exception e) {
       			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());

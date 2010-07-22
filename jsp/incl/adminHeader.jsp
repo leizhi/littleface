@@ -20,19 +20,19 @@
 
 			<!-- Start content of pane -->
 			<ul>
-				<li><a href="<%=request.getContextPath()%>/BlogCategory.do"><html:message key="BlogCategory" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/BlogType.do"><html:message key="BlogType" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/AccountCategory.do"><html:message key="AccountCategory" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/AccountType.do"><html:message key="AccountType" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/AccountGroup.do"><html:message key="AccountGroup" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/AccountExtension.do"><html:message key="AccountExtension" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Account.do"><html:message key="Account" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/NoteType.do"><html:message key="NoteType" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/OperatorUser.do"><html:message key="OperatorUser" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Country.do"><html:message key="Country" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Language.do"><html:message key="Language" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Currency.do"><html:message key="Currency" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/DownloadType.do"><html:message key="DownloadType" /></a></li>
+				<li><a href="<%=request.getContextPath()%>/BlogCategory.do"><fmt:message key="BlogCategory" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/BlogType.do"><fmt:message key="BlogType" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/AccountCategory.do"><fmt:message key="AccountCategory" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/AccountType.do"><fmt:message key="AccountType" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/AccountGroup.do"><fmt:message key="AccountGroup" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/AccountExtension.do"><fmt:message key="AccountExtension" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Account.do"><fmt:message key="Account" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/NoteType.do"><fmt:message key="NoteType" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/OperatorUser.do"><fmt:message key="OperatorUser" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Country.do"><fmt:message key="Country" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Language.do"><fmt:message key="Language" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Currency.do"><fmt:message key="Currency" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/DownloadType.do"><fmt:message key="DownloadType" /></a></li>
 			</ul>
 			<!-- End content -->
 		</div>		
@@ -42,11 +42,11 @@
 		<div>
 			<!-- Start content of pane -->
 			<ul>
-    				<li><a href="<%=request.getContextPath()%>/Financial.do"><html:message key="Financial" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Sale.do"><html:message key="Sale" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Investment.do"><html:message key="Investment" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Free.do"><html:message key="Free" /></a></li>
-    				<li><a href="<%=request.getContextPath()%>/Accounting.do"><html:message key="Accounting" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Financial.do"><fmt:message key="Financial" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Sale.do"><fmt:message key="Sale" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Investment.do"><fmt:message key="Investment" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Free.do"><fmt:message key="Free" /></a></li>
+    				<li><a href="<%=request.getContextPath()%>/Accounting.do"><fmt:message key="Accounting" /></a></li>
 			</ul>
 			<!-- End content -->
 		</div>		

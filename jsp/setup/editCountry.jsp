@@ -24,15 +24,15 @@
 <!-- UpdateTable -->
     <div class="SearchTable" >
       <ul>
-	<html:input type="hidden" id="ID" name="ID" property="ID"/>
-     	<li class="AddOutput"><html:message key="Code" /></li>
-	<li class="AddInput"><html:input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
+	<input type="hidden" id="ID" name="ID" property="ID"/>
+     	<li class="AddOutput"><fmt:message key="Code" /></li>
+	<li class="AddInput"><input type="text" id="Code" name="Code" property="Code" size="15" maxlength="255"/></li>
 
-     	<li class="AddOutput"><html:message key="Name" /></li>
-	<li class="AddInput"><html:input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></li>
+     	<li class="AddOutput"><fmt:message key="Name" /></li>
+	<li class="AddInput"><input type="text" id="Name" name="Name" property="Name" size="15" maxlength="255"/></li>
 
-     	<li class="AddOutput"><html:message key="Description" /></li>
-        <li class="AddInput"><html:input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/> </li>
+     	<li class="AddOutput"><fmt:message key="Description" /></li>
+        <li class="AddInput"><input type="text" id="Description" name="Description" property="Description" size="15" maxlength="255"/> </li>
      	<li class="Button"><input type="button" id="Update" name="Update" value="Update" onclick="Util.Submit('/Country.do?state=processUpdate');"/><input type="button" id="Update" name="Update" value="Update" onclick="Util.Submit('/Country.do?state=processUpdate');"/></li>
       </ul>
     </div>

@@ -1,6 +1,6 @@
 package com.mooo.mycoz.cache;
 
-import com.manihot.xpc.util.LinkedListNode;
+import com.mooo.mycoz.util.LinkedListNode;
 
 /**
  * $RCSfile: CacheObject.java,v $

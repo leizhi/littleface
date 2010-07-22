@@ -69,7 +69,7 @@ import com.mooo.mycoz.jdbc.MysqlConnection;
 import com.mooo.mycoz.util.ActionServlet;
 import com.mooo.mycoz.util.I18n;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.Input;
+
 
 import com.mooo.mycoz.util.SAXParserConf;
 import com.mooo.mycoz.util.ActionMap;
@@ -82,7 +82,7 @@ private static Log log = LogFactory.getLog(DownloadController.class);
 
 public void listStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
   try {
-	Input in = new Input();
+	
 	long fileBit = 0;
 	double fileK = 0.0;
 	double fileM = 0.0;
@@ -108,13 +108,13 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 	int i = 0;
 	while(rs.next()) {
 
-		in.addValue(request,"ID"+i,rs.getString("dl.ID"));
-		in.addValue(request,"Type"+i,rs.getString("dt.Name"));
-		in.addValue(request,"Name"+i,rs.getString("dl.Name"));
-		in.addValue(request,"Date"+i,rs.getString("dl.Date"));
+		request.setAttribute("ID"+i,rs.getString("dl.ID"));
+		request.setAttribute("Type"+i,rs.getString("dt.Name"));
+		request.setAttribute("Name"+i,rs.getString("dl.Name"));
+		request.setAttribute("Date"+i,rs.getString("dl.Date"));
 
 		value = rs.getString("dl.DownloadPath");
-		in.addValue(request,"DownloadPath"+i,uploadDirectory+value);
+		request.setAttribute("DownloadPath"+i,uploadDirectory+value);
 
 		DownloadFile = new File(uploadPath+value);
 		if(!DownloadFile.exists())
@@ -124,7 +124,7 @@ public void listStateRun(HttpServletRequest request, HttpServletResponse respons
 		fileK = fileBit/1024;
 		fileM = fileK/1024;
 
-		in.addValue(request,"FileLength"+i,df.format(fileM)+"M");
+		request.setAttribute("FileLength"+i,df.format(fileM)+"M");
 
 		i++;
              }
@@ -142,14 +142,14 @@ if (log.isDebugEnabled()) log.debug("SQL: " + sql);
 
 public void promptAddStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException,SQLException {
   try {	
-	Input in = new Input();
-	in.addValue(request,"ID",request.getParameter("ID"));
-	in.addHashMapValues(request,"TypeID",new DownloadType().getValues(),request.getParameter("TypeID"));
-	in.addValue(request,"Name",request.getParameter("Name"));
-	in.addValue(request,"Date",request.getParameter("Date"));
-	in.addValue(request,"DownloadPath",request.getParameter("DownloadPath"));
-	in.addValue(request,"ImagePath",request.getParameter("ImagePath"));
-	in.addValue(request,"Description",request.getParameter("Description"));
+	
+	request.setAttribute("ID");
+	request.setAttribute("TypeID",new DownloadType().getValues());
+	request.setAttribute("Name");
+	request.setAttribute("Date");
+	request.setAttribute("DownloadPath");
+	request.setAttribute("ImagePath");
+	request.setAttribute("Description");
 	
      } catch (SQLException se) {
       		if (log.isDebugEnabled()) log.error("SQLException Load error of: " + se.getMessage());
@@ -221,7 +221,7 @@ try {
 		Download bt = new Download();
 		ResultSet rs = null;
 		String sql = "";
-		Input in = new Input();
+		
 
 		if(key != null) {
 			sql += "SELECT ID,TypeID,Name,Date,DownloadPath,ImagePath,Description FROM Download";
@@ -229,13 +229,13 @@ try {
 			rs = bt.getResultSet(sql);
 
 			if(rs.first()) {
-				in.addValue(request,"ID",rs.getString("ID"));
-				in.addHashMapValues(request,"TypeID",new DownloadType().getValues(),rs.getString("TypeID"));
-				in.addValue(request,"Name",rs.getString("Name"));
-				in.addValue(request,"Date",rs.getString("Date"));
-				in.addValue(request,"DownloadPath",rs.getString("DownloadPath"));
-				in.addValue(request,"ImagePath",rs.getString("ImagePath"));
-				in.addValue(request,"Description",rs.getString("Description"));
+				request.setAttribute("ID",rs.getString("ID"));
+				request.setAttribute("TypeID",new DownloadType().getValues(),rs.getString("TypeID"));
+				request.setAttribute("Name",rs.getString("Name"));
+				request.setAttribute("Date",rs.getString("Date"));
+				request.setAttribute("DownloadPath",rs.getString("DownloadPath"));
+				request.setAttribute("ImagePath",rs.getString("ImagePath"));
+				request.setAttribute("Description",rs.getString("Description"));
                		}
 
 		}
@@ -321,7 +321,7 @@ try {
 
 public void onListStateRun(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 try {
-	Input in = new Input();
+	
 	long fileBit = 0;
 	double fileK = 0.0;
 	double fileM = 0.0;
@@ -346,13 +346,13 @@ try {
 	int i = 0;
 	while(rs.next()) {
 
-		in.addValue(request,"ID"+i,rs.getString("dl.ID"));
-		in.addValue(request,"DownloadType"+i,rs.getString("dt.Name"));
-		in.addValue(request,"SongName"+i,rs.getString("dl.Name"));
-		in.addValue(request,"Date"+i,rs.getString("dl.Date"));
+		request.setAttribute("ID"+i,rs.getString("dl.ID"));
+		request.setAttribute("DownloadType"+i,rs.getString("dt.Name"));
+		request.setAttribute("SongName"+i,rs.getString("dl.Name"));
+		request.setAttribute("Date"+i,rs.getString("dl.Date"));
 
 		value = rs.getString("dl.DownloadPath");
-		in.addValue(request,"DownloadPath"+i,value);
+		request.setAttribute("DownloadPath"+i,value);
 
 		DownloadFile = new File(uploadPath+value);
 		if(!DownloadFile.exists())
@@ -362,7 +362,7 @@ try {
 		fileK = fileBit/1024;
 		fileM = fileK/1024;
 
-		in.addValue(request,"FileLength"+i,df.format(fileM)+"M");
+		request.setAttribute("FileLength"+i,df.format(fileM)+"M");
 
 //if (log.isDebugEnabled()) log.debug("File "+value + " size:" + fileBit + "Bit");
 //if (log.isDebugEnabled()) log.debug("File "+value + " size:" + df.format(fileK)+"K");
