@@ -1,10 +1,10 @@
 package com.mooo.mycoz.util;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,31 +53,46 @@ public class ActionServlet extends HttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		PrintWriter out = response.getWriter();
+		//PrintWriter out = response.getWriter();
 		//request.setCharacterEncoding("utf-8");
 		//response.setContentType("text/html; charset=UTF-8");
 		
-		out.println("locale:"+request.getLocale());
-		//javax.servlet.jsp.jstl.fmt.LocaleSupport.getLocalizedMessage(pageContext, key);
-		
 		try {
-			out.println("Start Servlet:");
+			String accessPath = request.getServletPath();
+			
+			System.out.println("accessPath:" + accessPath);
+			/*
+			String accessURL = request.getRequestURI();
+			Pattern p = Pattern.compile(".jsp");
+			Matcher m = p.matcher(accessURL);
+			boolean isJsp = m.find();
 
-			String execPath = request.getServletPath();
+			//if (isJsp) {
+				
+			//}
+			*/
+			String execPath = "";
 
-			if (execPath.indexOf(".") > 0) {
-				//execPath = execPath.substring(0, execPath.indexOf("."));
-				execPath = execPath.substring(1, execPath.indexOf("."));
+			if (accessPath.indexOf(".") > 0) {
+				
+				if(accessPath.indexOf("/") > -1)
+					execPath = accessPath.substring(1, accessPath.indexOf("."));
+				else
+					execPath = accessPath.substring(0, accessPath.indexOf("."));
+				
+			} else {
+				if(accessPath.indexOf("/") > -1)
+					execPath = accessPath.substring(1);
 			}
 
-			if (execPath == null)
-				execPath = request.getParameter("Controller");
+			//if (execPath == null)
+			//	execPath = request.getParameter("action");
 			
-			out.println("execPath:" + execPath);
+			System.out.println("execPath:" + execPath);
 
 			String execAction = "";
 			String execResult = "";
-			String execMethod = request.getParameter("state");
+			String execMethod = request.getParameter("method");
 			
 			ActionNode actionNode = null;
 			Hashtable<String, String> results;
@@ -86,12 +101,13 @@ public class ActionServlet extends HttpServlet {
 			Map<String, ActionNode> actionMap = conf.getActionMap();
 			// set controller,execState for execPath
 			actionNode = (ActionNode) actionMap.get(execPath);
-			out.println("actionNode:" + actionNode);
 
 			execAction = actionNode.getCls();
 			if (execMethod == null)
 				execMethod = actionNode.getDefMethod();
 			
+			System.out.println("execMethod:" + execMethod);
+
 			results = actionNode.getResults();
 			// exec Controller request aciton
 			Object obj = Class.forName(execAction).newInstance();
@@ -105,32 +121,70 @@ public class ActionServlet extends HttpServlet {
 			Object paraValues[] = new Object[] { request, response };
 			
 			// set Transition jsp for execMethod
-			Object actionJsp = results.get(execMethod);
+			String actionResult = results.get(execMethod);
 			
 			String resultMethod = (String) method.invoke(obj, paraValues);
 			
 			if(resultMethod != null)
 				if(!resultMethod.equals("success"))
-					actionJsp = results.get(resultMethod);
-			else
-				new Exception("RETURN STATE NULL");
+					actionResult = results.get(resultMethod);
+			/*else {
+				String returnAction= (String) request.getAttribute("action");
+				String returnMethod= (String) request.getAttribute("method");
+				
+				if(returnAction != null){
+					if(returnMethod !=null) {
+						actionResult = "/"+returnAction+".do?method="+returnMethod;
+					} else {
+						actionResult = "/"+returnAction+".do";
+					}
+				} else{
+					new Exception("RETURN STATE NULL");
+				}
+			}*/
 			
-			if (actionJsp != null) {
-				execResult = (String) actionJsp;
+			System.out.println("execAction:" + execAction);
+			System.out.println("execResult:" + actionResult);
+
+			Pattern p = Pattern.compile(".jsp");
+			Matcher m;
+			boolean isJsp = false;
+			
+			if (actionResult != null) {
+				
+				execResult = actionResult;
+				if(execResult.indexOf("/") != 0)
+					execResult = "/"+execResult;
+				
+				if(execResult.indexOf(".do") < 0 && execResult.indexOf(".jsp") < 0)
+					execResult += ".do";
+
+				m = p.matcher(execResult);
+				isJsp = m.find();
+				
 				if (!execResult.equals("")) {
-					getServletConfig().getServletContext()
+					if(isJsp){
+						getServletConfig().getServletContext()
 							.getRequestDispatcher(execResult).forward(request,response);
-					 //response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-					 //response.setHeader("Location",request.getContextPath()+execResult);
+					}else{
+						response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+						response.setHeader("Location",request.getContextPath()+execResult);
+					}
 				}
 			}
-			out.println("End Servlet:");
 		} catch (Exception ex) {
-			out.println("Exception:" + ex.getMessage());
+			System.out.println("Exception:" + ex.getMessage());
 			ex.printStackTrace();
+			request.setAttribute("error", ex.getMessage());
+			getServletConfig().getServletContext()
+			.getRequestDispatcher("/jsp/error.jsp").forward(request,response);
 		} catch (Throwable e) {
-			out.println("Throwable:" + e.getMessage());
+			System.out.println("Throwable:" + e.getMessage());
 			e.printStackTrace();
+			request.setAttribute("error", e.getMessage());
+
+			getServletConfig().getServletContext()
+			.getRequestDispatcher("/jsp/error.jsp").forward(request,response);
 		}
 	}
 

@@ -19,9 +19,15 @@
 			<result name="accept">/jsp/rust.jsp</result>
 		</action>
 		
+		<action name="Login" default="promptLogin"
+			class="com.mooo.mycoz.action.LoginAction">
+			<result name="promptLogin">/jsp/login.jsp</result>
+			<result name="processLogin">Menu</result>
+		</action>
+				
 		<action name="Menu" default="show"
-			class="com.mooo.mycoz.action.IndexAction">
-			<result name="show">/jsp/default.jsp</result>
+			class="com.mooo.mycoz.action.MenuAction">
+			<result name="show">/jsp/menu.jsp</result>
 		</action>
 		
 	</package>
