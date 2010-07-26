@@ -1,152 +1,90 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-
-
-
-
-import java.lang.reflect.Method;
-import java.lang.NoSuchMethodException;
-import java.lang.IllegalAccessException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.ClassNotFoundException;
-
-import com.mooo.mycoz.dbobj.DBObject;
-
-
-
-
-import com.mooo.mycoz.util.ActionServlet;
-
-import com.mooo.mycoz.util.SAXParserConf;
-import com.mooo.mycoz.util.ActionMap;
-
-
 /**
 
  */
-public class Download extends DBObject{
-private static Log log = LogFactory.getLog(Download.class);
-    /**
-     */
-    public Download() 
-	throws SQLException{
-	getConection();
-	getStatement();
-    } /* Download() */
+public class Download {
 
-    public Hashtable getValues()
-        throws SQLException {
+	private Integer id;
+	private Integer typeid;
+	private String filelength;
+	private String typename;
+	private String name;
+	private String downloadpath;
+	private String imagepath;
+	private String date;
+	private String description;
 
-	Hashtable lTable = new Hashtable();
-	lTable.put("0","--select--");
-
-	ResultSet rs = null;
-	String sql = "SELECT ID,Name FROM Download WHERE ID > 0";
-	rs = getResultSet(sql);
-	while(rs.next()) {
-		lTable.put(rs.getString("ID"),rs.getString("Name"));
-               }
-
-	return lTable;
-    } /* getValues() */
-
-    public int getNextID() {
-	int id = 0;
-	try{
-		ResultSet rs = null;
-		String sql = "SELECT MAX(ID) AS MaxId FROM Download";
-		rs = getResultSet(sql);
-		if(rs.first()) id=rs.getInt("MaxId")+1;
-
-        } catch (SQLException sqlE) {
-            	if (log.isDebugEnabled()) log.error("SQLException:" + sqlE.getMessage());
-        } catch (Exception e) {
-		if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage());
+	public Integer getId() {
+		return id;
 	}
 
-	return id;
-    } /* getNextID() */
-
-    public int getID(String name) {
-	int id = 0;
-	try{
-		ResultSet rs = null;
-		String sql = "SELECT ID FROM Download";
-		sql += " WHERE Name='" + name+"'";
-
-		rs = getResultSet(sql);
-		if(rs.first()) id=rs.getInt("ID");
-
-        } catch (SQLException sqlE) {
-            	if (log.isDebugEnabled()) log.error("SQLException:" + sqlE.getMessage());
-        } catch (Exception e) {
-		if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage());
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	return id;
-    } /* getID(String) */
-
-    public String getName(int id)  {
-        String var = null;
-        try {
-		ResultSet rs = null;
-		String sql = "SELECT Name FROM Download";
-		sql += " WHERE ID=" + id;
-
-		rs = getResultSet(sql);
-		if(rs.first()) var = rs.getString("Name");
-
- 	} catch (SQLException sqlE) {
-            	if (log.isDebugEnabled()) log.error("SQLException:" + sqlE.getMessage());
-        } catch (Exception e) {
-		if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage());
+	public Integer getTypeid() {
+		return typeid;
 	}
 
-	return var;
+	public void setTypeid(Integer typeid) {
+		this.typeid = typeid;
+	}
 
-       }
+	public String getFilelength() {
+		return filelength;
+	}
+
+	public void setFilelength(String filelength) {
+		this.filelength = filelength;
+	}
+
+	public String getTypename() {
+		return typename;
+	}
+
+	public void setTypename(String typename) {
+		this.typename = typename;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDownloadpath() {
+		return downloadpath;
+	}
+
+	public void setDownloadpath(String downloadpath) {
+		this.downloadpath = downloadpath;
+	}
+
+	public String getImagepath() {
+		return imagepath;
+	}
+
+	public void setImagepath(String imagepath) {
+		this.imagepath = imagepath;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 }

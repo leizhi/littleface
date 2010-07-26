@@ -24,4 +24,18 @@ public class ReflectUtil {
 
 	}
 
+	public List<String> getMethodNames(Class<?> clazz)
+			throws ClassNotFoundException {
+
+		Method[] methods = clazz.getDeclaredMethods();
+		List<String> names = new ArrayList<String>();
+
+		for (Method method : methods) {
+			names.add(method.getName());
+			System.out.println(method.getName());
+		}
+
+		return names;
+
+	}
 }

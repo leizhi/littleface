@@ -1,7 +1,9 @@
 package com.mooo.mycoz.db.sql;
 
-public interface MultiSQL extends DBCommon {
+import java.util.List;
 
+public interface DbobjMultiSql extends DbCommon {
+ 	
 	void addTable(String name, String alias);
 	
 	void addTable(String catalog, String name, String alias);
@@ -35,4 +37,8 @@ public interface MultiSQL extends DBCommon {
  	void setOffset(int offset);
  	
  	void setRowcount(int rowcount);
+ 	
+	List searchAndRetrieveList();
+ 	
+ 	int count();
 }

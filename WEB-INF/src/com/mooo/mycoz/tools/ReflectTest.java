@@ -3,6 +3,14 @@ package com.mooo.mycoz.tools;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Iterator;
+import java.util.List;
+
+import com.mooo.mycoz.dbobj.DBObject;
+import com.mooo.mycoz.dbobj.TestBean;
+import com.mooo.mycoz.dbobj.mycozBranch.Download;
+import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.ReflectUtil;
 
 public class ReflectTest {
 
@@ -10,6 +18,52 @@ public class ReflectTest {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
+		//DBObject db = new DBObject();
+		//Download bean = new Download();
+		TestBean bean = new TestBean();
+		List dl = bean.searchAndRetrieveList("select * from Download");
+		
+		for (Iterator it = dl.iterator(); it.hasNext();) {
+			bean = (TestBean)it.next();
+			System.out.println("name:"+bean.getName());
+		}
+		
+		/*
+		ReflectUtil ru = new ReflectUtil();
+		ru.getMethodNames(Download.class);
+		*/
+		/*
+		Download bean1;
+		Download bean2;
+		Download bean3;
+
+		Object o1 = Download.class.newInstance();
+		Object o2 = Download.class.newInstance();
+		Object o3 = Download.class.newInstance();
+
+		bean1 = (Download)o1;
+		bean1.setName("name1");
+		System.out.println(bean1.getName());
+		bean2 = (Download)o2;
+		bean2.setName("name2");
+		System.out.println(bean2.getName());
+		bean3 = (Download)o3;
+		bean3.setName("name3");
+		System.out.println(bean3.getName());
+		
+		System.out.println(bean1.getName());
+		System.out.println(bean2.getName());
+		System.out.println(bean3.getName());
+*/
+		/*
+		Download bean = new Download();
+		ParamUtil.bindProperty(bean, "Typename", "very good", null);
+		ParamUtil.bindProperty(bean, "Name", "verdsafsdafd", null);
+
+		System.out.println("fff"+bean.getTypename());
+		System.out.println("fff"+bean.getName());
+*/
+		/*
 		Class<?> clazz = Class.forName("com.manihot.xpc.tools.Test");
 		Field[] fields = clazz.getDeclaredFields();
 		Method[] methods = clazz.getDeclaredMethods();
@@ -54,6 +108,7 @@ public class ReflectTest {
 
 		rt.getMethod("sayHello", paraTypes).invoke(obj, paraValues);
 		// Method method = methods[]
+		 */
 	}
 
 	public void sayHello() {

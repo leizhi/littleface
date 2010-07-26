@@ -26,7 +26,10 @@ public class ArapTag extends TagSupport {
 		Statement stmt = null;
 		try {
 
-			MultiSQL ms = MultiSQLFactory.getInstance();
+			//DbobjMultiSql ms = MultiSQLFactory.getInstance();
+			
+			DbobjMultiSql ms = new MultiDBObject();
+
 			ms.addTable("JobNote", "jn");
 			ms.addTable("Customer", "ct");
 			ms.setForeignKey("jn", "CustomerID", "ct", "ID");
@@ -93,8 +96,8 @@ public class ArapTag extends TagSupport {
 
 			ms.setRowcount(10000);
 
-			String sql = ms.buildSQL();
-			System.out.println("buildSQL=" + sql);
+			//String sql = ms.S();
+			//System.out.println("buildSQL=" + sql);
 
 			long startTime = System.currentTimeMillis();
 
@@ -132,7 +135,7 @@ public class ArapTag extends TagSupport {
 			con = DbConnectionManager.getConnection();
 			stmt = con.createStatement();
 
-			ResultSet rs = stmt.executeQuery(sql);
+			ResultSet rs = stmt.executeQuery("");
 			int i = 0;
 			while (rs.next()) {
 				if (i++ % 2 == 0)

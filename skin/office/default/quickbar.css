@@ -1,0 +1,159 @@
+/* 
+	General styles for this example page */ /*
+html {
+	height: 100%;
+}
+
+body {
+	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+	font-size: 0.8em;
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+	background-color: #E2EBED;
+	height: 100%;
+}
+
+p {
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+#mainContainer {
+	width: 760px;
+	margin: 0 auto;
+	text-align: left;
+	background-color: #FFF;
+	padding-left: 16px;
+	padding-right: 16px;
+	padding-bottom: 20px;
+}
+
+#dhtmlgoodies_menu img {
+	border: 0px;
+}
+*/ /* End general styles for this example page */
+	/* General configuration CSS */
+#dhtmlgoodies_menu ul li ul {
+	display: none; /* Needed to display ok in Opera */
+}
+
+#dhtmlgoodies_menu {
+	visibility: hidden;
+}
+
+#dhtmlgoodies_menu ul {
+	margin: 0px; /* No indent */
+	padding: 0px; /* No indent */
+}
+
+#dhtmlgoodies_menu li {
+	list-style-type: none; /* No bullets */
+}
+
+#dhtmlgoodies_menu a {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* End general configuration CSS */ /* Cosmetic */
+	/***********************************************************************
+		CSS - MENU BLOCKS
+	 	General rules for all menu blocks (group of sub items) 
+	***********************************************************************/
+#dhtmlgoodies_menu ul {
+	border: 1px solid #000;
+	background-color: #FFF;
+	padding: 1px;
+}
+
+#dhtmlgoodies_menu ul.menuBlock1 { /* Menu bar - main menu items */
+	border: 0px;
+	padding: 1px;
+	border: 1px solid #317082;
+	background-color: #E2EBED;
+	overflow: visible;
+}
+
+#dhtmlgoodies_menu ul.menuBlock2 { /* Menu bar - main menu items */
+	border: 0px;
+	padding: 1px;
+	border: 1px solid #555;
+}
+
+/***********************************************************************
+		CSS - MENU ITEMS
+	 	Here, you could assign rules to the menu items at different depths.
+	***********************************************************************/
+	/* General rules for all menu items */
+#dhtmlgoodies_menu a {
+	color: #000;
+	text-decoration: none;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+/*
+	Main menu items 
+	*/
+#dhtmlgoodies_menu .currentDepth1 {
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 1px solid #E2EBED;
+}
+
+#dhtmlgoodies_menu .currentDepth1over {
+	padding-left: 5px;
+	padding-right: 5px;
+	background-color: #317082;
+	border: 1px solid #000;
+}
+
+#dhtmlgoodies_menu .currentDepth1 a {
+	font-weight: bold;
+}
+
+#dhtmlgoodies_menu .currentDepth1over a { /* Text rules */
+	color: #FFF;
+	font-weight: bold;
+}
+
+/* Sub menu depth 1 */
+#dhtmlgoodies_menu .currentDepth2 {
+	padding-right: 2px;
+	border: 1px solid #FFF;
+}
+
+#dhtmlgoodies_menu .currentDepth2over {
+	padding-right: 2px;
+	background-color: #E2EBED;
+	border: 1px solid #000;
+}
+
+#dhtmlgoodies_menu .currentDepth2over a { /* Text rules */
+	color: #000;
+}
+
+/* Sub menu depth 2 */
+#dhtmlgoodies_menu .currentDepth3 {
+	padding-right: 2px;
+	border: 1px solid #FFF;
+}
+
+#dhtmlgoodies_menu .currentDepth3over {
+	padding-right: 2px;
+	background-color: #EDE3EB;
+	border: 1px solid #000;
+}
+
+/* Sub menu depth 3 */
+#dhtmlgoodies_menu .currentDepth4 {
+	padding-right: 2px;
+	border: 1px solid #FFF;
+}
+
+#dhtmlgoodies_menu .currentDepth4over {
+	padding-right: 2px;
+	background-color: #EBEDE3;
+	border: 1px solid #000;
+}

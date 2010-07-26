@@ -1,0 +1,16 @@
+/* Presentation Stylesheet */
+h3,p {
+	margin: 0;
+	padding: 15px;
+}
+
+h4 {
+	margin: 0;
+	padding: 5px 0;
+}
+
+p:first-letter {
+	font-size: 80%;
+	font-weight: bold;
+	color: blue;
+}

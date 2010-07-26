@@ -3,9 +3,8 @@ package com.mooo.mycoz.db.sql;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.HashMap;
 
-public class CommonMultiSQL implements MultiSQL {
+public class DbMultiBulildSQL implements DbobjMultiSql {
 
 	public String catalog;
 	public List<String> tables;
@@ -16,7 +15,7 @@ public class CommonMultiSQL implements MultiSQL {
 	public int offset;
 	public int rowcount;
 
-	public CommonMultiSQL() {
+	public DbMultiBulildSQL() {
 		catalog = null;
 		tables = new ArrayList<String>();
 		whereKey = new ArrayList<String>();
@@ -189,4 +188,15 @@ public class CommonMultiSQL implements MultiSQL {
 	public void setRowcount(int rowcount) {
 		this.rowcount = rowcount;
 	}
+
+	public List searchAndRetrieveList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int count() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

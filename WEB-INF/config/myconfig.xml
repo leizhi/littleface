@@ -16,13 +16,13 @@
 		<action name="Index" default="promptIndex"
 			class="com.mooo.mycoz.action.IndexAction">
 			<result name="promptIndex">/jsp/start.jsp</result>
-			<result name="accept">/jsp/rust.jsp</result>
 		</action>
 		
 		<action name="Login" default="promptLogin"
 			class="com.mooo.mycoz.action.LoginAction">
 			<result name="promptLogin">/jsp/login.jsp</result>
-			<result name="processLogin">Menu</result>
+			<result name="processLogin">Index</result>
+			<result name="processLogout">/jsp/login.jsp</result>
 		</action>
 				
 		<action name="Menu" default="show"
@@ -30,5 +30,13 @@
 			<result name="show">/jsp/menu.jsp</result>
 		</action>
 		
+		<action name="File" default="list"
+			class="com.mooo.mycoz.action.operation.FileAction">
+			<result name="list">/jsp/operation/listFile.jsp</result>
+			<result name="promptUpload">/jsp/operation/uploadFile.jsp</result>
+			<result name="processUpload">File</result>
+			<result name="processDelete">File</result>
+			<result name="processDownload">File</result>
+		</action>
 	</package>
 </struts>

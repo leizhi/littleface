@@ -1,7 +1,15 @@
 package com.mooo.mycoz.db.sql;
 
-public interface Search extends DBOperation {
+public interface DbobjSql extends DbCommon{
 
+ 	String getCatalog();
+ 	
+ 	void setCatalog(String catalog);
+ 	
+	String getTable();
+	
+	void setTable(String table);
+	
 	void setField(String field, String value);
 
 	void setLike(String field, String value);
@@ -17,4 +25,13 @@ public interface Search extends DBOperation {
 	void setOrderBy(String field, String type);
 
 	void setRecord(int recordStart, int recordEnd);
+	
+ 	String AddSQL();
+ 	
+ 	String DeleteSQL();
+ 	
+ 	String UpdateSQL();
+ 	
+ 	String SearchSQL();
+
 }

@@ -1,195 +1,182 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import javax.servlet.ServletException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-
-
-
-
-import java.lang.reflect.Method;
-import java.lang.NoSuchMethodException;
-import java.lang.IllegalAccessException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.ClassNotFoundException;
-
-import com.mooo.mycoz.dbobj.DBObject;
-
-
-
-
-import com.mooo.mycoz.util.ActionServlet;
-
-import com.mooo.mycoz.util.SAXParserConf;
-import com.mooo.mycoz.util.ActionMap;
-
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 /**
 
  */
-public class User extends DBObject{
+public class User {
 
-private static Log log = LogFactory.getLog(User.class);
+	private static Log log = LogFactory.getLog(User.class);
 
-    /**
-     */
-    public User() 
-	throws SQLException{
-	getConection();
-	getStatement();
-    } /* User() */
+	private Integer id;
+	private Integer countryid;
+	private Integer languageid;
+	private Integer cityid;
+	private Integer stateid;
+	private String name;
+	private String password;
+	private String address;
+	private String email;
+	private String tel;
+	private String zip;
+	private String mobileno;
 
-    public HashMap getValues()
-        throws SQLException {
-
-	HashMap< String, String> lMap = new HashMap< String, String>();
-	lMap.put(null,"--select--");
-
-	ResultSet rs = null;
-	String sql = "SELECT ID,Name FROM User WHERE ID > 0";
-	rs = getResultSet(sql);
-	while(rs.next()) {
-		lMap.put(rs.getString("ID"),rs.getString("Name"));
-               }
-
-	return lMap;
-    } /* getValues() */
-
-    public int getNextID() {
-	int id = 0;
-	try{
-		ResultSet rs = null;
-		String sql = "SELECT MAX(ID) AS MaxId FROM User";
-		rs = getResultSet(sql);
-		if(rs.first()) id=rs.getInt("MaxId")+1;
-
-        } catch (SQLException sqlE) {
-            	if (log.isDebugEnabled()) log.error("SQLException:" + sqlE.getMessage());
-        } catch (Exception e) {
-		if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage());
+	public Integer getId() {
+		return id;
 	}
 
-	return id;
-    } /* getNextID() */
-
-    public int getID(String name) {
-	int id = 0;
-	try{
-		ResultSet rs = null;
-		String sql = "SELECT ID FROM User";
-		sql += " WHERE Name='" + name+"'";
-
-		rs = getResultSet(sql);
-		if(rs.first()) id=rs.getInt("ID");
-
-        } catch (SQLException sqlE) {
-            	if (log.isDebugEnabled()) log.error("SQLException:" + sqlE.getMessage());
-        } catch (Exception e) {
-		if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage());
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	return id;
-    } /* getID(String) */
-
-    public String getName(int id)  {
-        String var = null;
-        try {
-		ResultSet rs = null;
-		String sql = "SELECT Name FROM User";
-		sql += " WHERE ID=" + id;
-
-		rs = getResultSet(sql);
-		if(rs.first()) var = rs.getString("Name");
-
- 	} catch (SQLException sqlE) {
-            	if (log.isDebugEnabled()) log.error("SQLException:" + sqlE.getMessage());
-        } catch (Exception e) {
-		if (log.isDebugEnabled()) log.error("Exception: " + e.getMessage());
+	public Integer getCountryid() {
+		return countryid;
 	}
 
-	return var;
+	public void setCountryid(Integer countryid) {
+		this.countryid = countryid;
+	}
 
-       }
+	public Integer getLanguageid() {
+		return languageid;
+	}
 
-    public boolean loginAdminCheck(String chName,String chPassword)
-        throws SQLException {
+	public void setLanguageid(Integer languageid) {
+		this.languageid = languageid;
+	}
 
-		if(chName == null || chName.equals("") 
-				|| chPassword == null || chPassword.equals(""))
+	public Integer getCityid() {
+		return cityid;
+	}
+
+	public void setCityid(Integer cityid) {
+		this.cityid = cityid;
+	}
+
+	public Integer getStateid() {
+		return stateid;
+	}
+
+	public void setStateid(Integer stateid) {
+		this.stateid = stateid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public String getMobileno() {
+		return mobileno;
+	}
+
+	public void setMobileno(String mobileno) {
+		this.mobileno = mobileno;
+	}
+
+	public boolean loginCheck() {
+
+		if (name == null || name.equals("") || password == null
+				|| password.equals(""))
+			
 			return false;
-
+		
+		String sql;
+		Connection con = DbConnectionManager.getConnection();
+		Statement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT Name,Password FROM User";
-		sql += " WHERE Name='" + chName + 
-		       "' AND Password=Password('" +chPassword+"') AND StateID=0";
 
-		rs = getResultSet(sql);
-		if (log.isDebugEnabled()) log.debug("SQL=" + sql);
-		System.out.println("SQL=" + sql);
+		sql = "SELECT ID,Name,Password FROM User";
+		sql += " WHERE Password=Password('" + password.replaceAll("'", "")
+				+ "')";
+		boolean isLogin = false;
+		
+		try {
+			if (log.isDebugEnabled()) log.debug("SQL=" + sql);
 
-		if(rs.first())
-			return true;
-		else 
-			return false;
-    }
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(sql);
 
-    public boolean loginUserCheck(String chName,String chPassword)
-        throws SQLException {
+			if (rs.first()) {
 
-		if(chName == null || chPassword == null)
-			return false;
+				if (log.isDebugEnabled()) log.debug("pas=" + rs.getString(3));
+				if (log.isDebugEnabled()) log.debug("id=" + rs.getInt(1));
 
-		ResultSet rs = null;
+				setId(rs.getInt(1));
 
-		String sql = "SELECT Name,Password FROM User";
-		sql += " WHERE Name='" + chName +
-			"' AND Password=Password('" +chPassword+"') AND StateID<>0";
+				if (rs.getString(2).equals(name))
+					isLogin = true;
 
-		rs = getResultSet(sql);
-		if(rs.first())
-			return true;
-		else 
-			return false;
-    }
+			} 
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null)
+					rs.close();
+				if(stmt != null)
+					stmt.close();
+				if(con != null)
+					con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return isLogin;
+	}
+
 }

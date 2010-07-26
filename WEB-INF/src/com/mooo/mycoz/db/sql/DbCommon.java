@@ -1,12 +1,6 @@
 package com.mooo.mycoz.db.sql;
 
-public interface DBCommon {
-
+public interface DbCommon {
  	String getCatalog();
- 	
  	void setCatalog(String catalog);
- 	
- 	String buildSQL();
- 	
- 	//String buildCountSQL();
 }

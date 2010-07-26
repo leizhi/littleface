@@ -1,8 +1,6 @@
 package com.mooo.mycoz.util;
 
 import java.io.IOException;
-import java.util.Locale;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +18,10 @@ public class ActionFilter implements Filter {
 
 	public static final String USER_SESSION_KEY = "UserSessionKey";
 
+	public void init(FilterConfig filterConfig) throws ServletException {
+		filterConfig.getInitParameter(USER_SESSION_KEY);
+	}
+
 	public void destroy() {
 
 	}
@@ -27,91 +29,55 @@ public class ActionFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		
-		if (request instanceof HttpServletRequest) {
+		try {
 
-			HttpServletRequest hRequest = (HttpServletRequest) request;
-			HttpServletResponse hResponse = (HttpServletResponse) response;
+			if (request instanceof HttpServletRequest) {
 
-			HttpSession session = hRequest.getSession();
-			// String accessPath = hRequest.getContextPath();
-			String url = hRequest.getRequestURI();
+				HttpServletRequest hRequest = (HttpServletRequest) request;
+				HttpServletResponse hResponse = (HttpServletResponse) response;
 
-			Pattern p = Pattern.compile(".jsp");
-			Matcher m = p.matcher(url);
-			boolean isJsp = m.find();
+				HttpSession session = hRequest.getSession();
+				String contextPath = hRequest.getContextPath();
+				String accessPath = hRequest.getServletPath();
 
-			if (isJsp) {
-				Integer userID = (Integer) session
-						.getAttribute(USER_SESSION_KEY);
+				Pattern p = Pattern.compile("\\.jsp");
+				Matcher m = p.matcher(accessPath);
+				boolean isJsp = m.find();
 
+				p = Pattern.compile("\\.do");
+				m = p.matcher(accessPath);
+				boolean isAction = m.find();
+
+				Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
 				boolean isAuthenticated = (null != userID);
+
+				System.out.println("--------filter start-------------");
+				System.out.println("filter contextPath:" + contextPath);
+				System.out.println("filter accessPath:" + accessPath);
+				System.out.println("filter execPath:" + ActionUtil.execPath(accessPath));
+				System.out.println("filter isJsp:" + isJsp);
+				System.out.println("filter isAction:" + isAction);
+				System.out.println("--------filter end-------------");
 
 				if (!isAuthenticated) {
 					hResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-					// hResponse.setHeader("Location", accessPath + "/login");
+					if (isJsp) {
+						hResponse.setHeader("Location", contextPath + "/Login.do");
+					} else if (isAction) {
+						if (!ActionUtil.execPath(accessPath).equals("Login")) {
+							hResponse.setHeader("Location", contextPath + "/Login.do");
+						}
+					}
 				}
 
 			}
-/*
-			String queryString = hRequest.getQueryString();
-			if (queryString != null
-					&& (queryString.indexOf("lc=") >= 0 || queryString
-							.indexOf("locale=") >= 0)) {
-				String locale = request.getParameter("locale");
-				if (locale == null) {
-					locale = request.getParameter("lc");
-				}
-				
-				if (locale != null && locale.length() > 0) {
-					final Locale crtLocale = getloacle(locale, Locale.CHINA);
-					request.setAttribute(
-							"javax.servlet.jsp.jstl.fmt.locale.request",
-							crtLocale); // 给jstl用
-					request.setAttribute("org.apache.struts.action.LOCALE",
-							crtLocale); // 给Struts 用
-					chain.doFilter(
-									new javax.servlet.http.HttpServletRequestWrapper(hRequest) {
-										public Locale getLocale() {
-											return crtLocale;
-										}
-									}, response);
-					return;
-				}
-			}
-			*/
+			
+		} catch (Exception e) {
+			System.out.println("Exception:" + e.getMessage());
+			e.printStackTrace();
+		} finally {
 			request.setCharacterEncoding("UTF-8");
 			chain.doFilter(request, response);
 		}
-	}
-
-	public void init(FilterConfig filterConfig) throws ServletException {
-		filterConfig.getInitParameter(USER_SESSION_KEY);
-	}
-	
-	private static Locale getloacle(String lstr, Locale defaultLocale) {
-		Locale locale = defaultLocale; // Locale.getDefault();
-		if (lstr == null || lstr.length() < 1) {
-			return locale;
-		}
-		try {
-			StringTokenizer localeTokens = new StringTokenizer(lstr, "_");
-			String lang = null;
-			String country = null;
-			if (localeTokens.hasMoreTokens()) {
-				lang = localeTokens.nextToken();
-			}
-			if (localeTokens.hasMoreTokens()) {
-				country = localeTokens.nextToken();
-			}
-			locale = new Locale(lang, country);
-			Locale crtls[] = Locale.getAvailableLocales();
-			for (int i = 0; i < crtls.length; i++) {
-				if (crtls[i].equals(locale)) {
-					return crtls[i];
-				}
-			}
-		} catch (Throwable t) {
-		}
-		return locale;
 	}
 }

@@ -31,9 +31,7 @@ public class AutoComplete {
 			ResultSet rs = null;
 			sql += "SELECT UserName FROM User WHERE ID > 0 AND UserName LIKE '%"
 					+ prefix + "%' LIMIT 10";
-			user.getResultSet(sql);
-			rs = user.getResultSet(sql);
-
+			
 			if (rs.next()) {
 				PrintWriter output = response.getWriter();
 				response.setContentType("text/xml");

@@ -7,12 +7,15 @@ import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,12 +70,11 @@ public class ParamUtil {
 		// 得到方法名
 		String funName = getFunName(propertyName);
 		// get方法
-		Method getMethod = bean.getClass().getMethod("get" + funName, null);
+		Method getMethod = bean.getClass().getMethod("get" + funName);
 		// 得到参数类型
 		Class<?> cl = getMethod.getReturnType();
 		// set方法
-		Method setMethod = bean.getClass().getMethod("set" + funName,
-				new Class[] { cl });
+		Method setMethod = bean.getClass().getMethod("set" + funName,new Class[] { cl });
 
 		// 当参数为空时直接赋予NULL值
 		if (value.trim().equals("")) {
@@ -110,8 +112,7 @@ public class ParamUtil {
 				simpleDateFormat = new java.text.SimpleDateFormat(formatChar);
 				Date date = simpleDateFormat.parse(value);
 				Object dateObj = cl.newInstance();
-				Method setTime = cl.getMethod("setTime",
-						new Class[] { long.class });
+				Method setTime = cl.getMethod("setTime",new Class[] { long.class });
 				setTime.invoke(dateObj, new Object[] { date.getTime() });
 				setMethod.invoke(bean, new Object[] { dateObj });
 			}
@@ -144,9 +145,9 @@ public class ParamUtil {
 			throws NoSuchMethodException, InvocationTargetException,
 			IllegalAccessException, ParseException, InstantiationException {
 		String funName = getFunName(objName);
-		Method getMethod = bean.getClass().getMethod("get" + funName, null);
+		Method getMethod = bean.getClass().getMethod("get" + funName);
 		Class<?> cls = getMethod.getReturnType();
-		Object obj = getMethod.invoke(bean, null);
+		Object obj = getMethod.invoke(bean);
 
 		// 判断参数为空,直接设置NULL值.
 		if (value.trim().equals("")) {
@@ -185,7 +186,9 @@ public class ParamUtil {
 	 */
 	public static void bindData(HttpServletRequest request, Object bean,
 			List<?> excludes, String prefix) {
-		java.util.Enumeration<String> em = request.getParameterNames();
+		@SuppressWarnings("unchecked")
+		Enumeration<String> em = request.getParameterNames();
+
 		for (; em.hasMoreElements();) {
 			try {
 				String name = em.nextElement();
@@ -210,13 +213,10 @@ public class ParamUtil {
 				if (name.indexOf(".") > -1) {
 					int start = name.indexOf(".");
 					String objName = name.substring(0, start);
-					String propertyName = name.substring(start + 1, name
-							.length());
-					bindSubObject(bean, objName, propertyName, value, request
-							.getParameter(FORMAT_NAME + name));
+					String propertyName = name.substring(start + 1, name.length());
+					bindSubObject(bean, objName, propertyName, value, request.getParameter(FORMAT_NAME + name));
 				} else {
-					bindProperty(bean, name, value, request
-							.getParameter(FORMAT_NAME + name));
+					bindProperty(bean, name, value, request.getParameter(FORMAT_NAME + name));
 				}
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace(); // To change body of catch statement use
@@ -248,14 +248,28 @@ public class ParamUtil {
 	public static void bindData(HttpServletRequest request, Object bean) {
 		bindData(request, bean, null, null);
 	}
-
-	public static void fillMap(Class c, Object obj, Map<String, Object> params) {
+	
+	/**
+	 * 动态从request.getParameter里绑定javaBean属性值.
+	 * 
+	 * @param request
+	 *            http响应对象
+	 * @param bean
+	 *            绑定的javaBean
+	 * @param bean
+	 *            绑定的javaBran前缀
+	 */
+	public static void bindData(HttpServletRequest request, Object bean,String prefix) {
+		bindData(request, bean, null, prefix);
+	}
+	
+	public static void fillMap(Class<?> c, Object obj, Map<String, Object> params) {
 		Method[] methods = c.getDeclaredMethods();
 		for (Method m : methods) {
 			if (Modifier.isPublic(m.getModifiers())
 					&& m.getName().startsWith("get")) {
 				try {
-					params.put(m.getName().substring(3), m.invoke(obj, null));
+					params.put(m.getName().substring(3), m.invoke(obj));
 				} catch (Exception e) {
 					System.err.println(e.getMessage());
 				}
@@ -263,13 +277,12 @@ public class ParamUtil {
 		}
 	}
 
-	public static void fillObject(Class c, Object obj, Map params) {
+	public static void fillObject(Class<?> c, Object obj, Map<?, ?> params) {
 		for (Object key : params.keySet()) {
 			String paramName = (String) key;
 			try {
-				Method getMethod = c.getMethod("get" + paramName, null);
-				Method setMethod = c.getMethod("set" + paramName, getMethod
-						.getReturnType());
+				Method getMethod = c.getMethod("get" + paramName);
+				Method setMethod = c.getMethod("set" + paramName, getMethod.getReturnType());
 				setMethod.invoke(obj, params.get(key));
 			} catch (NoSuchMethodException e) {
 				continue;
@@ -278,108 +291,24 @@ public class ParamUtil {
 			}
 		}
 	}
-	//Transaction 
+
+	//Transaction
 	public static void add(HttpServletRequest request, String table) {
-
-		java.util.Enumeration<String> em = request.getParameterNames();
-		Connection con = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		ResultSetMetaData rsmd = null;
-		Transaction ts = null;
-
-		try {
-			String sql = "INSERT INTO " + table;
-			String fileds = "";
-			String values = "";
-			
-			List<String> col = new ArrayList<String>();
-			
-			ts = new Transaction();
-			ts.start();
-			con = ts.getConnection();
-			
-			con.setCatalog("mycozBranch");
-			stmt = con.createStatement();
-			
-			System.out.println("add con=" + con);
-			rs = stmt.executeQuery("SELECT * FROM " + table);
-			rsmd = rs.getMetaData();
-
-			for (int i = 0; i < rsmd.getColumnCount(); i++) {
-				col.add(rsmd.getColumnName(i + 1).toUpperCase());
-				System.out.println(rsmd.getColumnName(i + 1).toUpperCase());
-			}
-			
-			rs = stmt.executeQuery("SELECT * FROM " + table);
-			rsmd = rs.getMetaData();
-			while (rs.next() && rs.getRow()>0) {
-				for(int i=0;i<rsmd.getColumnCount();i++){
-					System.out.print(rs.getString(i+1)+"\t");
-				}
-				System.out.println();
-			}
-
-			while (em.hasMoreElements()) {
-				String name = em.nextElement();
-				String value = request.getParameter(name);
-				if (col.contains(name.toUpperCase())) {
-					if (fileds.length() > 0) {
-						fileds += "," + name;
-						values += ",'" + value + "'";
-					} else {
-						fileds += "(" + name;
-						values += " VALUES ('" + value + "'";
-					}
-				}
-			}
-			fileds += ") ";
-			values += ")";
-
-			sql += fileds;
-			sql += values;
-			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
-			System.out.println("add sql=" + sql);
-
-			stmt.executeUpdate(sql);
-
-			// rs = stmt.executeQuery(sql);
-			// while (rs.next()) {
-			// System.out.println("Name=" + rs.getString("XZQH_MC"));
-			// }
-			ts.commit();
-		} catch (Exception e) {
-			ts.rollback();
-			e.printStackTrace();
-		} finally {
-			try {
-				if(rs != null)
-					rs.close();
-				if(stmt != null)
-					stmt.close();
-				
-				ts.end();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
-	public static void addT(HttpServletRequest request, String table) {
 
 		boolean abortTransaction = false;
 		boolean supportsTransactions = false;
-		
-		java.util.Enumeration<String> em = request.getParameterNames();
+		@SuppressWarnings("unchecked")
+		Enumeration<String> em = request.getParameterNames();
 		Connection con = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		ResultSet rs = null;
 
 		try {
-			String sql = "INSERT INTO " + table;
-			String fileds = "";
-			String values = "";
+			StringBuffer sql =  new StringBuffer("INSERT INTO " + table);
+			StringBuffer fileds = new StringBuffer();
+			StringBuffer values = new StringBuffer();
+			String value,colName;
 			
 			List<String> col = new ArrayList<String>();
 
@@ -401,27 +330,42 @@ public class ParamUtil {
 			
 			while (em.hasMoreElements()) {
 				String name = em.nextElement();
-				String value = request.getParameter(name);
-				if (col.contains(name.toUpperCase())) {
-					if (fileds.length() > 0) {
-						fileds += "," + name;
-						values += ",'" + value + "'";
-					} else {
-						fileds += "(" + name;
-						values += " VALUES ('" + value + "'";
-					}
-				}
+				StringTokenizer st = new StringTokenizer(name, ".");
+					if (st.countTokens() > 1) {
+						
+						if (st.nextToken().equals(table)) {
+							
+							value = request.getParameter(name);
+							colName = st.nextToken();
+							
+							if (col.contains(colName.toUpperCase())) {
+								if (fileds.length() > 0) {
+									fileds.append("," + colName);
+									values.append(",'" + value + "'");
+								} else {
+									fileds.append("(" + colName);
+									values.append(" VALUES ('" + value + "'");
+								}
+							}
+						}
+					} // must conform to the rules
 			}
-			fileds += ") ";
-			values += ")";
+			
+			if (fileds.length() > 0)
+				fileds.append(") ");
+			if (values.length() > 0)
+				values.append(") ");
 
-			sql += fileds;
-			sql += values;
+			if (sql.length() > 0)
+				sql.append(fileds);
+			if (sql.length() > 0)
+				sql.append(values);
+			
 			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
 			System.out.println("add sql=" + sql);
 
 			stmt = con.createStatement();
-			stmt.executeUpdate(sql);
+			stmt.executeUpdate(sql.toString());
 			
 			// rs = stmt.executeQuery(sql);
 			// while (rs.next()) {
@@ -457,7 +401,101 @@ public class ParamUtil {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+		}
 
+	}
+	
+	//Transaction too
+	public static void addTable(HttpServletRequest request, String table) {
+		@SuppressWarnings("unchecked")
+		Enumeration<String> em = request.getParameterNames();
+		Statement stmt = null;
+		ResultSetMetaData rsmd = null;
+		ResultSet rs = null;
+		Transaction tx = new Transaction();
+		
+		try {
+			tx.start();
+
+			StringBuffer sql =  new StringBuffer("INSERT INTO " + table);
+			StringBuffer fileds = new StringBuffer();
+			StringBuffer values = new StringBuffer();
+			String value,colName;
+			
+			List<String> col = new ArrayList<String>();
+			
+			stmt = tx.getConnection().createStatement();
+			rs = stmt.executeQuery("SELECT * FROM " + table);
+			rsmd = rs.getMetaData();
+
+			for (int i = 0; i < rsmd.getColumnCount(); i++) {
+				col.add(rsmd.getColumnName(i + 1).toUpperCase());
+			}
+			
+			while (em.hasMoreElements()) {
+				String name = em.nextElement();
+				StringTokenizer st = new StringTokenizer(name, ".");
+				
+					if (st.countTokens() > 1) {
+						
+						if (st.nextToken().equals(table)) {
+							
+							value = request.getParameter(name);
+							colName = st.nextToken();
+							
+							if (col.contains(colName.toUpperCase())) {
+								
+								if (fileds.length() > 0) {
+									fileds.append("," + colName);
+									values.append(",'" + value + "'");
+								} else {
+									fileds.append("(" + colName);
+									values.append(" VALUES ('" + value + "'");
+								}
+							}
+						}
+					} // must conform to the rules
+			}
+			
+			if (fileds.length() > 0)
+				fileds.append(") ");
+			if (values.length() > 0)
+				values.append(") ");
+
+			if (sql.length() > 0)
+				sql.append(fileds);
+			if (sql.length() > 0)
+				sql.append(values);
+			
+			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
+			System.out.println("add sql=" + sql);
+
+			stmt = tx.getConnection().createStatement();
+			stmt.executeUpdate(sql.toString());
+			
+			// rs = stmt.executeQuery(sql);
+			// while (rs.next()) {
+			// System.out.println("Name=" + rs.getString("XZQH_MC"));
+			// }
+			tx.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+			
+			try {
+				if(rs != null)
+					rs.close();
+				if(stmt != null)
+					stmt.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			tx.end();
 		}
 
 	}
@@ -472,32 +510,44 @@ public class ParamUtil {
 	}
 
 	public static String buildAddSQL(HttpServletRequest request, String table) {
-		java.util.Enumeration<String> em = request.getParameterNames();
-		String sql = "INSERT INTO " + table;
-		String fileds = "";
-		String values = "";
-
+		@SuppressWarnings("unchecked")
+		Enumeration<String> em = request.getParameterNames();
+		StringBuffer sql =  new StringBuffer("INSERT INTO " + table);
+		StringBuffer fileds = new StringBuffer();
+		StringBuffer values = new StringBuffer();
+		String value;
+		
 		while (em.hasMoreElements()) {
 			String name = em.nextElement();
-			String value = request.getParameter(name);
-			if (fileds.length() > 0) {
-				fileds += "," + name;
-				values += ",'" + value + "'";
-			} else {
-				fileds += "(" + name;
-				values += " VALUES ('" + value + "'";
-			}
+			StringTokenizer st = new StringTokenizer(name, ".");
+			//while (st.hasMoreElements()) {
+				if (st.countTokens() > 1) {
+					if (st.nextToken().equals(table)) {
+						value = request.getParameter(name);
+						if (fileds.length() > 0) {
+							fileds.append("," + st.nextToken());
+							values.append(",'" + value + "'");
+						} else {
+							fileds.append("(" + st.nextToken());
+							values.append(" VALUES ('" + value + "'");
+						}
+					}
+				} // must conform to the rules
+			//}
 		}
-		fileds += ") ";
-		values += ")";
+		
+		if (fileds.length() > 0)
+			fileds.append(") ");
+		if (values.length() > 0)
+			values.append(") ");
 
-		sql += fileds;
-		sql += values;
+		if (sql.length() > 0)
+			sql.append(fileds);
+		if (sql.length() > 0)
+			sql.append(values);
 
-		if (log.isDebugEnabled())
-			log.debug("add sql=" + sql);
-		System.out.println("add sql=" + sql);
+		if (log.isDebugEnabled())log.debug("add sql=" + sql);
 
-		return sql;
+		return sql.toString();
 	}
 }

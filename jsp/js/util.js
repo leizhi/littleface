@@ -1,5 +1,5 @@
 /*  mycoz util, version 1.0.0 2007.12.18
- *  (c) http://xpc-web.eicp.net <leizhifesker@gmail.com>
+ *  (c) http://mycoz.mooo.com <leizhifesker@gmail.com>
 /*----------------------------------------------------*/
 var xmlHttp = false;
 
@@ -511,3 +511,8 @@ with (this) {
 };
 
 var Util = new class();
+
+function docommit(url) {
+	document.forms[0].action=url;
+	document.forms[0].submit();
+}

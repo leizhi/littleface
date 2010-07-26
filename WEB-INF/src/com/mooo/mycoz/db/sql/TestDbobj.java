@@ -5,9 +5,13 @@ package com.mooo.mycoz.db.sql;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import com.mooo.mycoz.db.pool.*;
+import com.mooo.mycoz.dbobj.TestBean;
+import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.bean.accounting.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -102,7 +106,9 @@ public class TestDbobj {
 			ar.getJobNoteNo();
 */
 			//MultiDBObject mdb = MultiDBObject.getInstance();
+			/*
 			MultiDBObject mdb = new MultiDBObject();
+			mdb.setCatalog("xpcBranch");
 			mdb.addTable("JobNote", "jn");
 			mdb.addTable("ClientJob", "cj");
 
@@ -124,6 +130,7 @@ public class TestDbobj {
   			 System.out.println((String)map.get("jn.ID"));
 
   }
+  */
 			/*
 			mdb.searchAndRetrieveList();
 			
@@ -137,6 +144,7 @@ public class TestDbobj {
 
   		}
   		*/
+			/*
 			mdb = new MultiDBObject();
 			mdb.addTable("JobNote", "jn");
 			mdb.addTable("ClientJob", "cj");
@@ -150,6 +158,7 @@ public class TestDbobj {
 			//mdb.setLike("cj", "ID", "SE");
 			
 			System.out.println("SQL = " + mdb.buildSQL());
+			*/
 			//mdb.debug();
 			/*mdb.searchAndRetrieveList();
 			
@@ -162,14 +171,15 @@ public class TestDbobj {
   			 System.out.println((String)map.get("jn.ID"));
 
   		}  		*/
-						System.out.println("cache list = " + mdb.searchAndRetrieveList());
+					
+			/*System.out.println("cache list = " + mdb.searchAndRetrieveList());
 			for(Iterator it = mdb.searchAndRetrieveList().iterator(); it.hasNext();){
    
   				map = (Map)it.next();
   			 System.out.println((String)map.get("jn.ID"));
 
   }
-
+*/
   /*
 		 rs = DbSession.getInstance().getResultSet();
 			while (rs.next()) {
@@ -194,6 +204,34 @@ public class TestDbobj {
 			}
 			*/
 	//	}
+			/*
+			DbBulildSQL db = DbBulildSQL.getInstance();
+			db.setTable("ClientJob");
+			db.setField("id", "6");
+			*/
+			
+			TestBean bean = new TestBean();
+			bean.setTable("Example");
+			bean.setField("id", IDGenerator.getNextID("Example"));
+			bean.setField("name","TEST TEST1");
+			bean.add();
+			
+			//bean.setTable("Download");
+			//System.out.println("Add SQL:"+bean.getTable());
+			//System.out.println("Search SQL:"+bean.SearchSQL());
+
+			//List dl = bean.searchAndRetrieveList();
+			
+			//for (Iterator it = dl.iterator(); it.hasNext();) {
+			//	bean = (TestBean)it.next();
+			//	System.out.println("name:"+bean.getName());
+			//}
+			
+			System.out.println("Add SQL:"+bean.AddSQL());
+			System.out.println("Upate SQL:"+bean.UpdateSQL());
+			System.out.println("Delete SQL:"+bean.DeleteSQL());
+			System.out.println("Search SQL:"+bean.SearchSQL());
+			
 	} catch (Exception e) {
 			System.err.println("Error in DbForum.groupsWithPermission:" + e);
 			e.printStackTrace();

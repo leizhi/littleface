@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.xml.DOMConfigurator;
 import java.lang.reflect.Method;
 
@@ -20,6 +22,7 @@ public class ActionServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 4119522977670257605L;
+	private static Log log = LogFactory.getLog(ActionServlet.class);
 
 	protected ConfigureUtil conf;
 	
@@ -53,42 +56,20 @@ public class ActionServlet extends HttpServlet {
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		//PrintWriter out = response.getWriter();
-		//request.setCharacterEncoding("utf-8");
-		//response.setContentType("text/html; charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=UTF-8");
 		
 		try {
 			String accessPath = request.getServletPath();
 			
-			System.out.println("accessPath:" + accessPath);
-			/*
-			String accessURL = request.getRequestURI();
-			Pattern p = Pattern.compile(".jsp");
-			Matcher m = p.matcher(accessURL);
-			boolean isJsp = m.find();
-
-			//if (isJsp) {
-				
-			//}
-			*/
-			String execPath = "";
-
-			if (accessPath.indexOf(".") > 0) {
-				
-				if(accessPath.indexOf("/") > -1)
-					execPath = accessPath.substring(1, accessPath.indexOf("."));
-				else
-					execPath = accessPath.substring(0, accessPath.indexOf("."));
-				
-			} else {
-				if(accessPath.indexOf("/") > -1)
-					execPath = accessPath.substring(1);
-			}
+			if(log.isDebugEnabled())log.debug("accessPath:" + accessPath);
+			
+			String execPath = ActionUtil.execPath(accessPath);
 
 			//if (execPath == null)
 			//	execPath = request.getParameter("action");
 			
-			System.out.println("execPath:" + execPath);
+			if(log.isDebugEnabled())log.debug("execPath:" + execPath);
 
 			String execAction = "";
 			String execResult = "";
@@ -106,9 +87,13 @@ public class ActionServlet extends HttpServlet {
 			if (execMethod == null)
 				execMethod = actionNode.getDefMethod();
 			
-			System.out.println("execMethod:" + execMethod);
-
 			results = actionNode.getResults();
+			
+			if(log.isDebugEnabled())log.debug("========exec start=======");
+			if(log.isDebugEnabled())log.debug("execAction="+execAction);
+			if(log.isDebugEnabled())log.debug("execMethod="+execMethod);
+			//check sample action
+			
 			// exec Controller request aciton
 			Object obj = Class.forName(execAction).newInstance();
 			
@@ -125,6 +110,8 @@ public class ActionServlet extends HttpServlet {
 			
 			String resultMethod = (String) method.invoke(obj, paraValues);
 			
+			if(log.isDebugEnabled())log.debug("========exec end=======");
+
 			if(resultMethod != null)
 				if(!resultMethod.equals("success"))
 					actionResult = results.get(resultMethod);
@@ -143,10 +130,10 @@ public class ActionServlet extends HttpServlet {
 				}
 			}*/
 			
-			System.out.println("execAction:" + execAction);
-			System.out.println("execResult:" + actionResult);
+			if(log.isDebugEnabled())log.debug("execAction:" + execAction);
+			if(log.isDebugEnabled())log.debug("execResult:" + actionResult);
 
-			Pattern p = Pattern.compile(".jsp");
+			Pattern p = Pattern.compile("\\.jsp");
 			Matcher m;
 			boolean isJsp = false;
 			
@@ -164,27 +151,28 @@ public class ActionServlet extends HttpServlet {
 				
 				if (!execResult.equals("")) {
 					if(isJsp){
-						getServletConfig().getServletContext()
-							.getRequestDispatcher(execResult).forward(request,response);
+						getServletContext().getRequestDispatcher(execResult).forward(request,response);
 					}else{
 						response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 						response.setHeader("Location",request.getContextPath()+execResult);
 					}
 				}
 			}
-		} catch (Exception ex) {
-			System.out.println("Exception:" + ex.getMessage());
-			ex.printStackTrace();
-			request.setAttribute("error", ex.getMessage());
-			getServletConfig().getServletContext()
-			.getRequestDispatcher("/jsp/error.jsp").forward(request,response);
-		} catch (Throwable e) {
-			System.out.println("Throwable:" + e.getMessage());
+			
+		} catch (NullPointerException e) {
+			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
 			e.printStackTrace();
-			request.setAttribute("error", e.getMessage());
-
-			getServletConfig().getServletContext()
-			.getRequestDispatcher("/jsp/error.jsp").forward(request,response);
+		} catch (RuntimeException e) {
+			if(log.isErrorEnabled()) log.error("RuntimeException:"+e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			if(log.isErrorEnabled()) log.error("Exception:"+e.getMessage());
+			e.printStackTrace();
+		} catch (Throwable e) {
+			if(log.isErrorEnabled()) log.error("Throwable:"+e.getMessage());
+			e.printStackTrace();
+		}finally{
+				//getServletContext().getRequestDispatcher("/jsp/error.jsp").forward(request,response);
 		}
 	}
 

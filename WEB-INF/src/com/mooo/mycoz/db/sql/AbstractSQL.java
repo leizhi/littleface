@@ -1,6 +1,6 @@
 package com.mooo.mycoz.db.sql;
 
-public abstract class AbstractSQL implements DBCommon{
+public abstract class AbstractSQL implements DbobjSql{
 
 	public String catalog;
 	public String table;
@@ -25,7 +25,4 @@ public abstract class AbstractSQL implements DBCommon{
 		catalog = null;
 		table = null;
 	}
-
-	public abstract String buildSQL();
-	//public abstract String buildCountSQL();
 }

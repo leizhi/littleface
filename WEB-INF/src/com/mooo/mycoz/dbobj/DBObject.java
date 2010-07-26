@@ -1,67 +1,239 @@
 package com.mooo.mycoz.dbobj;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.mooo.mycoz.db.pool.DbConnectionManager;
-
-import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class DBObject {
+import com.mooo.mycoz.db.sql.DbBulildSQL;
+import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.Transaction;
 
-	private static Log log = LogFactory.getLog(DBObject.class);
-	private Connection conn = null;
-	private Statement stmt = null;
-	private ResultSet rs = null;
-	private String sql = null;
+public class DBObject extends DbBulildSQL{
+	
+	public static Transaction tx = null;
+	public static Statement stmt = null;
+	public static ResultSet rs = null;
+	public static ResultSetMetaData rsmd = null;
 
-	/**
-     	 */
-	public DBObject() throws SQLException {
-		getConection();
-		getStatement();
-	} /* DBObject() */
+	public DBObject() {
+		tx = new Transaction();
+	}
 
-	public void getConection() throws SQLException {
-		conn = DbConnectionManager.getConnection();
-	} /* getConection() */
-
-	public void getConection(String db) throws SQLException {
-		conn = DbConnectionManager.getConnection();
-		conn.setCatalog(db);
-
-	} /* getConection(String) */
-
-	public void getStatement() throws SQLException {
-		stmt = conn.createStatement();
-	} /* getStatement() */
-
-	public ResultSet getResultSet(String sql) throws SQLException {
-
-		if (conn != null && stmt != null)
+	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
+		List<Object> retrieveList = null;
+		try {
+			tx.start();
+			retrieveList = new ArrayList<Object>();
+			
+			stmt = tx.getConnection().createStatement();
+			
 			rs = stmt.executeQuery(sql);
+			
+			rsmd = rs.getMetaData();
+			Object bean;
 
-		return rs;
-	} /* getResultSet(String) */
+			while (rs.next()) {
+				bean = obj.newInstance();
+				
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					//System.out.println("ColumnTypeName=" + rsmd.getColumnTypeName(i+1));
+					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
+							rs.getString(i + 1), null);
+					//System.out.println(rsmd.getColumnName(i + 1).toLowerCase()+"="+ rs.getString(i + 1));
+				}
+				//System.out.println("name="+((Download)bean).getName());
+				retrieveList.add(bean);
+			}
 
-	public void execute(String sql)
+			tx.commit();
 
-	throws SQLException {
-		if (conn != null && stmt != null)
-			stmt.execute(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
 
-	} /* execute(String) */
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
 
-	public void prepareCall(String sql)
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
-	throws SQLException {
+			tx.end();
+		}
+		
+		return retrieveList;
+	}
 
-		if (conn != null)
-			conn.prepareCall(sql);
+	public List<Object> searchAndRetrieveList(String sql) {
+		List<Object> retrieveList = null;
+		try {
+			tx.start();
+			retrieveList = new ArrayList<Object>();
+			
+			stmt = tx.getConnection().createStatement();
+			
+			rs = stmt.executeQuery(sql);
+			
+			rsmd = rs.getMetaData();
+			Object bean;
 
-	} /* prepareCall(String) */
+			while (rs.next()) {
+				bean = this.getClass().newInstance();
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
+							rs.getString(i + 1), null);
+				}
+				retrieveList.add(bean);
+			}
 
+			tx.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			tx.end();
+		}
+		
+		return retrieveList;
+	}
+	
+	public List<Object> searchAndRetrieveList() {
+		List<Object> retrieveList = null;
+		try {
+			tx.start();
+			retrieveList = new ArrayList<Object>();
+			
+			stmt = tx.getConnection().createStatement();
+			
+			rs = stmt.executeQuery(SearchSQL());
+			
+			rsmd = rs.getMetaData();
+			Object bean;
+
+			while (rs.next()) {
+				bean = this.getClass().newInstance();
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
+							rs.getString(i + 1), null);
+				}
+				retrieveList.add(bean);
+			}
+
+			tx.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			tx.end();
+		}
+		
+		return retrieveList;
+	}
+	
+	public void add(){
+		try {
+			tx.start();
+			stmt = tx.getConnection().createStatement();
+			stmt.execute(AddSQL());
+			
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+
+			try {
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			tx.end();
+		}
+	}
+	
+	public void delete(){
+		try {
+			tx.start();
+			stmt = tx.getConnection().createStatement();
+			stmt.execute(DeleteSQL());
+			
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+
+			try {
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			tx.end();
+		}
+	}
+	
+	public void update(){
+		try {
+			tx.start();
+			stmt = tx.getConnection().createStatement();
+			stmt.execute(UpdateSQL());
+			
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+
+			try {
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			tx.end();
+		}
+	}
+	
+	public void retrieve(){
+		
+	}
 }

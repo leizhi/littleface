@@ -41,7 +41,7 @@
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 	<!-- JSPC servlet mappings end -->
-	
+
 	<filter>
 		<filter-name>ActionFilter</filter-name>
 		<filter-class>com.mooo.mycoz.util.ActionFilter</filter-class>
