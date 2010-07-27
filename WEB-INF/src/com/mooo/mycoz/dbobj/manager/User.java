@@ -1,14 +1,7 @@
 package com.mooo.mycoz.dbobj.manager;
 
-import java.util.Iterator;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class User {
-	private static Log log = LogFactory.getLog(User.class);
 
 	private static final long serialVersionUID = 1L;
 

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.ParamUtil;
 
@@ -56,6 +57,37 @@ public class LoginAction extends BaseSupport {
 		}
 		return "success";
 
+	}
+	
+	public String promptRegister(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			if (log.isDebugEnabled())log.debug("promptRegister");
+
+			request.setAttribute("name", request.getParameter("name"));
+			request.setAttribute("password", request.getParameter("password"));
+			
+		} catch (Exception e) {
+			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
+			return "promptRegister";
+		}
+		return "success";
+	}
+
+	public String processRegister(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			if (log.isDebugEnabled())log.debug("promptRegister");
+			DBSession session = DBSession.getInstance();
+			User user = new User();
+			ParamUtil.bindData(request, user, "User");
+			session.save(user);
+			
+		} catch (Exception e) {
+			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
+			return "promptRegister";
+		}
+		return "success";
 	}
 	
 	public String processLogout(HttpServletRequest request,

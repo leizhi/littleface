@@ -1,7 +1,14 @@
 package com.mooo.mycoz.db.sql;
 
-public abstract class AbstractSQL implements DbSql{
+import java.io.Serializable;
 
+public abstract class AbstractSQL implements DbSql, Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5695615314838758248L;
+	
 	public String catalog;
 	public String table;
 

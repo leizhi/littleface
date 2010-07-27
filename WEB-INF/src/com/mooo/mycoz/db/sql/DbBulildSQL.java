@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 public class DbBulildSQL extends AbstractSQL implements DbSql{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6187804890473172495L;
+
 	// Singleton
 	/*
 	private static Object initLock = new Object();

@@ -1,31 +1,16 @@
 package com.mooo.mycoz.util;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-
-import com.mooo.mycoz.dbobj.manager.Action;
-import com.mooo.mycoz.dbobj.manager.Controller;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 
 public class AuthUtil {
 
-	private static Log log = LogFactory.getLog(AuthUtil.class);
+	//private static Log log = LogFactory.getLog(AuthUtil.class);
 
 	InputStream in = null;
-
-
+/*
 	public AuthUtil() {
 		in = getClass().getResourceAsStream("/xpc.xml");
 		parseXML();
@@ -44,8 +29,14 @@ public class AuthUtil {
 	}
 
 	public void clearController() {
+		Transaction tx = new Transaction();
 
 		try {
+			tx.start();
+			
+			DBSession session = DBSession.getInstance();
+			session.setConnection(tx.getConnection());
+			
 			String action = "";
 			String method = "";
 
@@ -54,6 +45,7 @@ public class AuthUtil {
 
 			query = session.createQuery("FROM Controller");
 			Iterator<?> iterator = query.list().iterator();
+			
 			while (iterator.hasNext()) {
 				Controller co = (Controller) iterator.next();
 				action = co.getName();
@@ -136,11 +128,8 @@ public class AuthUtil {
 	}
 
 	public void addController() {
-		Transaction tx = null;
+		Transaction tx = new Transaction();
 		try {
-			Session session = HibernateUtil.getInstance();
-			tx = session.beginTransaction();
-			Query query;
 
 			String action = "";
 			String method = "";
@@ -273,9 +262,6 @@ public class AuthUtil {
 	public void parseDatabase() {
 		Transaction tx = null;
 		try {
-			Session session = HibernateUtil.getInstance();
-			tx = session.beginTransaction();
-			Query query;
 
 			controllerDababaseMap = new HashMap<String, List<String>>();
 			List<String> dataActions;
@@ -351,6 +337,6 @@ public class AuthUtil {
 			e.printStackTrace();
 		}
 	}
-
+*/
 }
 

@@ -39,5 +39,15 @@
 			<result name="processDelete">File</result>
 			<result name="processDownload">File</result>
 		</action>
+		
+		<action name="Tree" default="list"
+			class="com.mooo.mycoz.action.profile.TreeAction">
+			<result name="list">/jsp/profile/listTree.jsp</result>
+			<result name="promptAdd">/jsp/profile/addTree.jsp</result>
+			<result name="processAdd">Tree</result>
+			<result name="promptUpdate">/jsp/profile/editTree.jsp</result>
+			<result name="processUpdate">Tree</result>
+			<result name="processDelete">Tree</result>
+		</action>
 	</package>
 </struts>

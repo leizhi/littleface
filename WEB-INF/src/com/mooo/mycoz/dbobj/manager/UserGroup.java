@@ -2,11 +2,7 @@ package com.mooo.mycoz.dbobj.manager;
 
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class UserGroup {
-	private static Log log = LogFactory.getLog(UserGroup.class);
 
 	private Integer id;
 	private String name;

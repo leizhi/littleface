@@ -14,6 +14,10 @@ import com.mooo.mycoz.util.ReflectUtil;
 
 public class DBSession extends DbBulildSQL {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5905546154431674650L;
 	private static Object initLock = new Object();
 	private static DBSession factory;
 
@@ -43,7 +47,7 @@ public class DBSession extends DbBulildSQL {
 		return factory;
 	}
 
-	public void save(Object bean) throws SQLException{
+	public void beanFillField(Object bean){
 		try {
 
 			List<String> methods = ReflectUtil.getMethodNames(bean.getClass());
@@ -85,7 +89,10 @@ public class DBSession extends DbBulildSQL {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+	}
+	
+	private void execute(Object bean,String type) throws SQLException{
+		beanFillField(bean);
 		Statement stmt = null;
 		try{
 			connection = DbConnectionManager.getConnection();
@@ -96,7 +103,12 @@ public class DBSession extends DbBulildSQL {
 				conn=DbConnectionManager.getConnection();
 				stmt = conn.createStatement();
 			}
-			stmt.executeUpdate(AddSQL());
+			if(type.equals("add"))
+				stmt.executeUpdate(AddSQL());
+			else if(type.equals("update"))
+				stmt.executeUpdate(UpdateSQL());
+			else if(type.equals("delete"))
+				stmt.executeUpdate(DeleteSQL());
 		}finally {
 
 			try {
@@ -109,5 +121,16 @@ public class DBSession extends DbBulildSQL {
 			}
 
 		}
+	}
+	public void save(Object bean) throws SQLException{
+		execute(bean,"add");
+	}
+	
+	public void update(Object bean) throws SQLException{
+		execute(bean,"update");
+	}
+	
+	public void delete(Object bean) throws SQLException{
+		execute(bean,"delete");
 	}
 }

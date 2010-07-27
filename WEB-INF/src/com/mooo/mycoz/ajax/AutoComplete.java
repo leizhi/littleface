@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mooo.mycoz.dbobj.mycozBranch.User;
-import com.mooo.mycoz.dbobj.mycozShared.BlogType;
 
 public class AutoComplete {
 
@@ -68,12 +67,11 @@ public class AutoComplete {
 			String sql = "";
 			String prefix = request.getParameter("prefix");
 
-			BlogType bt = new BlogType();
 			ResultSet rs = null;
 			sql += "SELECT Name FROM BlogType WHERE ID > 0 AND Name LIKE '%"
 					+ prefix + "%' LIMIT 10";
-			bt.getResultSet(sql);
-			rs = bt.getResultSet(sql);
+			
+			rs = null;//bt.getResultSet(sql);
 
 			if (rs.next()) {
 				PrintWriter output = response.getWriter();

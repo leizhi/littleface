@@ -41,7 +41,7 @@ public class IDGenerator {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(sql);
 			//if(rs.first()) id=rs.getInt("MaxId")+1;
-			if(rs.next() && rs.getRow() > 0) id=rs.getInt("MaxId")+1;
+			if(rs.next()) id=rs.getInt("MaxId")+1;
 
 			nextID=Integer.toString(id);
 		} catch (SQLException e) {

@@ -7,6 +7,11 @@ import com.mooo.mycoz.dbobj.DBObject;
  */
 public class Download extends DBObject{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private Integer id;
 	private Integer typeid;
 	private String filelength;

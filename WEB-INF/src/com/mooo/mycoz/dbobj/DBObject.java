@@ -14,6 +14,10 @@ import com.mooo.mycoz.util.ParamUtil;
 
 public class DBObject extends DbBulildSQL{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4716776899444767709L;
 	public Connection connection;
 	public Connection conn;
 

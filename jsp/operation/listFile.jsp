@@ -37,6 +37,7 @@
 <input type="submit" value="Upload" onclick="docommit('${promptUpload}')">
 <input type="submit" value="Delete" onclick="docommit('${processDelete}')">
 <input type="submit" value="Download" onclick="docommit('${processDownload}')">
+<input type="submit" value="Browse" onclick="docommit('${processDownload}')">
 </div>
 
 <div>
@@ -52,7 +53,7 @@
 
 <c:forEach var="item" items="${files}" varStatus="status">
 <tr>
-<td><c:out value="${item.id}"></c:out></td>
+<td><input type="checkbox" name="id" value="${item.id}"> </td>
 <td><c:out value="${item.name}"></c:out></td>
 <td><a href="upload/${item.downloadpath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
 <td><a href="upload/${item.imagepath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
