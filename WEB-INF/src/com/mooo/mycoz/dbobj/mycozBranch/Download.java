@@ -1,9 +1,11 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
+import com.mooo.mycoz.dbobj.DBObject;
+
 /**
 
  */
-public class Download {
+public class Download extends DBObject{
 
 	private Integer id;
 	private Integer typeid;

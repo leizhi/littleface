@@ -41,7 +41,25 @@
 
 <div>
 <fmt:message key="File"/>
+<table>
+<tr>
+<td><c:out value="ID"></c:out></td>
+<td><c:out value="Name"></c:out></td>
+<td><c:out value="Download"></c:out></td>
+<td><c:out value="Image"></c:out></td>
+<td><c:out value="Date"></c:out></td>
+</tr>
 
+<c:forEach var="item" items="${files}" varStatus="status">
+<tr>
+<td><c:out value="${item.id}"></c:out></td>
+<td><c:out value="${item.name}"></c:out></td>
+<td><a href="upload/${item.downloadpath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
+<td><a href="upload/${item.imagepath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
+<td><c:out value="${item.date}"></c:out></td>
+</tr>
+</c:forEach>
+</table>
 </div>
 
 </form>

@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.mooo.mycoz.db.pool.*;
-import com.mooo.mycoz.db.sql.*;
+import com.mooo.mycoz.db.sql.DbMultiBulildSQL;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -28,7 +28,7 @@ public class ArapTag extends TagSupport {
 
 			//DbobjMultiSql ms = MultiSQLFactory.getInstance();
 			
-			DbobjMultiSql ms = new MultiDBObject();
+			DbMultiBulildSQL ms = new DbMultiBulildSQL();
 
 			ms.addTable("JobNote", "jn");
 			ms.addTable("Customer", "ct");

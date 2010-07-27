@@ -6,36 +6,38 @@ import java.util.List;
 
 public class ReflectUtil {
 
-	Class<?> clazz;
+	public static Class<?> clazz;
 
-	public List<String> getMethodNames(String className)
-			throws ClassNotFoundException {
-
-		clazz = Class.forName(className);
-
-		Method[] methods = clazz.getDeclaredMethods();
+	public static List<String> getMethodNames(String className) {
 		List<String> names = new ArrayList<String>();
 
-		for (Method method : methods) {
-			names.add(method.getName());
-		}
+		try {
 
+			clazz = Class.forName(className);
+
+			Method[] methods = clazz.getDeclaredMethods();
+
+			for (Method method : methods) {
+				names.add(method.getName());
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		return names;
 
 	}
 
-	public List<String> getMethodNames(Class<?> clazz)
-			throws ClassNotFoundException {
+	public static List<String> getMethodNames(Class<?> clazz) {
 
-		Method[] methods = clazz.getDeclaredMethods();
 		List<String> names = new ArrayList<String>();
+		Method[] methods = clazz.getDeclaredMethods();
 
 		for (Method method : methods) {
 			names.add(method.getName());
-			System.out.println(method.getName());
 		}
-
+		
 		return names;
-
 	}
+	
 }

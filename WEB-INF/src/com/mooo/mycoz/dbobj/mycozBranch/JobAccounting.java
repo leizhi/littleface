@@ -69,13 +69,6 @@ import com.mooo.mycoz.util.ActionMap;
  */
 public class JobAccounting extends DBObject{
 private static Log log = LogFactory.getLog(JobAccounting.class);
-    /**
-     */
-    public JobAccounting() 
-	throws SQLException{
-	getConection();
-	getStatement();
-    } /* JobAccounting() */
 
     public int getNextID()
         throws SQLException {

@@ -43,13 +43,13 @@
 	<!-- JSPC servlet mappings end -->
 
 	<filter>
-		<filter-name>ActionFilter</filter-name>
-		<filter-class>com.mooo.mycoz.util.ActionFilter</filter-class>
+		<filter-name>JspFilter</filter-name>
+		<filter-class>com.mooo.mycoz.util.JspFilter</filter-class>
 	</filter>
 
 	<filter-mapping>
-		<filter-name>ActionFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<filter-name>JspFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
 
 	<welcome-file-list>

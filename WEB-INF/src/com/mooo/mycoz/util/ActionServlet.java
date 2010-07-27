@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,6 +24,8 @@ public class ActionServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 4119522977670257605L;
 	private static Log log = LogFactory.getLog(ActionServlet.class);
+	
+	public static final String USER_SESSION_KEY = "UserSessionKey";
 
 	protected ConfigureUtil conf;
 	
@@ -66,6 +69,16 @@ public class ActionServlet extends HttpServlet {
 			
 			String execPath = ActionUtil.execPath(accessPath);
 
+			//check sample action
+			HttpSession session = request.getSession(true);
+			Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
+			boolean isAuthenticated = (null != userID);
+			
+			if (!isAuthenticated) {
+				if(!execPath.equals("Login") || !execPath.equals("Index"))
+					execPath="Login";
+			}
+			
 			//if (execPath == null)
 			//	execPath = request.getParameter("action");
 			
@@ -92,8 +105,7 @@ public class ActionServlet extends HttpServlet {
 			if(log.isDebugEnabled())log.debug("========exec start=======");
 			if(log.isDebugEnabled())log.debug("execAction="+execAction);
 			if(log.isDebugEnabled())log.debug("execMethod="+execMethod);
-			//check sample action
-			
+
 			// exec Controller request aciton
 			Object obj = Class.forName(execAction).newInstance();
 			

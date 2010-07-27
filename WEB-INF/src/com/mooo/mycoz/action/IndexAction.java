@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class IndexAction {
+public class IndexAction  extends BaseSupport {
 
 	private static Log log = LogFactory.getLog(IndexAction.class);
 
@@ -23,7 +23,14 @@ public class IndexAction {
 			
 			Locale locale = new Locale("zh_CN");
 			request.setAttribute("javax.servlet.jsp.jstl.fmt.locale.request",locale);
-
+			
+			Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
+			boolean isAuthenticated = (null != userID);
+			
+			if (!isAuthenticated) {
+				return "promptLogin";
+			}
+			
 			if (log.isDebugEnabled()) log.debug("promptIndexStateRun OK: ");
 		} catch (Exception e) {
 			if (log.isDebugEnabled())

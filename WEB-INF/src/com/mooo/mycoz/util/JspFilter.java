@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class ActionFilter implements Filter {
+public class JspFilter implements Filter {
 
 	public static final String USER_SESSION_KEY = "UserSessionKey";
 
@@ -44,10 +44,6 @@ public class ActionFilter implements Filter {
 				Matcher m = p.matcher(accessPath);
 				boolean isJsp = m.find();
 
-				p = Pattern.compile("\\.do");
-				m = p.matcher(accessPath);
-				boolean isAction = m.find();
-
 				Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
 				boolean isAuthenticated = (null != userID);
 
@@ -56,17 +52,12 @@ public class ActionFilter implements Filter {
 				System.out.println("filter accessPath:" + accessPath);
 				System.out.println("filter execPath:" + ActionUtil.execPath(accessPath));
 				System.out.println("filter isJsp:" + isJsp);
-				System.out.println("filter isAction:" + isAction);
 				System.out.println("--------filter end-------------");
 
 				if (!isAuthenticated) {
 					hResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 					if (isJsp) {
 						hResponse.setHeader("Location", contextPath + "/Login.do");
-					} else if (isAction) {
-						if (!ActionUtil.execPath(accessPath).equals("Login")) {
-							hResponse.setHeader("Location", contextPath + "/Login.do");
-						}
 					}
 				}
 

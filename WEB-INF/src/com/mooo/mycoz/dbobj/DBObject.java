@@ -1,5 +1,6 @@
 package com.mooo.mycoz.dbobj;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -7,28 +8,38 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbBulildSQL;
 import com.mooo.mycoz.util.ParamUtil;
-import com.mooo.mycoz.util.Transaction;
 
 public class DBObject extends DbBulildSQL{
 	
-	public static Transaction tx = null;
-	public static Statement stmt = null;
-	public static ResultSet rs = null;
-	public static ResultSetMetaData rsmd = null;
+	public Connection connection;
+	public Connection conn;
 
-	public DBObject() {
-		tx = new Transaction();
+	public Connection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
 		List<Object> retrieveList = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		ResultSetMetaData rsmd = null;
 		try {
-			tx.start();
 			retrieveList = new ArrayList<Object>();
 			
-			stmt = tx.getConnection().createStatement();
+			if(connection!=null){
+				stmt = connection.createStatement();
+			}else{
+				if(conn==null)
+				conn=DbConnectionManager.getConnection();
+				stmt = conn.createStatement();
+			}
 			
 			rs = stmt.executeQuery(sql);
 			
@@ -48,11 +59,9 @@ public class DBObject extends DbBulildSQL{
 				retrieveList.add(bean);
 			}
 
-			tx.commit();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
 		} finally {
 
 			try {
@@ -60,12 +69,12 @@ public class DBObject extends DbBulildSQL{
 					rs.close();
 				if (stmt != null)
 					stmt.close();
-
+				if (conn != null)
+					conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			tx.end();
 		}
 		
 		return retrieveList;
@@ -73,11 +82,19 @@ public class DBObject extends DbBulildSQL{
 
 	public List<Object> searchAndRetrieveList(String sql) {
 		List<Object> retrieveList = null;
+		Statement stmt = null;
+		ResultSetMetaData rsmd = null;
+		ResultSet rs = null;
 		try {
-			tx.start();
 			retrieveList = new ArrayList<Object>();
 			
-			stmt = tx.getConnection().createStatement();
+			if(connection!=null){
+				stmt = connection.createStatement();
+			}else{
+				if(conn==null)
+				conn=DbConnectionManager.getConnection();
+				stmt = conn.createStatement();
+			}
 			
 			rs = stmt.executeQuery(sql);
 			
@@ -93,11 +110,8 @@ public class DBObject extends DbBulildSQL{
 				retrieveList.add(bean);
 			}
 
-			tx.commit();
-
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
 		} finally {
 
 			try {
@@ -105,12 +119,12 @@ public class DBObject extends DbBulildSQL{
 					rs.close();
 				if (stmt != null)
 					stmt.close();
-
+				if (conn != null)
+					conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			tx.end();
 		}
 		
 		return retrieveList;
@@ -118,11 +132,19 @@ public class DBObject extends DbBulildSQL{
 	
 	public List<Object> searchAndRetrieveList() {
 		List<Object> retrieveList = null;
+		Statement stmt = null;
+		ResultSetMetaData rsmd = null;
+		ResultSet rs = null;
 		try {
-			tx.start();
 			retrieveList = new ArrayList<Object>();
 			
-			stmt = tx.getConnection().createStatement();
+			if(connection!=null){
+				stmt = connection.createStatement();
+			}else{
+				if(conn==null)
+				conn=DbConnectionManager.getConnection();
+				stmt = conn.createStatement();
+			}
 			
 			rs = stmt.executeQuery(SearchSQL());
 			
@@ -138,11 +160,8 @@ public class DBObject extends DbBulildSQL{
 				retrieveList.add(bean);
 			}
 
-			tx.commit();
-
 		} catch (Exception e) {
 			e.printStackTrace();
-			tx.rollback();
 		} finally {
 
 			try {
@@ -150,90 +169,92 @@ public class DBObject extends DbBulildSQL{
 					rs.close();
 				if (stmt != null)
 					stmt.close();
-
+				if (conn != null)
+					conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			tx.end();
 		}
 		
 		return retrieveList;
 	}
 	
-	public void add(){
-		try {
-			tx.start();
-			stmt = tx.getConnection().createStatement();
+	public void add() throws SQLException {
+		Statement stmt = null;
+		try{
+			if(connection!=null){
+				stmt = connection.createStatement();
+			}else{
+				if(conn==null)
+				conn=DbConnectionManager.getConnection();
+				stmt = conn.createStatement();
+			}
 			stmt.execute(AddSQL());
-			
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		} finally {
+		}finally {
 
 			try {
 				if (stmt != null)
 					stmt.close();
-
+				if (conn != null)
+					conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			tx.end();
 		}
 	}
 	
-	public void delete(){
-		try {
-			tx.start();
-			stmt = tx.getConnection().createStatement();
+	public void delete() throws SQLException {
+		Statement stmt = null;
+		try{
+			if(connection!=null){
+				stmt = connection.createStatement();
+			}else{
+				if(conn==null)
+				conn=DbConnectionManager.getConnection();
+				stmt = conn.createStatement();
+			}
 			stmt.execute(DeleteSQL());
-			
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		} finally {
+
+		}finally {
 
 			try {
 				if (stmt != null)
 					stmt.close();
-
+				if (conn != null)
+					conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
-			tx.end();
 		}
 	}
-	
-	public void update(){
-		try {
-			tx.start();
-			stmt = tx.getConnection().createStatement();
+	public void update() throws SQLException{
+		Statement stmt = null;
+		try{
+			if(connection!=null){
+				stmt = connection.createStatement();
+			}else{
+				if(conn==null)
+				conn=DbConnectionManager.getConnection();
+				stmt = conn.createStatement();
+			}
 			stmt.execute(UpdateSQL());
-			
-			tx.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		} finally {
+		}finally {
 
 			try {
 				if (stmt != null)
 					stmt.close();
-
+				if (conn != null)
+					conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
-			tx.end();
 		}
 	}
 	
 	public void retrieve(){
 		
 	}
+	
 }

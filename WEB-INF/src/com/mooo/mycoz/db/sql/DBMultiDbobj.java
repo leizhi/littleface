@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 import com.mooo.mycoz.db.pool.*;
 
-public class DBMultiDbobj extends DbMultiBulildSQL implements DbobjMultiSql {
+public class DBMultiDbobj extends DbMultiBulildSQL implements DbMultiSql {
 	private static Object initLock = new Object();
 	private static DBMultiDbobj factory = null;
 

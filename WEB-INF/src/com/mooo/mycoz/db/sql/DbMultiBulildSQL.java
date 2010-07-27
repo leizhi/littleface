@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class DbMultiBulildSQL implements DbobjMultiSql {
+public class DbMultiBulildSQL implements DbMultiSql {
 
 	public String catalog;
 	public List<String> tables;

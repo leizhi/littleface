@@ -167,7 +167,7 @@ public class ARBean {
 		Statement stmt = null;
 		int[][] groups = new int[0][2];
 		try {
-			DbobjMultiSql ms = MultiSQLFactory.getInstance();
+			DbMultiSql ms = MultiSQLFactory.getInstance();
 			ms.addTable("JobNote", "jn");
 			ms.addTable("Customer", "ct");
 			ms.setForeignKey("jn", "CustomerID", "ct", "ID");

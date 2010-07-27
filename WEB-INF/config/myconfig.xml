@@ -16,6 +16,7 @@
 		<action name="Index" default="promptIndex"
 			class="com.mooo.mycoz.action.IndexAction">
 			<result name="promptIndex">/jsp/start.jsp</result>
+			<result name="promptLogin">Login</result>
 		</action>
 		
 		<action name="Login" default="promptLogin"

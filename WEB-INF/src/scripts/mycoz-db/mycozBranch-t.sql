@@ -31,7 +31,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Download` WRITE;
 /*!40000 ALTER TABLE `Download` DISABLE KEYS */;
-INSERT INTO `Download` VALUES (1,4,'verygodd','upload/78620080701070532249.mp3','upload/pub116487412484120080701070532997.mp3','2008-06-30',''),(2,4,'kk','upload/New Stories (Highway Blues)20080701072550052.wma','upload/exp_mbar20080701072550677.jpg','2008-06-30',''),(3,4,'哈哈','upload/Shania Twain - 09 Raining On Our Love 20080706074057287.mp3','upload/120080706074101658.jpg','2008-07-05','very good'),(4,3,'fdsafdsa','upload/2915020090125062224517.mp3','upload/000120090125062226124.jpg','2009-01-25','');
+INSERT INTO `Download` VALUES (1,3,'图片','2010-04-14-14221520100727210622141.jpg','2010-02-03-15475320100727210622199.jpg','2010-07-27','sadfdsa'),(2,3,'mp3','青花瓷-周杰伦20100727210750127.mp3','练习20100727210751912.mp3','2010-07-27','sdafsa');
 /*!40000 ALTER TABLE `Download` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -41,7 +41,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `Example` WRITE;
 /*!40000 ALTER TABLE `Example` DISABLE KEYS */;
-INSERT INTO `Example` VALUES (12,'小猪',12,'七中'),(13,'小猪f',12,'七中'),(14,'小猪猪',12,'七中'),(15,'小猪猪1',12,'七中'),(16,'小猪猪3',12,'七中'),(17,'小猪猪4',12,'七中'),(18,'小猪猪5',12,'七中'),(19,'小猪猪6',12,'七中'),(20,'小猪猪7',12,'七中'),(21,'小猪猪8',12,'七中'),(22,'小猪猪9',12,'七中');
 /*!40000 ALTER TABLE `Example` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,4 +101,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-06-30  8:02:31
+-- Dump completed on 2010-07-27 21:21:03

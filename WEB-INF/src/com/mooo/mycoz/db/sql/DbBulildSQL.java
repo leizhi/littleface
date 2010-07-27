@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class DbBulildSQL extends AbstractSQL {
+public class DbBulildSQL extends AbstractSQL implements DbSql{
 	// Singleton
-/*
+	/*
 	private static Object initLock = new Object();
 	private static DbBulildSQL factory = null;
 	
@@ -31,13 +31,16 @@ public class DbBulildSQL extends AbstractSQL {
 		catalog = null;
 		table = null;
 		
-		whereKey = new ArrayList<String>();
 		groupBy = new ArrayList<String>();
 		orderBy = new ArrayList<String>();
 		recordStart = 0;
 		recordEnd = 0;
 		
-		intoKey = new HashMap();
+		fields = new HashMap();
+		likeField= new HashMap();
+		greaterEqualField= new HashMap();
+		lessEqual= new HashMap();
+		
 		updateKey = new ArrayList<String>();
 	}
 	*/
@@ -45,48 +48,46 @@ public class DbBulildSQL extends AbstractSQL {
 		catalog = null;
 		table = null;
 		
-		whereKey = new ArrayList<String>();
 		groupBy = new ArrayList<String>();
 		orderBy = new ArrayList<String>();
 		recordStart = 0;
 		recordEnd = 0;
 		
-		intoKey = new HashMap();
+		fields = new HashMap();
+		likeField= new HashMap();
+		greaterEqualField= new HashMap();
+		lessEqualField= new HashMap();
+		
 		updateKey = new ArrayList<String>();
 	}
-	
 	public void clear() {
 		catalog = null;
 		table = null;
-		whereKey.clear();
+		
+		fields.clear();
+		likeField.clear();
+		greaterEqualField.clear();
+		lessEqualField.clear();
+		
 		groupBy.clear();
 		orderBy.clear();
-		intoKey.clear();
+		updateKey.clear();
+		
 		recordStart = 0;
 		recordEnd = 0;
 	}
 	
 	//public
 	
-	public void setField(String field, String value) {
-		setAddField(field,value);
-		setWhereField(field,value);
-	}
-	
-	public void setField(String field, int value) {
-		setAddField(field,value);
-		setWhereField(field,value);
-	}
-	
 	//Add SQL
-	private Map intoKey;
+	private Map fields;
 	
-	private void setAddField(String field, String value) {
-		intoKey.put(field, "'" + value + "'");
+	public void setField(String field, String value) {
+		fields.put(field, "'" + value + "'");
 	}
 
-	private void setAddField(String field, int value) {
-		intoKey.put(field, value);
+	public void setField(String field, Integer value) {
+		fields.put(field, value);
 	}
 
 	public String AddSQL() {
@@ -101,16 +102,16 @@ public class DbBulildSQL extends AbstractSQL {
 		else
 			sql += this.getClass().getSimpleName();
 
-		if (intoKey != null && !intoKey.isEmpty()) {
+		if (fields != null && !fields.isEmpty()) {
 			sql += "(";
-			for (Iterator<String> it = intoKey.keySet().iterator(); it.hasNext();) {
+			for (Iterator<String> it = fields.keySet().iterator(); it.hasNext();) {
 				value = (String) it.next();
 				sql += value + ",";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
 			sql += ") VALUES (";
 
-			for (Iterator<String> it = intoKey.values().iterator(); it.hasNext();) {
+			for (Iterator<String> it = fields.values().iterator(); it.hasNext();) {
 				value = (String) it.next();
 				sql += value + ",";
 			}
@@ -118,36 +119,34 @@ public class DbBulildSQL extends AbstractSQL {
 
 			sql += ")";
 		}
+		clear();
+		
+		System.out.println("AddSQL="+sql);
 
 		return sql;
 	}
 	
 	/////////Search SQL
-	private List<String> whereKey;
 	
 	private List<String> groupBy;
 	private List<String> orderBy;
 	private int recordStart;
 	private int recordEnd;
-
-	private void setWhereField(String field, String value) {
-		whereKey.add(field + "='" + value + "'");
-	}
+	
+	private Map likeField;
+	private Map greaterEqualField;
+	private Map lessEqualField;
 
 	public void setLike(String field, String value) {
-		whereKey.add(field + " LIKE '%" + value + "%'");
+		likeField.put(field, value);
 	}
 
 	public void setGreaterEqual(String field, String value) {
-		whereKey.add(field + " >= '" + value + "'");
+		greaterEqualField.put(field, value);
 	}
 
 	public void setLessEqual(String field, String value) {
-		whereKey.add(field + " <= '" + value + "'");
-	}
-
-	private void setWhereField(String field, int value) {
-		whereKey.add(field + "=" + value);
+		lessEqualField.put(field, value);
 	}
 
 	public void setGroupBy(String field) {
@@ -159,26 +158,46 @@ public class DbBulildSQL extends AbstractSQL {
 	}
 
 	public String SearchSQL() {
+		
+		String key;
 		String value;
+
 		String sql = "SELECT * FROM ";
 
 		if (catalog != null)
 			sql += catalog + ".";
 		
-		System.out.println("table:"+table);
-
 		if (table != null)
 			sql += table;
 		else
 			sql += this.getClass().getSimpleName();
 
-		if (whereKey != null && !whereKey.isEmpty()) {
+		if (fields != null && !fields.isEmpty()) {
 			sql += " WHERE ";
-			for (Iterator<String> it = whereKey.iterator(); it.hasNext();) {
-				value = (String) it.next();
-				sql += value + " AND ";
+			//fields
+			for (Iterator<String> it = fields.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + "='" + fields.get(key) + "' AND ";
 			}
-			sql = sql.substring(0, sql.lastIndexOf(" AND "));
+			//likes
+			for (Iterator<String> it = likeField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + " LIKE '%" + likeField.get(key) + "%' AND ";
+			}	
+			//greaterEqualField
+			for (Iterator<String> it = greaterEqualField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + "  >= '" + likeField.get(key) + "' AND ";
+			}
+			
+			//lessEqual
+			for (Iterator<String> it = lessEqualField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + " <= '" + likeField.get(key) + "' AND ";
+			}
+			
+			sql = sql.substring(0, sql.lastIndexOf("AND"));
+			
 		}
 
 		if (groupBy != null && !groupBy.isEmpty()) {
@@ -203,6 +222,10 @@ public class DbBulildSQL extends AbstractSQL {
 			sql += " LIMIT " + recordStart + "," + recordEnd;
 
 		}
+		clear();
+		
+		System.out.println("SearchSQL="+sql);
+
 		return sql;
 	}
 
@@ -213,7 +236,7 @@ public class DbBulildSQL extends AbstractSQL {
 	
 	//Delete SQL
 	public String DeleteSQL() {
-		String value;
+		String key;
 		String sql = "DELETE FROM ";
 
 		if (catalog != null)
@@ -224,25 +247,45 @@ public class DbBulildSQL extends AbstractSQL {
 		else
 			sql += this.getClass().getSimpleName();
 
-		if (whereKey != null && !whereKey.isEmpty()) {
+		if (fields != null && !fields.isEmpty()) {
 			sql += " WHERE ";
-			for (Iterator<String> it = whereKey.iterator(); it.hasNext();) {
-				value = (String) it.next();
-				sql += value + " AND ";
+			//fields
+			for (Iterator<String> it = fields.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + "='" + fields.get(key) + "' AND ";
+			}
+			//likes
+			for (Iterator<String> it = likeField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + " LIKE '%" + likeField.get(key) + "%' AND ";
+			}	
+			//greaterEqualField
+			for (Iterator<String> it = greaterEqualField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + "  >= '" + likeField.get(key) + "' AND ";
+			}
+			
+			//lessEqual
+			for (Iterator<String> it = lessEqualField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + " <= '" + likeField.get(key) + "' AND ";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(" AND "));
 		}
+		clear();
+		System.out.println("DeleteSQL="+sql);
 
 		return sql;
 	}
 	//Update SQL
-	private List<String> updateKey;
+	private static List<String> updateKey;
 
 	public void setUpdate(String field, String value) {
 		updateKey.add(field + "='" + value + "'");
 	}
 
 	public String UpdateSQL() {
+		String key;
 		String value;
 		String sql = "UPDATE ";
 
@@ -256,21 +299,40 @@ public class DbBulildSQL extends AbstractSQL {
 
 		if (updateKey != null && !updateKey.isEmpty()) {
 			sql += " SET ";
-			for (Iterator<String> it = whereKey.iterator(); it.hasNext();) {
+			for (Iterator<String> it = updateKey.iterator(); it.hasNext();) {
 				value = (String) it.next();
 				sql += value + ",";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
 		}
 
-		if (whereKey != null && !whereKey.isEmpty()) {
+		if (fields != null && !fields.isEmpty()) {
 			sql += " WHERE ";
-			for (Iterator<String> it = whereKey.iterator(); it.hasNext();) {
-				value = (String) it.next();
-				sql += value + " AND ";
+			//fields
+			for (Iterator<String> it = fields.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + "='" + fields.get(key) + "' AND ";
+			}
+			//likes
+			for (Iterator<String> it = likeField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + " LIKE '%" + likeField.get(key) + "%' AND ";
+			}	
+			//greaterEqualField
+			for (Iterator<String> it = greaterEqualField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + "  >= '" + likeField.get(key) + "' AND ";
+			}
+			
+			//lessEqual
+			for (Iterator<String> it = lessEqualField.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				sql += key + " <= '" + likeField.get(key) + "' AND ";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(" AND "));
 		}
+		clear();
+		System.out.println("UpdateSQL="+sql);
 
 		return sql;
 	}

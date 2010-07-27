@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.dbobj.DBObject;
 
-public class Example {
+public class Example extends DBObject{
 	/** DATABASE QUERIES **/
 	private static final String EXAMPLE_COUNT = "SELECT count(*) FROM EXAMPLE";
 	private static final String EXAMPLE_LIST = "SELECT * FROM EXAMPLE";
@@ -53,7 +54,7 @@ public class Example {
 	// Lock for saving state to database.
 	private Object saveLock = new Object();
 	private int order;
-
+/*
     public int count() {
         int count = 0;
         Connection con = null;
@@ -64,7 +65,7 @@ public class Example {
             //pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             rs.next();
-            count = rs.getInt(1 /*"messageCount"*/);
+            //count = rs.getInt(1 );//"messageCount"
         }
         catch( SQLException sqle ) {
             System.err.println("DbForum:getMessageCount() failed: " + sqle);
@@ -127,4 +128,5 @@ public class Example {
 			}
 		}
 	}
+	*/
 }

@@ -1,6 +1,6 @@
 package com.mooo.mycoz.db.sql;
 
-public abstract class AbstractSQL implements DbobjSql{
+public abstract class AbstractSQL implements DbSql{
 
 	public String catalog;
 	public String table;

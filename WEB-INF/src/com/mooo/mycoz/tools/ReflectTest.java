@@ -3,35 +3,33 @@ package com.mooo.mycoz.tools;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import com.mooo.mycoz.dbobj.DBObject;
-import com.mooo.mycoz.dbobj.TestBean;
+import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.Download;
+import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.ReflectUtil;
+import com.mooo.mycoz.util.Transaction;
 
 public class ReflectTest {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws Exception {
-		//DBObject db = new DBObject();
-		//Download bean = new Download();
-		TestBean bean = new TestBean();
-		List dl = bean.searchAndRetrieveList("select * from Download");
+	public static void main(String[] args) {
 		
-		for (Iterator it = dl.iterator(); it.hasNext();) {
-			bean = (TestBean)it.next();
-			System.out.println("name:"+bean.getName());
-		}
 		
-		/*
 		ReflectUtil ru = new ReflectUtil();
 		ru.getMethodNames(Download.class);
-		*/
+		
 		/*
 		Download bean1;
 		Download bean2;

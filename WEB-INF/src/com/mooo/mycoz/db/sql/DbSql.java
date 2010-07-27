@@ -1,6 +1,6 @@
 package com.mooo.mycoz.db.sql;
 
-public interface DbobjSql extends DbCommon{
+public interface DbSql extends DbCommon{
 
  	String getCatalog();
  	
@@ -11,14 +11,14 @@ public interface DbobjSql extends DbCommon{
 	void setTable(String table);
 	
 	void setField(String field, String value);
+	
+	void setField(String field, Integer value);
 
 	void setLike(String field, String value);
 
 	void setGreaterEqual(String field, String value);
 	
 	void setLessEqual(String field, String value);
-
-	void setField(String field, int value);
 
 	void setGroupBy(String field);
 
