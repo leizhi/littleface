@@ -3,8 +3,8 @@ package com.mooo.mycoz.util;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+//import java.util.regex.Matcher;
+//import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +26,12 @@ public class ActionServlet extends HttpServlet {
 	private static Log log = LogFactory.getLog(ActionServlet.class);
 	
 	public static final String USER_SESSION_KEY = "UserSessionKey";
-
+	
+	private static String execAction = "";
+	private static String execResult = "";
+	private static String execMethod = "";
+	private static String resultMethod ="";
+	
 	protected ConfigureUtil conf;
 	
 	public void destroy() {
@@ -84,9 +89,7 @@ public class ActionServlet extends HttpServlet {
 			
 			if(log.isDebugEnabled())log.debug("execPath:" + execPath);
 
-			String execAction = "";
-			String execResult = "";
-			String execMethod = request.getParameter("method");
+			execMethod = request.getParameter("method");
 			
 			ActionNode actionNode = null;
 			Hashtable<String, String> results;
@@ -118,56 +121,31 @@ public class ActionServlet extends HttpServlet {
 			Object paraValues[] = new Object[] { request, response };
 			
 			// set Transition jsp for execMethod
-			String actionResult = results.get(execMethod);
+			resultMethod = (String) method.invoke(obj, paraValues);
 			
-			String resultMethod = (String) method.invoke(obj, paraValues);
-			
+			execResult = results.get(execMethod);
+
 			if(log.isDebugEnabled())log.debug("========exec end=======");
 
-			if(resultMethod != null)
-				if(!resultMethod.equals("success"))
-					actionResult = results.get(resultMethod);
-			/*else {
-				String returnAction= (String) request.getAttribute("action");
-				String returnMethod= (String) request.getAttribute("method");
-				
-				if(returnAction != null){
-					if(returnMethod !=null) {
-						actionResult = "/"+returnAction+".do?method="+returnMethod;
-					} else {
-						actionResult = "/"+returnAction+".do";
-					}
-				} else{
-					new Exception("RETURN STATE NULL");
+			if(resultMethod != null){
+				// not success then exec return method and fowward jsp
+				if(!resultMethod.equals("success")) {
+					
+					execMethod=resultMethod;
+					method = cls.getMethod(execMethod, paraTypes);
+					resultMethod = (String) method.invoke(obj, paraValues);
+					
+					if(!resultMethod.equals("success"))
+						execResult = results.get(resultMethod);
+					else
+						execResult = results.get(execMethod);
 				}
-			}*/
-			
-			if(log.isDebugEnabled())log.debug("execAction:" + execAction);
-			if(log.isDebugEnabled())log.debug("execResult:" + actionResult);
-
-			Pattern p = Pattern.compile("\\.jsp");
-			Matcher m;
-			boolean isJsp = false;
-			
-			if (actionResult != null) {
 				
-				execResult = actionResult;
-				if(execResult.indexOf("/") != 0)
-					execResult = "/"+execResult;
-				
-				if(execResult.indexOf(".do") < 0 && execResult.indexOf(".jsp") < 0)
-					execResult += ".do";
-
-				m = p.matcher(execResult);
-				isJsp = m.find();
-				
-				if (!execResult.equals("")) {
-					if(isJsp){
-						getServletContext().getRequestDispatcher(execResult).forward(request,response);
-					}else{
-						response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-						response.setHeader("Location",request.getContextPath()+execResult);
-					}
+				if(StringUtils.checkString(execResult, "\\.jsp")){// is jsp
+					getServletContext().getRequestDispatcher(execResult).forward(request,response);
+				} else if(StringUtils.checkString(execResult, "\\.do")){// is action
+					response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+					response.setHeader("Location",request.getContextPath()+execResult);
 				}
 			}
 			

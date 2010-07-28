@@ -58,6 +58,8 @@ package com.mooo.mycoz.util;
 
 import java.security.*; //import java.text.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility class to peform common String manipulation algorithms.
@@ -620,5 +622,26 @@ public class StringUtils {
 		}
 		return buf.toString();
 	}
-
+	
+	/**
+	 * checkString 
+	 * 
+	 * @param string
+	 *            the string to check.
+	 * @param string
+	 *            the string to define. ("\\.do")
+	 * @return the boolean with check result.
+	 */
+	public static final boolean checkString(String string,String pattern) {
+		// Check if the string is null or zero length -- if so, return
+		// what was sent in.
+		if (string == null || string.length() == 0 || pattern == null || pattern.length() == 0) {
+			return false;
+		}
+		
+		Pattern p = Pattern.compile(pattern);
+		Matcher m = p.matcher(string);
+		
+		return m.find();
+	}
 }

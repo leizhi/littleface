@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ include file="/jsp/incl/static.inc" %>
 <!DOCTYPE form PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<fmt:bundle basename="MessageBundle">
-
+	
+<fmt:bundle basename="MessageBundle" >
 <html>
 <head>
 <title><fmt:message key="Menu"/></title>
@@ -13,7 +13,7 @@
 <body class="mbody">
 <div>
 online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
-
+<fmt:message key="Login"/>
 <c:url value="/Login.do" var="processLogout">
 	<c:param name="method">processLogout</c:param>
 </c:url>

@@ -1,5 +1,7 @@
 package com.mooo.mycoz.action;
 
+import java.util.Locale;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,6 +29,26 @@ public class LoginAction extends BaseSupport {
 			request.setAttribute("name", request.getParameter("name"));
 			request.setAttribute("password", request.getParameter("password"));
 			
+			//Locale locale = Locale.getDefault();
+			//if (log.isDebugEnabled()) log.debug("request locale: " + request.getParameter("locale"));
+
+			//if (request.getParameter("locale") != null){
+			//	locale = new Locale(request.getParameter("locale"));
+			//}
+			
+			//Object cobj = session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
+			//if (log.isDebugEnabled()) log.debug("fmt locale: " + cobj);
+
+			//if (cobj != null && cobj instanceof Locale) {
+			//	locale = (Locale) cobj;
+			//} //else if (request.getParameter("locale") != null){
+			//	locale = new Locale(request.getParameter("locale"));
+			//}
+
+			Locale[] locales = java.text.NumberFormat.getAvailableLocales();
+			request.setAttribute("locales", locales);
+			//request.setAttribute("locale", locale);
+
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 			return "promptLogin";

@@ -16,14 +16,14 @@
 		<action name="Index" default="promptIndex"
 			class="com.mooo.mycoz.action.IndexAction">
 			<result name="promptIndex">/jsp/start.jsp</result>
-			<result name="promptLogin">Login</result>
+			<result name="promptLogin">/Login.do</result>
 		</action>
 		
 		<action name="Login" default="promptLogin"
 			class="com.mooo.mycoz.action.LoginAction">
 			<result name="promptLogin">/jsp/login.jsp</result>
-			<result name="processLogin">Index</result>
-			<result name="processLogout">/jsp/login.jsp</result>
+			<result name="processLogin">/Index.do</result>
+			<result name="processLogout">/Login.do</result>
 		</action>
 				
 		<action name="Menu" default="show"
@@ -35,19 +35,19 @@
 			class="com.mooo.mycoz.action.operation.FileAction">
 			<result name="list">/jsp/operation/listFile.jsp</result>
 			<result name="promptUpload">/jsp/operation/uploadFile.jsp</result>
-			<result name="processUpload">File</result>
-			<result name="processDelete">File</result>
-			<result name="processDownload">File</result>
+			<result name="processUpload">/File.do</result>
+			<result name="processDelete">/File.do</result>
+			<result name="processDownload">/File.do</result>
 		</action>
 		
 		<action name="Tree" default="list"
 			class="com.mooo.mycoz.action.profile.TreeAction">
 			<result name="list">/jsp/profile/listTree.jsp</result>
 			<result name="promptAdd">/jsp/profile/addTree.jsp</result>
-			<result name="processAdd">Tree</result>
+			<result name="processAdd">/Tree.do</result>
 			<result name="promptUpdate">/jsp/profile/editTree.jsp</result>
-			<result name="processUpdate">Tree</result>
-			<result name="processDelete">Tree</result>
+			<result name="processUpdate">/Tree.do</result>
+			<result name="processDelete">/Tree.do</result>
 		</action>
 	</package>
 </struts>

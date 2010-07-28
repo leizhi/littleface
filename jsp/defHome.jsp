@@ -6,7 +6,6 @@
 </head>
 <body background="images/bg_ship.gif">
 <fmt:bundle basename="MessageBundle">
-
 	<br>
 	<br>
 	<br>
