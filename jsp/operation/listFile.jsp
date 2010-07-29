@@ -38,22 +38,22 @@ function docommit(url) {
 
 <form method="post" action="${listFile}">
 <div class="command">
-<input type="submit" value="List">
-<input type="submit" value="Upload" onclick="docommit('${promptUpload}')">
-<input type="submit" value="Delete" onclick="docommit('${processDelete}')">
-<input type="submit" value="Download" onclick="docommit('${processDownload}')">
-<input type="submit" value="Browse" onclick="docommit('${processDownload}')">
+<input type="submit" value="<fmt:message key="List"/>">
+<input type="submit" value="<fmt:message key="Upload"/>" onclick="docommit('${promptUpload}')">
+<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
+<input type="submit" value="<fmt:message key="Download"/>" onclick="docommit('${processDownload}')">
+<input type="submit" value="<fmt:message key="Browse"/>" onclick="docommit('${processDownload}')">
 </div>
 
 <div>
 <fmt:message key="File"/>
 <table>
 <tr>
-<td><c:out value="ID"></c:out></td>
-<td><c:out value="Name"></c:out></td>
-<td><c:out value="Download"></c:out></td>
-<td><c:out value="Image"></c:out></td>
-<td><c:out value="Date"></c:out></td>
+<td><fmt:message key="ID"/></td>
+<td><fmt:message key="Name"/></td>
+<td><fmt:message key="Download"/></td>
+<td><fmt:message key="Image"/></td>
+<td><fmt:message key="Date"/></td>
 </tr>
 
 <c:forEach var="item" items="${files}" varStatus="status">

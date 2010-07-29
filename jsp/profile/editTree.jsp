@@ -40,8 +40,8 @@
 <form method="post" action="${processUpdate}">
 
 <div class="command">
-<input type="submit" value="Black" onclick="docommit('${tree}')">
-<input type="submit" value="OK"">
+<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${tree}')">
+<input type="submit" value="<fmt:message key="OK"/>">
 </div>
 
 <div>

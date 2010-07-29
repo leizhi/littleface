@@ -13,7 +13,7 @@
 <body class="mbody">
 <div>
 online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
-<fmt:message key="Login"/>
+
 <c:url value="/Login.do" var="processLogout">
 	<c:param name="method">processLogout</c:param>
 </c:url>

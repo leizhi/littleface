@@ -45,10 +45,8 @@
 			<select name="locale" onchange="docommit('${promptLogin}')">
 				<c:forEach var="items" items="${locales}" varStatus="s">
 					<option value="${items}"
-					<c:if test="${!empty param.locale && items==param.locale}">
-						selected="selected"
-					</c:if>
-					<c:if test="${empty param.locale && items==header.locale}">
+
+					<c:if test="${items==locale}">
 						selected="selected"
 					</c:if>
 						>

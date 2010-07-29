@@ -40,8 +40,8 @@
 <form method="post" action="${processUpload}" enctype="multipart/form-data">
 
 <div class="command">
-<input type="submit" value="Black" onclick="docommit('${file}')">
-<input type="submit" value="OK"">
+<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${file}')">
+<input type="submit" value="<fmt:message key="OK"/>">
 </div>
 
 <div>

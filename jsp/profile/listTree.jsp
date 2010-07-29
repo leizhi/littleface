@@ -37,18 +37,18 @@
 
 <form method="post" action="${listFile}">
 <div class="command">
-<input type="submit" value="List">
-<input type="submit" value="Add" onclick="docommit('${promptAdd}')">
-<input type="submit" value="Edit" onclick="docommit('${promptUpdate}')">
-<input type="submit" value="Delete" onclick="docommit('${processDelete}')">
+<input type="submit" value="<fmt:message key="List"/>">
+<input type="submit" value="<fmt:message key="Add"/>" onclick="docommit('${promptAdd}')">
+<input type="submit" value="<fmt:message key="Edit"/>" onclick="docommit('${promptUpdate}')">
+<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
 </div>
 
 <div>
 <fmt:message key="Tree"/>
 <table>
 <tr>
-<td><c:out value="ID"></c:out></td>
-<td><c:out value="Name"></c:out></td>
+<td><fmt:message key="ID"/></td>
+<td><fmt:message key="Name"/></td>
 </tr>
 
 <c:forEach var="item" items="${treeTypes}" varStatus="status">
