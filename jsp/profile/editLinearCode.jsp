@@ -47,13 +47,13 @@
 <div>
 <fmt:message key="UpdateTree"/>
 <div id="formresponse">
-<input type="hidden" id="CodeType.id" name="CodeType.id" value="${CodeType.id}"/>
+<input type="hidden" id="TreeType.id" name="TreeType.id" value="${TreeType.id}"/>
 
 <table align="center" style="font-size:0.9em;">
 
 <tr>
 <td><fmt:message key="Name" /></td>
-<td><input type="text" id="CodeType.name" name="CodeType.name" value="${CodeType.name}" size="15" maxlength="255"/></td>
+<td><input type="text" id="TreeType.name" name="TreeType.name" value="${TreeType.name}" size="15" maxlength="255"/></td>
 </tr>
 
 </table>

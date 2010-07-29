@@ -5,7 +5,7 @@
 
 <html>
 <head>
-<title><fmt:message key="UpdateTree"/></title>
+<title><fmt:message key="AddCodeType"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
 <link type="text/css" rel="stylesheet" href="skin/office/default/presentation.css" />
@@ -32,28 +32,45 @@
 </head>
 
 <body>
-<c:url value="/Tree.do" var="tree"/>
-<c:url value="/Tree.do" var="processUpdate">
-	<c:param name="method">processUpdate</c:param>
+<c:url value="/CodeType.do" var="linearCode"/>
+
+<c:url value="/CodeType.do" var="processAdd">
+	<c:param name="method">processAdd</c:param>
 </c:url>
 
-<form method="post" action="${processUpdate}">
+<form method="post" action="${processAdd}">
 
 <div class="command">
-<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${tree}')">
+<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${linearCode}')">
 <input type="submit" value="<fmt:message key="OK"/>">
 </div>
 
 <div>
-<fmt:message key="UpdateTree"/>
+<fmt:message key="AddCodeType"/>
 <div id="formresponse">
-<input type="hidden" id="CodeType.id" name="CodeType.id" value="${CodeType.id}"/>
+<input type="hidden" id="CodeType.id" name="CodeType.id" value="${codeType.id}"/>
 
 <table align="center" style="font-size:0.9em;">
 
 <tr>
+<td><fmt:message key="Category" /></td>
+<td>
+<select id="CodeType.category" name="CodeType.category">
+	<c:forEach var="items" items="${codeCategory}" varStatus="s">
+	<option value="${items}"
+	<c:if test="${items==param.codeCategory}">
+	selected="selected"
+	</c:if>
+	>
+	<fmt:message key="${items}"/>
+	</option>
+	</c:forEach>
+</select>
+</tr>
+
+<tr>
 <td><fmt:message key="Name" /></td>
-<td><input type="text" id="CodeType.name" name="CodeType.name" value="${CodeType.name}" size="15" maxlength="255"/></td>
+<td><input type="text" id="CodeType.name" name="CodeType.name" value="${codeType.name}" size="15" maxlength="255"/></td>
 </tr>
 
 </table>

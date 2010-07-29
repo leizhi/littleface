@@ -88,7 +88,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 	private Map fields;
 	
 	public void setField(String field, String value) {
-		fields.put(field, "'" + value + "'");
+		fields.put(field, value);
 	}
 
 	public void setField(String field, Integer value) {
@@ -118,7 +118,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 
 			for (Iterator<String> it = fields.values().iterator(); it.hasNext();) {
 				value = (String) it.next();
-				sql += value + ",";
+				sql += "'"+value + "',";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
 

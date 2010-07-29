@@ -14,8 +14,8 @@ import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
 
-public class TreeAction extends BaseSupport{
-	private static Log log = LogFactory.getLog(TreeAction.class);
+public class LinearCodeAction extends BaseSupport{
+	private static Log log = LogFactory.getLog(LinearCodeAction.class);
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -24,10 +24,10 @@ public class TreeAction extends BaseSupport{
 			CodeType tt = new CodeType();
 			tt.setCatalog("mycozShared");
 			//tt.setCategory("Tree");
-			tt.setField("Category", "Tree");
+			tt.setField("Category", "Linear");
 			
-			List<?> treeTypes = tt.searchAndRetrieveList();
-			request.setAttribute("treeTypes", treeTypes);
+			List<?> linearTypes = tt.searchAndRetrieveList();
+			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -43,7 +43,7 @@ public class TreeAction extends BaseSupport{
 			CodeType codeType = new CodeType();
 			codeType.setId(new Integer(IDGenerator.getNextID("mycozShared.CodeType")));
 			codeType.setName(request.getParameter("CodeType.name"));
-			codeType.setCategory("Tree");
+			codeType.setCategory("Linear");
 			request.setAttribute("codeType", codeType);
 			
 		} catch (Exception e) {

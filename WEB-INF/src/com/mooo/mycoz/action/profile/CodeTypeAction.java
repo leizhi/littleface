@@ -1,5 +1,6 @@
 package com.mooo.mycoz.action.profile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,20 +15,29 @@ import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
 
-public class TreeAction extends BaseSupport{
-	private static Log log = LogFactory.getLog(TreeAction.class);
+public class CodeTypeAction extends BaseSupport{
+	private static Log log = LogFactory.getLog(CodeTypeAction.class);
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("list");
+			String value;
+			
+			List codeCategory = new ArrayList();
+			codeCategory.add("Linear");
+			codeCategory.add("Tree");
+			request.setAttribute("codeCategory", codeCategory);
+
 			CodeType tt = new CodeType();
 			tt.setCatalog("mycozShared");
 			//tt.setCategory("Tree");
-			tt.setField("Category", "Tree");
+			if((value=request.getParameter("codeCategory")) != null){
+				tt.setField("Category", value);
+			}
 			
-			List<?> treeTypes = tt.searchAndRetrieveList();
-			request.setAttribute("treeTypes", treeTypes);
+			List<?> linearTypes = tt.searchAndRetrieveList();
+			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -39,11 +49,16 @@ public class TreeAction extends BaseSupport{
 	public String promptAdd(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			if (log.isDebugEnabled()) log.debug("promptUpload");
+			if (log.isDebugEnabled()) log.debug("promptAdd");
+			List codeCategory = new ArrayList();
+			codeCategory.add("Linear");
+			codeCategory.add("Tree");
+			request.setAttribute("codeCategory", codeCategory);
+			
 			CodeType codeType = new CodeType();
 			codeType.setId(new Integer(IDGenerator.getNextID("mycozShared.CodeType")));
 			codeType.setName(request.getParameter("CodeType.name"));
-			codeType.setCategory("Tree");
+			codeType.setCategory("Linear");
 			request.setAttribute("codeType", codeType);
 			
 		} catch (Exception e) {
@@ -106,4 +121,21 @@ public class TreeAction extends BaseSupport{
 		}
 		return "success";
 	}
+	
+	public String listCode(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			if (log.isDebugEnabled()) log.debug("processUpload");
+			DBSession session = DBSession.getInstance();
+			CodeType bean = new CodeType();
+			ParamUtil.bindData(request, bean, "CodeType");
+			session.update(bean);
+			
+		} catch (Exception e) {
+			if (log.isDebugEnabled())
+				log.debug("Exception Load error of: " + e.getMessage());
+		}
+		return "success";
+	}	
+	
 }
