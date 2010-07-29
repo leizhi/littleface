@@ -40,6 +40,17 @@
 			<result name="processDownload">/File.do</result>
 		</action>
 		
+		<action name="CodeType" default="list"
+			class="com.mooo.mycoz.action.profile.CodeTypeAction">
+			<result name="list">/jsp/profile/listCodeType.jsp</result>
+			<result name="promptAdd">/jsp/profile/addCodeType.jsp</result>
+			<result name="processAdd">/CodeType.do</result>
+			<result name="promptUpdate">/jsp/profile/editCodeType.jsp</result>
+			<result name="processUpdate">/CodeType.do</result>
+			<result name="processDelete">/CodeType.do</result>
+			<result name="listCode">/jsp/profile/listCode.jsp</result>
+		</action>
+				
 		<action name="Tree" default="list"
 			class="com.mooo.mycoz.action.profile.TreeAction">
 			<result name="list">/jsp/profile/listTree.jsp</result>
@@ -48,6 +59,16 @@
 			<result name="promptUpdate">/jsp/profile/editTree.jsp</result>
 			<result name="processUpdate">/Tree.do</result>
 			<result name="processDelete">/Tree.do</result>
+		</action>
+		
+		<action name="LinearCode" default="list"
+			class="com.mooo.mycoz.action.profile.LinearCodeAction">
+			<result name="list">/jsp/profile/listLinearCode.jsp</result>
+			<result name="promptAdd">/jsp/profile/addLinearCode.jsp</result>
+			<result name="processAdd">/LinearCode.do</result>
+			<result name="promptUpdate">/jsp/profile/editLinearCode.jsp</result>
+			<result name="processUpdate">/LinearCode.do</result>
+			<result name="processDelete">/LinearCode.do</result>
 		</action>
 	</package>
 </struts>
