@@ -24,7 +24,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("list");
 			String value;
 			
-			List codeCategory = new ArrayList();
+			List<String> codeCategory = new ArrayList<String>();
 			codeCategory.add("Linear");
 			codeCategory.add("Tree");
 			request.setAttribute("codeCategory", codeCategory);
@@ -50,7 +50,7 @@ public class CodeTypeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("promptAdd");
-			List codeCategory = new ArrayList();
+			List<String> codeCategory = new ArrayList<String>();
 			codeCategory.add("Linear");
 			codeCategory.add("Tree");
 			request.setAttribute("codeCategory", codeCategory);
@@ -125,11 +125,13 @@ public class CodeTypeAction extends BaseSupport{
 	public String listCode(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			if (log.isDebugEnabled()) log.debug("processUpload");
-			DBSession session = DBSession.getInstance();
-			CodeType bean = new CodeType();
-			ParamUtil.bindData(request, bean, "CodeType");
-			session.update(bean);
+			if (log.isDebugEnabled()) log.debug("listCode");
+			//Integer[] ids =  request.getParameterValues("id");
+			String[] ids =  request.getParameterValues("id");
+			
+			for(int i=0;i<ids.length;i++){
+				if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
+			}
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())

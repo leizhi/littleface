@@ -8,6 +8,18 @@
 <link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
 <link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
 <script type="text/javascript" src="jsp/js/util.js"></script>
+<script type="text/javascript">
+function checkbox(id){
+	var selectedObj =  window.document.getElementsById(id);
+	var count = 0;
+	for(var i=0;i<selectedObj.length;i++){
+ 		if(selectedObj[i].checked){
+  			count = count + 1;
+ 		}
+	}
+	alert("count="+checkbox.length);
+}
+</script>
 </head>
 
 <body>
@@ -51,8 +63,8 @@
 <div>
 			<select name="codeCategory">
 				<c:forEach var="items" items="${codeCategory}" varStatus="s">
+					
 					<option value="${items}"
-
 					<c:if test="${items==param.codeCategory}">
 						selected="selected"
 					</c:if>
@@ -73,7 +85,7 @@
 
 <c:forEach var="item" items="${linearTypes}" varStatus="status">
 <tr>
-<td><input type="checkbox" name="id" value="${item.id}"> </td>
+<td><input type="checkbox" name="id" id="id" value="${item.id}" onclick="javascript:checkbox('id')"> </td>
 <td><c:out value="${item.name}"></c:out></td>
 <td><fmt:message key="${item.category}"/></td>
 </tr>

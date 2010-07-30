@@ -46,9 +46,12 @@
 				<c:forEach var="items" items="${locales}" varStatus="s">
 					<option value="${items}"
 
-					<c:if test="${items==locale}">
+					<c:if test="${empty param.locale and items==header.locale}">
 						selected="selected"
 					</c:if>
+					<c:if test="${!empty param.locale and items==param.locale}">
+						selected="selected"
+					</c:if>					
 						>
 					${items.displayName}
 					</option>
