@@ -90,19 +90,21 @@ public class DBSession extends DbBulildSQL {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void execute(Object bean,String type) throws SQLException{
 		beanFillField(bean);
 		Statement stmt = null;
 		try{
-			connection = DbConnectionManager.getConnection();
+			System.out.println("DbSession connection." + connection);
+			System.out.println("DbSession conn." + conn);
+
 			if(connection!=null){
 				stmt = connection.createStatement();
 			}else{
-				if(conn==null)
 				conn=DbConnectionManager.getConnection();
 				stmt = conn.createStatement();
 			}
+			
 			if(type.equals("add"))
 				stmt.executeUpdate(AddSQL());
 			else if(type.equals("update"))
@@ -111,14 +113,10 @@ public class DBSession extends DbBulildSQL {
 				stmt.executeUpdate(DeleteSQL());
 		}finally {
 
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+            try {  stmt.close(); }
+            catch (Exception e) { e.printStackTrace(); }
+            try {  conn.close();   }
+            catch (Exception e) { e.printStackTrace(); }
 
 		}
 	}
@@ -133,4 +131,5 @@ public class DBSession extends DbBulildSQL {
 	public void delete(Object bean) throws SQLException{
 		execute(bean,"delete");
 	}
+	
 }

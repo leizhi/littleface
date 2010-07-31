@@ -13,7 +13,7 @@
 <body>
 <fmt:bundle basename="MessageBundle">
 
-<c:url value="/CodeType.do" var="list"/>
+<c:url value="/CodeType.do" var="listCodeType"/>
 
 <c:url value="/CodeType.do" var="processAddCode">
 	<c:param name="method">processAddCode</c:param>
@@ -31,42 +31,34 @@
 	<c:param name="method">listCode</c:param>
 </c:url>
 
-<form method="post" action="${list}">
+<form method="post" action="${listCode}">
 <div class="command">
+<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${listCodeType}')">
 <input type="submit" value="<fmt:message key="List"/>">
 <input type="submit" value="<fmt:message key="Add"/>" onclick="docommit('${processAddCode}')">
 <input type="submit" value="<fmt:message key="Update"/>" onclick="docommit('${processUpdateCode}')">
-<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
+<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDeleteCode}')">
 </div>
 
 <div>
-			<select name="codeCategory">
-				<c:forEach var="items" items="${codeCategory}" varStatus="s">
-					<option value="${items}"
-
-					<c:if test="${items==param.codeCategory}">
-						selected="selected"
-					</c:if>
-						>
-					<fmt:message key="${items}"/>
-					</option>
-				</c:forEach>
-			</select>
+<fmt:message key="Name"/>:
+<input type="text" name="LinearCode.name">
+<input type="hidden" name="LinearCode.typeid" value="${id}">
 </div>
+
 <div>
-<fmt:message key="CodeType"/>
+<c:out value="${codeType.name}"/>
+
 <table>
 <tr>
 <td><fmt:message key="ID"/></td>
 <td><fmt:message key="Name"/></td>
-<td><fmt:message key="Category"/></td>
 </tr>
 
-<c:forEach var="item" items="${linearTypes}" varStatus="status">
+<c:forEach var="item" items="${codes}" varStatus="status">
 <tr>
 <td><input type="checkbox" name="id" value="${item.id}"> </td>
-<td><c:out value="${item.name}"></c:out></td>
-<td><fmt:message key="${item.category}"/></td>
+<td><c:out value="${item.name}"/></td>
 </tr>
 </c:forEach>
 </table>

@@ -50,19 +50,21 @@ function docommit(url) {
 <table>
 <tr>
 <td><fmt:message key="ID"/></td>
+<td><fmt:message key="Type"/></td>
 <td><fmt:message key="Name"/></td>
+<td><fmt:message key="Size"/></td>
 <td><fmt:message key="Download"/></td>
-<td><fmt:message key="Image"/></td>
 <td><fmt:message key="Date"/></td>
 </tr>
 
 <c:forEach var="item" items="${files}" varStatus="status">
 <tr>
 <td><input type="checkbox" name="id" value="${item.id}"> </td>
+<td><c:out value="${item.typename}"></c:out></td>
 <td><c:out value="${item.name}"></c:out></td>
-<td><a href="upload/${item.downloadpath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
-<td><a href="upload/${item.imagepath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
-<td><c:out value="${item.date}"></c:out></td>
+<td><c:out value="${item.size}"></c:out></td>
+<td><a href="upload/${item.filepath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
+<td><c:out value="${item.datetime}"></c:out></td>
 </tr>
 </c:forEach>
 </table>

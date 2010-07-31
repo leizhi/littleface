@@ -4,23 +4,20 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
-
-import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -284,6 +281,7 @@ public class ParamUtil {
 				Method getMethod = c.getMethod("get" + paramName);
 				Method setMethod = c.getMethod("set" + paramName, getMethod.getReturnType());
 				setMethod.invoke(obj, params.get(key));
+				if(log.isDebugEnabled()) log.debug("");
 			} catch (NoSuchMethodException e) {
 				continue;
 			} catch (Exception e) {
@@ -291,123 +289,17 @@ public class ParamUtil {
 			}
 		}
 	}
-
+	
+	public static String WriteUTF8(String input) {
+		try {
+			return new String(input.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	//Transaction
 	public static void add(HttpServletRequest request, String table) {
-
-		boolean abortTransaction = false;
-		boolean supportsTransactions = false;
-		@SuppressWarnings("unchecked")
-		Enumeration<String> em = request.getParameterNames();
-		Connection con = null;
-		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		ResultSet rs = null;
-
-		try {
-			StringBuffer sql =  new StringBuffer("INSERT INTO " + table);
-			StringBuffer fileds = new StringBuffer();
-			StringBuffer values = new StringBuffer();
-			String value,colName;
-			
-			List<String> col = new ArrayList<String>();
-
-			con = DbConnectionManager.getConnection();
-			supportsTransactions = con.getMetaData().supportsTransactions();
-			if (supportsTransactions) {
-				con.setAutoCommit(false);
-			}
-			con.setCatalog("mycozBranch");
-
-			System.out.println("add con=" + con);
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM " + table);
-			rsmd = rs.getMetaData();
-
-			for (int i = 0; i < rsmd.getColumnCount(); i++) {
-				col.add(rsmd.getColumnName(i + 1).toUpperCase());
-			}
-			
-			while (em.hasMoreElements()) {
-				String name = em.nextElement();
-				StringTokenizer st = new StringTokenizer(name, ".");
-					if (st.countTokens() > 1) {
-						
-						if (st.nextToken().equals(table)) {
-							
-							value = request.getParameter(name);
-							colName = st.nextToken();
-							
-							if (col.contains(colName.toUpperCase())) {
-								if (fileds.length() > 0) {
-									fileds.append("," + colName);
-									values.append(",'" + value + "'");
-								} else {
-									fileds.append("(" + colName);
-									values.append(" VALUES ('" + value + "'");
-								}
-							}
-						}
-					} // must conform to the rules
-			}
-			
-			if (fileds.length() > 0)
-				fileds.append(") ");
-			if (values.length() > 0)
-				values.append(") ");
-
-			if (sql.length() > 0)
-				sql.append(fileds);
-			if (sql.length() > 0)
-				sql.append(values);
-			
-			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
-			System.out.println("add sql=" + sql);
-
-			stmt = con.createStatement();
-			stmt.executeUpdate(sql.toString());
-			
-			// rs = stmt.executeQuery(sql);
-			// while (rs.next()) {
-			// System.out.println("Name=" + rs.getString("XZQH_MC"));
-			// }
-		} catch (Exception e) {
-			e.printStackTrace();
-			abortTransaction = true;
-			return;
-		} finally {
-			try {
-				if (supportsTransactions) {
-					if (abortTransaction == true) {
-						con.rollback();
-					} else {
-						con.commit();
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (supportsTransactions) {
-					con.setAutoCommit(true);
-				}
-				if(rs != null)
-					rs.close();
-				if(stmt != null)
-					stmt.close();
-				if(con != null)
-					con.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-
-	}
-	
-	//Transaction too
-	public static void addTable(HttpServletRequest request, String table) {
 		@SuppressWarnings("unchecked")
 		Enumeration<String> em = request.getParameterNames();
 		Statement stmt = null;
@@ -499,55 +391,5 @@ public class ParamUtil {
 		}
 
 	}
-	
-	public static String WriteUTF8(String input) {
-		try {
-			return new String(input.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
-	public static String buildAddSQL(HttpServletRequest request, String table) {
-		@SuppressWarnings("unchecked")
-		Enumeration<String> em = request.getParameterNames();
-		StringBuffer sql =  new StringBuffer("INSERT INTO " + table);
-		StringBuffer fileds = new StringBuffer();
-		StringBuffer values = new StringBuffer();
-		String value;
-		
-		while (em.hasMoreElements()) {
-			String name = em.nextElement();
-			StringTokenizer st = new StringTokenizer(name, ".");
-			//while (st.hasMoreElements()) {
-				if (st.countTokens() > 1) {
-					if (st.nextToken().equals(table)) {
-						value = request.getParameter(name);
-						if (fileds.length() > 0) {
-							fileds.append("," + st.nextToken());
-							values.append(",'" + value + "'");
-						} else {
-							fileds.append("(" + st.nextToken());
-							values.append(" VALUES ('" + value + "'");
-						}
-					}
-				} // must conform to the rules
-			//}
-		}
-		
-		if (fileds.length() > 0)
-			fileds.append(") ");
-		if (values.length() > 0)
-			values.append(") ");
-
-		if (sql.length() > 0)
-			sql.append(fileds);
-		if (sql.length() > 0)
-			sql.append(values);
-
-		if (log.isDebugEnabled())log.debug("add sql=" + sql);
-
-		return sql.toString();
-	}
 }

@@ -94,7 +94,11 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 	public void setField(String field, Integer value) {
 		fields.put(field, value);
 	}
-
+	
+	public void setFields() {
+		
+	}
+	
 	public String AddSQL() {
 		String value;
 		String sql = "INSERT INTO ";

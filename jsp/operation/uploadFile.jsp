@@ -47,7 +47,6 @@
 <div>
 <fmt:message key="UploadFile"/>
 <div id="formresponse">
-<input type="hidden" id="id" name="id" />
 
 <table align="center" style="font-size:0.9em;">
 
@@ -58,30 +57,33 @@
 
 <tr>
 <td><fmt:message key="Type" /></td>
-<td><input id="typeid" name="typeid"/> </td>
-</tr>
-
-<tr>
-<td><fmt:message key="File" /></td>
-<td><input type="file" id="downloadpath" name="downloadpath"/></td>
-</tr>
-
-<tr>
-<td><fmt:message key="Image" /></td>
-<td><input type="file" id="imagepath" name="imagepath"/></td>
-</tr>
-
-<tr>
-<td><fmt:message key="DownloadDate" /></td>
 <td>
-<input type="text" id="date" name="date" size="15" maxlength="255" readonly/> 
-<img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="choosedate"/>" onclick="displayCalendar(document.forms[0].date,'yyyy/mm/dd hh:ii',this,true)">
+			<select name="typeid">
+				<c:forEach var="items" items="${fileTypes}" varStatus="s">
+					<option value="${items.key}"
+
+					<c:if test="${items.key==param.typeid}">
+						selected="selected"
+					</c:if>			
+						>
+					${items.value}
+					</option>
+				</c:forEach>
+			</select>
 </td>
 </tr>
 
 <tr>
-<td><fmt:message key="Description" /></td>
-<td><input type="text" id="description" name="description" size="15" maxlength="255"/></td>
+<td><fmt:message key="File" /></td>
+<td><input type="file" id="file" name="file"/></td>
+</tr>
+
+<tr>
+<td><fmt:message key="Date" /></td>
+<td>
+<input type="text" id="date" name="date" size="15" maxlength="255" readonly/> 
+<img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="choosedate"/>" onclick="displayCalendar(document.forms[0].date,'yyyy/mm/dd hh:ii',this,true)">
+</td>
 </tr>
 
 </table>

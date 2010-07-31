@@ -1,8 +1,14 @@
 package com.mooo.mycoz.dbobj.mycozShared;
 
-public class LinearCode {
+import com.mooo.mycoz.dbobj.DBObject;
+
+public class LinearCode extends DBObject{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private Integer typeId;
+	private Integer typeid;
 	private String name;
 	
 	public Integer getId() {
@@ -11,11 +17,11 @@ public class LinearCode {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getTypeId() {
-		return typeId;
+	public Integer getTypeid() {
+		return typeid;
 	}
-	public void setTypeId(Integer typeId) {
-		this.typeId = typeId;
+	public void setTypeid(Integer typeid) {
+		this.typeid = typeid;
 	}
 	public String getName() {
 		return name;

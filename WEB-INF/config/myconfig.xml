@@ -49,6 +49,9 @@
 			<result name="processUpdate">/CodeType.do</result>
 			<result name="processDelete">/CodeType.do</result>
 			<result name="listCode">/jsp/profile/listCode.jsp</result>
+			<result name="processAddCode"></result>
+			<result name="processUpdateCode"></result>
+			<result name="processDeleteCode"></result>			
 		</action>
 				
 		<action name="Tree" default="list"
@@ -69,6 +72,10 @@
 			<result name="promptUpdate">/jsp/profile/editLinearCode.jsp</result>
 			<result name="processUpdate">/LinearCode.do</result>
 			<result name="processDelete">/LinearCode.do</result>
+			<result name="processAddCode">/LinearCode.do</result>
+			<result name="processUpdateCode">/jsp/profile/editLinearCode.jsp</result>
+			<result name="processDeleteCode">/LinearCode.do</result>
+			<result name="listCode">/LinearCode.do</result>
 		</action>
 	</package>
 </struts>

@@ -87,7 +87,7 @@ public class DbobjExample {
 		}
 	}
 
-	public void searchBean(){
+	public void searchBean() throws SQLException{
 		Example ex = new Example();
 		ex.setRecord(1, 200000);
 		List examples = ex.searchAndRetrieveList();

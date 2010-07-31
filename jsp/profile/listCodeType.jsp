@@ -9,15 +9,53 @@
 <link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
 <script type="text/javascript" src="jsp/js/util.js"></script>
 <script type="text/javascript">
-function checkbox(id){
-	var selectedObj =  window.document.getElementsById(id);
+function checkbox(){
+	var selectedObj = document.all["id"];
 	var count = 0;
 	for(var i=0;i<selectedObj.length;i++){
  		if(selectedObj[i].checked){
   			count = count + 1;
  		}
 	}
-	alert("count="+checkbox.length);
+	return count;
+	/*
+	var edit = document.getElementById("Edit");
+	var remove = document.getElementById("Delete");
+	var codeManager= document.getElementById("CodeManager");
+	if(count > 0){
+		remove.style.display="inline";
+	} else {
+		remove.style.display="none";
+	}
+	
+	if(count == 1){
+		edit.style.display="inline";
+		codeManager.style.display="inline";		
+	} else {
+		edit.style.display="none";
+		codeManager.style.display="none";
+	}
+	alert("count="+count);
+	*/
+}
+
+
+function remove(url){
+	if(checkbox()<1){
+		alert("请选择至少一条记录");
+		return false;
+	}
+	
+	return docommit(url);
+}
+
+function edit(url){
+	
+	if(checkbox()==1){
+		return docommit(url);
+	}
+	alert("请选择一条记录");
+	return false;
 }
 </script>
 </head>
@@ -42,7 +80,7 @@ function checkbox(id){
 <c:url value="/CodeType.do" var="processUpdate">
 	<c:param name="method">processUpdate</c:param>
 </c:url>
-
+Edit
 <c:url value="/CodeType.do" var="processDelete">
 	<c:param name="method">processDelete</c:param>
 </c:url>
@@ -53,11 +91,11 @@ function checkbox(id){
 
 <form method="post" action="${list}">
 <div class="command">
-<input type="submit" value="<fmt:message key="List"/>">
-<input type="submit" value="<fmt:message key="Add"/>" onclick="docommit('${promptAdd}')">
-<input type="submit" value="<fmt:message key="Edit"/>" onclick="docommit('${promptUpdate}')">
-<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
-<input type="submit" value="<fmt:message key="CodeManager"/>" onclick="docommit('${listCode}')">
+<input type="submit" id="List" value="<fmt:message key="List"/>">
+<input type="submit" id="Add" value="<fmt:message key="Add"/>" onclick="return docommit('${promptAdd}')">
+<input type="submit" id="Edit" value="<fmt:message key="Edit"/>" onclick="return edit('${promptUpdate}')">
+<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="return remove('${processDelete}')">
+<input type="submit" id="CodeManager" value="<fmt:message key="CodeManager"/>" onclick="return edit('${listCode}');">
 </div>
 
 <div>
@@ -85,7 +123,7 @@ function checkbox(id){
 
 <c:forEach var="item" items="${linearTypes}" varStatus="status">
 <tr>
-<td><input type="checkbox" name="id" id="id" value="${item.id}" onclick="javascript:checkbox('id')"> </td>
+<td><input type="checkbox" name="id" id="id" value="${item.id}"> </td>
 <td><c:out value="${item.name}"></c:out></td>
 <td><fmt:message key="${item.category}"/></td>
 </tr>

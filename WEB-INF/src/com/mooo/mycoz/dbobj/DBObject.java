@@ -1,16 +1,20 @@
 package com.mooo.mycoz.dbobj;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbBulildSQL;
 import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.ReflectUtil;
 
 public class DBObject extends DbBulildSQL{
 	
@@ -134,7 +138,9 @@ public class DBObject extends DbBulildSQL{
 		return retrieveList;
 	}
 	
-	public List<Object> searchAndRetrieveList() {
+	public List<Object> searchAndRetrieveList() throws SQLException{
+		beanFillField();
+
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
@@ -185,6 +191,8 @@ public class DBObject extends DbBulildSQL{
 	}
 	
 	public void add() throws SQLException {
+		beanFillField();
+
 		Statement stmt = null;
 		try{
 			if(connection!=null){
@@ -210,6 +218,7 @@ public class DBObject extends DbBulildSQL{
 	}
 	
 	public void delete() throws SQLException {
+		beanFillField();
 		Statement stmt = null;
 		try{
 			if(connection!=null){
@@ -234,6 +243,8 @@ public class DBObject extends DbBulildSQL{
 		}
 	}
 	public void update() throws SQLException{
+		beanFillField();
+
 		Statement stmt = null;
 		try{
 			if(connection!=null){
@@ -257,8 +268,80 @@ public class DBObject extends DbBulildSQL{
 		}
 	}
 	
-	public void retrieve(){
-		
+	public void beanFillField(){
+		try {
+			List<String> methods = ReflectUtil.getMethodNames(this.getClass());
+			setTable(this.getClass().getSimpleName());
+			String method;
+			String field;
+			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
+				method = it.next();
+				if(method.indexOf("get")==0){
+					Method getMethod;
+					getMethod = this.getClass().getMethod(method);
+					Object obj = getMethod.invoke(this);
+					if(obj !=null) {
+						field = method.substring(method.indexOf("get")+3).toLowerCase();
+						setField(field, obj.toString());
+					}
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void retrieve() throws SQLException{
+		beanFillField();
+		Statement stmt = null;
+		ResultSetMetaData rsmd = null;
+		ResultSet rs = null;
+		try{
+			connection = DbConnectionManager.getConnection();
+			if(connection!=null){
+				stmt = connection.createStatement();
+			}else{
+				if(conn==null)
+				conn=DbConnectionManager.getConnection();
+				stmt = conn.createStatement();
+			}
+
+			rs = stmt.executeQuery(SearchSQL());
+			
+			rsmd = rs.getMetaData();
+
+			while (rs.next()) {
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					ParamUtil.bindProperty(this, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
+							rs.getString(i + 1), null);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();		
+		}finally {
+
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 	
 }

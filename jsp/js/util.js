@@ -4,4 +4,5 @@
 function docommit(url) {
 	document.forms[0].action=url;
 	document.forms[0].submit();
+	return true;
 }
