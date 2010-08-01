@@ -36,7 +36,6 @@ public class DBObject extends DbBulildSQL{
 	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
 		List<Object> retrieveList = null;
 		Statement stmt = null;
-		ResultSet rs = null;
 		ResultSetMetaData rsmd = null;
 		try {
 			retrieveList = new ArrayList<Object>();
@@ -49,7 +48,7 @@ public class DBObject extends DbBulildSQL{
 				stmt = conn.createStatement();
 			}
 			
-			rs = stmt.executeQuery(sql);
+			ResultSet rs = stmt.executeQuery(sql);
 			
 			rsmd = rs.getMetaData();
 			Object bean;
@@ -73,8 +72,6 @@ public class DBObject extends DbBulildSQL{
 		} finally {
 
 			try {
-				if (rs != null)
-					rs.close();
 				if (stmt != null)
 					stmt.close();
 				if (conn != null)
@@ -92,7 +89,6 @@ public class DBObject extends DbBulildSQL{
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
-		ResultSet rs = null;
 		try {
 			retrieveList = new ArrayList<Object>();
 			
@@ -104,7 +100,7 @@ public class DBObject extends DbBulildSQL{
 				stmt = conn.createStatement();
 			}
 			
-			rs = stmt.executeQuery(sql);
+			ResultSet rs = stmt.executeQuery(sql);
 			
 			rsmd = rs.getMetaData();
 			Object bean;
@@ -123,8 +119,6 @@ public class DBObject extends DbBulildSQL{
 		} finally {
 
 			try {
-				if (rs != null)
-					rs.close();
 				if (stmt != null)
 					stmt.close();
 				if (conn != null)
@@ -144,7 +138,6 @@ public class DBObject extends DbBulildSQL{
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
-		ResultSet rs = null;
 		try {
 			retrieveList = new ArrayList<Object>();
 			
@@ -156,7 +149,7 @@ public class DBObject extends DbBulildSQL{
 				stmt = conn.createStatement();
 			}
 			
-			rs = stmt.executeQuery(SearchSQL());
+			ResultSet rs = stmt.executeQuery(SearchSQL());
 			
 			rsmd = rs.getMetaData();
 			Object bean;
@@ -175,8 +168,6 @@ public class DBObject extends DbBulildSQL{
 		} finally {
 
 			try {
-				if (rs != null)
-					rs.close();
 				if (stmt != null)
 					stmt.close();
 				if (conn != null)
@@ -305,7 +296,6 @@ public class DBObject extends DbBulildSQL{
 		beanFillField();
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
-		ResultSet rs = null;
 		try{
 			connection = DbConnectionManager.getConnection();
 			if(connection!=null){
@@ -316,7 +306,7 @@ public class DBObject extends DbBulildSQL{
 				stmt = conn.createStatement();
 			}
 
-			rs = stmt.executeQuery(SearchSQL());
+			ResultSet rs = stmt.executeQuery(SearchSQL());
 			
 			rsmd = rs.getMetaData();
 
@@ -331,8 +321,6 @@ public class DBObject extends DbBulildSQL{
 		}finally {
 
 			try {
-				if (rs != null)
-					rs.close();
 				if (stmt != null)
 					stmt.close();
 				if (conn != null)

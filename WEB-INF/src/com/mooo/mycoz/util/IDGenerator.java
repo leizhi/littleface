@@ -1,8 +1,8 @@
 package com.mooo.mycoz.util;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
 
 import java.util.HashMap;
@@ -12,6 +12,7 @@ import java.util.TimeZone;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 public class IDGenerator {
+	private static final String SELECT_MAX_BY_TABLE="SELECT MAX(ID) maxid FROM ";
 
 	public static HashMap<String, String> getReportTypes() {
 
@@ -25,41 +26,39 @@ public class IDGenerator {
 		return lMap;
 	} // getDCValues()
 
-	public synchronized static String getNextID(String table) {
-		String nextID = "";
-		Connection con = null;
-		Statement stmt = null;
-		ResultSet rs = null;
+	public synchronized static Integer getNextID(String table) {
 		
-		try {
-			int id = 0;
-			String sql = "SELECT MAX(ID) AS MaxId FROM "+table;
-			
-			con = DbConnectionManager.getConnection();
-			
-			con.setCatalog("mycozBranch");
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(sql);
-			//if(rs.first()) id=rs.getInt("MaxId")+1;
-			if(rs.next()) id=rs.getInt("MaxId")+1;
-
-			nextID=Integer.toString(id);
-		} catch (SQLException e) {
+		Connection connection=null;
+        PreparedStatement pstmt = null;
+        Integer nextId=0;
+        try {
+			connection = DbConnectionManager.getConnection();
+            pstmt = connection.prepareStatement(SELECT_MAX_BY_TABLE+table);
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+            	nextId = rs.getInt("maxid");
+            }
+            
+            if(nextId != null)
+            	nextId ++;
+            else
+            	nextId=0;
+            
+		}catch (SQLException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+	   }finally {
 			try {
-				if(rs != null)
-					rs.close();
-				if(stmt != null)
-					stmt.close();
-			} catch (Exception e) {
+				if(pstmt != null)
+					pstmt.close();
+				if(connection != null)
+					connection.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			
 		}
-
-		return nextID;
+		return nextId;
 	} // getNextID(String table)
 
 

@@ -34,5 +34,5 @@
 <entry key="yazdUrl">http://127.0.0.1/</entry>
 <entry key="DbConnectionDefaultPool.maxConnections">25</entry>
 <entry key="Sequence.UseDatabase">false</entry>
-<entry key="connectionProvider.className">com.manihot.xpc.jdbc.DbConnectionDefaultPool</entry>
+<entry key="connectionProvider.className">com.mooo.mycoz.db.pool.DbConnectionDefaultPool</entry>
 </properties>

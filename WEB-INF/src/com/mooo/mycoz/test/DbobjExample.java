@@ -10,6 +10,7 @@ import java.util.List;
 import com.mooo.mycoz.db.pool.*;
 import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
+import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.Transaction;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,9 +23,26 @@ import org.apache.commons.logging.LogFactory;
 public class DbobjExample {
 	private static Log log = LogFactory.getLog(DbobjExample.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
+		long startTime = System.currentTimeMillis();
+		
 		DbobjExample td = new DbobjExample();
-		td.saveBratchBean();
+		
+		for (int i=0;i<100;i++){
+			//td.saveTransactionAction();
+			//td.saveAction();
+			td.saveDbObject();
+			//td.saveSql();
+		}
+		
+		long finishTime = System.currentTimeMillis();
+		long hours = (finishTime - startTime) / 1000 / 60 / 60;
+		long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
+		long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
+		
+		System.out.println(finishTime - startTime);
+		System.out.println("expends:   " + hours + ":" + minutes + ":" + seconds);
+		//td.saveBratchBean();
 		//td.searchBigData();
 		/*
 
@@ -223,6 +241,86 @@ public class DbobjExample {
 			tx.rollback();
 		}finally {
 			tx.end();
+		}
+	}
+	
+	public void saveAction(){
+		try {
+			
+			DBSession session = DBSession.getInstance();
+			Example bean = new Example();
+			bean.setId(IDGenerator.getNextID("Example"));
+			bean.setName(IDGenerator.getNextID("Example")+"");
+			session.save(bean);
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+			System.out.println("SQLException:"+e.getMessage());
+		}
+	}
+	
+	public void saveTransactionAction(){
+		Transaction tx = new Transaction();
+		try {
+			tx.start();
+			
+			DBSession session = DBSession.getInstance();
+			session.setConnection(tx.getConnection());
+			
+			Example bean = new Example();
+			bean.setId(IDGenerator.getNextID("Example"));
+			bean.setName(IDGenerator.getNextID("Example")+"");
+			session.save(bean);
+			
+			tx.commit();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+			System.out.println("SQLException:"+e.getMessage());
+			tx.rollback();
+		}finally {
+			tx.end();
+		}
+	}
+	
+	public void saveDbObject(){
+		try {
+			Example bean = new Example();
+			bean.setField("id",IDGenerator.getNextID("Example")+"" );
+			bean.setField("name",IDGenerator.getNextID("Example")+"");
+			bean.add();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+			System.out.println("SQLException:"+e.getMessage());
+		}
+	}
+	
+	public void saveSql(){
+		String sql="INSERT INTO Example(id,name) VALUES (?,?)";
+		Connection connection=null;
+        PreparedStatement pstmt = null;
+        try {
+			connection = DbConnectionManager.getConnection();
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1,IDGenerator.getNextID("Example"));
+            pstmt.setString(2, IDGenerator.getNextID("Example").toString());
+            pstmt.execute();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+			System.out.println("SQLException:"+e.getMessage());
+	   }finally {
+			try {
+				if(pstmt != null)
+					pstmt.close();
+				if(connection != null)
+					connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 }

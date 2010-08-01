@@ -182,17 +182,20 @@ public class CodeTypeAction extends BaseSupport{
 	}	
 	public String processAddCode(HttpServletRequest request,
 			HttpServletResponse response) {
+		long startTime = System.currentTimeMillis();
+
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
-			//ParamUtil.add(request,"mycozShared.LinearCode");
 
+			//ParamUtil.add(request,"mycozShared.LinearCode");
+			String value;
 			DBSession session = DBSession.getInstance();
 			session.setCatalog("mycozShared");
 			
 			LinearCode bean = new LinearCode();
-			bean.setId(new Integer(IDGenerator.getNextID("mycozShared.LinearCode")));
+			bean.setId(IDGenerator.getNextID("mycozShared.LinearCode"));
 			
-			if(request.getParameter("LinearCode.name")==null || "".equals(request.getParameter("LinearCode.name"))){
+			if((value=request.getParameter("LinearCode.name"))==null || value.equals("")){
 				return "listCode";
 			}
 			
@@ -203,6 +206,14 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
 		}
+		long finishTime = System.currentTimeMillis();
+		long hours = (finishTime - startTime) / 1000 / 60 / 60;
+		long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
+		long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
+		
+		System.out.println("processAddCode time:"+ (finishTime - startTime));
+		System.out.println("processAddCode expends:" + hours + ":" + minutes + ":" + seconds);
+		
 		return "listCode";
 	}
 

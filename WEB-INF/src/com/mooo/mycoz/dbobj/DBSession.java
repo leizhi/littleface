@@ -23,7 +23,7 @@ public class DBSession extends DbBulildSQL {
 
 	public Connection connection;
 	public Connection conn;
-	
+
 	public Connection getConnection() {
 		return connection;
 	}
@@ -47,35 +47,36 @@ public class DBSession extends DbBulildSQL {
 		return factory;
 	}
 
-	public void beanFillField(Object bean){
+	public void beanFillField(Object bean) {
 		try {
 
 			List<String> methods = ReflectUtil.getMethodNames(bean.getClass());
-			
+
 			setTable(bean.getClass().getSimpleName());
-			
+
 			String method;
 			String field;
 			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
 
 				method = it.next();
-				
-				if(method.indexOf("get")==0){
-					
+
+				if (method.indexOf("get") == 0) {
+
 					Method getMethod;
 					getMethod = bean.getClass().getMethod(method);
-					
-					//Class<?> cl = getMethod.getReturnType();
-					//System.out.println("getReturnType="+cl.getName());
+
+					// Class<?> cl = getMethod.getReturnType();
+					// System.out.println("getReturnType="+cl.getName());
 					Object obj = getMethod.invoke(bean);
-					
-					if(obj !=null) {
-						field = method.substring(method.indexOf("get")+3).toLowerCase();
+
+					if (obj != null) {
+						field = method.substring(method.indexOf("get") + 3)
+								.toLowerCase();
 						setField(field, obj.toString());
 					}
 				}
 			}
-			
+
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -91,45 +92,53 @@ public class DBSession extends DbBulildSQL {
 		}
 	}
 
-	private void execute(Object bean,String type) throws SQLException{
+	private void execute(Object bean, String type) throws SQLException {
 		beanFillField(bean);
 		Statement stmt = null;
-		try{
+		try {
 			System.out.println("DbSession connection." + connection);
 			System.out.println("DbSession conn." + conn);
 
-			if(connection!=null){
+			if (connection != null) {
 				stmt = connection.createStatement();
-			}else{
-				conn=DbConnectionManager.getConnection();
+			} else {
+				conn = DbConnectionManager.getConnection();
 				stmt = conn.createStatement();
 			}
-			
-			if(type.equals("add"))
+
+			if (type.equals("add"))
 				stmt.executeUpdate(AddSQL());
-			else if(type.equals("update"))
+			else if (type.equals("update"))
 				stmt.executeUpdate(UpdateSQL());
-			else if(type.equals("delete"))
+			else if (type.equals("delete"))
 				stmt.executeUpdate(DeleteSQL());
-		}finally {
-
-            try {  stmt.close(); }
-            catch (Exception e) { e.printStackTrace(); }
-            try {  conn.close();   }
-            catch (Exception e) { e.printStackTrace(); }
-
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	public void save(Object bean) throws SQLException{
-		execute(bean,"add");
+
+	public void save(Object bean) throws SQLException {
+		execute(bean, "add");
 	}
-	
-	public void update(Object bean) throws SQLException{
-		execute(bean,"update");
+
+	public void update(Object bean) throws SQLException {
+		execute(bean, "update");
 	}
-	
-	public void delete(Object bean) throws SQLException{
-		execute(bean,"delete");
+
+	public void delete(Object bean) throws SQLException {
+		execute(bean, "delete");
 	}
-	
+
 }

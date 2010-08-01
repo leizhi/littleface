@@ -121,7 +121,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 			sql += ") VALUES (";
 
 			for (Iterator<String> it = fields.values().iterator(); it.hasNext();) {
-				value = (String) it.next();
+				value = it.next().toString();
 				sql += "'"+value + "',";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.xml.DOMConfigurator;
+
 import java.lang.reflect.Method;
 
 public class ActionServlet extends HttpServlet {
@@ -33,6 +34,8 @@ public class ActionServlet extends HttpServlet {
 	private static String resultMethod ="";
 	
 	protected ConfigureUtil conf;
+	
+	private static Map<String, ActionNode> actionMap;
 	
 	public void destroy() {
 	  
@@ -59,11 +62,14 @@ public class ActionServlet extends HttpServlet {
 
 		conf.conf();
 		conf.confCache();
+		
+		// get mvc configure
+		actionMap = conf.getActionMap();
 	}
 
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+			
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -90,15 +96,12 @@ public class ActionServlet extends HttpServlet {
 			if(log.isDebugEnabled())log.debug("execPath:" + execPath);
 
 			execMethod = request.getParameter("method");
-			
+
 			ActionNode actionNode = null;
 			Hashtable<String, String> results;
-
-			// get mvc configure
-			Map<String, ActionNode> actionMap = conf.getActionMap();
 			// set controller,execState for execPath
 			actionNode = (ActionNode) actionMap.get(execPath);
-
+			
 			execAction = actionNode.getCls();
 			if (execMethod == null)
 				execMethod = actionNode.getDefMethod();
@@ -108,12 +111,12 @@ public class ActionServlet extends HttpServlet {
 			if(log.isDebugEnabled())log.debug("========exec start=======");
 			if(log.isDebugEnabled())log.debug("execAction="+execAction);
 			if(log.isDebugEnabled())log.debug("execMethod="+execMethod);
-
+			
 			// exec Controller request aciton
 			Object obj = Class.forName(execAction).newInstance();
 			
 			Class<? extends Object> cls = obj.getClass();
-			
+					
 			Class<?>[] paraTypes = new Class[] { HttpServletRequest.class,HttpServletResponse.class };
 			
 			Method method = cls.getMethod(execMethod, paraTypes);
@@ -126,7 +129,7 @@ public class ActionServlet extends HttpServlet {
 			execResult = results.get(execMethod);
 
 			if(log.isDebugEnabled())log.debug("========exec end=======");
-
+					
 			if(resultMethod != null){
 				// not success then exec return method and fowward jsp
 				if(!resultMethod.equals("success")) {
@@ -148,7 +151,6 @@ public class ActionServlet extends HttpServlet {
 					response.setHeader("Location",request.getContextPath()+execResult);
 				}
 			}
-			
 		} catch (NullPointerException e) {
 			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
 			e.printStackTrace();

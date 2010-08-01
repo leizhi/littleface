@@ -153,11 +153,9 @@ public class ArapTag extends TagSupport {
 			long finishTime = System.currentTimeMillis();
 			long hours = (finishTime - startTime) / 1000 / 60 / 60;
 			long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
-			long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60
-					- minutes * 60;
+			long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
 			System.out.println(finishTime - startTime);
-			System.out.println("expends:   " + hours + ":" + minutes + ":"
-					+ seconds);
+			System.out.println("expends:   " + hours + ":" + minutes + ":"	+ seconds);
 
 			/*
 			 * HttpServletRequest request =
