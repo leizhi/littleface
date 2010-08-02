@@ -154,7 +154,7 @@ public class DBObject extends DbBulildSQL{
 		long finishTime = System.currentTimeMillis();
 		
 		List<Object> retrieveList = null;
-		String doSql = SearchSQL();
+		String doSql = searchSQL();
 
 /*
 		Object obj = getCache(doSql);
@@ -237,7 +237,7 @@ public class DBObject extends DbBulildSQL{
 			}
 			
 			stmt = connection.createStatement();
-			stmt.execute(AddSQL());
+			stmt.execute(addSQL());
 		}finally {
 
 			try {
@@ -269,7 +269,7 @@ public class DBObject extends DbBulildSQL{
 			}
 			
 			stmt = connection.createStatement();
-			stmt.execute(DeleteSQL());
+			stmt.execute(deleteSQL());
 
 		}finally {
 
@@ -300,7 +300,7 @@ public class DBObject extends DbBulildSQL{
 			}
 			
 			stmt = connection.createStatement();
-			stmt.execute(UpdateSQL());
+			stmt.execute(updateSQL());
 		}finally {
 
 			try {
@@ -365,7 +365,7 @@ public class DBObject extends DbBulildSQL{
 			}
 			
 			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(SearchSQL());
+			ResultSet rs = stmt.executeQuery(searchSQL());
 			
 			rsmd = rs.getMetaData();
 

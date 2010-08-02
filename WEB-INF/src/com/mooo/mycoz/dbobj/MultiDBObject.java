@@ -8,15 +8,18 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbMultiBulildSQL;
+import com.mooo.mycoz.db.sql.DbMultiSql;
 import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 
-public class MultiDBObject extends DbMultiBulildSQL{
+public class MultiDBObject extends DbMultiBulildSQL implements DbMultiSql{
 	
 	/**
 	 * 
@@ -33,150 +36,58 @@ public class MultiDBObject extends DbMultiBulildSQL{
 		this.connection = connection;
 	}
 	
-	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
+
+	public List searchAndRetrieveList() {
 		List<Object> retrieveList = null;
+		String doSql = searchSQL();
+		//beanFillField();
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		boolean closeCon = false;
 
 		try {
 			retrieveList = new ArrayList<Object>();
-
 			if(connection == null){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}
 			
 			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			
-			rsmd = rs.getMetaData();
-			Object bean;
-
-			while (rs.next()) {
-				bean = obj.newInstance();
-				
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
-				}
-				retrieveList.add(bean);
-			}
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		
-		return retrieveList;
-	}
-
-	public List<Object> searchAndRetrieveList(String sql) {
-		List<Object> retrieveList = null;
-		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		boolean closeCon = false;
-
-		try {
-			retrieveList = new ArrayList<Object>();
-			
-			if(connection == null){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			
-			rsmd = rs.getMetaData();
-			Object bean;
-
-			while (rs.next()) {
-				bean = this.getClass().newInstance();
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
-				}
-				retrieveList.add(bean);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		
-		return retrieveList;
-	}
-	
-	public List<Object> searchAndRetrieveList(){
-		long startTime = System.currentTimeMillis();
-		long finishTime = System.currentTimeMillis();
-		
-		List<Object> retrieveList = null;
-		String doSql = SearchSQL();
-
-		beanFillField();
-		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		boolean closeCon = false;
-
-		try {
-			retrieveList = new ArrayList<Object>();
-			System.out.println("do searchAndRetrieveList can1:"+(System.currentTimeMillis() - finishTime));
-			finishTime = System.currentTimeMillis();
-			
-			System.out.println("do searchAndRetrieveList connection:"+connection);
-			
-			if(connection == null){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
-			System.out.println("do searchAndRetrieveList can2:"+(System.currentTimeMillis() - finishTime));
-			finishTime = System.currentTimeMillis();
-			
 			ResultSet rs = stmt.executeQuery(doSql);
 			
 			rsmd = rs.getMetaData();
+			Map re;
+
+			String key;
+			String value;
+			Class cls;
 			Object bean;
+			String catalog,table,column;
 
 			while (rs.next()) {
-				bean = this.getClass().newInstance();
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
+				re = new HashMap();
+				
+				for (Iterator<?> it = objs.keySet().iterator(); it.hasNext();) {
+					key = (String)it.next();
+					cls = objs.get(key);
+					bean = cls.newInstance();
+
+					for (int i=1; i < rsmd.getColumnCount()+1; i++) {
+						catalog = rsmd.getCatalogName(i);
+						table = rsmd.getTableName(i);
+						
+						value = tables.get(key);
+						
+						if(value.equals(catalog+"."+table)){
+							column = rsmd.getColumnName(i).toLowerCase();
+							ParamUtil.bindProperty(bean, ParamUtil.getFunName(column),
+									rs.getString(i), null);
+						}
+					}
+					re.put(key, bean);
 				}
-				retrieveList.add(bean);
+				retrieveList.add(re);
 			}
-			//addCache(doSql, retrieveList);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -196,15 +107,13 @@ public class MultiDBObject extends DbMultiBulildSQL{
 			}
 
 		}
-		System.out.println("do searchAndRetrieveList end:"+(System.currentTimeMillis() - startTime));
-
 		return retrieveList;
 	}
 	
-	public void beanFillField(){
+	public void beanFillField(Class clazz){
 		try {
-			List<String> methods = ReflectUtil.getMethodNames(this.getClass());
-			//setTable(this.getClass().getSimpleName());
+			List<String> methods = ReflectUtil.getMethodNames(clazz);
+			//setTable(clazz.getSimpleName());
 			String method;
 			String field;
 			for (Iterator<String> it = methods.iterator(); it.hasNext();) {

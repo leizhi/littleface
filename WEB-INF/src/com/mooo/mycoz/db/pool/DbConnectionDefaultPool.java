@@ -389,12 +389,6 @@ public class DbConnectionDefaultPool extends DbConnectionProvider {
             if(maxConnMSec < 30000) {  // Recycle no less than 30 seconds.
                 maxConnMSec = 30000;
             }
-            //maxConnMSec = (int) (maxConnTime * 1000.0);; // 1 seconds = 1000
-            //if(maxConnMSec < 1000) {  // Recycle no less than 1 seconds.
-            //    maxConnMSec = 1000;
-            //}
-
-
 
             log.debug("Starting ConnectionPool:");
             log.debug("dbDriver = " + dbDriver);

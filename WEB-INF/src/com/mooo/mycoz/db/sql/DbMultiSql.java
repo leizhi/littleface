@@ -1,7 +1,5 @@
 package com.mooo.mycoz.db.sql;
 
-import java.util.List;
-
 public interface DbMultiSql extends DbCommon {
  	
 	void addTable(String name, String alias);
@@ -37,8 +35,6 @@ public interface DbMultiSql extends DbCommon {
  	void setOffset(int offset);
  	
  	void setRowcount(int rowcount);
- 	
-	List<?> searchAndRetrieveList();
  	
  	int count();
 }

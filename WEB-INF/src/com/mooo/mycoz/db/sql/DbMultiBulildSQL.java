@@ -1,26 +1,16 @@
 package com.mooo.mycoz.db.sql;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.util.ParamUtil;
-import com.mooo.mycoz.util.ReflectUtil;
-
 public class DbMultiBulildSQL implements DbMultiSql {
 
 	public String catalog;
-	public List<String> tables;
+	public Map<String,String> tables;
 	public List<String> whereKey;
 	public List<String> retrieveFields;
 	public List<String> groupBy;
@@ -43,7 +33,7 @@ public class DbMultiBulildSQL implements DbMultiSql {
 	public DbMultiBulildSQL() {
 		catalog = null;
 		objs = new HashMap<String, Class<?>>();
-		tables = new ArrayList<String>();
+		tables = new HashMap<String,String>();
 		whereKey = new ArrayList<String>();
 		retrieveFields = new ArrayList<String>();
 		groupBy = new ArrayList<String>();
@@ -64,23 +54,23 @@ public class DbMultiBulildSQL implements DbMultiSql {
 	}
 	public void addTable(Class<?> clazz, String alias) {
 		
-		objs.put(clazz.getSimpleName(), clazz);
+		objs.put(alias, clazz);
 		
 		if (catalog != null)
-			tables.add(catalog + "." + clazz.getSimpleName() + " AS " + alias);
+			tables.put(alias, catalog + "." + clazz.getSimpleName());
 		else
-			tables.add(clazz.getSimpleName() + " AS " + alias);
+			tables.put(alias, getDbName(clazz));
 	}
 	
 	public void addTable(String name, String alias) {
 		if (catalog != null)
-			tables.add(catalog + "." + name + " AS " + alias);
+			tables.put(alias, catalog + "." + name);
 		else
-			tables.add(name + " AS " + alias);
+			tables.put(alias, name);
 	}
 
 	public void addTable(String catalog, String name, String alias) {
-		tables.add(catalog + "." + name + " AS " + alias);
+		tables.put(alias, catalog + "." + name);
 	}
 
 	public void setRetrieveField(String alias, String field) {
@@ -140,7 +130,8 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		this.catalog = catalog;
 	}
 
-	public String SearchSQL() {
+	public String searchSQL() {
+		String key;
 		String value;
 		String sql = "";
 		if (retrieveFields != null && !retrieveFields.isEmpty()) {
@@ -155,9 +146,10 @@ public class DbMultiBulildSQL implements DbMultiSql {
 
 		if (tables != null && !tables.isEmpty()) {
 			sql += " FROM ";
-			for (Iterator<String> it = tables.iterator(); it.hasNext();) {
-				value = it.next();
-				sql += value + ",";
+			for (Iterator<?> it = tables.keySet().iterator(); it.hasNext();) {
+				key = (String) it.next();
+				value = (String) tables.get(key);
+				sql += value +" "+key+ ",";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
 		}
@@ -203,7 +195,7 @@ public class DbMultiBulildSQL implements DbMultiSql {
 	}
 
 	public String buildCountSQL() {
-		String searchSQL = SearchSQL();
+		String searchSQL = searchSQL();
 
 		String sql = "SELECT COUNT(*) ";
 		searchSQL = searchSQL.substring(searchSQL.indexOf("FROM"));
@@ -224,91 +216,20 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		this.rowcount = rowcount;
 	}
 
-	public List searchAndRetrieveList() {
-		List<Object> retrieveList = null;
-		String doSql = SearchSQL();
-		//beanFillField();
-		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		boolean closeCon = false;
-
-		try {
-			retrieveList = new ArrayList<Object>();
-			if(connection == null){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(doSql);
-			
-			rsmd = rs.getMetaData();
-			Object bean;
-
-			while (rs.next()) {
-				bean = this.getClass().newInstance();
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
-				}
-				retrieveList.add(bean);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		return retrieveList;
-	}
-
 	public int count() {
 		return 0;
 	}
 	
-	public void beanFillField(Class clazz){
-		try {
-			List<String> methods = ReflectUtil.getMethodNames(clazz);
-			//setTable(clazz.getSimpleName());
-			String method;
-			String field;
-			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
-				method = it.next();
-				if(method.indexOf("get")==0){
-					Method getMethod;
-					getMethod = this.getClass().getMethod(method);
-					Object obj = getMethod.invoke(this);
-					if(obj !=null) {
-						field = method.substring(method.indexOf("get")+3).toLowerCase();
-						setField(field, obj.toString());
-					}
-				}
-			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String getDbName(Class<?> clazz){
+		
+		String value ="";
+		String fillName = clazz.getName();
+		String[] packArray=fillName.split("\\.");
+
+		for(int i=packArray.length-2;i<packArray.length;i++)
+			value += packArray[i]+".";
+		value = value.substring(0, value.length()-1);
+		
+		return value;
 	}
 }

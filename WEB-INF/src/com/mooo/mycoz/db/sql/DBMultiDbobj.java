@@ -160,7 +160,7 @@ public class DBMultiDbobj extends DbMultiBulildSQL implements DbMultiSql {
 			con = DbConnectionManager.getConnection();
 			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
-			rs = stmt.executeQuery(SearchSQL());
+			rs = stmt.executeQuery(searchSQL());
 			String value;
 			while (rs.next()) {
 				Map map = new HashMap();
@@ -187,7 +187,7 @@ public class DBMultiDbobj extends DbMultiBulildSQL implements DbMultiSql {
 			con = DbConnectionManager.getConnection();
 			stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
-			rs = stmt.executeQuery(SearchSQL());
+			rs = stmt.executeQuery(searchSQL());
 			String value;
 			for (Iterator<String> it = retrieveFields.iterator(); it.hasNext();) {
 				value = (String) it.next();

@@ -26,12 +26,12 @@ public interface DbSql extends DbCommon{
 
 	void setRecord(int recordStart, int recordEnd);
 	
- 	String AddSQL();
+ 	String addSQL();
  	
- 	String DeleteSQL();
+ 	String deleteSQL();
  	
- 	String UpdateSQL();
+ 	String updateSQL();
  	
- 	String SearchSQL();
+ 	String searchSQL();
 
 }

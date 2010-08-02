@@ -27,7 +27,8 @@ public class DbobjExample {
 		//long startTime = System.currentTimeMillis();
 		DbobjExample td = new DbobjExample();
 		try {
-			td.getCon();
+			for (int i=0;i<10000;i++)
+				td.getCon();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,9 +150,9 @@ public class DbobjExample {
 			
 			Example ex = new Example();
 			//ex.setTable("Example");
-			ex.SearchSQL();
+			ex.searchSQL();
 			
-			rs = stmt.executeQuery(ex.SearchSQL());
+			rs = stmt.executeQuery(ex.searchSQL());
 			
 			while(rs.next()){
 				System.out.println("id="+rs.getString("id")+" name="+rs.getString("name"));
@@ -353,19 +354,13 @@ public class DbobjExample {
 	}
 	public void getCon() throws InterruptedException{
 
-	System.out.println("start");
+	long startTime = System.currentTimeMillis();
 
-	long finishTime = System.currentTimeMillis();
 	Connection conn=null;
 	Statement stmt=null;
 	try {
-		
-	for (int i=0;i<50;i++){
 			conn=DbConnectionManager.getConnection();
 			stmt = conn.createStatement();
-			System.out.println(i+":"+(System.currentTimeMillis() - finishTime));
-			finishTime = System.currentTimeMillis();
-	}
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -375,6 +370,9 @@ public class DbobjExample {
         catch (Exception e) { e.printStackTrace(); }
         try {  conn.close();   }
         catch (Exception e) { e.printStackTrace(); }
+        
+    	long finishTime = System.currentTimeMillis();
+		System.out.println(finishTime - startTime);
 
 	}
 	}

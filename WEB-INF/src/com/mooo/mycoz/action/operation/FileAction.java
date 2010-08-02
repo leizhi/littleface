@@ -22,7 +22,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.dbobj.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
+import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.FileUtil;
 import com.mooo.mycoz.util.IDGenerator;
@@ -33,10 +35,6 @@ public class FileAction extends BaseSupport {
 	private static final String INSERT_FILE="INSERT INTO FileInfo(id,typeid,name,datetime,filePath) VALUES(?,?,?,?,?)";
 	 
 	public String list(HttpServletRequest request, HttpServletResponse response) {
-		Connection connection=null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
 		try {
 			if (log.isDebugEnabled()) log.debug("list");
 
@@ -51,24 +49,35 @@ public class FileAction extends BaseSupport {
 
 			DecimalFormat df = new DecimalFormat("###0.00");
 
-			//ResultSet rs = null;
+			MultiDBObject mdb = new MultiDBObject();
+			mdb.addTable(CodeType.class, "ct");
+			mdb.addTable(LinearCode.class, "lc");
+			mdb.addTable(FileInfo.class, "fi");
 
-			sql = "SELECT  fi.*,lc.name FROM FileInfo fi,mycozShared.LinearCode lc,mycozShared.CodeType ct WHERE fi.typeId=lc.id AND lc.typeId=ct.id AND ct.id=1";
+			mdb.setForeignKey("ct", "id", "lc", "typeid");
+			mdb.setForeignKey("fi", "typeId", "lc", "id");
+			mdb.setField("ct.id", "1");
+			
+			mdb.setRetrieveField("fi", "id");
+			mdb.setRetrieveField("fi", "name");
+			mdb.setRetrieveField("fi", "datetime");
+			mdb.setRetrieveField("fi", "filePath");
+			mdb.setRetrieveField("fi", "id");
+
+			mdb.setRetrieveField("lc", "name");
 
 			value = request.getParameter("Key");
 			
 			if (value != null && !value.equals("")) {
-				sql += " AND dt.ID=" + value;
+				mdb.setField("ct.id", "1");
 			}
 
-
+			List retrives = mdb.searchAndRetrieveList();
+			
 			List files = new ArrayList();
 			
 			//List downs = down.searchAndRetrieveList();
-			connection = DbConnectionManager.getConnection();
-			stmt = connection.createStatement();
-
-			rs = stmt.executeQuery(sql);
+			/*
 			FileInfo fi;
 			File checkFile;
 			while (rs.next()) {
@@ -84,7 +93,7 @@ public class FileAction extends BaseSupport {
 				
 				if (log.isDebugEnabled()) log.debug("checkFile = "+(checkFile.exists()));
 
-				if (!checkFile.exists()){
+				if (!checkFile.exists()){ */
 					/*
 					Blob fileBlob = rs.getBlob("fi.file");
 					InputStream in = fileBlob.getBinaryStream();
@@ -97,7 +106,7 @@ public class FileAction extends BaseSupport {
 				     out.close();      
 				     in.close();
 				     */
-				}
+			/*	}
 				
 				fileBit = checkFile.length();
 				fileK = fileBit / 1024;
@@ -106,26 +115,11 @@ public class FileAction extends BaseSupport {
 				
 				files.add(fi);
 			}
-			
+			*/
 			request.setAttribute("files", files);
-		} catch (SQLException e) {
-			if (log.isDebugEnabled())
-				log.debug("Exception Load error of: " + e.getMessage());
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
-		}finally {
-			try {
-				if(rs != null)
-					rs.close();
-				if(stmt != null)
-					stmt.close();
-				if(connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
 		}
 		return "success";
 	}

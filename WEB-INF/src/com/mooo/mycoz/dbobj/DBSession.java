@@ -108,11 +108,11 @@ public class DBSession extends DbBulildSQL {
 			stmt = connection.createStatement();
 			
 			if (type.equals("add"))
-				stmt.executeUpdate(AddSQL());
+				stmt.executeUpdate(addSQL());
 			else if (type.equals("update"))
-				stmt.executeUpdate(UpdateSQL());
+				stmt.executeUpdate(updateSQL());
 			else if (type.equals("delete"))
-				stmt.executeUpdate(DeleteSQL());
+				stmt.executeUpdate(deleteSQL());
 			
 		} finally {
 			try {

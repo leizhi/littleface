@@ -99,7 +99,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 		
 	}
 	
-	public String AddSQL() {
+	public String addSQL() {
 		String value;
 		String sql = "INSERT INTO ";
 
@@ -166,7 +166,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 		orderBy.add(field + " " + type);
 	}
 
-	public String SearchSQL() {
+	public String searchSQL() {
 		
 		String key;
 		String value;
@@ -244,7 +244,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 	}
 	
 	//Delete SQL
-	public String DeleteSQL() {
+	public String deleteSQL() {
 		String key;
 		String sql = "DELETE FROM ";
 
@@ -293,7 +293,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 		updateKey.add(field + "='" + value + "'");
 	}
 
-	public String UpdateSQL() {
+	public String updateSQL() {
 		String key;
 		String value;
 		String sql = "UPDATE ";
