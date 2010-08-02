@@ -24,17 +24,26 @@ public class DbobjExample {
 	private static Log log = LogFactory.getLog(DbobjExample.class);
 
 	public static void main(String[] args) {	
-		long startTime = System.currentTimeMillis();
-		
+		//long startTime = System.currentTimeMillis();
 		DbobjExample td = new DbobjExample();
-		
-		for (int i=0;i<100;i++){
-			//td.saveTransactionAction();
-			//td.saveAction();
-			td.saveDbObject();
-			//td.saveSql();
+		try {
+			td.getCon();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
+		/*
+		DbobjExample td = new DbobjExample();
+		
+		for (int i=0;i<1;i++){
+			//td.saveTransactionAction();
+			td.saveAction();
+			td.searchBeanL();
+			//td.saveSql();
+		}
+		*/
+		/*
 		long finishTime = System.currentTimeMillis();
 		long hours = (finishTime - startTime) / 1000 / 60 / 60;
 		long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
@@ -42,6 +51,7 @@ public class DbobjExample {
 		
 		System.out.println(finishTime - startTime);
 		System.out.println("expends:   " + hours + ":" + minutes + ":" + seconds);
+		*/
 		//td.saveBratchBean();
 		//td.searchBigData();
 		/*
@@ -322,5 +332,50 @@ public class DbobjExample {
 			}
 			
 		}
+	}
+	
+	public void searchBeanL(){
+		try {
+			/*
+			LinearCode lc = new LinearCode();
+			lc.setCatalog("mycozShared");
+			lc.setTypeid(1);
+			lc.searchAndRetrieveList();
+			*/
+			Example bean = new Example();
+			bean.searchAndRetrieveList();
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+			System.out.println("SQLException:"+e.getMessage());
+		}
+	}
+	public void getCon() throws InterruptedException{
+
+	System.out.println("start");
+
+	long finishTime = System.currentTimeMillis();
+	Connection conn=null;
+	Statement stmt=null;
+	try {
+		
+	for (int i=0;i<50;i++){
+			conn=DbConnectionManager.getConnection();
+			stmt = conn.createStatement();
+			System.out.println(i+":"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
+	}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}finally {
+
+        try {  stmt.close(); }
+        catch (Exception e) { e.printStackTrace(); }
+        try {  conn.close();   }
+        catch (Exception e) { e.printStackTrace(); }
+
+	}
 	}
 }

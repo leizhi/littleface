@@ -1,5 +1,6 @@
 package com.mooo.mycoz.action.profile;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.Transaction;
 
 public class CodeTypeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(CodeTypeAction.class);
@@ -125,71 +127,76 @@ public class CodeTypeAction extends BaseSupport{
 	
 	public String listCode(HttpServletRequest request,
 			HttpServletResponse response) {
+		long startTime = System.currentTimeMillis();
+		long finishTime = System.currentTimeMillis();
+		//Transaction tx = new Transaction();
+
 		try {
+			//tx.start();
+			
 			if (log.isDebugEnabled()) log.debug("listCode");
 			String 	id = request.getParameter("LinearCode.typeid");
 			if(id==null)
 				id= request.getParameter("id");
 			
 			request.setAttribute("id",id);
-
+			
+			System.out.println("do listCode CodeType start expends :"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
+			
 			CodeType codeType = new CodeType();
+			//codeType.setConnection(tx.getConnection());
+
 			codeType.setCatalog("mycozShared");
 			codeType.setId(new Integer (id));
 			codeType.retrieve();
 			request.setAttribute("codeType", codeType);
 			
-			//Map types = new HashMap();
-
+			System.out.println("do listCode CodeType end expends :"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
+			
 			if(codeType.getCategory().equals("Linear")){
 				
-				//ct = new CodeType();
-				//ct.setCatalog("mycozShared");
-				//ct.setCategory("Linear");
-				//List cts = ct.searchAndRetrieveList();
-				//CodeType bean;
-				//for(Iterator it = cts.iterator(); it.hasNext();){
-				//	bean = (CodeType)it.next();
-				//	types.put(bean.getId(), bean.getName());
-				//}
-
 				LinearCode lc = new LinearCode();
+				//lc.setConnection(tx.getConnection());
+
 				lc.setCatalog("mycozShared");
 				lc.setTypeid(codeType.getId());
 				request.setAttribute("codes",lc.searchAndRetrieveList());
+				
 			} else {
 				//TreeCode tc = new TreeCode();
 			}
-			
-			//request.setAttribute("types",types);
-
-			//ct.setField("id", id);
-			
-			//Integer[] ids =  request.getParameterValues("id");
-			//String[] ids =  request.getParameterValues("id");
-			
-			//for(int i=0;i<ids.length;i++){
-			//	if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
-			//}
-
-			
-			
+			System.out.println("do listCode end expends :"+(System.currentTimeMillis() - startTime));
+		}catch (SQLException e) {
+				e.printStackTrace();
+				if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+				System.out.println("SQLException:"+e.getMessage());
+				//tx.rollback();
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
+			//tx.rollback();
+
+		} finally {
+			//tx.end();
 		}
+		
 		return "success";
 	}	
 	public String processAddCode(HttpServletRequest request,
 			HttpServletResponse response) {
 		long startTime = System.currentTimeMillis();
+		Transaction tx = new Transaction();
 
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
+			tx.start();
 
 			//ParamUtil.add(request,"mycozShared.LinearCode");
 			String value;
 			DBSession session = DBSession.getInstance();
+			session.setConnection(tx.getConnection());
 			session.setCatalog("mycozShared");
 			
 			LinearCode bean = new LinearCode();
@@ -202,17 +209,20 @@ public class CodeTypeAction extends BaseSupport{
 			ParamUtil.bindData(request, bean, "LinearCode");
 			session.save(bean);
 			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+			System.out.println("SQLException:"+e.getMessage());
+			tx.rollback();
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
+			tx.rollback();
+		} finally {
+			tx.end();
 		}
-		long finishTime = System.currentTimeMillis();
-		long hours = (finishTime - startTime) / 1000 / 60 / 60;
-		long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
-		long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
 		
-		System.out.println("processAddCode time:"+ (finishTime - startTime));
-		System.out.println("processAddCode expends:" + hours + ":" + minutes + ":" + seconds);
+		System.out.println("do processAdd end expends :"+(System.currentTimeMillis() - startTime));
 		
 		return "listCode";
 	}

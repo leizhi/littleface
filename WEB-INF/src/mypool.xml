@@ -32,6 +32,7 @@
 <entry key="setup">true</entry>
 <entry key="DbConnectionDefaultPool.connectionTimeout">0.5</entry>
 <entry key="yazdUrl">http://127.0.0.1/</entry>
+<entry key="DbConnectionDefaultPool.minConnections">5</entry>
 <entry key="DbConnectionDefaultPool.maxConnections">25</entry>
 <entry key="Sequence.UseDatabase">false</entry>
 <entry key="connectionProvider.className">com.mooo.mycoz.db.pool.DbConnectionDefaultPool</entry>

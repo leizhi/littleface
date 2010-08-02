@@ -16,6 +16,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import com.mooo.mycoz.cache.CacheManager;
+
 import java.lang.reflect.Method;
 
 public class ActionServlet extends HttpServlet {
@@ -36,6 +38,7 @@ public class ActionServlet extends HttpServlet {
 	protected ConfigureUtil conf;
 	
 	private static Map<String, ActionNode> actionMap;
+	private static CacheManager cacheManager;
 	
 	public void destroy() {
 	  
@@ -65,11 +68,22 @@ public class ActionServlet extends HttpServlet {
 		
 		// get mvc configure
 		actionMap = conf.getActionMap();
+		cacheManager = CacheManager.getInstance();
 	}
 
+	public void addCache(String key, Object object){
+		cacheManager.add("action", key, object);
+	}
+
+	public Object getCache(String key){
+		return cacheManager.get("action", key);
+	}
+	
 	protected void service(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-			
+		long startTime = System.currentTimeMillis();
+		long finishTime = System.currentTimeMillis();
+
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
@@ -92,7 +106,6 @@ public class ActionServlet extends HttpServlet {
 			
 			//if (execPath == null)
 			//	execPath = request.getParameter("action");
-			
 			if(log.isDebugEnabled())log.debug("execPath:" + execPath);
 
 			execMethod = request.getParameter("method");
@@ -112,8 +125,18 @@ public class ActionServlet extends HttpServlet {
 			if(log.isDebugEnabled())log.debug("execAction="+execAction);
 			if(log.isDebugEnabled())log.debug("execMethod="+execMethod);
 			
+			System.out.println("do expends1:"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
+			
 			// exec Controller request aciton
-			Object obj = Class.forName(execAction).newInstance();
+			Object obj = getCache(execAction);
+			
+			System.out.println("getCache:"+obj);
+
+			if(obj == null) {
+				obj = Class.forName(execAction).newInstance();
+				addCache(execAction, obj);
+			}
 			
 			Class<? extends Object> cls = obj.getClass();
 					
@@ -123,14 +146,19 @@ public class ActionServlet extends HttpServlet {
 			
 			Object paraValues[] = new Object[] { request, response };
 			
+			System.out.println("do expends2:"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
 			// set Transition jsp for execMethod
 			resultMethod = (String) method.invoke(obj, paraValues);
-			
 			execResult = results.get(execMethod);
 
 			if(log.isDebugEnabled())log.debug("========exec end=======");
-					
+			System.out.println("do expends3:"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
+			
 			if(resultMethod != null){
+				System.out.println("do expends4:"+(System.currentTimeMillis() - finishTime));
+				finishTime = System.currentTimeMillis();
 				// not success then exec return method and fowward jsp
 				if(!resultMethod.equals("success")) {
 					
@@ -143,6 +171,9 @@ public class ActionServlet extends HttpServlet {
 					else
 						execResult = results.get(execMethod);
 				}
+				
+				System.out.println("do expends5:"+(System.currentTimeMillis() - finishTime));
+				finishTime = System.currentTimeMillis();
 				
 				if(StringUtils.checkString(execResult, "\\.jsp")){// is jsp
 					getServletContext().getRequestDispatcher(execResult).forward(request,response);
@@ -165,6 +196,7 @@ public class ActionServlet extends HttpServlet {
 			e.printStackTrace();
 		}finally{
 				//getServletContext().getRequestDispatcher("/jsp/error.jsp").forward(request,response);
+			System.out.println("end expends6:"+(System.currentTimeMillis() - startTime));
 		}
 	}
 

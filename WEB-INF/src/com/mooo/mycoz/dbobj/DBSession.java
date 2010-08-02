@@ -22,7 +22,6 @@ public class DBSession extends DbBulildSQL {
 	private static DBSession factory;
 
 	public Connection connection;
-	public Connection conn;
 
 	public Connection getConnection() {
 		return connection;
@@ -32,6 +31,8 @@ public class DBSession extends DbBulildSQL {
 		this.connection = connection;
 	}
 
+	private DBSession(){	}
+	
 	public static DBSession getInstance() {
 		if (factory == null) {
 			synchronized (initLock) {
@@ -95,23 +96,24 @@ public class DBSession extends DbBulildSQL {
 	private void execute(Object bean, String type) throws SQLException {
 		beanFillField(bean);
 		Statement stmt = null;
+		boolean closeCon = false;
+
 		try {
 			System.out.println("DbSession connection." + connection);
-			System.out.println("DbSession conn." + conn);
-
-			if (connection != null) {
-				stmt = connection.createStatement();
-			} else {
-				conn = DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
 			}
-
+			
+			stmt = connection.createStatement();
+			
 			if (type.equals("add"))
 				stmt.executeUpdate(AddSQL());
 			else if (type.equals("update"))
 				stmt.executeUpdate(UpdateSQL());
 			else if (type.equals("delete"))
 				stmt.executeUpdate(DeleteSQL());
+			
 		} finally {
 			try {
 				if (stmt != null)
@@ -121,8 +123,8 @@ public class DBSession extends DbBulildSQL {
 			}
 			
 			try {
-				if (conn != null)
-					conn.close();
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

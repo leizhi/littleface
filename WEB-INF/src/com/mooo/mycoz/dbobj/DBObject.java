@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+//import com.mooo.mycoz.cache.CacheManager;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbBulildSQL;
 import com.mooo.mycoz.util.ParamUtil;
@@ -23,31 +24,42 @@ public class DBObject extends DbBulildSQL{
 	 */
 	private static final long serialVersionUID = -4716776899444767709L;
 	public Connection connection;
-	public Connection conn;
+	
+	//private static final String CACHE_TYPE = "dbobj";
+	//private static CacheManager cacheManager = CacheManager.getInstance();
+/*
+	public void addCache(String key, Object object){
+		cacheManager.add(CACHE_TYPE, key, object);
+	}
 
+	public Object getCache(String key){
+		return cacheManager.get(CACHE_TYPE, key);
+	}
+	*/
 	public Connection getConnection() {
 		return connection;
 	}
 
 	public void setConnection(Connection connection) {
+
 		this.connection = connection;
 	}
-
+	
 	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
+		boolean closeCon = false;
+
 		try {
 			retrieveList = new ArrayList<Object>();
-			
-			if(connection!=null){
-				stmt = connection.createStatement();
-			}else{
-				if(conn==null)
-				conn=DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
+
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
 			}
 			
+			stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			rsmd = rs.getMetaData();
@@ -74,8 +86,8 @@ public class DBObject extends DbBulildSQL{
 			try {
 				if (stmt != null)
 					stmt.close();
-				if (conn != null)
-					conn.close();
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -89,17 +101,17 @@ public class DBObject extends DbBulildSQL{
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
+		boolean closeCon = false;
+
 		try {
 			retrieveList = new ArrayList<Object>();
 			
-			if(connection!=null){
-				stmt = connection.createStatement();
-			}else{
-				if(conn==null)
-				conn=DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
 			}
 			
+			stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			rsmd = rs.getMetaData();
@@ -121,8 +133,13 @@ public class DBObject extends DbBulildSQL{
 			try {
 				if (stmt != null)
 					stmt.close();
-				if (conn != null)
-					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -133,23 +150,44 @@ public class DBObject extends DbBulildSQL{
 	}
 	
 	public List<Object> searchAndRetrieveList() throws SQLException{
-		beanFillField();
-
+		long startTime = System.currentTimeMillis();
+		long finishTime = System.currentTimeMillis();
+		
 		List<Object> retrieveList = null;
+		String doSql = SearchSQL();
+
+/*
+		Object obj = getCache(doSql);
+
+		if(obj != null) {
+			retrieveList =  (List<Object>) obj;
+		}
+		
+		if(retrieveList != null)
+			return retrieveList;
+	*/	
+		beanFillField();
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
+		boolean closeCon = false;
+
 		try {
 			retrieveList = new ArrayList<Object>();
+			System.out.println("do searchAndRetrieveList can1:"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
 			
-			if(connection!=null){
-				stmt = connection.createStatement();
-			}else{
-				if(conn==null)
-				conn=DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
+			System.out.println("do searchAndRetrieveList connection:"+connection);
+			
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
 			}
 			
-			ResultSet rs = stmt.executeQuery(SearchSQL());
+			stmt = connection.createStatement();
+			System.out.println("do searchAndRetrieveList can2:"+(System.currentTimeMillis() - finishTime));
+			finishTime = System.currentTimeMillis();
+			
+			ResultSet rs = stmt.executeQuery(doSql);
 			
 			rsmd = rs.getMetaData();
 			Object bean;
@@ -162,7 +200,8 @@ public class DBObject extends DbBulildSQL{
 				}
 				retrieveList.add(bean);
 			}
-
+			//addCache(doSql, retrieveList);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -170,37 +209,47 @@ public class DBObject extends DbBulildSQL{
 			try {
 				if (stmt != null)
 					stmt.close();
-				if (conn != null)
-					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
 		}
-		
+		System.out.println("do searchAndRetrieveList end:"+(System.currentTimeMillis() - startTime));
+
 		return retrieveList;
 	}
 	
 	public void add() throws SQLException {
 		beanFillField();
-
+		boolean closeCon = false;
 		Statement stmt = null;
 		try{
-			if(connection!=null){
-				stmt = connection.createStatement();
-			}else{
-				if(conn==null)
-				conn=DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
 			}
+			
+			stmt = connection.createStatement();
 			stmt.execute(AddSQL());
 		}finally {
 
 			try {
 				if (stmt != null)
 					stmt.close();
-				if (conn != null)
-					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -211,14 +260,15 @@ public class DBObject extends DbBulildSQL{
 	public void delete() throws SQLException {
 		beanFillField();
 		Statement stmt = null;
+		boolean closeCon = false;
+
 		try{
-			if(connection!=null){
-				stmt = connection.createStatement();
-			}else{
-				if(conn==null)
-				conn=DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
 			}
+			
+			stmt = connection.createStatement();
 			stmt.execute(DeleteSQL());
 
 		}finally {
@@ -226,8 +276,13 @@ public class DBObject extends DbBulildSQL{
 			try {
 				if (stmt != null)
 					stmt.close();
-				if (conn != null)
-					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -235,24 +290,29 @@ public class DBObject extends DbBulildSQL{
 	}
 	public void update() throws SQLException{
 		beanFillField();
+		boolean closeCon = false;
 
 		Statement stmt = null;
 		try{
-			if(connection!=null){
-				stmt = connection.createStatement();
-			}else{
-				if(conn==null)
-				conn=DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
 			}
+			
+			stmt = connection.createStatement();
 			stmt.execute(UpdateSQL());
 		}finally {
 
 			try {
 				if (stmt != null)
 					stmt.close();
-				if (conn != null)
-					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -296,16 +356,15 @@ public class DBObject extends DbBulildSQL{
 		beanFillField();
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
-		try{
-			connection = DbConnectionManager.getConnection();
-			if(connection!=null){
-				stmt = connection.createStatement();
-			}else{
-				if(conn==null)
-				conn=DbConnectionManager.getConnection();
-				stmt = conn.createStatement();
-			}
+		boolean closeCon = false;
 
+		try{
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
+			}
+			
+			stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(SearchSQL());
 			
 			rsmd = rs.getMetaData();
@@ -323,8 +382,13 @@ public class DBObject extends DbBulildSQL{
 			try {
 				if (stmt != null)
 					stmt.close();
-				if (conn != null)
-					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

@@ -1,8 +1,21 @@
 package com.mooo.mycoz.db.sql;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.ReflectUtil;
 
 public class DbMultiBulildSQL implements DbMultiSql {
 
@@ -14,9 +27,22 @@ public class DbMultiBulildSQL implements DbMultiSql {
 	public List<String> orderBy;
 	public int offset;
 	public int rowcount;
+	
+	public Map<String,Class<?>> objs;
+	
+	public Connection connection;
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
 
 	public DbMultiBulildSQL() {
 		catalog = null;
+		objs = new HashMap<String, Class<?>>();
 		tables = new ArrayList<String>();
 		whereKey = new ArrayList<String>();
 		retrieveFields = new ArrayList<String>();
@@ -35,6 +61,15 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		orderBy.clear();
 		offset = 0;
 		rowcount = 0;
+	}
+	public void addTable(Class<?> clazz, String alias) {
+		
+		objs.put(clazz.getSimpleName(), clazz);
+		
+		if (catalog != null)
+			tables.add(catalog + "." + clazz.getSimpleName() + " AS " + alias);
+		else
+			tables.add(clazz.getSimpleName() + " AS " + alias);
 	}
 	
 	public void addTable(String name, String alias) {
@@ -105,13 +140,13 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		this.catalog = catalog;
 	}
 
-	public String buildSQL() {
+	public String SearchSQL() {
 		String value;
 		String sql = "";
 		if (retrieveFields != null && !retrieveFields.isEmpty()) {
 			sql += "SELECT ";
 			for (Iterator<String> it = retrieveFields.iterator(); it.hasNext();) {
-				value = (String) it.next();
+				value = it.next();
 				sql += value + ",";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
@@ -121,7 +156,7 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		if (tables != null && !tables.isEmpty()) {
 			sql += " FROM ";
 			for (Iterator<String> it = tables.iterator(); it.hasNext();) {
-				value = (String) it.next();
+				value = it.next();
 				sql += value + ",";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
@@ -130,7 +165,7 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		if (whereKey != null && !whereKey.isEmpty()) {
 			sql += " WHERE ";
 			for (Iterator<String> it = whereKey.iterator(); it.hasNext();) {
-				value = (String) it.next();
+				value = it.next();
 				sql += value + " AND ";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(" AND "));
@@ -139,7 +174,7 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		if (groupBy != null && !groupBy.isEmpty()) {
 			sql += " GROUP BY ";
 			for (Iterator<String> it = groupBy.iterator(); it.hasNext();) {
-				value = (String) it.next();
+				value = it.next();
 				sql += value + ",";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
@@ -148,7 +183,7 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		if (orderBy != null && !orderBy.isEmpty()) {
 			sql += " ORDER BY ";
 			for (Iterator<String> it = orderBy.iterator(); it.hasNext();) {
-				value = (String) it.next();
+				value = it.next();
 				sql += value + ",";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(","));
@@ -168,7 +203,7 @@ public class DbMultiBulildSQL implements DbMultiSql {
 	}
 
 	public String buildCountSQL() {
-		String searchSQL = buildSQL();
+		String searchSQL = SearchSQL();
 
 		String sql = "SELECT COUNT(*) ";
 		searchSQL = searchSQL.substring(searchSQL.indexOf("FROM"));
@@ -190,13 +225,90 @@ public class DbMultiBulildSQL implements DbMultiSql {
 	}
 
 	public List searchAndRetrieveList() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Object> retrieveList = null;
+		String doSql = SearchSQL();
+		//beanFillField();
+		Statement stmt = null;
+		ResultSetMetaData rsmd = null;
+		boolean closeCon = false;
+
+		try {
+			retrieveList = new ArrayList<Object>();
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
+			}
+			
+			stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(doSql);
+			
+			rsmd = rs.getMetaData();
+			Object bean;
+
+			while (rs.next()) {
+				bean = this.getClass().newInstance();
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
+							rs.getString(i + 1), null);
+				}
+				retrieveList.add(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return retrieveList;
 	}
 
 	public int count() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	
+	public void beanFillField(Class clazz){
+		try {
+			List<String> methods = ReflectUtil.getMethodNames(clazz);
+			//setTable(clazz.getSimpleName());
+			String method;
+			String field;
+			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
+				method = it.next();
+				if(method.indexOf("get")==0){
+					Method getMethod;
+					getMethod = this.getClass().getMethod(method);
+					Object obj = getMethod.invoke(this);
+					if(obj !=null) {
+						field = method.substring(method.indexOf("get")+3).toLowerCase();
+						setField(field, obj.toString());
+					}
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
