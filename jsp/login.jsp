@@ -62,12 +62,12 @@
 			</tr>
 		
 			<tr>
-  				<td><br><b><fmt:message key="UserName"/>:</b></td>
+  				<td><br><b><fmt:message key="UserName"/>:root</b></td>
  				<td><br><input type="text" name="User.name"></td>
 			</tr>
 
 			<tr>
-  				<td><b><fmt:message key="Password"/>:</b></td>
+  				<td><b><fmt:message key="Password"/>:root</b></td>
   				<td><input type="password" name="User.password"></td>
 			</tr>
 			
