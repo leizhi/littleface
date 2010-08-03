@@ -44,8 +44,6 @@ public class FileAction extends BaseSupport {
 			String uploadPath = request.getRealPath("/")+"upload/";
 			
 			String value = null;
-			String sql = null;
-			File file = null;
 
 			DecimalFormat df = new DecimalFormat("###0.00");
 
@@ -63,7 +61,6 @@ public class FileAction extends BaseSupport {
 			mdb.setRetrieveField("fi", "datetime");
 			mdb.setRetrieveField("fi", "filePath");
 			mdb.setRetrieveField("fi", "id");
-
 			mdb.setRetrieveField("lc", "name");
 
 			value = request.getParameter("Key");
@@ -75,25 +72,22 @@ public class FileAction extends BaseSupport {
 			List retrives = mdb.searchAndRetrieveList();
 			
 			List files = new ArrayList();
-			
-			//List downs = down.searchAndRetrieveList();
-			/*
 			FileInfo fi;
 			File checkFile;
-			while (rs.next()) {
-				fi = new FileInfo();
-				fi.setId(rs.getInt("fi.id"));
-				fi.setTypename(rs.getString("lc.name"));
-				fi.setName(rs.getString("fi.name"));
-				fi.setDatetime(rs.getString("fi.datetime"));
-				value = rs.getString("fi.filePath");
-				fi.setFilepath(value);
-				
+			
+			for (Iterator it = retrives.iterator(); it.hasNext();) {
+				Map map = (Map)it.next();
+				//CodeType ct = (CodeType)map.get("ct");
+				LinearCode lc = (LinearCode)map.get("lc");
+				fi = (FileInfo)map.get("fi");
+				fi.setTypename(lc.getName());
+
+				value = fi.getFilepath();
+
 				checkFile = new File(uploadPath + value);
-				
 				if (log.isDebugEnabled()) log.debug("checkFile = "+(checkFile.exists()));
 
-				if (!checkFile.exists()){ */
+				if (!checkFile.exists()){ 
 					/*
 					Blob fileBlob = rs.getBlob("fi.file");
 					InputStream in = fileBlob.getBinaryStream();
@@ -106,8 +100,7 @@ public class FileAction extends BaseSupport {
 				     out.close();      
 				     in.close();
 				     */
-			/*	}
-				
+				}
 				fileBit = checkFile.length();
 				fileK = fileBit / 1024;
 				fileM = fileK / 1024;
@@ -115,7 +108,6 @@ public class FileAction extends BaseSupport {
 				
 				files.add(fi);
 			}
-			*/
 			request.setAttribute("files", files);
 		} catch (Exception e) {
 			if (log.isDebugEnabled())

@@ -150,9 +150,6 @@ public class DBObject extends DbBulildSQL{
 	}
 	
 	public List<Object> searchAndRetrieveList() throws SQLException{
-		long startTime = System.currentTimeMillis();
-		long finishTime = System.currentTimeMillis();
-		
 		List<Object> retrieveList = null;
 		String doSql = searchSQL();
 
@@ -173,10 +170,6 @@ public class DBObject extends DbBulildSQL{
 
 		try {
 			retrieveList = new ArrayList<Object>();
-			System.out.println("do searchAndRetrieveList can1:"+(System.currentTimeMillis() - finishTime));
-			finishTime = System.currentTimeMillis();
-			
-			System.out.println("do searchAndRetrieveList connection:"+connection);
 			
 			if(connection == null){
 				connection = DbConnectionManager.getConnection();
@@ -184,9 +177,6 @@ public class DBObject extends DbBulildSQL{
 			}
 			
 			stmt = connection.createStatement();
-			System.out.println("do searchAndRetrieveList can2:"+(System.currentTimeMillis() - finishTime));
-			finishTime = System.currentTimeMillis();
-			
 			ResultSet rs = stmt.executeQuery(doSql);
 			
 			rsmd = rs.getMetaData();
@@ -221,8 +211,6 @@ public class DBObject extends DbBulildSQL{
 			}
 
 		}
-		System.out.println("do searchAndRetrieveList end:"+(System.currentTimeMillis() - startTime));
-
 		return retrieveList;
 	}
 	

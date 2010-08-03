@@ -477,8 +477,6 @@ public class DbConnectionDefaultPool extends DbConnectionProvider {
                     long age = System.currentTimeMillis() - connCreateDate[i];
 
                     synchronized(connStatus) {
-                        log.debug("connStatus["+i+"] In use:"+connStatus[i]);
-
                         if(connStatus[i] > 0) { // In use, catch it next time!
                             continue;
                         }
