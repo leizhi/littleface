@@ -43,6 +43,7 @@ public class LoginAction extends BaseSupport {
 			request.setAttribute("locales", locales);
 			request.setAttribute("locale", locale);
 
+			if (log.isDebugEnabled()) log.debug("IP:"+getClinetIp(request));
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 			return "promptLogin";
@@ -117,5 +118,19 @@ public class LoginAction extends BaseSupport {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 		}
 		return "success";
-	}	
+	}
+	
+	public String getClinetIp(HttpServletRequest request) {   
+	     String ip = request.getHeader("x-forwarded-for");   
+	     if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {   
+	         ip = request.getHeader("Proxy-Client-IP");   
+	     }   
+	     if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {   
+	         ip = request.getHeader("WL-Proxy-Client-IP");   
+	     }   
+	     if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {   
+	         ip = request.getRemoteAddr();   
+	     }   
+	     return ip;   
+	} 
 }
