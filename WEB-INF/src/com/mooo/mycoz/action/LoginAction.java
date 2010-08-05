@@ -1,5 +1,7 @@
 package com.mooo.mycoz.action;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.logging.Log;
@@ -10,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.mooo.mycoz.dbobj.DBSession;
+import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
+import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
 
 public class LoginAction extends BaseSupport {
@@ -44,6 +48,14 @@ public class LoginAction extends BaseSupport {
 			request.setAttribute("locale", locale);
 
 			if (log.isDebugEnabled()) log.debug("IP:"+getClinetIp(request));
+			//DBSession dbSession = DBSession.getInstance();
+
+			AccessLog al = new AccessLog();
+			al.setId(IDGenerator.getNextID("AccessLog"));
+			al.setIp(getClinetIp(request));
+			al.setStartdate(new Timestamp(new Date().getTime()));
+			al.add();
+			
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 			return "promptLogin";

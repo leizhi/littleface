@@ -32,3 +32,14 @@ CREATE TABLE `FileInfo` (
   KEY `dateTime` (`datetime`),
   KEY `filepath` (`filepath`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+CREATE TABLE `AccessLog` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `ip` varchar(100) DEFAULT 'NULL',
+  `startdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `enddate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `ip` (`ip`),
+  KEY `startdate` (`startdate`),
+  KEY `enddate` (`enddate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 
