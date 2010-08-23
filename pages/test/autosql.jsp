@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=gb2312"%>
 <%@ page import="java.sql.*,java.util.*"%>
+<%@ page import="com.mooo.mycoz.db.pool.DbConnectionManager"%>
+
 <%!public String chomp(String str, String separator) {
 		if (str == null || str.length() == 0 || separator == null) {
 			return str;
@@ -9,7 +11,7 @@
 		}
 		return str;
 	}%>
-
+5591416
 <%!public String capitalize(String str) {
 		int strLen;
 		if (str == null || (strLen = str.length()) == 0) {
@@ -28,6 +30,7 @@
 %>
 
 <%
+/*
 	Connection conn;
 	String DBUser = "ww";
 	String DBPassword = "ww";
@@ -38,6 +41,8 @@
 	conn = java.sql.DriverManager.getConnection(
 			"jdbc:oracle:thin:@192.168.0.3:1521:khdb", DBUser,
 			DBPassword);
+*/
+	Connection conn = DbConnectionManager.getConnection();
 
 	String sql = "select * from " + tableName;// change to your table name 
 

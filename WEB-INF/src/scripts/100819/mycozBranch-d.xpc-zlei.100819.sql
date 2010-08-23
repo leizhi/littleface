@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.47, for redhat-linux-gnu (i386)
+-- MySQL dump 10.13  Distrib 5.1.48, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.47
+-- Server version	5.1.48
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,60 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `AccessLog`
+--
+
+DROP TABLE IF EXISTS `AccessLog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AccessLog` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `ip` varchar(100) DEFAULT 'NULL',
+  `startdate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `enddate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `ip` (`ip`),
+  KEY `startdate` (`startdate`),
+  KEY `enddate` (`enddate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `AddressBook`
+--
+
+DROP TABLE IF EXISTS `AddressBook`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AddressBook` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) NOT NULL DEFAULT '0',
+  `countryId` int(11) NOT NULL DEFAULT '0',
+  `languageId` int(11) NOT NULL DEFAULT '0',
+  `cityId` int(11) NOT NULL DEFAULT '0',
+  `address` varchar(200) DEFAULT NULL,
+  `postalCode` varchar(20) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `tel` varchar(60) DEFAULT NULL,
+  `mobileNo` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `countryId` (`countryId`),
+  KEY `cityId` (`cityId`),
+  KEY `languageId` (`languageId`),
+  KEY `address` (`address`),
+  KEY `postalCode` (`postalCode`),
+  KEY `email` (`email`),
+  KEY `tel` (`tel`),
+  KEY `mobileNo` (`mobileNo`),
+  CONSTRAINT `AddressBook_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`ID`),
+  CONSTRAINT `AddressBook_ibfk_2` FOREIGN KEY (`countryId`) REFERENCES `mycozShared`.`Country` (`ID`),
+  CONSTRAINT `AddressBook_ibfk_3` FOREIGN KEY (`languageId`) REFERENCES `mycozShared`.`Language` (`ID`),
+  CONSTRAINT `AddressBook_ibfk_4` FOREIGN KEY (`cityId`) REFERENCES `mycozShared`.`City` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `Blog`
@@ -190,6 +244,53 @@ CREATE TABLE `Message` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `Property`
+--
+
+DROP TABLE IF EXISTS `Property`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Property` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `reference` varchar(50) DEFAULT 'NULL',
+  `userId` int(11) NOT NULL DEFAULT '0',
+  `transaction` varchar(50) DEFAULT 'NULL',
+  `propertyStatus` int(11) NOT NULL DEFAULT '0',
+  `propertyType` int(11) NOT NULL DEFAULT '0',
+  `offer` decimal(25,4) DEFAULT NULL,
+  `bedrooms` int(11) NOT NULL DEFAULT '0',
+  `createdDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `bathroom` int(11) NOT NULL DEFAULT '0',
+  `validTo` varchar(50) DEFAULT 'NULL',
+  `swimmingPool` varchar(50) DEFAULT 'NULL',
+  `price` decimal(25,4) DEFAULT NULL,
+  `areaM2` decimal(25,4) DEFAULT NULL,
+  `plotM2` decimal(25,4) DEFAULT NULL,
+  `terraceM2` decimal(25,4) DEFAULT NULL,
+  `carPark` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `reference` (`reference`),
+  KEY `userId` (`userId`),
+  KEY `transaction` (`transaction`),
+  KEY `propertyStatus` (`propertyStatus`),
+  KEY `propertyType` (`propertyType`),
+  KEY `offer` (`offer`),
+  KEY `bedrooms` (`bedrooms`),
+  KEY `createdDate` (`createdDate`),
+  KEY `bathroom` (`bathroom`),
+  KEY `swimmingPool` (`swimmingPool`),
+  KEY `price` (`price`),
+  KEY `areaM2` (`areaM2`),
+  KEY `plotM2` (`plotM2`),
+  KEY `terraceM2` (`terraceM2`),
+  KEY `carPark` (`carPark`),
+  CONSTRAINT `Property_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`ID`),
+  CONSTRAINT `Property_ibfk_2` FOREIGN KEY (`propertyStatus`) REFERENCES `mycozShared`.`LinearCode` (`id`),
+  CONSTRAINT `Property_ibfk_3` FOREIGN KEY (`propertyType`) REFERENCES `mycozShared`.`LinearCode` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `TreeExample`
 --
 
@@ -219,27 +320,12 @@ DROP TABLE IF EXISTS `User`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `User` (
   `ID` int(11) NOT NULL DEFAULT '0',
-  `CountryID` int(11) NOT NULL DEFAULT '0',
-  `LanguageID` int(11) NOT NULL DEFAULT '0',
-  `CityID` int(11) NOT NULL DEFAULT '0',
   `StateID` int(11) NOT NULL DEFAULT '0',
   `Name` varchar(50) DEFAULT NULL,
   `Password` varchar(50) DEFAULT NULL,
-  `Address` varchar(200) DEFAULT NULL,
-  `Email` varchar(50) DEFAULT NULL,
-  `Tel` varchar(60) DEFAULT NULL,
-  `Zip` varchar(20) DEFAULT NULL,
-  `MobileNo` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Name` (`Name`),
-  KEY `CountryID` (`CountryID`),
-  KEY `LanguageID` (`LanguageID`),
-  KEY `CityID` (`CityID`),
-  KEY `StateID` (`StateID`),
-  CONSTRAINT `User_ibfk_1` FOREIGN KEY (`CountryID`) REFERENCES `mycozShared`.`Country` (`ID`),
-  CONSTRAINT `User_ibfk_2` FOREIGN KEY (`LanguageID`) REFERENCES `mycozShared`.`Language` (`ID`),
-  CONSTRAINT `User_ibfk_3` FOREIGN KEY (`CityID`) REFERENCES `mycozShared`.`City` (`ID`),
-  CONSTRAINT `User_ibfk_4` FOREIGN KEY (`StateID`) REFERENCES `mycozShared`.`State` (`ID`)
+  KEY `StateID` (`StateID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -256,4 +342,4 @@ CREATE TABLE `User` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-08-01  1:57:25
+-- Dump completed on 2010-08-19 16:06:45

@@ -20,6 +20,9 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 
 <ul>
 <li><a href="<c:url value="/File.do"/>" target="main"><fmt:message key="File"/></a></li>
+<li><a href="<c:url value="/File.do"/>" target="main"><fmt:message key="File"/></a></li>
+<li><a href="<c:url value="/File.do"/>" target="main"><fmt:message key="File"/></a></li>
+<li><a href="<c:url value="/File.do"/>" target="main"><fmt:message key="File"/></a></li>
 <li><a href="<c:url value="/Setup.do"/>" target="main"><fmt:message key="Setup"/></a></li>
 <li><a href="<c:url value="/System.do"/>" target="main"><fmt:message key="System"/></a></li>
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>

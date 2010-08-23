@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.47, for redhat-linux-gnu (i386)
+-- MySQL dump 10.13  Distrib 5.1.48, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.47
+-- Server version	5.1.48
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,12 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Dumping data for table `AccessLog`
+--
+
+LOCK TABLES `AccessLog` WRITE;
+/*!40000 ALTER TABLE `AccessLog` DISABLE KEYS */;
+INSERT INTO `AccessLog` VALUES (1,'0:0:0:0:0:0:0:1','2010-08-17 15:49:57','0000-00-00 00:00:00'),(2,'0:0:0:0:0:0:0:1','2010-08-17 15:50:30','0000-00-00 00:00:00'),(3,'0:0:0:0:0:0:0:1','2010-08-17 17:10:43','0000-00-00 00:00:00'),(4,'0:0:0:0:0:0:0:1','2010-08-17 17:10:51','0000-00-00 00:00:00'),(5,'0:0:0:0:0:0:0:1','2010-08-18 15:03:43','0000-00-00 00:00:00'),(6,'0:0:0:0:0:0:0:1','2010-08-18 15:06:47','0000-00-00 00:00:00'),(7,'0:0:0:0:0:0:0:1','2010-08-18 15:07:12','0000-00-00 00:00:00'),(8,'0:0:0:0:0:0:0:1','2010-08-18 15:35:48','0000-00-00 00:00:00'),(9,'0:0:0:0:0:0:0:1','2010-08-18 16:59:53','0000-00-00 00:00:00'),(10,'0:0:0:0:0:0:0:1','2010-08-19 16:30:01','0000-00-00 00:00:00'),(11,'0:0:0:0:0:0:0:1','2010-08-19 19:52:17','0000-00-00 00:00:00'),(12,'0:0:0:0:0:0:0:1','2010-08-19 19:52:21','0000-00-00 00:00:00'),(13,'0:0:0:0:0:0:0:1','2010-08-19 19:52:24','0000-00-00 00:00:00'),(14,'0:0:0:0:0:0:0:1','2010-08-19 19:52:26','0000-00-00 00:00:00');
+/*!40000 ALTER TABLE `AccessLog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `AddressBook`
+--
+
+LOCK TABLES `AddressBook` WRITE;
+/*!40000 ALTER TABLE `AddressBook` DISABLE KEYS */;
+INSERT INTO `AddressBook` VALUES (1,1,1,0,1,'','aa','aa','aa',''),(2,2,3,0,1,'','','','',''),(3,3,1,0,1,'','','','',''),(4,4,1,0,1,'','614200','kid_lyj@126.com','13541066041',''),(5,5,1,0,1,'','400000','boy.365@126.com','13658241719',''),(6,6,1,1,1,'dd','dd','leizhifesker@gmail.com','dd',NULL),(7,7,4,4,3,'','','','',NULL);
+/*!40000 ALTER TABLE `AddressBook` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `Blog`
 --
 
 LOCK TABLES `Blog` WRITE;
 /*!40000 ALTER TABLE `Blog` DISABLE KEYS */;
-INSERT INTO `Blog` VALUES (1,2,10,'web开发','来人来人 ok 解放了',NULL,'2008-09-04'),(2,2,12,'H','讨论',NULL,'2008-09-04'),(3,2,10,'桌面','桌面桌面桌面桌面',NULL,'2008-09-04');
 /*!40000 ALTER TABLE `Blog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,7 +69,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `JobAccounting` WRITE;
 /*!40000 ALTER TABLE `JobAccounting` DISABLE KEYS */;
-INSERT INTO `JobAccounting` VALUES (1,3,'kk','10.0000','月',2.3,1,6),(2,3,'yy','10.0000','月',2.4,1,6),(3,3,'kk','100.0000','月',1,2,7),(4,3,'jj','1002.0000','月',2.3,2,7),(5,4,'jj','10.0000','月',2.3,2,5),(6,4,'kk','100.0000','月',2.4,2,4),(7,4,'jj','100.0000','月',2.1,2,4);
 /*!40000 ALTER TABLE `JobAccounting` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +87,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `JobNote` WRITE;
 /*!40000 ALTER TABLE `JobNote` DISABLE KEYS */;
-INSERT INTO `JobNote` VALUES (1,'DN800011',5,1,4,'N',NULL,0,'2008-01-26','2008-01-26',''),(2,'DN800012',5,1,4,'N',NULL,0,'2008-01-26','2008-01-26',''),(3,'DN800013',5,1,4,'N',NULL,0,'2008-01-26','2008-01-26',''),(4,'CN800011',4,1,4,'N',NULL,0,'2008-01-26','2008-01-26','');
 /*!40000 ALTER TABLE `JobNote` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,6 +97,15 @@ UNLOCK TABLES;
 LOCK TABLES `Message` WRITE;
 /*!40000 ALTER TABLE `Message` DISABLE KEYS */;
 /*!40000 ALTER TABLE `Message` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `Property`
+--
+
+LOCK TABLES `Property` WRITE;
+/*!40000 ALTER TABLE `Property` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Property` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -97,7 +123,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (1,1,0,1,0,'root','67457e226a1a15bd','','aa','aa','aa',''),(2,3,0,1,1,'zlei','*E2B91693F9EED6BD199AF53AB0E72BCE4435F5CE','','','','',''),(3,1,0,1,1,'小魔女','36947cd0171b6250','','','','',''),(4,1,0,1,1,'kid_lyj','2984941e0e090905','','kid_lyj@126.com','13541066041','614200',''),(5,1,0,1,1,'蕲春人','2648b7361202c38f','','boy.365@126.com','13658241719','400000',''),(6,1,1,1,1,'admin','*4ACFE3202A5FF5CF467898FC58AAB1D615029441','dd','leizhifesker@gmail.com','dd','dd',NULL),(7,4,4,3,1,'0252118','*23AE809DDACAF96AF0FD78ED04B6A265E05AA257','','','','',NULL);
+INSERT INTO `User` VALUES (1,0,'root','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B'),(2,1,'zlei','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B'),(3,1,'小魔女','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B'),(4,1,'kid_lyj','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B'),(5,1,'蕲春人','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B'),(6,1,'admin','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B'),(7,1,'0252118','*81F5E21E35407D884A6CD4A731AEBFB6AF209E1B');
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -110,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-08-01  1:57:25
+-- Dump completed on 2010-08-19 16:06:45

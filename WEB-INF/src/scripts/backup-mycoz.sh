@@ -24,12 +24,10 @@ echo "backup-mycoz $HEXT $DEXT $PASSWORD"
 
 BackupDatabases() {
 
-mysqldump -uroot -p$PASSWORD -t mysql > mysql-t.$HEXT.$DEXT
-mysqldump -uroot -p$PASSWORD -d mysql > mysql-d.$HEXT.$DEXT
-mysqldump -uroot -p$PASSWORD -t mycozBranch > mycozBranch-t.$HEXT.$DEXT
-mysqldump -uroot -p$PASSWORD -d -R mycozBranch > mycozBranch-d.$HEXT.$DEXT
-mysqldump -uroot -p$PASSWORD -t mycozShared > mycozShared-t.$HEXT.$DEXT
-mysqldump -uroot -p$PASSWORD -d -R mycozShared > mycozShared-d.$HEXT.$DEXT
+mysqldump -uroot -p$PASSWORD -t mycozBranch > mycozBranch-t.$HEXT.$DEXT.sql
+mysqldump -uroot -p$PASSWORD -d -R mycozBranch > mycozBranch-d.$HEXT.$DEXT.sql
+mysqldump -uroot -p$PASSWORD -t mycozShared > mycozShared-t.$HEXT.$DEXT.sql
+mysqldump -uroot -p$PASSWORD -d -R mycozShared > mycozShared-d.$HEXT.$DEXT.sql
 
 }
 

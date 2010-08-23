@@ -4,7 +4,7 @@
 	<package name="xpc" namespace="/xpc" extends="struts-default">
 
 		<cache name="action" size="1024" sizeUnit="K" time="24" timeUnit="HOUR" />
-		<cache name="dbobj" size="1024" sizeUnit="K" time="24" timeUnit="HOUR" />
+		<!-- <cache name="dbobj" size="1024" sizeUnit="K" time="24" timeUnit="HOUR" /> -->
 
 		<global-results>
 			<result name="login" type="redirectAction">LoginXpc</result>
