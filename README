@@ -1,7 +1,9 @@
 leizhifesker@gmail.com
 2007/06/19
-http://xpc-web.eicp.net:8080/nick-zlei
+http://dasjkt.mooo.com:8082/littleface
 native2ascii MessageBundle.zh_CN MessageBundle_zh_CN.properties
 
-cvs -d :ext:cvs@xpc-web.eicp.net:/srv/cvsroot co -d nick nick-web
-cvs -d :pserver:zlei@xpc-web.eicp.net:/srv/cvsroot login co -d nick nick-web
+#cvs -d :ext:cvs@dasjkt.mooo.com:/srv/cvsroot co -d nick nick-web
+#cvs -d :pserver:zlei@dasjkt.mooo.com:/srv/cvsroot login co -d nick nick-web
+
+git clone git@@dasjkt.mooo.com:~/littleface.git
