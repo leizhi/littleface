@@ -16,15 +16,27 @@ public class JdbcExample {
 			SQLException {
 		Connection con = null;
 		Statement stmt = null;
-		ResultSet rs = null;
 		ResultSetMetaData rsmd = null;
 		String sql = "";
 		try {
+			ResultSet rs = null;
 
+			//mypool
+			con = DbConnectionManager.getConnection();
+			System.out.println("打开连接-------------");
+			System.out.println(con);
+			
+			// oracle jdbc
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			con = DriverManager.getConnection("jdbc:oracle:thin:@192.168.1.188:1521:orcl","sddb","sddb");
+			System.out.println("打开-------------");
+			System.out.println(con);
+			
+/*
 			Class.forName("org.gjt.mm.mysql.Driver");
 			// use proxool
-			con = DriverManager
-					.getConnection("jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf8");
+			con = DriverManager.getConnection("jdbc:mysql://localhost/test?useUnicode=true&amp;characterEncoding=utf8",
+			"mycoz","xmlpj0#");
 			System.out.println("打开-------------");
 			System.out.println(con);
 			con.setAutoCommit(false);
@@ -60,22 +72,20 @@ public class JdbcExample {
 				System.out.println();
 			}
 			con.commit();
-
-			/*
-			 * // use mypool con = DbConnectionManager.getConnection();
-			 * con.setAutoCommit(false); // con.setCatalog("xpcBranch"); stmt =
-			 * con.createStatement(); sql = "SELECT  * FROM dm_xzqh_map_bak"; rs
-			 * = stmt.executeQuery(sql); while (rs.next()) {
-			 * System.out.println("Name=" + rs.getString("XZQH_MC")); }
-			 * con.commit();
-			 */
+*/
+			// con.setAutoCommit(false);
+			 // con.setCatalog("xpcBranch");
+			// stmt = con.createStatement(); sql = "SELECT  * FROM dm_xzqh_map_bak";
+			// rs  = stmt.executeQuery(sql); while (rs.next()) {
+			//  System.out.println("Name=" + rs.getString("XZQH_MC")); }
+			//  con.commit();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			con.rollback();
 			System.out.println("Exception: " + e.getMessage());
 
 		} finally {
-			rs.close();
 			stmt.close();
 			con.close();
 		}
