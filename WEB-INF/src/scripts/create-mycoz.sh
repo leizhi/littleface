@@ -6,17 +6,15 @@ set FOREIGN_KEY_CHECKS=0;
 CREATE DATABASE IF NOT EXISTS mycozShared;
 CREATE DATABASE IF NOT EXISTS mycozBranch;
 
-use mysql;
+GRANT ALL PRIVILEGES ON mycozBranch.* TO 'mycoz'@'localhost' IDENTIFIED BY 'xmlpj0#' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON mycozShared.* TO 'mycoz'@'localhost' IDENTIFIED BY 'xmlpj0#' WITH GRANT OPTION;
 
-CREATE USER mycoz;
-GRANT ALL ON mycozBranch.* TO 'mycoz';
-GRANT ALL ON mycozShared.* TO 'mycoz';
+#GRANT ALL PRIVILEGES ON mycozBranch.* TO 'mycoz'@'%' IDENTIFIED BY 'xmlpj0#' WITH GRANT OPTION;
+#GRANT ALL PRIVILEGES ON mycozShared.* TO 'mycoz'@'%' IDENTIFIED BY 'xmlpj0#' WITH GRANT OPTION;
 
-SET PASSWORD FOR mycoz = PASSWORD('xmlpj0#');
-update user set Host='localhost' where User='mycoz';
+#DROP USER 'mycoz'@'localhost';
+#DROP USER 'mycoz'@'%';
 
 FLUSH PRIVILEGES;
-
 set FOREIGN_KEY_CHECKS=1;
-
 FLAG

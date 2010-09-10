@@ -1,7 +1,7 @@
 conn /as sysdba;
 startup;
 conn /as sysdba;
-create user sddb identified by sddb;
+create user sddb identified by weather;
 grant connect,resource to sddb;
-conn sddb/sddb@orcl;
-select * from dual;
+conn sddb/weather@orcl;
+select sysdate from dual;
