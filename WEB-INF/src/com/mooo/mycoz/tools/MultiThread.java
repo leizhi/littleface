@@ -1,97 +1,285 @@
 package com.mooo.mycoz.tools;
 
-import java.io.*;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
-//\u591a\u7ebf\u7a0b\u7f16\u7a0b
+import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
+
 public class MultiThread {
-	public static void main(String args[]) {
-		System.out.println("\u6211\u662f\u4e3b\u7ebf\u7a0b!");
-		// \u4e0b\u9762\u521b\u5efa\u7ebf\u7a0b\u5b9e\u4f8bthread1
-		ThreadUseExtends thread1 = new ThreadUseExtends();
-		// \u521b\u5efathread2\u65f6\u4ee5\u5b9e\u73b0\u4e86Runnable\u63a5\u53e3\u7684THhreadUseRunnable\u7c7b\u5b9e\u4f8b\u4e3a\u53c2\u6570
-		Thread thread2 = new Thread(new ThreadUseRunnable(), "SecondThread");
-		thread1.start();// \u542f\u52a8\u7ebf\u7a0bthread1\u4f7f\u4e4b\u5904\u4e8e\u5c31\u7eea\u72b6\u6001
-		// thread1.setPriority(6);//\u8bbe\u7f6ethread1\u7684\u4f18\u5148\u7ea7\u4e3a6
-		// \u4f18\u5148\u7ea7\u5c06\u51b3\u5b9acpu\u7a7a\u51fa\u65f6\uff0c\u5904\u4e8e\u5c31\u7eea\u72b6\u6001\u7684\u7ebf\u7a0b\u8c01\u5148\u5360\u9886cpu\u5f00\u59cb\u8fd0\u884c
-		// \u4f18\u5148\u7ea7\u8303\u56f41\u523010,MIN_PRIORITY,MAX_PRIORITY,NORM_PAIORITY
-		// \u65b0\u7ebf\u7a0b\u7ee7\u627f\u521b\u5efa\u5979\u7684\u7236\u7ebf\u7a0b\u4f18\u5148\u7ea7,\u7236\u7ebf\u7a0b\u901a\u5e38\u6709\u666e\u901a\u4f18\u5148\u7ea7\u53735NORM_PRIORITY
-		System.out.println("\u4e3b\u7ebf\u7a0b\u5c06\u6302\u8d777\u79d2!");
-		try {
-			Thread.sleep(7000);// \u4e3b\u7ebf\u7a0b\u6302\u8d777\u79d2
-		} catch (InterruptedException e) {
-			return;
-		}
-		System.out.println("\u53c8\u56de\u5230\u4e86\u4e3b\u7ebf\u7a0b!");
-		if (thread1.isAlive()) {
-			thread1.stop();// \u5982\u679cthread1\u8fd8\u5b58\u5728\u5219\u6740\u6389\u4ed6
-			System.out.println("thread1\u4f11\u7720\u8fc7\u957f,\u4e3b\u7ebf\u7a0b\u6740\u6389\u4e86thread1!");
-		} else
-			System.out.println("\u4e3b\u7ebf\u7a0b\u6ca1\u53d1\u73b0thread1,thread1\u5df2\u9192\u987a\u5e8f\u6267\u884c\u7ed3\u675f\u4e86!");
-		thread2.start();// \u542f\u52a8thread2
-		System.out.println("\u4e3b\u7ebf\u7a0b\u53c8\u5c06\u6302\u8d777\u79d2!");
-		try {
-			Thread.sleep(7000);// \u4e3b\u7ebf\u7a0b\u6302\u8d777\u79d2
-		} catch (InterruptedException e) {
-			return;
-		}
-		System.out.println("\u53c8\u56de\u5230\u4e86\u4e3b\u7ebf\u7a0b!");
-		if (thread2.isAlive()) {
-			thread2.stop();// \u5982\u679cthread2\u8fd8\u5b58\u5728\u5219\u6740\u6389\u4ed6
-			System.out.println("thread2\u4f11\u7720\u8fc7\u957f\uff0c\u4e3b\u7ebf\u7a0b\u6740\u6389\u4e86thread2!");
-		} else
-			System.out.println("\u4e3b\u7ebf\u7a0b\u6ca1\u53d1\u73b0thread2,thread2\u5df2\u9192\u987a\u5e8f\u6267\u884c\u7ed3\u675f\u4e86!");
-		System.out.println("\u7a0b\u5e8f\u7ed3\u675f\u6309\u4efb\u610f\u952e\u7ee7\u7eed!");
-		try {
-			System.in.read();
-		} catch (IOException e) {
-			System.out.println(e.toString());
-		}
 
-	}// main
-}// MultiThread
+	public void writeDb(){
+		Connection con = null;
+		Statement stmt = null;
+		String sql = "";
+		try {
+			//mypool
+			con = DbConnectionManager.getConnection();
+			con.setAutoCommit(false);
+			
+			System.out.println("打开连接-------------");
+			System.out.println(con);
+			
+			stmt = con.createStatement();
+			sql = "INSERT INTO buffer_price(remoteid,sampleid,sale_price,islocal,oper_date,sale_qnty,sale_money,max_price,min_price)";
+			String remoteid = randomNo("bus_remotes","remoteid");
+			String sampleid = randomNo("bus_samples","sampleid");
 
-class ThreadUseExtends extends Thread {
-	// \u901a\u8fc7\u7ee7\u627fThread\u7c7b,\u5e76\u5b9e\u73b0\u5b83\u7684\u62bd\u8c61\u65b9\u6cd5run()
-	// \u9002\u5f53\u65f6\u5019\u521b\u5efa\u8fd9\u4e00Thread\u5b50\u7c7b\u7684\u5b9e\u4f8b\u6765\u5b9e\u73b0\u591a\u7ebf\u7a0b\u673a\u5236
-	// \u4e00\u4e2a\u7ebf\u7a0b\u542f\u52a8\u540e\uff08\u4e5f\u5373\u8fdb\u5165\u5c31\u7eea\u72b6\u6001\uff09\u4e00\u65e6\u83b7\u5f97CPU\u5c06\u81ea\u52a8\u8c03\u7528\u5b83\u7684run()\u65b9\u6cd5
+			System.out.println("remoteid="+remoteid);
+			System.out.println("sampleid="+sampleid);
+			Random random = new Random();
+			
+			//random.setSeed(10000000L);
+	       BigDecimal bd = new BigDecimal(random.nextDouble() * 10);
+	       double sale_price = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+	       int islocal = new Random().nextInt(2);
+	       String oper_date = randomDate();
 
-	ThreadUseExtends() {
-	}// \u6784\u9020\u51fd\u6570
+	       bd = new BigDecimal(random.nextDouble() * 100);
+	       double sale_qnty = bd.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+	       
+	       bd = new BigDecimal(random.nextDouble() * 100);
+	       double sale_money = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+	       double max_price = sale_money;
+	       double min_price = sale_money;
+
+			System.out.println("sale_price="+sale_price);
+			System.out.println("islocal="+islocal);
+			System.out.println("oper_date="+oper_date);
+			System.out.println("sale_qnty="+sale_qnty);
+			
+			System.out.println("sale_money="+sale_money);
+			System.out.println("max_price="+max_price);
+			System.out.println("min_price="+min_price);
+
+			sql += " VALUES(" +"'"+remoteid+"',"
+					+"'"+sampleid+"',"
+					+sale_price+","
+					+islocal+","
+					+"date'"+oper_date+"',"
+					+sale_qnty+","
+					+sale_money+","
+					+max_price+","
+					+min_price
+					+")";
+			
+			System.out.println("SQL="+sql);
+			stmt.execute(sql);
+
+		    bd = new BigDecimal(sale_money*sale_qnty);
+		    double totle_money = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+		    // check 
+			sql = "SELECT COUNT(*) total from buffer_traffic WHERE  oper_date=date'"+oper_date+"' AND remoteid = '"+remoteid+"'";
+			System.out.println("SQL="+sql);
+			ResultSet result = stmt.executeQuery(sql);
+			int total=0;
+			
+			while (result.next()) {
+				total = result.getInt("total");
+			}
+			// if have
+			if(total > 0){
+				sql = "UPDATE buffer_traffic SET "
+						+"trade_amount=trade_amount+1,sale_money=sale_money+"+totle_money
+						+" WHERE oper_date=date'"+oper_date+"' AND remoteid = '"+remoteid+"'";
+			} else { // else not
+				sql = "INSERT INTO buffer_traffic(remoteid,oper_date,trade_amount,sale_money) ";
+				sql += " VALUES(" +"'"+remoteid+"',"
+					+"date'"+oper_date+"',"
+					+ islocal +","
+					+ totle_money
+					+")";
+			}
+			System.out.println("SQL="+sql);
+
+			stmt.execute(sql);
+			System.out.println("commit");
+			con.commit();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.out.println("Exception: " + e.getMessage());
+
+		} finally {
+			try {
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	public String randomNo(String table,String rFiled){
+		Connection con = null;
+		Statement stmt = null;
+		String sql = "";
+		String rValue="";
+		try {
+			//mypool
+			con = DbConnectionManager.getConnection();
+			System.out.println("打开连接-------------");
+			System.out.println(con);
+			
+			stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			sql = "SELECT  * FROM "+table;
+			ResultSet rs = stmt.executeQuery(sql);
+			List remotes = new ArrayList();
+			
+			while (rs.next()) {
+				remotes.add(rs.getString(rFiled));
+			}
+			rs.first();
+			
+			int randomIndex=0;
+			
+			Random random = new Random();
+			randomIndex = random.nextInt(remotes.size());
+
+			int i=0;
+			while (rs.next()) {
+				if(i==randomIndex){
+					rValue = rs.getString(rFiled);
+					break;
+				}
+				i++;
+			}
+			//random.
+		}catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception: " + e.getMessage());
+		} finally {
+			try {
+				stmt.close();
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return rValue;
+	}
+	
+	public String randomDate(){
+		String rDate="1976-01-01";
+		
+		Random random = new Random();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ");
+		Calendar cal = Calendar.getInstance();
+		cal.set(2010, 7, 1);
+		long start = cal.getTimeInMillis();
+		cal.set(2010, 9, 13);
+		long end = cal.getTimeInMillis();
+		for (int i = 0; i < 10; i++) {
+			Date d = new Date(start + (long) (random.nextDouble() * (end - start)));
+			rDate = format.format(d);
+			//System.out.println("build value="+rDate);
+		}
+		
+		return rDate;
+	}
+
+	public int randomInt(int max){
+		return new Random().nextInt(max);
+	}
+	
+	public void sdb(){
+		try {
+			
+			BusRemotes busRemotes = new BusRemotes();
+			busRemotes.setTable("bus_remotes");
+			List remotes = busRemotes.searchAndRetrieveList();
+			Random random = new Random();
+			for(int i=0;i<remotes.size();i++)
+			System.out.println("random="+random.nextInt(remotes.size()));
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("SQLException:"+e.getMessage());
+		}
+		
+	}
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		//MultiThread mt = new MultiThread();
+		//mt.();
+		
+		//mt.db();
+		//System.out.println("no="+mt.randomNo("bus_remotes","remoteid"));
+		//System.out.println("no="+mt.randomNo("bus_samples","sampleid"));
+		//System.out.println("no="+mt.randomNo("bus_remotes","remoteid"));
+
+		new Thread(new WriteRun()).start();
+		//new Thread(new ReadRun()).start();
+	}
+
+}
+
+class ReadRun implements Runnable {
+
+	int count = 1;
+
+	public ReadRun() {
+		System.out.println("创建线程 ");
+	}
 
 	public void run() {
-		System.out.println("\u6211\u662fThread\u5b50\u7c7b\u7684\u7ebf\u7a0b\u5b9e\u4f8b!");
-		System.out.println("\u6211\u5c06\u6302\u8d7710\u79d2!");
-		System.out.println("\u56de\u5230\u4e3b\u7ebf\u7a0b,\u8bf7\u7a0d\u7b49,\u521a\u624d\u4e3b\u7ebf\u7a0b\u6302\u8d77\u53ef\u80fd\u8fd8\u6ca1\u9192\u8fc7\u6765\uff01");
 		try {
-			sleep(10000);// \u6302\u8d775\u79d2
+			while (true) {
+				System.out.println();
+
+				if ((count++) % 100 == 0)
+					break;
+				Thread.sleep(30000);
+			}
 		} catch (InterruptedException e) {
-			return;
+			e.printStackTrace();
 		}
-		// \u5982\u679c\u8be5run()\u65b9\u6cd5\u987a\u5e8f\u6267\u884c\u5b8c\u4e86,\u7ebf\u7a0b\u5c06\u81ea\u52a8\u7ed3\u675f,\u800c\u4e0d\u4f1a\u88ab\u4e3b\u7ebf\u7a0b\u6740\u6389
-		// \u4f46\u5982\u679c\u4f11\u7720\u65f6\u95f4\u8fc7\u957f,\u5219\u7ebf\u7a0b\u8fd8\u5b58\u6d3b,\u53ef\u80fd\u88abstop()\u6740\u6389
 	}
 }
 
-class ThreadUseRunnable implements Runnable {
-	// \u901a\u8fc7\u5b9e\u73b0Runnable\u63a5\u53e3\u4e2d\u7684run()\u65b9\u6cd5,\u518d\u4ee5\u8fd9\u4e2a\u5b9e\u73b0\u4e86run()\u65b9\u6cd5\u7684\u7c7b
-	// \u4e3a\u53c2\u6570\u521b\u5efaThread\u7684\u7ebf\u7a0b\u5b9e\u4f8b
-	// Thread thread2=new Thread(this);
-	// \u4ee5\u8fd9\u4e2a\u5b9e\u73b0\u4e86Runnable\u63a5\u53e3\u4e2drun()\u65b9\u6cd5\u7684\u7c7b\u4e3a\u53c2\u6570\u521b\u5efaThread\u7c7b\u7684\u7ebf\u7a0b\u5b9e\u4f8b
-	ThreadUseRunnable() {
-	}// \u6784\u9020\u51fd\u6570
+class WriteRun implements Runnable {
 
-	public void run() {
-		System.out.println("\u6211\u662fThread\u7c7b\u7684\u7ebf\u7a0b\u5b9e\u4f8b\u5e76\u4ee5\u5b9e\u73b0\u4e86Runnable\u63a5\u53e3\u7684\u7c7b\u4e3a\u53c2\u6570!");
-		System.out.println("\u6211\u5c06\u6302\u8d771\u79d2!");
-		System.out.println("\u56de\u5230\u4e3b\u7ebf\u7a0b,\u8bf7\u7a0d\u7b49,\u521a\u624d\u4e3b\u7ebf\u7a0b\u6302\u8d77\u53ef\u80fd\u8fd8\u6ca1\u9192\u8fc7\u6765\uff01");
-		try {
-			Thread.sleep(1000);// \u6302\u8d775\u79d2
-		} catch (InterruptedException e) {
-			return;
-		}
-		// \u5982\u679c\u8be5run()\u65b9\u6cd5\u987a\u5e8f\u6267\u884c\u5b8c\u4e86,\u7ebf\u7a0b\u5c06\u81ea\u52a8\u7ed3\u675f,\u800c\u4e0d\u4f1a\u88ab\u4e3b\u7ebf\u7a0b\u6740\u6389
-		// \u4f46\u5982\u679c\u4f11\u7720\u65f6\u95f4\u8fc7\u957f,\u5219\u7ebf\u7a0b\u8fd8\u5b58\u6d3b,\u53ef\u80fd\u88abstop()\u6740\u6389
+	//int count = 1;
+	MultiThread mt = new MultiThread();
+	
+	public WriteRun() {
+		System.out.println("创建写入线程...");
 	}
 
+	public void run() {
+		try {
+			while (true) {
+				System.out.println("insert into data");
+				mt.writeDb();
+				//if ((count++) % 100 == 0)
+				//	break;
+				//wait(30000); //30 seconds
+				//Thread.sleep(30000); //30 seconds
+				Thread.sleep(10000); //10 seconds
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }
-// \u8be5\u7a0b\u5e8f\u53ef\u505a\u7684\u4fee\u6539\u5982\u6539\u4f11\u7720\u65f6\u95f4\u6216\u4f18\u5148\u7ea7setPriority()

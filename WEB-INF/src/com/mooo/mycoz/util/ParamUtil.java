@@ -37,8 +37,10 @@ public class ParamUtil {
 
 	public static String getFunName(String objName) {
 		String funName = objName.substring(0, 1).toUpperCase();
+
 		if (objName.length() > 1) {
-			funName += objName.substring(1, objName.length());
+			//funName += objName.substring(1).toLowerCase();
+			funName += objName.substring(1);
 		}
 		return funName;
 	}
@@ -74,7 +76,7 @@ public class ParamUtil {
 		Method setMethod = bean.getClass().getMethod("set" + funName,new Class[] { cl });
 
 		// 当参数为空时直接赋予NULL值
-		if (value.trim().equals("")) {
+		if (value == null || value.trim().equals("")) {
 			setMethod.invoke(bean, new Object[] { null });
 			return;
 		}
@@ -391,5 +393,10 @@ public class ParamUtil {
 		}
 
 	}
-
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		System.out.println("fullName="+getFunName("saDDDDsafa"));
+	}
 }

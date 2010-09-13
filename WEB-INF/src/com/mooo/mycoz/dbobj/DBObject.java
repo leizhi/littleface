@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 //import com.mooo.mycoz.cache.CacheManager;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbBulildSQL;
@@ -19,6 +22,8 @@ import com.mooo.mycoz.util.ReflectUtil;
 
 public class DBObject extends DbBulildSQL{
 	
+	private static Log log = LogFactory.getLog(DBObject.class);
+
 	/**
 	 * 
 	 */
@@ -185,8 +190,9 @@ public class DBObject extends DbBulildSQL{
 			while (rs.next()) {
 				bean = this.getClass().newInstance();
 				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
+					if(log.isDebugEnabled()) log.debug("fullName="+ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()));
+					if(log.isDebugEnabled()) log.debug("value="+rs.getString(i + 1));
+					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),rs.getString(i + 1), null);
 				}
 				retrieveList.add(bean);
 			}
