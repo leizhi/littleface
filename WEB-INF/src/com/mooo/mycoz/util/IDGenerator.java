@@ -1,12 +1,18 @@
 package com.mooo.mycoz.util;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
@@ -61,7 +67,102 @@ public class IDGenerator {
 		return nextId;
 	} // getNextID(String table)
 
+	public static List<?> search(Class<?> clazz){
+		List<?> searchList = null;
+		try {
+			Object obj = clazz.newInstance();
+			Method execMethod = clazz.getMethod("searchAndRetrieveList");
+			searchList = (List<?>) execMethod.invoke(obj);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}finally{
+		}
+		return searchList;
+	}
 
+	public static Object randomNo(Class<?> clazz){
+		List<?> searchList = search(clazz);
+		Random random = new Random();
+		int randomId = random.nextInt(searchList.size());
+		return searchList.get(randomId);
+	}
+	
+	public static Map<?, ?> getSexs() {
+		HashMap<Object, Object> sexs = new HashMap<Object, Object>();
+		sexs.put("Male", "Male");
+		sexs.put("Female", "Female");
+		return sexs;
+	}
+
+	public static Map<?, ?> getEnables() {
+		HashMap<Object, Object> sexs = new HashMap<Object, Object>();
+		sexs.put("Yes", "Yes");
+		sexs.put("No", "No");
+		return sexs;
+	}
+
+	public static String getIdPrifix() {
+		TimeZone tz = TimeZone.getDefault();
+		Calendar now = Calendar.getInstance(tz);
+		String prefix = now.toString();
+		int tmp = now.get(Calendar.YEAR);
+		prefix = (tmp + "").substring(2, 4);
+		tmp = now.get(Calendar.MONTH) + 1;
+		if (tmp < 10)
+			prefix += "0" + tmp;
+		else
+			prefix += tmp;
+
+		return prefix;
+	}
+
+	public static String getYYMM() {
+		return getIdPrifix();
+	}
+
+	public static String getYY() {
+		TimeZone tz = TimeZone.getDefault();
+		Calendar now = Calendar.getInstance(tz);
+		String prefix = now.toString();
+		int tmp = now.get(Calendar.YEAR);
+		prefix = (tmp + "").substring(2, 4);
+
+		return prefix;
+	}
+	
+	public static Date getDate() {
+		
+		TimeZone tz = TimeZone.getDefault();
+		Calendar now = Calendar.getInstance(tz);
+		Date date = now.getTime();
+
+		return date;
+	}
+	
+	public static String getNowTime() {
+		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
+	
+		return ft.format(getDate());
+	}
+	
+	public static String getNowYear() {
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy");
+	
+		return ft.format(getDate());
+	}
+	
+	public static String getNow() {
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		
+		return ft.format(getDate());
+	}
+	
 	public static String getLastMonthToday() {
 
 		// get default date in yyyy-mm-dd format

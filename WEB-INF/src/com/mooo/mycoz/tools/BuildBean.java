@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 
-public class BuilDbobj {
+public class BuildBean {
 	
 	public void build(String table){
 		Connection con = null;
@@ -116,9 +116,10 @@ public class BuilDbobj {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		BuilDbobj bd = new BuilDbobj();
+		BuildBean bd = new BuildBean();
 		//bd.build("bus_remotes");
-		bd.buildInsert("buffer_traffic");
+		bd.build("bus_samples");
+		//bd.buildInsert("buffer_traffic");
 
 	}
 

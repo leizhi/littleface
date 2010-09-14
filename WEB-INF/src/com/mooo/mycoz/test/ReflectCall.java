@@ -28,6 +28,23 @@ public class ReflectCall {
 
 	}
 
+	public Object getBean(Class<?> clazz) throws Exception {
+		Object obj = null;
+		try {
+			obj = (Object) clazz.newInstance();
+			
+			Method[] methods = clazz.getDeclaredMethods();
+			for (Method method : methods) {
+				Class<?>[] paraTypes = new Class[] {};
+				Object paraValues[] = new Object[] {};
+			}
+
+		} catch (Throwable e) {
+			System.err.println(e);
+		}
+		return obj;
+	}
+	
 	public String execute() throws Exception {
 		try {
 			Class<?> clazz = this.getClass();

@@ -14,6 +14,8 @@ import java.util.Random;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
+import com.mooo.mycoz.dbobj.marketmoniter.BusSamples;
+import com.mooo.mycoz.util.IDGenerator;
 
 public class MultiThread {
 
@@ -31,9 +33,13 @@ public class MultiThread {
 			
 			stmt = con.createStatement();
 			sql = "INSERT INTO buffer_price(remoteid,sampleid,sale_price,islocal,oper_date,sale_qnty,sale_money,max_price,min_price)";
-			String remoteid = randomNo("bus_remotes","remoteid");
-			String sampleid = randomNo("bus_samples","sampleid");
-
+			
+			BusRemotes busRemotes = (BusRemotes)IDGenerator.randomNo(BusRemotes.class);
+			String remoteid = busRemotes.getRemoteid();
+			
+			BusSamples busSamples = (BusSamples)IDGenerator.randomNo(BusSamples.class);
+			String sampleid = busSamples.getSampleid();
+			
 			System.out.println("remoteid="+remoteid);
 			System.out.println("sampleid="+sampleid);
 			Random random = new Random();
@@ -128,63 +134,13 @@ public class MultiThread {
 		
 	}
 	
-	public String randomNo(String table,String rFiled){
-		Connection con = null;
-		Statement stmt = null;
-		String sql = "";
-		String rValue="";
-		try {
-			//mypool
-			con = DbConnectionManager.getConnection();
-			System.out.println("打开连接-------------");
-			System.out.println(con);
-			
-			stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-			sql = "SELECT  * FROM "+table;
-			ResultSet rs = stmt.executeQuery(sql);
-			List remotes = new ArrayList();
-			
-			while (rs.next()) {
-				remotes.add(rs.getString(rFiled));
-			}
-			rs.first();
-			
-			int randomIndex=0;
-			
-			Random random = new Random();
-			randomIndex = random.nextInt(remotes.size());
-
-			int i=0;
-			while (rs.next()) {
-				if(i==randomIndex){
-					rValue = rs.getString(rFiled);
-					break;
-				}
-				i++;
-			}
-			//random.
-		}catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Exception: " + e.getMessage());
-		} finally {
-			try {
-				stmt.close();
-				con.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return rValue;
-	}
-	
 	public String randomDate(){
 		String rDate="1976-01-01";
 		
 		Random random = new Random();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ");
 		Calendar cal = Calendar.getInstance();
-		cal.set(2010, 7, 1);
+		cal.set(2010, 8, 1);
 		long start = cal.getTimeInMillis();
 		cal.set(2010, 9, 13);
 		long end = cal.getTimeInMillis();
@@ -202,33 +158,16 @@ public class MultiThread {
 	}
 	
 	public void sdb(){
-		try {
-			
-			BusRemotes busRemotes = new BusRemotes();
-			busRemotes.setTable("bus_remotes");
-			List remotes = busRemotes.searchAndRetrieveList();
-			Random random = new Random();
-			for(int i=0;i<remotes.size();i++)
-			System.out.println("random="+random.nextInt(remotes.size()));
-			
-		}catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("SQLException:"+e.getMessage());
-		}
+		BusRemotes busRemotes = (BusRemotes)IDGenerator.randomNo(BusRemotes.class);
+		System.out.println("no="+busRemotes.getRemoteid());
 		
+		BusSamples busSamples = (BusSamples)IDGenerator.randomNo(BusSamples.class);
+		System.out.println("no="+busSamples.getSampleid());
 	}
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//MultiThread mt = new MultiThread();
-		//mt.();
-		
-		//mt.db();
-		//System.out.println("no="+mt.randomNo("bus_remotes","remoteid"));
-		//System.out.println("no="+mt.randomNo("bus_samples","sampleid"));
-		//System.out.println("no="+mt.randomNo("bus_remotes","remoteid"));
-
 		new Thread(new WriteRun()).start();
 		//new Thread(new ReadRun()).start();
 	}
@@ -276,7 +215,8 @@ class WriteRun implements Runnable {
 				//	break;
 				//wait(30000); //30 seconds
 				//Thread.sleep(30000); //30 seconds
-				Thread.sleep(10000); //10 seconds
+				//Thread.sleep(10000); //10 seconds
+				Thread.sleep(10); //10 ms
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

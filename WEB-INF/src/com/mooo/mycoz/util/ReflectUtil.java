@@ -1,8 +1,12 @@
 package com.mooo.mycoz.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class ReflectUtil {
 
@@ -39,5 +43,72 @@ public class ReflectUtil {
 		
 		return names;
 	}
+
+	public void getBean(){
+		try {
+			Object obj = Class.forName("com.mooo.cxrd.Dbobj").newInstance();
+			Class<? extends Object> cls = obj.getClass();
+			Class<?>[] paraTypes = new Class[] { Object.class,Object.class };
+			try {
+				Method method = cls.getMethod("methodName", paraTypes);
+				Object paraValues[] = new Object[] { new Object(), new Object() };
+				
+				try {
+					Object rObj = method.invoke(obj, paraValues);
+					
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
+	public void mod (){
+		try {
+			Object obj = Class.forName("com.mooo.cxrd.Dbobj").newInstance();
+			Class<? extends Object> cls = obj.getClass();
+			Class<?>[] paraTypes = new Class[] { Object.class,Object.class };
+			try {
+				Method method = cls.getMethod("methodName", paraTypes);
+				Object paraValues[] = new Object[] { new Object(), new Object() };
+				
+				try {
+					Object rObj = method.invoke(obj, paraValues);
+					
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
 }
