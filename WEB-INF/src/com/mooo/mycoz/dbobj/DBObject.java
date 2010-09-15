@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,10 +19,13 @@ import org.apache.commons.logging.LogFactory;
 //import com.mooo.mycoz.cache.CacheManager;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbBulildSQL;
+import com.mooo.mycoz.db.sql.OracleSQL;
 import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.ReflectUtil;
+import com.mooo.mycoz.util.StringUtils;
 
-public class DBObject extends DbBulildSQL{
+//public class DBObject extends DbBulildSQL{
+public class DBObject extends OracleSQL{
 	
 	private static Log log = LogFactory.getLog(DBObject.class);
 
@@ -219,9 +224,51 @@ public class DBObject extends DbBulildSQL{
 		}
 		return retrieveList;
 	}
+
+	public Integer find() throws SQLException{
+		String doSql = findSQL();
+
+		beanFillField();
+		Statement stmt = null;
+		boolean closeCon = false;
+		int total=0;
+		
+		try {
+			
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
+			}
+			
+			stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(doSql);
+			total = rs.getInt(1);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return total;
+	}
 	
 	public void add() throws SQLException {
 		beanFillField();
+		
 		boolean closeCon = false;
 		Statement stmt = null;
 		try{
@@ -316,18 +363,35 @@ public class DBObject extends DbBulildSQL{
 	public void beanFillField(){
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(this.getClass());
-			setTable(this.getClass().getSimpleName());
+			
+			setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName()));
+			initialization();
+			
 			String method;
 			String field;
+			
 			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
 				method = it.next();
 				if(method.indexOf("get")==0){
+					
 					Method getMethod;
 					getMethod = this.getClass().getMethod(method);
+					
+					System.out.println("method:" + method);
+
 					Object obj = getMethod.invoke(this);
+					
 					if(obj !=null) {
-						field = method.substring(method.indexOf("get")+3).toLowerCase();
-						setField(field, obj.toString());
+						field = method.substring(method.indexOf("get")+3);
+						if(obj.getClass().isAssignableFrom(Integer.class))
+							setField(StringUtils.upperToPrefix(field), (Integer)obj);
+						else if(obj.getClass().isAssignableFrom(String.class)){
+							setField(StringUtils.upperToPrefix(field), (String)obj);
+						}else if(obj.getClass().isAssignableFrom(Date.class)){
+							setField(StringUtils.upperToPrefix(field), (Date)obj);
+						}else if(obj.getClass().isAssignableFrom(Double.class)){
+							setField(StringUtils.upperToPrefix(field), (Double)obj);
+						}
 					}
 				}
 			}

@@ -1,7 +1,6 @@
 package com.mooo.mycoz.db.sql;
 
-public interface DbSql extends DbCommon{
-
+public interface DbAction extends DbCommon{
  	String getCatalog();
  	
  	void setCatalog(String catalog);
@@ -10,7 +9,7 @@ public interface DbSql extends DbCommon{
 	
 	void setTable(String table);
 	
-	void setField(String field, String value);
+	void setField(Field field);
 	
 	void setField(String field, Integer value);
 

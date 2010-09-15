@@ -27,9 +27,4 @@ public abstract class AbstractSQL implements DbSql, Serializable{
 	public void setTable(String table) {
 		this.table = table;
 	}
-
-	public void clear() {
-		catalog = null;
-		table = null;
-	}
 }

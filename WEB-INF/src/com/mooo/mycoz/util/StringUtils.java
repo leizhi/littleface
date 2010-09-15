@@ -644,4 +644,95 @@ public class StringUtils {
 		
 		return m.find();
 	}
+	
+	public static final String toUppeFirst(String str){
+		return str.substring(0, 1).toUpperCase()+str.substring(1);
+	}
+
+	public static final String toLowerFirst(String str){
+		return str.substring(0, 1).toLowerCase()+str.substring(1);
+	}
+	
+	public static final String prefixToUpper(String str){
+		return prefixToUpper(str,"_");
+	}
+
+	public static final String prefixToUpperNot(String str){
+		String result = prefixToUpper(str,"_");
+		result = result.substring(0, 1).toLowerCase()+result.substring(1);
+		
+		return result;
+	}
+	
+	public static final String prefixToUpper(String str,String prefix){
+		
+		if(str != null && str.length() > 0)
+			str = str.toLowerCase();
+		else if (str.indexOf(prefix) < 0)
+			return str;
+		else
+			return null;
+		
+		StringTokenizer tokens = new StringTokenizer(str, prefix);
+
+		String result="";
+		String tmp="";
+		
+		while (tokens.hasMoreTokens()) {
+				tmp = tokens.nextToken();
+				result += tmp.substring(0, 1).toUpperCase()+tmp.substring(1);
+		}
+		
+		return result;
+
+	}
+	
+	public static final String upperToPrefix(String str){
+		return upperToPrefix(str,"_");
+	}
+	
+	public static final String upperToPrefix(String str,String prefix){
+		
+		if(prefix==null || prefix.equals(""))
+			return str;
+		
+		String result="";
+
+		Pattern p = Pattern.compile("[A-Z]+[a-z]*");
+		Matcher m = p.matcher(str);
+		
+		while(m.find()){
+			result += prefix+m.group().toLowerCase();
+		}
+		
+		if(result != null && result.length() > 2) {
+			result = result.substring(1);
+		}
+		
+		return result;
+	}
+	
+	public static final String getMethod(String columnName,String returnType){
+		
+		StringBuilder createBuf = new StringBuilder();
+		createBuf.append("\tpublic "+returnType+" get"+toUppeFirst(columnName)+"() {\n");
+		createBuf.append("\treturn "+columnName+";\n");
+		createBuf.append("\t}\n");
+
+		return createBuf.toString();
+	}
+	
+	public static final String setMethod(String columnName,String returnType){
+		
+		StringBuilder createBuf = new StringBuilder();
+		createBuf.append("\tpublic void set"+toUppeFirst(columnName)+"("+returnType+" "+columnName+") {\n");
+		createBuf.append("\t this."+columnName+" = "+columnName+";\n");
+		createBuf.append("\t}\n");
+
+		return createBuf.toString();
+	}
+	
+	public static final String createMethod(String columnName,String returnType){
+		return getMethod(columnName,returnType)+setMethod(columnName,returnType);
+	}
 }

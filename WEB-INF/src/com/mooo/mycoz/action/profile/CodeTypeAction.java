@@ -240,7 +240,7 @@ public class CodeTypeAction extends BaseSupport{
 			LinearCode bean = new LinearCode();
 			bean.setCatalog("mycozShared");
 			bean.setId(new Integer(id));
-			bean.setUpdate("name", request.getParameter("LinearCode.name"));
+			//bean.setUpdate("name", request.getParameter("LinearCode.name"));
 			
 			if(request.getParameter("LinearCode.name")==null || "".equals(request.getParameter("LinearCode.name"))){
 				return "listCode";

@@ -12,43 +12,6 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 	 */
 	private static final long serialVersionUID = 6187804890473172495L;
 
-	// Singleton
-	/*
-	private static Object initLock = new Object();
-	private static DbBulildSQL factory = null;
-	
-	public static DbBulildSQL getInstance() {
-		if (factory == null) {
-			synchronized (initLock) {
-				try {
-					factory = new DbBulildSQL();
-				} catch (Exception e) {
-					System.err.println("Exception ARBean." + e.getMessage());
-					e.printStackTrace();
-					return null;
-				}
-			}
-		}
-		return factory;
-	}
-	
-	private DbBulildSQL() {
-		catalog = null;
-		table = null;
-		
-		groupBy = new ArrayList<String>();
-		orderBy = new ArrayList<String>();
-		recordStart = 0;
-		recordEnd = 0;
-		
-		fields = new HashMap();
-		likeField= new HashMap();
-		greaterEqualField= new HashMap();
-		lessEqual= new HashMap();
-		
-		updateKey = new ArrayList<String>();
-	}
-	*/
 	public DbBulildSQL() {
 		catalog = null;
 		table = null;
@@ -166,13 +129,23 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 		orderBy.add(field + " " + type);
 	}
 
+	public String findSQL() {
+		return searchSQL(true);
+	}
+	
 	public String searchSQL() {
+		return searchSQL(false);
+	}
+	
+	public String searchSQL(boolean find) {
 		
 		String key;
 		String value;
-
 		String sql = "SELECT * FROM ";
 
+		if (find)
+			sql = "SELECT COUNT(*) AS total FROM ";
+		
 		if (catalog != null)
 			sql += catalog + ".";
 		
