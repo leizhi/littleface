@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Random;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.marketmoniter.BufferPrice;
 import com.mooo.mycoz.dbobj.marketmoniter.BufferTraffic;
 import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
 import com.mooo.mycoz.dbobj.marketmoniter.BusSamples;
+import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.Transaction;
 
@@ -204,6 +206,40 @@ public class Monitoring {
 				
 			}
 
+			public void writeTx(){
+				Transaction tx = new Transaction();
+				try {
+					tx.start();
+					
+					BusRemotes busRemotes = (BusRemotes)IDGenerator.randomNo(BusRemotes.class);
+					String remoteid = busRemotes.getRemoteid();
+					
+					BusSamples busSamples = (BusSamples)IDGenerator.randomNo(BusSamples.class);
+					String sampleid = busSamples.getSampleid();
+					
+					System.out.println("remoteid="+remoteid);
+					System.out.println("sampleid="+sampleid);
+					
+					BufferPrice BufferPrice = new BufferPrice();
+					BufferPrice.setConnection(tx.getConnection());
+					BufferPrice.add();
+					
+					BufferTraffic bufferTraffic = new BufferTraffic();
+					bufferTraffic.setConnection(tx.getConnection());
+					
+					bufferTraffic.find();
+					
+					tx.commit();
+				}catch (SQLException e) {
+					e.printStackTrace();
+					System.out.println("SQLException:"+e.getMessage());
+					tx.rollback();
+				}finally {
+					tx.end();
+				}
+			
+			}
+			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
@@ -212,8 +248,8 @@ public class Monitoring {
 
 					while (true) {
 						System.out.println("insert into data");
-						
-						writeDb();
+						writeTx();
+						//writeDb();
 						//if ((count++) % 100 == 0)
 						//	break;
 						//wait(30000); //30 seconds
@@ -233,7 +269,36 @@ public class Monitoring {
 	public static void main(String[] args) {
 		System.out.println("欢迎使用本软件!");
 		
-		new Monitoring();
+		Transaction tx = new Transaction();
+		try {
+			tx.start();
+			
+			BusRemotes busRemotes = (BusRemotes)IDGenerator.randomNo(BusRemotes.class);
+			String remoteid = busRemotes.getRemoteid();
+			
+			BusSamples busSamples = (BusSamples)IDGenerator.randomNo(BusSamples.class);
+			String sampleid = busSamples.getSampleid();
+			
+			System.out.println("+++++remoteid="+remoteid);
+			System.out.println("+++++++++sampleid="+sampleid);
+			
+			BufferPrice BufferPrice = new BufferPrice();
+			BufferPrice.setConnection(tx.getConnection());
+			//BufferPrice.add();
+			
+			BufferTraffic bufferTraffic = new BufferTraffic();
+			bufferTraffic.setConnection(tx.getConnection());
+			bufferTraffic.find();
+			
+			tx.commit();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("SQLException:"+e.getMessage());
+			tx.rollback();
+		}finally {
+			tx.end();
+		}
+		//new Monitoring();
 		
 		//while(true) {
 			

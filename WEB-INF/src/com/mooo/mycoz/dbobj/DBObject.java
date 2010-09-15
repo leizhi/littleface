@@ -160,8 +160,6 @@ public class DBObject extends OracleSQL{
 	}
 	
 	public List<Object> searchAndRetrieveList() throws SQLException{
-		List<Object> retrieveList = null;
-		String doSql = searchSQL();
 
 /*
 		Object obj = getCache(doSql);
@@ -174,6 +172,10 @@ public class DBObject extends OracleSQL{
 			return retrieveList;
 	*/	
 		beanFillField();
+		List<Object> retrieveList = null;
+
+		String doSql = searchSQL();
+
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		boolean closeCon = false;
@@ -226,9 +228,12 @@ public class DBObject extends OracleSQL{
 	}
 
 	public Integer find() throws SQLException{
-		String doSql = findSQL();
-
 		beanFillField();
+		
+		String doSql = findSQL();
+		
+		System.out.println("doSql="+doSql);
+
 		Statement stmt = null;
 		boolean closeCon = false;
 		int total=0;
@@ -242,7 +247,9 @@ public class DBObject extends OracleSQL{
 			
 			stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(doSql);
-			total = rs.getInt(1);
+			
+			if(rs.next())
+				total = rs.getInt(1);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

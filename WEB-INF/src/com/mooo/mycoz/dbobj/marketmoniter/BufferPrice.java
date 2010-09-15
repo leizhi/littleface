@@ -1,79 +1,70 @@
 package com.mooo.mycoz.dbobj.marketmoniter;
 
+import java.util.*;
 import com.mooo.mycoz.dbobj.DBObject;
-
 public class BufferPrice extends DBObject {
 	private static final long serialVersionUID = 1L;
 	String remoteid;
 	String sampleid;
-	Double sale_price;
+	Double salePrice;
 	String islocal;
-	Double sale_qnty;
-	Double sale_money;
-	Double max_price;
-	Double min_price;
-	Double paycount;
-	String oper_date;
-	
-	public String getOper_date() {
-		return oper_date;
-	}
-	public void setOper_date(String oper_date) {
-		this.oper_date = oper_date;
-	}
+	Date operDate;
+	Double saleQnty;
+	Double saleMoney;
+	Double maxPrice;
+	Double minPrice;
 	public String getRemoteid() {
-		return remoteid;
+	return remoteid;
 	}
 	public void setRemoteid(String remoteid) {
-		this.remoteid = remoteid;
+	 this.remoteid = remoteid;
 	}
 	public String getSampleid() {
-		return sampleid;
+	return sampleid;
 	}
 	public void setSampleid(String sampleid) {
-		this.sampleid = sampleid;
+	 this.sampleid = sampleid;
 	}
-	public Double getSale_price() {
-		return sale_price;
+	public Double getSalePrice() {
+	return salePrice;
 	}
-	public void setSale_price(Double sale_price) {
-		this.sale_price = sale_price;
+	public void setSalePrice(Double salePrice) {
+	 this.salePrice = salePrice;
 	}
 	public String getIslocal() {
-		return islocal;
+	return islocal;
 	}
 	public void setIslocal(String islocal) {
-		this.islocal = islocal;
+	 this.islocal = islocal;
 	}
-	public Double getSale_qnty() {
-		return sale_qnty;
+	public Date getOperDate() {
+	return operDate;
 	}
-	public void setSale_qnty(Double sale_qnty) {
-		this.sale_qnty = sale_qnty;
+	public void setOperDate(Date operDate) {
+	 this.operDate = operDate;
 	}
-	public Double getSale_money() {
-		return sale_money;
+	public Double getSaleQnty() {
+	return saleQnty;
 	}
-	public void setSale_money(Double sale_money) {
-		this.sale_money = sale_money;
+	public void setSaleQnty(Double saleQnty) {
+	 this.saleQnty = saleQnty;
 	}
-	public Double getMax_price() {
-		return max_price;
+	public Double getSaleMoney() {
+	return saleMoney;
 	}
-	public void setMax_price(Double max_price) {
-		this.max_price = max_price;
+	public void setSaleMoney(Double saleMoney) {
+	 this.saleMoney = saleMoney;
 	}
-	public Double getMin_price() {
-		return min_price;
+	public Double getMaxPrice() {
+	return maxPrice;
 	}
-	public void setMin_price(Double min_price) {
-		this.min_price = min_price;
+	public void setMaxPrice(Double maxPrice) {
+	 this.maxPrice = maxPrice;
 	}
-	public Double getPaycount() {
-		return paycount;
+	public Double getMinPrice() {
+	return minPrice;
 	}
-	public void setPaycount(Double paycount) {
-		this.paycount = paycount;
+	public void setMinPrice(Double minPrice) {
+	 this.minPrice = minPrice;
 	}
-
 }

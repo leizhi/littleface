@@ -213,7 +213,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			if (field == null || value == null)
 				new Exception("set value is null");
 
-			fields.put(field, new Field(field));
+			fields.put(field, new Field(field,Types.VARCHAR));
 			columnValues.put(field, value);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -226,7 +226,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			if (field == null || value == null)
 				new Exception("set value is null");
 
-			fields.put(field, new Field(field));
+			fields.put(field, new Field(field,Types.INTEGER));
 			columnValues.put(field, value);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -238,7 +238,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			if (field == null || value == null)
 				new Exception("set value is null");
 
-			fields.put(field, new Field(field));
+			fields.put(field, new Field(field,Types.DOUBLE));
 			columnValues.put(field, value);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -250,13 +250,13 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			if (field == null || value == null)
 				new Exception("set value is null");
 
-			fields.put(field, new Field(field));
+			fields.put(field, new Field(field,Types.TIMESTAMP));
 			columnValues.put(field, value);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
-	
+
 	@Override
 	public void setLike(String field, String value) {
 		// TODO Auto-generated method stub
@@ -318,7 +318,6 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 
 	@Override
 	public String addSQL() {
-		//initialization();
 		
 		if(fields == null || columnValues == null)
 			return null;
@@ -528,15 +527,8 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 	@Override
 	public String searchSQL() {
 		
-		initialization();
-
-		setField("REMOTEID","0015");
-		setField("TRADE_AMOUNT","1395");
-		//setField("SALE_MONEY","3456115.7");
-		
-		setGreaterEqual("SALE_MONEY","3456");
-		
-		addOrderBy("SALE_MONEY");
+		if(fields == null || columnValues == null)
+			return null;
 		
 		Field field;
 		String key,value;
@@ -549,34 +541,37 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			if(field.isWhereByEqual()) {
 				byWhere = true;
 
-				if (field.getType() == Types.DATE)
+				if (field.getType() == Types.TIMESTAMP || field.getType() == Types.DATE){
 					whereBy.append(field.getName()+" = date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
+				}else if (field.getType() == Types.BIGINT || field.getType() == Types.DOUBLE){
 					whereBy.append(field.getName()+" = "+value + " AND ");
-				else 
+				}else {
 					whereBy.append(field.getName()+" = '"+value+"' AND ");
+				}
 			}
 			
 			if(field.isWhereByGreaterEqual()) {
 				byWhere = true;
 
-				if (field.getType() == Types.DATE)
+				if (field.getType() == Types.TIMESTAMP || field.getType() == Types.DATE){
 					whereBy.append(field.getName()+" >= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
+				}else if (field.getType() == Types.BIGINT || field.getType() == Types.DOUBLE){
 					whereBy.append(field.getName()+" >= "+value + " AND ");
-				else 
+				}else {
 					whereBy.append(field.getName()+" >= '"+value+"' AND");
+				}
 			}
 
 			if(field.isWhereByLessEqual()) {
 				byWhere = true;
 
-				if (field.getType() == Types.DATE)
+				if (field.getType() == Types.TIMESTAMP || field.getType() == Types.DATE){
 					whereBy.append(field.getName()+" <= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
+				}else if (field.getType() == Types.BIGINT || field.getType() == Types.DOUBLE){
 					whereBy.append(field.getName()+" <= "+value + " AND ");
-				else 
+				}else {
 					whereBy.append(field.getName()+" <= '"+value+"' AND ");
+				}
 			}
 	
 			if(field.isGroupBy()) {

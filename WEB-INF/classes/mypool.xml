@@ -17,7 +17,7 @@
  
 <!-- configure oracle database -->
 <entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>
-<entry key="DbConnectionDefaultPool.server">jdbc:oracle:thin:@192.168.0.117:1521:orcl</entry>
+<entry key="DbConnectionDefaultPool.server">jdbc:oracle:thin:@192.168.0.101:1521:orcl</entry>
 <entry key="DbConnectionDefaultPool.username">marketmoniter</entry>
 <entry key="DbConnectionDefaultPool.password">marketmonit</entry>
 

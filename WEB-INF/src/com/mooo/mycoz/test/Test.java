@@ -10,6 +10,10 @@ public class Test {
 
 	public static void main(String[] args) {
 
+		System.out.println(com.mooo.mycoz.util.IDGenerator.getNowTime());
+		System.out.println(com.mooo.mycoz.util.IDGenerator.getNow());
+		System.out.println(com.mooo.mycoz.util.IDGenerator.getNowYear());
+		
 		BufferTraffic bufferTraffic = new BufferTraffic();
 		bufferTraffic.setRemoteid("sdfsaf08");
 		bufferTraffic.setOperDate(new Date());
