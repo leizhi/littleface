@@ -28,7 +28,7 @@ public class MultiThread  {
 		if(log.isDebugEnabled()) log.debug("server start ok");
 		
 		System.out.println("服务器启动");
-		int max = 100;
+		int max = 400;
 		//int min = 10;
 
 		try {
@@ -74,7 +74,7 @@ public class MultiThread  {
 		}
 		
 		public void run() {
-			//synchronized (initLock) {
+			synchronized (initLock) {
 				while(true){
 					System.out.println("线程"+i+"执行");
 					doIt();
@@ -85,7 +85,7 @@ public class MultiThread  {
 						e.printStackTrace();
 					}
 				}
-			//}
+			}
 		}
 		
 		public void doIt(){
