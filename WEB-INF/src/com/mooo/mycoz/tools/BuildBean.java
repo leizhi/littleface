@@ -72,6 +72,7 @@ public class BuildBean {
 				}
 			}else if (type == Types.INTEGER){
 				buffer.append("\tInteger "+ columnName + ";\n");
+				gsMethod.append(StringUtils.createMethod(columnName, "Integer"));
 			}else if (type==Types.DECIMAL){
 				buffer.append("\tDouble "+ columnName + ";\n");
 				gsMethod.append(StringUtils.createMethod(columnName, "Double"));
@@ -181,7 +182,10 @@ public class BuildBean {
 		//bd.build("bus_remotes");
 		//bd.build("bus_samples");
 		//bd.build("buffer_price");
-		bd.build("buffer_traffic");
+		//bd.build("buffer_traffic");
+		bd.build("User");
+
+		
 		//bd.buildInsert("buffer_traffic");
 
 	}
