@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 public class OracleSQL extends AbstractSQL implements DbSql{
@@ -35,7 +36,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 	StringBuilder updateSql;
 	StringBuilder deleteSql;
 	StringBuilder searchSql;
-	StringBuilder findSql;
+	StringBuilder countSql;
 	
 	Map fields;
 	Map columnValues;
@@ -60,7 +61,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		updateSql = new StringBuilder("UPDATE "+table+" SET ");
 		deleteSql = new StringBuilder("DELETE FROM "+table);
 		searchSql = new StringBuilder("SELECT * FROM "+table);
-		findSql = new StringBuilder("SELECT COUNT(*) AS total FROM "+table);	
+		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM "+table);	
 		
 		fields= new HashMap();
 		columnValues = new HashMap();
@@ -161,17 +162,17 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			
 			if(byWhere) {
 				searchSql.append(whereBy);
-				findSql.append(whereBy);
+				countSql.append(whereBy);
 			}
 			
 			if(byGroup) {
 				searchSql.append(groupBy);
-				findSql.append(groupBy);
+				countSql.append(groupBy);
 			}
 			
 			if(byOrder) {
 				searchSql.append(orderBy);
-				findSql.append(orderBy);
+				countSql.append(orderBy);
 			}
 		}
 		
@@ -196,7 +197,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		
 		
 		System.out.println("searchSql="+searchSql);
-		System.out.println("findSql="+findSql);
+		System.out.println("findSql="+countSql);
 
 		System.out.println("saveSql="+saveSql);
 		System.out.println("updateSql="+updateSql);
@@ -336,9 +337,9 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 				isSave = true;
 				saveKey.append(field.getName()+",");
 				
-				if(obj.getClass().isAssignableFrom(Integer.class))
+				if(obj.getClass().isAssignableFrom(Integer.class)){
 					saveValue.append(obj+",");
-				else if(obj.getClass().isAssignableFrom(String.class)){
+				}else if(obj.getClass().isAssignableFrom(String.class)){
 					saveValue.append("'"+obj+"',");
 				}else if(obj.getClass().isAssignableFrom(Date.class)){
 					saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"',");
@@ -375,15 +376,6 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 
 	@Override
 	public String deleteSQL() {
-		initialization();
-		
-		setField("REMOTEID","0015");
-		setField("TRADE_AMOUNT","1395");
-		//setField("SALE_MONEY","3456115.7");
-		
-		setGreaterEqual("SALE_MONEY","3456115.7");
-		
-		addOrderBy("SALE_MONEY");
 		
 		Field field;
 		String key,value;
@@ -391,42 +383,52 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
 			key = (String) it.next();
 			field = (Field) fields.get(key);
-			value = (String) columnValues.get(key);
+			
+			Object obj = columnValues.get(key);
 
 			if(field.isWhereByEqual()) {
 				byWhere = true;
-
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" = date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" = "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" = '"+value+"' AND ");
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" = '"+obj +"' AND ");
+				}
 			}
 			
 			if(field.isWhereByGreaterEqual()) {
 				byWhere = true;
-
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" >= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" >= "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" >= '"+value+"' AND");
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" >= '"+obj +"' AND ");
+				}
 			}
 
 			if(field.isWhereByLessEqual()) {
 				byWhere = true;
 
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" <= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" <= "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" <= '"+value+"' AND ");
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" <= '"+obj +"' AND ");
+				}
 			}
-			
-			System.out.println(field.getName()+"="+value);
+	
+			System.out.println("whereBy="+whereBy);
 		}
 		
 		if(byWhere)
@@ -442,68 +444,95 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 
 	@Override
 	public String updateSQL() {
-		initialization();
-		
-		setField("REMOTEID","0015");
-		setField("TRADE_AMOUNT","1395");
-		setField("SALE_MONEY","3456115.7");
-
-		addOrderBy("SALE_MONEY");
 		
 		Field field;
-		String key,value;
+		String key;
+		whereBy=new StringBuilder(" WHERE ");
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
 			key = (String) it.next();
 			field = (Field) fields.get(key);
-			value = (String) columnValues.get(key);
 			
+			System.out.println("key="+key);
+
+			Object obj = columnValues.get(key);
 		
 			if(field.isUpdate()) {
 				isUpdate = true;
 				
-				if (field.getType() == Types.DATE)
-					updateSql.append(field.getName()+"=date'"+value+"',");
-				else if (field.getType() == Types.BIGINT)
-					updateSql.append(field.getName()+"="+value);
-				else 
-					updateSql.append(field.getName()+"='"+value+"',");
+				if (DbUtil.search(this.getTable()).contains(field.getName())) {
+					byWhere = true;
+					
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" = "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" = "+obj +" AND ");
+					} else {
+						whereBy.append(field.getName()+" = '"+obj +"' AND ");
+					}
+					
+					continue;
+				}
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					updateSql.append(field.getName()+" = "+obj +",");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					updateSql.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"',");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					updateSql.append(field.getName()+" = "+obj +",");
+				} else {
+					updateSql.append(field.getName()+" = '"+obj +"',");
+				}
+
 			}
 			
+			// where build
+			/*
 			if(field.isWhereByEqual()) {
 				byWhere = true;
-
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" = date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" = "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" = '"+value+"' AND ");
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" = '"+obj +"' AND ");
+				}
 			}
 			
 			if(field.isWhereByGreaterEqual()) {
 				byWhere = true;
-
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" >= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" >= "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" >= '"+value+"' AND");
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" >= '"+obj +"' AND ");
+				}
 			}
 
 			if(field.isWhereByLessEqual()) {
 				byWhere = true;
 
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" <= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" <= "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" <= '"+value+"' AND ");
-			}
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" <= '"+obj +"' AND ");
+				}
+			} */
+			// build end
 			
-			System.out.println(field.getName()+"="+value);
 		}
 		
 		if(byWhere)
@@ -515,9 +544,6 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			if(byWhere)
 				updateSql.append(whereBy);
 		}
-
-		if(byWhere)
-			deleteSql.append(whereBy);
 
 		System.out.println("updateSql="+updateSql);
 
@@ -534,46 +560,54 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		String key,value;
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
+		
 			key = (String) it.next();
 			field = (Field) fields.get(key);
-			value = (String) columnValues.get(key);
-						
+			
+			Object obj = columnValues.get(key);
+			
 			if(field.isWhereByEqual()) {
 				byWhere = true;
-
-				if (field.getType() == Types.TIMESTAMP || field.getType() == Types.DATE){
-					whereBy.append(field.getName()+" = date'"+value+"' AND ");
-				}else if (field.getType() == Types.BIGINT || field.getType() == Types.DOUBLE){
-					whereBy.append(field.getName()+" = "+value + " AND ");
-				}else {
-					whereBy.append(field.getName()+" = '"+value+"' AND ");
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" = '"+obj +"' AND ");
 				}
 			}
 			
 			if(field.isWhereByGreaterEqual()) {
 				byWhere = true;
-
-				if (field.getType() == Types.TIMESTAMP || field.getType() == Types.DATE){
-					whereBy.append(field.getName()+" >= date'"+value+"' AND ");
-				}else if (field.getType() == Types.BIGINT || field.getType() == Types.DOUBLE){
-					whereBy.append(field.getName()+" >= "+value + " AND ");
-				}else {
-					whereBy.append(field.getName()+" >= '"+value+"' AND");
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" >= '"+obj +"' AND ");
 				}
 			}
 
 			if(field.isWhereByLessEqual()) {
 				byWhere = true;
 
-				if (field.getType() == Types.TIMESTAMP || field.getType() == Types.DATE){
-					whereBy.append(field.getName()+" <= date'"+value+"' AND ");
-				}else if (field.getType() == Types.BIGINT || field.getType() == Types.DOUBLE){
-					whereBy.append(field.getName()+" <= "+value + " AND ");
-				}else {
-					whereBy.append(field.getName()+" <= '"+value+"' AND ");
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" <= '"+obj +"' AND ");
 				}
 			}
-	
+
 			if(field.isGroupBy()) {
 				byGroup = true;
 				groupBy.append(field.getName()+",");
@@ -583,8 +617,6 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 				byOrder = true;
 				orderBy.append(field.getName()+",");
 			}
-			
-			System.out.println(field.getName()+"="+value);
 		}
 		
 		if(byWhere)
@@ -602,17 +634,14 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			
 			if(byWhere) {
 				searchSql.append(whereBy);
-				findSql.append(whereBy);
 			}
 			
 			if(byGroup) {
 				searchSql.append(groupBy);
-				findSql.append(groupBy);
 			}
 			
 			if(byOrder) {
 				searchSql.append(orderBy);
-				findSql.append(orderBy);
 			}
 		}
 		
@@ -622,11 +651,85 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 	}
 
 	@Override
-	public String findSQL() {
+	public String countSQL() {
 		
-		return findSql.toString();
-	}
+		if(fields == null || columnValues == null)
+			return null;
+		
+		Field field;
+		String key,value;
+		
+		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
+			key = (String) it.next();
+			field = (Field) fields.get(key);
+			
+			Object obj = columnValues.get(key);
+						
+			if(field.isWhereByEqual()) {
+				byWhere = true;
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" = "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" = '"+obj +"' AND ");
+				}
+			}
+			
+			if(field.isWhereByGreaterEqual()) {
+				byWhere = true;
+				
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" >= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" >= '"+obj +"' AND ");
+				}
+			}
+
+			if(field.isWhereByLessEqual()) {
+				byWhere = true;
+
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" <= "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" <= '"+obj +"' AND ");
+				}
+			}
 	
-
-
+			System.out.println("whereBy="+whereBy);
+		}
+		
+		if(byWhere)
+			whereBy.delete(whereBy.lastIndexOf("AND"),whereBy.lastIndexOf("AND")+3);
+		
+		if(isSearch){
+			
+			if(byWhere) {
+				countSql.append(whereBy);
+			}
+			
+			if(byGroup) {
+				countSql.append(groupBy);
+			}
+			
+			if(byOrder) {
+				countSql.append(orderBy);
+			}
+		}
+		
+		System.out.println("countSql="+countSql);
+		
+		return countSql.toString();
+	}
 }

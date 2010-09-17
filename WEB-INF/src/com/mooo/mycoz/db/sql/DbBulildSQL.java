@@ -129,7 +129,7 @@ public class DbBulildSQL extends AbstractSQL implements DbSql{
 		orderBy.add(field + " " + type);
 	}
 
-	public String findSQL() {
+	public String countSQL() {
 		return searchSQL(true);
 	}
 	

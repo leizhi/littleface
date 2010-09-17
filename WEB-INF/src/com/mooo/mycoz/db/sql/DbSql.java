@@ -34,5 +34,5 @@ public interface DbSql extends DbCommon{
  	
  	String searchSQL();
 
- 	String findSQL();
+ 	String countSQL();
 }

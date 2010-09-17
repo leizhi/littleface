@@ -96,7 +96,7 @@ public class IDGenerator {
 		int randomId = random.nextInt(searchList.size());
 		return searchList.get(randomId);
 	}
-	
+	/*
 	public static String randomDate(){
 		String rDate="1976-01-01";
 		
@@ -114,6 +114,22 @@ public class IDGenerator {
 		}
 		
 		return rDate;
+	}
+*/
+	public static Date randomDate(){
+		Date randomDate = new Date();
+		Random random = new Random();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(2010, 8, 1);
+		long start = cal.getTimeInMillis();
+		cal.set(2010, 9, 13);
+		long end = cal.getTimeInMillis();
+		for (int i = 0; i < 10; i++) {
+			randomDate = new Date(start + (long) (random.nextDouble() * (end - start)));
+		}
+		
+		return randomDate;
 	}
 	
 	public static Map<?, ?> getSexs() {

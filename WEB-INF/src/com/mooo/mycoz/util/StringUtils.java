@@ -658,8 +658,12 @@ public class StringUtils {
 	}
 
 	public static final String prefixToUpperNot(String str){
-		String result = prefixToUpper(str,"_");
-		result = result.substring(0, 1).toLowerCase()+result.substring(1);
+		String result = null;
+		
+		if (str != null && str.length() > 1) {
+			result = prefixToUpper(str, "_");
+			result = result.substring(0, 1).toLowerCase() + result.substring(1);
+		}
 		
 		return result;
 	}
@@ -668,7 +672,7 @@ public class StringUtils {
 		
 		if(str != null && str.length() > 0)
 			str = str.toLowerCase();
-		else if (str.indexOf(prefix) < 0)
+		else if (str != null && str.indexOf(prefix) < 0)
 			return str;
 		else
 			return null;

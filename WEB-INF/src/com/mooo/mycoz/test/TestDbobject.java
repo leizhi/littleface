@@ -14,7 +14,7 @@ public class TestDbobject {
 		factory.addSQL();
 		factory.updateSQL();
 		factory.deleteSQL();
-		factory.findSQL();
+		factory.countSQL();
 	}
 
 }

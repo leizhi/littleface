@@ -58,8 +58,7 @@ public class OriginalExample extends DBObject{
 	// Lock for saving state to database.
 	//private Object saveLock = new Object();
 	//private int order;
-	
-    public int count() {
+    public Integer count() {
         int count = 0;
         Connection con = null;
         PreparedStatement pstmt = null;

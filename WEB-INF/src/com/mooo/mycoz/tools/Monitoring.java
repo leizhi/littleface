@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +18,13 @@ import com.mooo.mycoz.dbobj.marketmoniter.BufferTraffic;
 import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
 import com.mooo.mycoz.dbobj.marketmoniter.BusSamples;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
+import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.Transaction;
 
 public class Monitoring {
 	
-	final public static int MAX = 100;
+	final public static int MAX = 80;
 	
 	
 	public Monitoring (){
@@ -122,7 +124,7 @@ public class Monitoring {
 			       BigDecimal bd = new BigDecimal(random.nextDouble() * 10);
 			       double sale_price = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
 			       int islocal = new Random().nextInt(2);
-			       String oper_date = IDGenerator.randomDate();
+			       Date oper_date = IDGenerator.randomDate();
 
 			       bd = new BigDecimal(random.nextDouble() * 100);
 			       double sale_qnty = bd.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -145,7 +147,7 @@ public class Monitoring {
 							+"'"+sampleid+"',"
 							+sale_price+","
 							+islocal+","
-							+"date'"+oper_date+"',"
+							+"date'"+new SimpleDateFormat("yyyy-MM-dd ").format(oper_date) +"',"
 							+sale_qnty+","
 							+sale_money+","
 							+max_price+","
@@ -176,7 +178,7 @@ public class Monitoring {
 						sql = "INSERT INTO buffer_traffic(remoteid,oper_date,trade_amount,sale_money) ";
 						sql += " VALUES(" +"'"+remoteid+"',"
 							+"date'"+oper_date+"',"
-							+ islocal +","
+							+ 1 +","
 							+ totle_money
 							+")";
 					}
@@ -220,15 +222,76 @@ public class Monitoring {
 					System.out.println("remoteid="+remoteid);
 					System.out.println("sampleid="+sampleid);
 					
+					Random random = new Random();
+					
+					//random.setSeed(10000000L);
+			       BigDecimal bd = new BigDecimal(random.nextDouble() * 10);
+			       double salePrice = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			       Integer islocal = (new Random().nextInt(2));
+			       Date operDate = IDGenerator.randomDate();
+
+			       bd = new BigDecimal(random.nextDouble() * 100);
+			       double saleQnty = bd.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+			       
+			       bd = new BigDecimal(random.nextDouble() * 100);
+			       double saleMoney = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			       double maxPrice = saleMoney;
+			       double minPrice = saleMoney;
+
+					System.out.println("sale_price="+salePrice);
+					System.out.println("islocal="+islocal);
+					System.out.println("oper_date="+operDate);
+					System.out.println("sale_qnty="+saleQnty);
+					
+					System.out.println("sale_money="+saleMoney);
+					System.out.println("max_price="+maxPrice);
+					System.out.println("min_price="+minPrice);
+					
 					BufferPrice BufferPrice = new BufferPrice();
 					BufferPrice.setConnection(tx.getConnection());
+					BufferPrice.setRemoteid(remoteid);
+					BufferPrice.setSampleid(sampleid);
+					
+					BufferPrice.setSalePrice(salePrice);
+					BufferPrice.setOperDate(operDate);
+					BufferPrice.setSaleQnty(saleQnty);
+					BufferPrice.setSaleMoney(saleMoney);
+					BufferPrice.setMaxPrice(maxPrice);
+					BufferPrice.setMinPrice(minPrice);
+					BufferPrice.setIslocal(islocal.toString());
 					BufferPrice.add();
 					
 					BufferTraffic bufferTraffic = new BufferTraffic();
 					bufferTraffic.setConnection(tx.getConnection());
+					bufferTraffic.setRemoteid(remoteid);
+					bufferTraffic.setOperDate(operDate);
 					
-					bufferTraffic.find();
-					
+				    bd = new BigDecimal(saleMoney*saleQnty);
+				    double totleMoney = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				    
+					if(bufferTraffic.count() > 0) {
+						System.out.println("count="+bufferTraffic.count());
+						
+						bufferTraffic.retrieve();
+						
+						System.out.println("saleMoney="+bufferTraffic.getSaleMoney());
+						System.out.println("tradeAmount="+bufferTraffic.getTradeAmount());
+
+						bufferTraffic.setTradeAmount(bufferTraffic.getTradeAmount()+1);
+						bufferTraffic.setSaleMoney(bufferTraffic.getSaleMoney()+totleMoney);
+						
+						System.out.println("saleMoney="+bufferTraffic.getSaleMoney());
+						System.out.println("tradeAmount="+bufferTraffic.getTradeAmount());
+						
+						bufferTraffic.update();
+						
+					}else {
+						System.out.println("count="+bufferTraffic.count());
+						bufferTraffic.setTradeAmount(1);
+						bufferTraffic.setSaleMoney(totleMoney);
+						bufferTraffic.add();
+					}
+				
 					tx.commit();
 				}catch (SQLException e) {
 					e.printStackTrace();
@@ -237,7 +300,6 @@ public class Monitoring {
 				}finally {
 					tx.end();
 				}
-			
 			}
 			
 			@Override
@@ -269,36 +331,7 @@ public class Monitoring {
 	public static void main(String[] args) {
 		System.out.println("欢迎使用本软件!");
 		
-		Transaction tx = new Transaction();
-		try {
-			tx.start();
-			
-			BusRemotes busRemotes = (BusRemotes)IDGenerator.randomNo(BusRemotes.class);
-			String remoteid = busRemotes.getRemoteid();
-			
-			BusSamples busSamples = (BusSamples)IDGenerator.randomNo(BusSamples.class);
-			String sampleid = busSamples.getSampleid();
-			
-			System.out.println("+++++remoteid="+remoteid);
-			System.out.println("+++++++++sampleid="+sampleid);
-			
-			BufferPrice BufferPrice = new BufferPrice();
-			BufferPrice.setConnection(tx.getConnection());
-			//BufferPrice.add();
-			
-			BufferTraffic bufferTraffic = new BufferTraffic();
-			bufferTraffic.setConnection(tx.getConnection());
-			bufferTraffic.find();
-			
-			tx.commit();
-		}catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("SQLException:"+e.getMessage());
-			tx.rollback();
-		}finally {
-			tx.end();
-		}
-		//new Monitoring();
+		new Monitoring();
 		
 		//while(true) {
 			

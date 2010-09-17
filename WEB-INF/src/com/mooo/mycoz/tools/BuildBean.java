@@ -1,6 +1,7 @@
 package com.mooo.mycoz.tools;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -32,6 +33,45 @@ public class BuildBean {
 		System.out.println("打开连接-------------");
 		System.out.println(con);
 		
+		DatabaseMetaData db =  DbConnectionManager.getConnection().getMetaData();
+		rs = db.getPrimaryKeys(null, null, table.toUpperCase());
+		rsmd = rs.getMetaData();
+		
+		while (rs.next()) {
+			for (int i = 1; i < rsmd.getColumnCount()+1; i++) {
+				System.out.print(rs.getString(i) + " ");
+			}
+			System.out.println();
+		}
+		
+		// 表信息
+		String[] t = { "TABLE", "VIEW" };
+		ResultSet tableRs = db.getTables(null, null, table, t);
+		while (tableRs.next()) {
+		for (int i = 1; i < 6; i++) {
+		System.out.print(tableRs.getString(i) + " ");
+		}
+		System.out.println("+++++++++++++++++++++++++++++++++");
+		}
+		// 列信息
+		rs = db.getColumns(null, null, table, null);
+		while (rs.next()) {
+		for (int i = 1; i < 19; i++) {
+		System.out.print(rs.getString(i) + " ");
+		}
+		System.out.println("+++++++++++++++++++++++++++++++++");
+
+		}
+		//主键信息
+		ResultSet pkRs = db.getPrimaryKeys(null, null, table);
+		while (pkRs.next()) {
+		for (int i = 1; i < 6; i++) {
+		System.out.print(pkRs.getString(i) + " ");
+		}
+		System.out.println("+++++++++++++++++++++++++++++++++");
+
+		} 
+		
 		sql = "SELECT  * FROM "+table;
 		System.out.println(sql);
 		buffer.append(StringUtils.prefixToUpper(table));
@@ -43,13 +83,13 @@ public class BuildBean {
 		stmt = con.createStatement();
 		rs = stmt.executeQuery(sql);
 		rsmd = rs.getMetaData();
+		
 		int type=0;
 		int precision=0;
 		int scale=0;
 		String columnName="";
 
 		StringBuilder gsMethod = new StringBuilder();
-
 		for (int i = 0; i < rsmd.getColumnCount(); i++) {
 			type = rsmd.getColumnType(i+1);
 			precision = rsmd.getPrecision(i+1);

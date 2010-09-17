@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbBulildSQL;
 import com.mooo.mycoz.db.sql.OracleSQL;
+import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
@@ -188,23 +189,30 @@ public class DBObject extends OracleSQL{
 				closeCon=true;
 			}
 			
-			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(doSql);
-			
-			rsmd = rs.getMetaData();
-			Object bean;
+			synchronized(connection){
+				stmt = connection.createStatement();
+				ResultSet rs = stmt.executeQuery(doSql);
 
-			while (rs.next()) {
-				bean = this.getClass().newInstance();
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					if(log.isDebugEnabled()) log.debug("fullName="+ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()));
-					if(log.isDebugEnabled()) log.debug("value="+rs.getString(i + 1));
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),rs.getString(i + 1), null);
+				rsmd = rs.getMetaData();
+				Object bean;
+
+				while (rs.next()) {
+					bean = this.getClass().newInstance();
+					for (int i = 0; i < rsmd.getColumnCount(); i++) {
+						if (log.isDebugEnabled())
+							log.debug("fullName="
+									+ ParamUtil.getFunName(rsmd.getColumnName(
+											i + 1).toLowerCase()));
+						if (log.isDebugEnabled())
+							log.debug("value=" + rs.getString(i + 1));
+
+						ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd
+								.getColumnName(i + 1).toLowerCase()), rs.getString(i + 1), null);
+					}
+					retrieveList.add(bean);
 				}
-				retrieveList.add(bean);
-			}
 			//addCache(doSql, retrieveList);
-			
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -227,10 +235,11 @@ public class DBObject extends OracleSQL{
 		return retrieveList;
 	}
 
-	public Integer find() throws SQLException{
+	public Integer count() throws SQLException{
+		
 		beanFillField();
 		
-		String doSql = findSQL();
+		String doSql = countSQL();
 		
 		System.out.println("doSql="+doSql);
 
@@ -372,6 +381,7 @@ public class DBObject extends OracleSQL{
 			List<String> methods = ReflectUtil.getMethodNames(this.getClass());
 			
 			setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName()));
+			
 			initialization();
 			
 			String method;
@@ -433,11 +443,14 @@ public class DBObject extends OracleSQL{
 			ResultSet rs = stmt.executeQuery(searchSQL());
 			
 			rsmd = rs.getMetaData();
-
+			String value;
 			while (rs.next()) {
 				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					ParamUtil.bindProperty(this, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
+					value = rsmd.getColumnName(i + 1);
+					
+					ParamUtil.bindProperty(this, StringUtils.prefixToUpper(value), rs.getString(i + 1), null);					
+					//ParamUtil.bindProperty(this, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
+					//		rs.getString(i + 1), null);
 				}
 			}
 		} catch (Exception e) {
