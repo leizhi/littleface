@@ -32,13 +32,13 @@ DROP DATABASE IF EXISTS mycozShared;
 
 CREATE DATABASE mycozBranch;
 use mycozBranch;
-source mycozBranch-d.$HEXT.$DEXT;
-source mycozBranch-t.$HEXT.$DEXT;
+source mycozBranch-d.$HEXT.$DEXT.sql;
+source mycozBranch-t.$HEXT.$DEXT.sql;
 
 CREATE DATABASE mycozShared;
 use mycozShared;
-source mycozShared-d.$HEXT.$DEXT;
-source mycozShared-t.$HEXT.$DEXT;
+source mycozShared-d.$HEXT.$DEXT.sql;
+source mycozShared-t.$HEXT.$DEXT.sql;
 
 set FOREIGN_KEY_CHECKS=1;
 FLAG
