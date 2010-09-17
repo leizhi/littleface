@@ -28,7 +28,7 @@ public class MultiThread  {
 		if(log.isDebugEnabled()) log.debug("server start ok");
 		
 		System.out.println("服务器启动");
-		int max = 400;
+		int max = 200;
 		//int min = 10;
 
 		try {
