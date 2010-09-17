@@ -34,6 +34,7 @@ public class ReflectTest {
 	 */
 	public static void main(String[] args) throws Exception {
 		List searchList = IDGenerator.search(BusRemotes.class);
+		
 		BusRemotes entity;
 		for(int i=0;i<searchList.size();i++) {
 			entity = (BusRemotes)searchList.get(i);

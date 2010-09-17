@@ -7,10 +7,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mooo.mycoz.util.DbUtil;
-import com.mooo.mycoz.util.StringUtils;
 
 public class OracleSQL extends AbstractSQL implements DbSql{
+	
+	private static Log log = LogFactory.getLog(OracleSQL.class);
 
 	/**
 	 * 
@@ -146,7 +150,6 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 				orderBy.append(field.getName()+",");
 			}
 			
-			System.out.println(field.getName()+"="+value);
 		}
 		
 		if(byWhere)
@@ -195,17 +198,16 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		if(byWhere)
 			deleteSql.append(whereBy);
 		
-		
-		System.out.println("searchSql="+searchSql);
-		System.out.println("findSql="+countSql);
+		if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
+		if(log.isDebugEnabled())log.debug("findSql="+countSql);
 
-		System.out.println("saveSql="+saveSql);
-		System.out.println("updateSql="+updateSql);
-		System.out.println("deleteSql="+deleteSql);
+		if(log.isDebugEnabled())log.debug("saveSql="+saveSql);
+		if(log.isDebugEnabled())log.debug("updateSql="+updateSql);
+		if(log.isDebugEnabled())log.debug("deleteSql="+deleteSql);
 
-		System.out.println("whereBy="+whereBy);
-		System.out.println("groupBy="+groupBy);
-		System.out.println("orderBy="+orderBy);
+		if(log.isDebugEnabled())log.debug("whereBy="+whereBy);
+		if(log.isDebugEnabled())log.debug("groupBy="+groupBy);
+		if(log.isDebugEnabled())log.debug("orderBy="+orderBy);
 	}
 	
 	@Override
@@ -357,7 +359,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 				}
 				*/
 			}
-			//System.out.println(field.getName()+"="+value);
+			//if(log.isDebugEnabled())log.debug(field.getName()+"="+value);
 		}
 		
 		if(isSave){
@@ -369,7 +371,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			saveSql.append(saveValue);
 		}
 
-		System.out.println("saveSql="+saveSql);
+		if(log.isDebugEnabled())log.debug("saveSql="+saveSql);
 
 		return saveSql.toString();
 	}
@@ -428,7 +430,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 				}
 			}
 	
-			System.out.println("whereBy="+whereBy);
+			if(log.isDebugEnabled())log.debug("whereBy="+whereBy);
 		}
 		
 		if(byWhere)
@@ -437,7 +439,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		if(byWhere)
 			deleteSql.append(whereBy);
 		
-		System.out.println("deleteSql="+deleteSql);
+		if(log.isDebugEnabled())log.debug("deleteSql="+deleteSql);
 
 		return deleteSql.toString();
 	}
@@ -453,8 +455,6 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			key = (String) it.next();
 			field = (Field) fields.get(key);
 			
-			System.out.println("key="+key);
-
 			Object obj = columnValues.get(key);
 		
 			if(field.isUpdate()) {
@@ -545,7 +545,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 				updateSql.append(whereBy);
 		}
 
-		System.out.println("updateSql="+updateSql);
+		if(log.isDebugEnabled())log.debug("updateSql="+updateSql);
 
 		return updateSql.toString();
 	}
@@ -645,7 +645,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			}
 		}
 		
-		System.out.println("searchSql="+searchSql);
+		if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
 		
 		return searchSql.toString();
 	}
@@ -707,7 +707,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 				}
 			}
 	
-			System.out.println("whereBy="+whereBy);
+			if(log.isDebugEnabled())log.debug("whereBy="+whereBy);
 		}
 		
 		if(byWhere)
@@ -728,7 +728,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 			}
 		}
 		
-		System.out.println("countSql="+countSql);
+		if(log.isDebugEnabled())log.debug("countSql="+countSql);
 		
 		return countSql.toString();
 	}

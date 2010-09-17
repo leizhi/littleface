@@ -3,22 +3,40 @@ package com.mooo.mycoz.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 public class Transaction {
-	Connection con = null;
-	boolean abortTransaction = false;
-	boolean supportsTransactions = false;
+	private static Log log = LogFactory.getLog(Transaction.class);
+
+	Connection connection;
+	boolean abortTransaction;
+	boolean supportsTransactions;
 
 	public void start() {
 		try {
-			con = DbConnectionManager.getConnection();
-			supportsTransactions = con.getMetaData().supportsTransactions();
-			if (supportsTransactions) {
-				con.setAutoCommit(false);
+			if (connection == null) {
+
+				if (connection == null) {
+					connection = DbConnectionManager.getConnection();
+				}
+				if (connection != null) {
+					supportsTransactions = connection.getMetaData()
+							.supportsTransactions();
+					if (supportsTransactions) {
+						connection.setAutoCommit(false);
+					}
+				}
 			}
-		} catch (SQLException se) {
-			se.printStackTrace();
+			//
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled())log.debug("NullPointerException :" + e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled())log.debug("SQLException:" + e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -29,40 +47,57 @@ public class Transaction {
 	}
 
 	public Connection getConnection() {
-		return con;
+		return connection;
 	}
 
 	public void rollback() {
-		if (con != null) {
-			try {
-				if (supportsTransactions) {
-					con.rollback();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			if (supportsTransactions) {
+				if (connection != null)
+					connection.rollback();
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled())log.debug("NullPointerException :" + e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void commit() {
-		if (con != null) {
-			try {
-				if (supportsTransactions) {
-					con.commit();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			if (supportsTransactions) {
+				if (connection != null)
+					connection.commit();
 			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled())log.debug("NullPointerException :" + e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void end() {
 		try {
+
 			if (supportsTransactions) {
-				con.setAutoCommit(true);
+				if (connection != null)
+					connection.setAutoCommit(true);
 			}
-			if (con != null)
-				con.close();
+
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			if(log.isDebugEnabled())log.debug("NullPointerException :" + e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

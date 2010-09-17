@@ -223,7 +223,7 @@ public class BuildBean {
 		//bd.build("bus_samples");
 		//bd.build("buffer_price");
 		//bd.build("buffer_traffic");
-		bd.build("User");
+		bd.build("Example");
 
 		
 		//bd.buildInsert("buffer_traffic");

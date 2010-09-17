@@ -1,4 +1,5 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz;
+
 
 import java.io.*;
 import java.sql.SQLException;
@@ -7,7 +8,7 @@ import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.dbobj.mycozBranch.Example;
+import com.mooo.mycoz.dbobj.marketmoniter.Example;
 import com.mooo.mycoz.util.Transaction;
 
 public class MultiThread  {
@@ -99,7 +100,8 @@ public class MultiThread  {
 				//Runtime rt = Runtime.getRuntime();
 
 				//for(int i=0;i<100000;i++){
-				ex.setId(new Random().nextInt());
+				//ex.setId(new Random().nextInt());
+				ex.setId(new Random().nextDouble() * 1000000000000000000L);
 				ex.setName("日本女"+new Random().nextInt());
 				ex.add();
 					

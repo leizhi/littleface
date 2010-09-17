@@ -15,7 +15,7 @@ import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LoginAction extends BaseSupport {
 
@@ -68,7 +68,7 @@ public class LoginAction extends BaseSupport {
 		try {
 			
 			User user = new User();
-			ParamUtil.bindData(request, user, "User");
+			HttpParamUtil.bindData(request, user, "User");
 
 			if (log.isDebugEnabled())log.debug("name= " + user.getName());
 			if (log.isDebugEnabled())log.debug("password= " + user.getPassword());
@@ -109,7 +109,7 @@ public class LoginAction extends BaseSupport {
 			if (log.isDebugEnabled())log.debug("promptRegister");
 			DBSession session = DBSession.getInstance();
 			User user = new User();
-			ParamUtil.bindData(request, user, "User");
+			HttpParamUtil.bindData(request, user, "User");
 			session.save(user);
 			
 		} catch (Exception e) {

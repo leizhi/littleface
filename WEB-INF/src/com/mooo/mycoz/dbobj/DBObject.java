@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -18,10 +17,8 @@ import org.apache.commons.logging.LogFactory;
 
 //import com.mooo.mycoz.cache.CacheManager;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.DbBulildSQL;
 import com.mooo.mycoz.db.sql.OracleSQL;
-import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
@@ -60,6 +57,7 @@ public class DBObject extends OracleSQL{
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
+		ResultSet result = null;
 		boolean closeCon = false;
 
 		try {
@@ -71,32 +69,40 @@ public class DBObject extends OracleSQL{
 			}
 			
 			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
+			result = stmt.executeQuery(sql);
 			
-			rsmd = rs.getMetaData();
+			rsmd = result.getMetaData();
 			Object bean;
 
-			while (rs.next()) {
+			while (result.next()) {
 				bean = obj.newInstance();
 				
 				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					//System.out.println("ColumnTypeName=" + rsmd.getColumnTypeName(i+1));
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
-					//System.out.println(rsmd.getColumnName(i + 1).toLowerCase()+"="+ rs.getString(i + 1));
+					BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(rsmd.getColumnName(i + 1)),result.getString(i + 1), null);
 				}
-				//System.out.println("name="+((Download)bean).getName());
 				retrieveList.add(bean);
 			}
 
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 
 			try {
+				if (result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
 				if (stmt != null)
 					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
 				if (connection != null && closeCon)
 					connection.close();
 			} catch (SQLException e) {
@@ -131,8 +137,7 @@ public class DBObject extends OracleSQL{
 			while (rs.next()) {
 				bean = this.getClass().newInstance();
 				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-							rs.getString(i + 1), null);
+					BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(rsmd.getColumnName(i + 1)),rs.getString(i + 1), null);
 				}
 				retrieveList.add(bean);
 			}
@@ -179,6 +184,7 @@ public class DBObject extends OracleSQL{
 
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
+		ResultSet result = null;
 		boolean closeCon = false;
 
 		try {
@@ -189,34 +195,40 @@ public class DBObject extends OracleSQL{
 				closeCon=true;
 			}
 			
-			synchronized(connection){
-				stmt = connection.createStatement();
-				ResultSet rs = stmt.executeQuery(doSql);
-
-				rsmd = rs.getMetaData();
-				Object bean;
-
-				while (rs.next()) {
-					bean = this.getClass().newInstance();
-					for (int i = 0; i < rsmd.getColumnCount(); i++) {
-						if (log.isDebugEnabled())
-							log.debug("fullName="
-									+ ParamUtil.getFunName(rsmd.getColumnName(
-											i + 1).toLowerCase()));
-						if (log.isDebugEnabled())
-							log.debug("value=" + rs.getString(i + 1));
-
-						ParamUtil.bindProperty(bean, ParamUtil.getFunName(rsmd
-								.getColumnName(i + 1).toLowerCase()), rs.getString(i + 1), null);
-					}
-					retrieveList.add(bean);
-				}
-			//addCache(doSql, retrieveList);
+			if (connection == null)
+				new SQLException("can't do getConnection");
+			
+			try {
+			stmt = connection.createStatement();
+			} catch (Exception e) {
+				if(log.isDebugEnabled())log.debug("Exception:"+e.getMessage());
 			}
+			result = stmt.executeQuery(doSql);
+
+			rsmd = result.getMetaData();
+			Object bean;
+
+			while (result.next()) {
+				bean = this.getClass().newInstance();
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(rsmd
+							.getColumnName(i + 1)), result.getString(i + 1), null);
+				}
+				retrieveList.add(bean);
+			}
+			
+			//addCache(doSql, retrieveList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 
+			try {
+				if (result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			try {
 				if (stmt != null)
 					stmt.close();
@@ -241,9 +253,10 @@ public class DBObject extends OracleSQL{
 		
 		String doSql = countSQL();
 		
-		System.out.println("doSql="+doSql);
+		if(log.isDebugEnabled())log.debug("doSql="+doSql);
 
 		Statement stmt = null;
+		ResultSet result = null;
 		boolean closeCon = false;
 		int total=0;
 		
@@ -255,15 +268,22 @@ public class DBObject extends OracleSQL{
 			}
 			
 			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(doSql);
+			result = stmt.executeQuery(doSql);
 			
-			if(rs.next())
-				total = rs.getInt(1);
+			if(result.next())
+				total = result.getInt(1);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 
+			try {
+				if (result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			try {
 				if (stmt != null)
 					stmt.close();
@@ -345,7 +365,7 @@ public class DBObject extends OracleSQL{
 			}
 		}
 	}
-	public void update() throws SQLException{
+	public synchronized void update() throws SQLException{
 		beanFillField();
 		boolean closeCon = false;
 
@@ -394,8 +414,6 @@ public class DBObject extends OracleSQL{
 					Method getMethod;
 					getMethod = this.getClass().getMethod(method);
 					
-					System.out.println("method:" + method);
-
 					Object obj = getMethod.invoke(this);
 					
 					if(obj !=null) {
@@ -431,6 +449,7 @@ public class DBObject extends OracleSQL{
 		beanFillField();
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
+		ResultSet result = null;
 		boolean closeCon = false;
 
 		try{
@@ -440,23 +459,27 @@ public class DBObject extends OracleSQL{
 			}
 			
 			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(searchSQL());
+			result = stmt.executeQuery(searchSQL());
 			
-			rsmd = rs.getMetaData();
+			rsmd = result.getMetaData();
 			String value;
-			while (rs.next()) {
+			while (result.next()) {
 				for (int i = 0; i < rsmd.getColumnCount(); i++) {
 					value = rsmd.getColumnName(i + 1);
-					
-					ParamUtil.bindProperty(this, StringUtils.prefixToUpper(value), rs.getString(i + 1), null);					
-					//ParamUtil.bindProperty(this, ParamUtil.getFunName(rsmd.getColumnName(i + 1).toLowerCase()),
-					//		rs.getString(i + 1), null);
+					BeanUtil.bindProperty(this, StringUtils.prefixToUpper(value), result.getString(i + 1), null);					
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();		
 		}finally {
 
+			try {
+				if (result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			try {
 				if (stmt != null)
 					stmt.close();
@@ -470,7 +493,6 @@ public class DBObject extends OracleSQL{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
 		}
 	}
 	

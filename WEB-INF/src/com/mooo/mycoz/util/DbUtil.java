@@ -1,9 +1,7 @@
 package com.mooo.mycoz.util;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,24 +15,20 @@ public class DbUtil {
 		Connection connection = null;
 
 		try {
-			searchList = new ArrayList<String> ();
-			
-			connection = DbConnectionManager.getConnection();
-			DatabaseMetaData db =  connection.getMetaData();
+			searchList = new ArrayList<String>();
 
-			ResultSet result = db.getPrimaryKeys(null, null, table.toUpperCase());
-			ResultSetMetaData rsmd = result.getMetaData();
+			connection = DbConnectionManager.getConnection();
+
+			ResultSet result = connection.getMetaData().getPrimaryKeys(null,null, table.toUpperCase());
 			
 			while (result.next()) {
-				for (int i = 1; i < rsmd.getColumnCount()+1; i++) {
-					System.out.println("Column"+i+"="+result.getString(i));
-					//System.out.println("beanName="+StringUtils.prefixToUpperNot(result.getString(i)));
-				}
 				searchList.add(result.getString(4).toLowerCase());
-				
-				System.out.println();
 			}
 			
+			result.close();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			System.out.println("NullPointerException :"+e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("SQLException:" + e.getMessage());
@@ -45,7 +39,6 @@ public class DbUtil {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
 		}
 		return searchList;
 	}

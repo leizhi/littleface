@@ -14,7 +14,8 @@ import java.util.Map;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbMultiBulildSQL;
 import com.mooo.mycoz.db.sql.DbMultiSql;
-import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.BeanUtil;
+import com.mooo.mycoz.util.StringUtils;
 
 public class MultiDBObject extends DbMultiBulildSQL implements DbMultiSql{
 	
@@ -76,8 +77,7 @@ public class MultiDBObject extends DbMultiBulildSQL implements DbMultiSql{
 						
 						if(value.equals(catalog+"."+table)){
 							column = rsmd.getColumnName(i).toLowerCase();
-							ParamUtil.bindProperty(bean, ParamUtil.getFunName(column),
-									rs.getString(i), null);
+							BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(column),rs.getString(i), null);
 						}
 					}
 					re.put(key, bean);

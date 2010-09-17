@@ -645,19 +645,19 @@ public class StringUtils {
 		return m.find();
 	}
 	
-	public static final String toUppeFirst(String str){
+	public synchronized static final String toUppeFirst(String str){
 		return str.substring(0, 1).toUpperCase()+str.substring(1);
 	}
 
-	public static final String toLowerFirst(String str){
+	public synchronized static final String toLowerFirst(String str){
 		return str.substring(0, 1).toLowerCase()+str.substring(1);
 	}
 	
-	public static final String prefixToUpper(String str){
+	public synchronized static final String prefixToUpper(String str){
 		return prefixToUpper(str,"_");
 	}
 
-	public static final String prefixToUpperNot(String str){
+	public synchronized static final String prefixToUpperNot(String str){
 		String result = null;
 		
 		if (str != null && str.length() > 1) {
@@ -668,7 +668,7 @@ public class StringUtils {
 		return result;
 	}
 	
-	public static final String prefixToUpper(String str,String prefix){
+	public synchronized static final String prefixToUpper(String str,String prefix){
 		
 		if(str != null && str.length() > 0)
 			str = str.toLowerCase();
@@ -691,13 +691,13 @@ public class StringUtils {
 
 	}
 	
-	public static final String upperToPrefix(String str){
+	public synchronized static final String upperToPrefix(String str){
 		return upperToPrefix(str,"_");
 	}
 	
-	public static final String upperToPrefix(String str,String prefix){
+	public synchronized static final String upperToPrefix(String str,String prefix){
 		
-		if(prefix==null || prefix.equals("") || str.indexOf("prefix") < 0)
+		if(prefix==null || prefix.equals(""))
 			return str;
 		
 		String result="";
@@ -738,5 +738,14 @@ public class StringUtils {
 	
 	public static final String createMethod(String columnName,String returnType){
 		return getMethod(columnName,returnType)+setMethod(columnName,returnType);
+	}
+	
+	public static String getFunName(String objName) {
+		String funName = objName.substring(0, 1).toUpperCase();
+
+		if (objName.length() > 1) {
+			funName += objName.substring(1);
+		}
+		return funName;
 	}
 }

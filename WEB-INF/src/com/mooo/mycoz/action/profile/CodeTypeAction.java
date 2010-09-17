@@ -15,8 +15,8 @@ import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.Transaction;
+import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class CodeTypeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(CodeTypeAction.class);
@@ -83,7 +83,7 @@ public class CodeTypeAction extends BaseSupport{
 				return "promptAdd";
 			}
 			
-			ParamUtil.bindData(request, bean, "CodeType");
+			HttpParamUtil.bindData(request, bean, "CodeType");
 			if (log.isDebugEnabled()) log.debug("name="+request.getParameter("CodeType.name"));
 			if (log.isDebugEnabled()) log.debug("category="+request.getParameter("CodeType.category"));
 
@@ -115,7 +115,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("processUpload");
 			DBSession session = DBSession.getInstance();
 			CodeType bean = new CodeType();
-			ParamUtil.bindData(request, bean, "CodeType");
+			HttpParamUtil.bindData(request, bean, "CodeType");
 			session.update(bean);
 			
 		} catch (Exception e) {
@@ -206,7 +206,7 @@ public class CodeTypeAction extends BaseSupport{
 				return "listCode";
 			}
 			
-			ParamUtil.bindData(request, bean, "LinearCode");
+			HttpParamUtil.bindData(request, bean, "LinearCode");
 			session.save(bean);
 			
 		}catch (SQLException e) {

@@ -66,7 +66,6 @@ public class IDGenerator {
 		}
 		return nextId;
 	} // getNextID(String table)
-
 	public static List<?> search(Class<?> clazz){
 		List<?> searchList = null;
 		try {
@@ -96,6 +95,14 @@ public class IDGenerator {
 		int randomId = random.nextInt(searchList.size());
 		return searchList.get(randomId);
 	}
+	
+	
+	public static Object randomNo(List<?> retrieveList){
+		Random random = new Random();
+		int randomId = random.nextInt(retrieveList.size());
+		return retrieveList.get(randomId);
+	}
+
 	/*
 	public static String randomDate(){
 		String rDate="1976-01-01";
