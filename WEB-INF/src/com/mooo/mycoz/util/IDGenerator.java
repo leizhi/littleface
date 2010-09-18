@@ -66,6 +66,7 @@ public class IDGenerator {
 		}
 		return nextId;
 	} // getNextID(String table)
+	
 	public static List<?> search(Class<?> clazz){
 		List<?> searchList = null;
 		try {
@@ -86,43 +87,38 @@ public class IDGenerator {
 	}
 
 	public static int randomInt(int max){
-		return new Random().nextInt(max);
+		if(max > 0)
+			return new Random().nextInt(max);
+		
+		return 0;
 	}
 	
 	public static Object randomNo(Class<?> clazz){
 		List<?> searchList = search(clazz);
 		Random random = new Random();
-		int randomId = random.nextInt(searchList.size());
-		return searchList.get(randomId);
+		int randomId = searchList.size();
+		if (randomId > 0) {
+			random.nextInt(randomId);
+			return searchList.get(randomId);
+		} else {
+			randomId=0;
+		}
+		return 0;
 	}
 	
 	
 	public static Object randomNo(List<?> retrieveList){
 		Random random = new Random();
-		int randomId = random.nextInt(retrieveList.size());
-		return retrieveList.get(randomId);
+		int randomId = retrieveList.size();
+		if (randomId > 0) {
+			random.nextInt(randomId);
+			return retrieveList.get(randomId);
+		} else {
+			randomId=0;
+		}
+		return 0;
 	}
 
-	/*
-	public static String randomDate(){
-		String rDate="1976-01-01";
-		
-		Random random = new Random();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd ");
-		Calendar cal = Calendar.getInstance();
-		cal.set(2010, 8, 1);
-		long start = cal.getTimeInMillis();
-		cal.set(2010, 9, 13);
-		long end = cal.getTimeInMillis();
-		for (int i = 0; i < 10; i++) {
-			Date d = new Date(start + (long) (random.nextDouble() * (end - start)));
-			rDate = format.format(d);
-			//System.out.println("build value="+rDate);
-		}
-		
-		return rDate;
-	}
-*/
 	public static Date randomDate(){
 		Date randomDate = new Date();
 		Random random = new Random();

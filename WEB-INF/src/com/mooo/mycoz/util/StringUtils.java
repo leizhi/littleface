@@ -697,7 +697,7 @@ public class StringUtils {
 	
 	public synchronized static final String upperToPrefix(String str,String prefix){
 		
-		if(prefix==null || prefix.equals(""))
+		if(prefix==null || prefix.equals("") || str.indexOf(prefix) < 0)
 			return str;
 		
 		String result="";

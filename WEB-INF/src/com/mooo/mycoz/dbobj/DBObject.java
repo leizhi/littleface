@@ -1,15 +1,11 @@
 package com.mooo.mycoz.dbobj;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -19,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.OracleSQL;
 import com.mooo.mycoz.util.BeanUtil;
-import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 //public class DBObject extends DbBulildSQL{
@@ -63,7 +58,7 @@ public class DBObject extends OracleSQL{
 		try {
 			retrieveList = new ArrayList<Object>();
 
-			if(connection == null){
+			if(connection == null || connection.isClosed()){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}
@@ -123,7 +118,7 @@ public class DBObject extends OracleSQL{
 		try {
 			retrieveList = new ArrayList<Object>();
 			
-			if(connection == null){
+			if(connection == null || connection.isClosed()){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}
@@ -177,7 +172,6 @@ public class DBObject extends OracleSQL{
 		if(retrieveList != null)
 			return retrieveList;
 	*/	
-		beanFillField();
 		List<Object> retrieveList = null;
 
 		String doSql = searchSQL();
@@ -190,33 +184,28 @@ public class DBObject extends OracleSQL{
 		try {
 			retrieveList = new ArrayList<Object>();
 			
-			if(connection == null){
+			if (connection == null || connection.isClosed()) {
 				connection = DbConnectionManager.getConnection();
-				closeCon=true;
+				closeCon = true;
 			}
-			
-			if (connection == null)
-				new SQLException("can't do getConnection");
-			
-			try {
+
 			stmt = connection.createStatement();
-			} catch (Exception e) {
-				if(log.isDebugEnabled())log.debug("Exception:"+e.getMessage());
-			}
 			result = stmt.executeQuery(doSql);
 
 			rsmd = result.getMetaData();
 			Object bean;
 
 			while (result.next()) {
+
 				bean = this.getClass().newInstance();
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(rsmd
-							.getColumnName(i + 1)), result.getString(i + 1), null);
+
+				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
+					BeanUtil.bindProperty(bean,
+							StringUtils.prefixToUpper(rsmd.getColumnName(i)),
+							result.getString(i), null);
 				}
 				retrieveList.add(bean);
 			}
-			
 			//addCache(doSql, retrieveList);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -249,8 +238,6 @@ public class DBObject extends OracleSQL{
 
 	public Integer count() throws SQLException{
 		
-		beanFillField();
-		
 		String doSql = countSQL();
 		
 		if(log.isDebugEnabled())log.debug("doSql="+doSql);
@@ -262,7 +249,7 @@ public class DBObject extends OracleSQL{
 		
 		try {
 			
-			if(connection == null){
+			if(connection == null || connection.isClosed()){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}
@@ -303,12 +290,11 @@ public class DBObject extends OracleSQL{
 	}
 	
 	public void add() throws SQLException {
-		beanFillField();
 		
 		boolean closeCon = false;
 		Statement stmt = null;
 		try{
-			if(connection == null){
+			if(connection == null || connection.isClosed()){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}
@@ -335,12 +321,11 @@ public class DBObject extends OracleSQL{
 	}
 	
 	public void delete() throws SQLException {
-		beanFillField();
 		Statement stmt = null;
 		boolean closeCon = false;
 
 		try{
-			if(connection == null){
+			if(connection == null || connection.isClosed()){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}
@@ -366,12 +351,11 @@ public class DBObject extends OracleSQL{
 		}
 	}
 	public synchronized void update() throws SQLException{
-		beanFillField();
 		boolean closeCon = false;
 
 		Statement stmt = null;
 		try{
-			if(connection == null){
+			if(connection == null || connection.isClosed()){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}
@@ -395,65 +379,15 @@ public class DBObject extends OracleSQL{
 			}
 		}
 	}
-	
-	public void beanFillField(){
-		try {
-			List<String> methods = ReflectUtil.getMethodNames(this.getClass());
-			
-			setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName()));
-			
-			initialization();
-			
-			String method;
-			String field;
-			
-			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
-				method = it.next();
-				if(method.indexOf("get")==0){
-					
-					Method getMethod;
-					getMethod = this.getClass().getMethod(method);
-					
-					Object obj = getMethod.invoke(this);
-					
-					if(obj !=null) {
-						field = method.substring(method.indexOf("get")+3);
-						if(obj.getClass().isAssignableFrom(Integer.class))
-							setField(StringUtils.upperToPrefix(field), (Integer)obj);
-						else if(obj.getClass().isAssignableFrom(String.class)){
-							setField(StringUtils.upperToPrefix(field), (String)obj);
-						}else if(obj.getClass().isAssignableFrom(Date.class)){
-							setField(StringUtils.upperToPrefix(field), (Date)obj);
-						}else if(obj.getClass().isAssignableFrom(Double.class)){
-							setField(StringUtils.upperToPrefix(field), (Double)obj);
-						}
-					}
-				}
-			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public void retrieve() throws SQLException{
-		beanFillField();
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		ResultSet result = null;
 		boolean closeCon = false;
 
 		try{
-			if(connection == null){
+			if(connection == null || connection.isClosed()){
 				connection = DbConnectionManager.getConnection();
 				closeCon=true;
 			}

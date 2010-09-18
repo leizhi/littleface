@@ -40,6 +40,7 @@ public class ReflectCall {
 
 				Class<?>[] paraTypes = new Class[] {};
 				Object paraValues[] = new Object[] {};
+				
 				if (this.getAction() == null)
 					return "error";
 				else if (method.getName().equals(getAction()))

@@ -95,6 +95,7 @@ public class BeanUtil {
 		}
 
 	}
+
 	/**
 	 * 动态赋值给自定义对象 member.city.id = 110 bean = member objName = city propertyName
 	 * = id value = 110
