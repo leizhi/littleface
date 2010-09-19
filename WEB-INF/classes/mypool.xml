@@ -8,18 +8,19 @@
 <entry key="serverPort">10000</entry>
 
 <!-- configure mysql database -->
+<!-- 
 <entry key="DbConnectionDefaultPool.driver">org.gjt.mm.mysql.Driver</entry>
 <entry key="DbConnectionDefaultPool.server">jdbc:mysql://127.0.0.1/mycozBranch?useUnicode=true&amp;characterEncoding=utf8</entry>
 <entry key="DbConnectionDefaultPool.username">mycoz</entry>
 <entry key="DbConnectionDefaultPool.password">xmlpj0#</entry>
- 
+  -->
+  
 <!-- configure oracle database -->
-<!-- 
 <entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>
 <entry key="DbConnectionDefaultPool.server">jdbc:oracle:thin:@192.168.0.101:1521:orcl</entry>
 <entry key="DbConnectionDefaultPool.username">marketmoniter</entry>
 <entry key="DbConnectionDefaultPool.password">marketmonit</entry>
- -->
+
  
 <entry key="yazdMailSubject">Default Yazd Subject</entry>
 <entry key="yazdMailSMTPServer">127.0.0.1</entry>
