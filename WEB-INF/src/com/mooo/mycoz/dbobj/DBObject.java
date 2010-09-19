@@ -241,7 +241,7 @@ public class DBObject extends OracleSQL{
 		String doSql = countSQL();
 		
 		if(log.isDebugEnabled())log.debug("doSql="+doSql);
-
+		
 		Statement stmt = null;
 		ResultSet result = null;
 		boolean closeCon = false;

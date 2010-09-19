@@ -52,8 +52,9 @@ public class ReflectUtil {
 				Object paraValues[] = new Object[] { new Object(), new Object() };
 				
 				try {
-					Object rObj = method.invoke(obj, paraValues);
+					//Object rObj = method.invoke(obj, paraValues);
 					
+					method.invoke(obj, paraValues);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {

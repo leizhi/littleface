@@ -459,7 +459,7 @@ public class MysqlSQL extends AbstractSQL implements DbSql{
 			if(field.isUpdate()) {
 				isUpdate = true;
 				
-				if (DbUtil.search(this.getTable()).contains(field.getName())) {
+				if (DbUtil.isPrimaryKey(this.getTable(),field.getName())) {
 					byWhere = true;
 					
 					if(obj.getClass().isAssignableFrom(Integer.class)){

@@ -1,6 +1,5 @@
 package com.mooo.mycoz.test;
 
-import com.mooo.mycoz.tools.DynamicProxy;
 
 public class UserClient {
 

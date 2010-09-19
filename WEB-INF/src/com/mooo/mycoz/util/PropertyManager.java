@@ -163,7 +163,7 @@ public class PropertyManager {
      *
      * @return an Enumeration of the Yazd property names.
      */
-    public static Enumeration propertyNames() {
+    public static Enumeration<?> propertyNames() {
         if (manager == null) {
             synchronized(managerLock) {
                 if (manager == null) {
@@ -317,7 +317,7 @@ public class PropertyManager {
         }
     }
 
-    protected Enumeration propNames() {
+    protected Enumeration<?> propNames() {
         //If properties aren't loaded yet. We also need to make this thread
         //safe, so synchronize...
         if (properties == null) {
@@ -390,7 +390,8 @@ public class PropertyManager {
      * @return value of the source
      */
 
-    private int getLoadSource(){
+    @SuppressWarnings("unused")
+	private int getLoadSource(){
         int  loadsource=1; //assume that application is not setup.
         // check to see if we are loading from the database using a context provider
         try{
@@ -411,7 +412,8 @@ public class PropertyManager {
      */
     public boolean propFileIsReadable() {
         try {
-            InputStream in = getClass().getResourceAsStream(resourceURI);
+            //InputStream in = 
+            	getClass().getResourceAsStream(resourceURI);
             return true;
         }
         catch (Exception e) {

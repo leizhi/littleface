@@ -85,13 +85,6 @@ public class IDGenerator {
 		}
 		return searchList;
 	}
-
-	public static int randomInt(int max){
-		if(max > 0)
-			return new Random().nextInt(max);
-		
-		return 0;
-	}
 	
 	public static Object randomNo(Class<?> clazz){
 		List<?> searchList = search(clazz);
@@ -106,6 +99,12 @@ public class IDGenerator {
 		return 0;
 	}
 	
+	public static int randomInt(int max){
+		if(max > 0)
+			return new Random().nextInt(max);
+		
+		return 0;
+	}
 	
 	public static Object randomNo(List<?> retrieveList){
 		Random random = new Random();

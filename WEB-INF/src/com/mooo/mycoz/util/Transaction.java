@@ -17,20 +17,12 @@ public class Transaction {
 
 	public void start() {
 		try {
-			if (connection == null) {
-
-				if (connection == null) {
-					connection = DbConnectionManager.getConnection();
+				connection = DbConnectionManager.getConnection();
+				supportsTransactions = connection.getMetaData().supportsTransactions();
+				
+				if (supportsTransactions) {
+					connection.setAutoCommit(false);
 				}
-				if (connection != null) {
-					supportsTransactions = connection.getMetaData()
-							.supportsTransactions();
-					if (supportsTransactions) {
-						connection.setAutoCommit(false);
-					}
-				}
-			}
-			//
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			if(log.isDebugEnabled())log.debug("NullPointerException :" + e.getMessage());
@@ -84,9 +76,7 @@ public class Transaction {
 
 	public void end() {
 		try {
-
 			if (supportsTransactions) {
-				if (connection != null)
 					connection.setAutoCommit(true);
 			}
 

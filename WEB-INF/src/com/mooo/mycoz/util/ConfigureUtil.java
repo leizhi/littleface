@@ -30,7 +30,7 @@ public class ConfigureUtil {
 
 	private String cacheFile = "/myconfig.xml";
 	private String mvcFile = "/myconfig.xml";
-	private String poolFile = "/mypool.xml";
+	//private String poolFile = "/mypool.xml";
 
 	public static ConfigureUtil getInstance() {
 

@@ -1,35 +1,45 @@
 package com.mooo.mycoz.tools.test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.dbobj.marketmoniter.Example;
+import com.mooo.mycoz.dbobj.marketmoniter.BufferPrice;
+import com.mooo.mycoz.dbobj.marketmoniter.BufferTraffic;
+import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
+import com.mooo.mycoz.dbobj.marketmoniter.BusSamples;
+import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.Transaction;
 
-public class MultiThread {
-	private static Log log = LogFactory.getLog(MultiThread.class);
+public class CxrdTools {
+	private static Log log = LogFactory.getLog(CxrdTools.class);
 
-	private long maxLong = 9223372036854775807L;
+	//private long maxLong = 9223372036854775807L;
 	//private double maxDouble = 1.79769313486231570e+308;
 	
+	private static List<Object> busRemotesList;
+	private static List<Object> busSamplesList;
+
 	private Thread[] threadPool;
 	private Long[] threadCreateTime;
 	private Integer[] threadLevel;
 	
 	private int maxConnMSec;
 	
-	public MultiThread(){
+	public CxrdTools(){
 		long startTime = System.currentTimeMillis();
 		new DoThread(0).writeTransaction();
 		long finishTime = System.currentTimeMillis();
 		System.out.println("ex ms:"+(finishTime - startTime));
 	}
 	
-	public MultiThread(int maxConns,double maxConnTime) {
+	public CxrdTools(int maxConns,double maxConnTime) {
 
 		threadPool = new  Thread[maxConns];
 		threadCreateTime = new Long[maxConns];
@@ -38,6 +48,13 @@ public class MultiThread {
 		Transaction tx = new Transaction();
 		tx.start();
 		tx.end();
+		///////
+		try {
+			busRemotesList = new BusRemotes().searchAndRetrieveList();
+			busSamplesList = new BusSamples().searchAndRetrieveList();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		
 		maxConnMSec = (int) (maxConnTime * 86400000.0); // 86400 sec/day
 		//maxConnMSec = (int) (maxConnTime * 3000.0);		// loop seconds.
@@ -57,7 +74,7 @@ public class MultiThread {
 				threadLevel[i] = 1;
 
 				threadPool[i].start();
-				System.out.println("===启动线程=====::::::" + i);
+				//System.out.println("===启动线程=====::::::" + i);
 
 				Thread.sleep(80); // wait other thread initialization
 			}
@@ -117,9 +134,8 @@ public class MultiThread {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new MultiThread(19000,0.5);
+		new CxrdTools(800,0.5);
 		//new CxrdTools(5,0.5);
-
 		//new MultiThread();
 	}
 	
@@ -138,7 +154,8 @@ public class MultiThread {
 				try {
 					writeTransaction();
 					threadLevel[i] ++;
-					//Thread.sleep(200);
+					
+					Thread.sleep(5);
 				} catch (Exception e) {
 					e.printStackTrace();
 					
@@ -156,26 +173,95 @@ public class MultiThread {
 		}
 		
 		public void writeTransaction (){
-			long startTime = System.currentTimeMillis();
 
 			Transaction tx = new Transaction();
 			try {
 				tx.start();
+				Random random;
+				int randomId=0;
 				
-				Example ex = new Example();
-				ex.setConnection(tx.getConnection());
-				ex.setId(new Random().nextDouble() * maxLong);
-				ex.setName(new Random().nextDouble() * maxLong+"名称");
+				random = new Random();
+				BusRemotes busRemotes=null;
+				randomId = busRemotesList.size();
+				if (randomId > 0) {
+					randomId = random.nextInt(randomId);
+					if(randomId < busRemotesList.size())
+						busRemotes = (BusRemotes) busRemotesList.get(randomId);
+					else
+						busRemotes = (BusRemotes) busRemotesList.get(randomId-1);
+				} else {
+					busRemotes = (BusRemotes) busRemotesList.get(0);
+				}
+				
+				random = new Random();
+				BusSamples busSamples=null;
+				randomId = busSamplesList.size();
+				if (randomId > 0) {
+					random.nextInt(randomId);
+					if(randomId < busRemotesList.size())
+						busSamples = (BusSamples) busSamplesList.get(randomId);
+					else
+						busSamples = (BusSamples) busSamplesList.get(randomId-1);
+				} else {
+					busSamples = (BusSamples) busSamplesList.get(0);
+				}
+				
+				String remoteid = busRemotes.getRemoteid();
+				String sampleid = busSamples.getSampleid();
 
-				//ex.setId(new Random().nextInt(maxLong));
-				//ex.setName(new Random().nextInt(maxLong)+"");
-				//ex.searchAndRetrieveList();
-				System.out.println("find count="+ex.count());
+				if(log.isDebugEnabled())log.debug("remoteid="+remoteid);
+				if(log.isDebugEnabled())log.debug("sampleid="+sampleid);
+				
+				BigDecimal bd = new BigDecimal(new Random().nextDouble() * 10);
+				double salePrice = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+				Integer islocal = (new Random().nextInt(2));
+				Date operDate = IDGenerator.randomDate();
 
-				if(ex.count() < 1)
-					ex.add();
-				else
-					ex.update();
+				bd = new BigDecimal(new Random().nextDouble() * 100);
+				double saleQnty = bd.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+				bd = new BigDecimal(new Random().nextDouble() * 100);
+				double saleMoney = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+				double maxPrice = saleMoney;
+				double minPrice = saleMoney;
+				
+				BufferPrice bufferPrice = new BufferPrice();
+				bufferPrice.setConnection(tx.getConnection());
+				
+				bufferPrice.setRemoteid(remoteid);
+				bufferPrice.setSampleid(sampleid);
+
+				if (bufferPrice.count() > 0)
+					new SQLException("is have .");
+				
+				bufferPrice.setSalePrice(salePrice);
+				bufferPrice.setOperDate(operDate);
+				bufferPrice.setSaleQnty(saleQnty);
+				bufferPrice.setSaleMoney(saleMoney);
+				bufferPrice.setMaxPrice(maxPrice);
+				bufferPrice.setMinPrice(minPrice);
+				bufferPrice.setIslocal(islocal.toString());
+				
+				bufferPrice.add();
+					
+				BufferTraffic bufferTraffic = new BufferTraffic();
+				bufferTraffic.setConnection(tx.getConnection());
+				bufferTraffic.setRemoteid(remoteid);
+				bufferTraffic.setOperDate(operDate);
+
+				bd = new BigDecimal(saleMoney * saleQnty);
+				double totleMoney = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				
+				if (bufferTraffic.count() > 0) {
+					bufferTraffic.retrieve();
+					bufferTraffic.setTradeAmount(bufferTraffic.getTradeAmount() + 1);
+					bufferTraffic.setSaleMoney(bufferTraffic.getSaleMoney()+ totleMoney);
+					bufferTraffic.update();
+				} else {
+					bufferTraffic.setTradeAmount(1);
+					bufferTraffic.setSaleMoney(totleMoney);
+					bufferTraffic.add();
+				}
 
 				tx.commit();
 			}catch (SQLException e) {
@@ -190,16 +276,8 @@ public class MultiThread {
 				tx.rollback();
 			}finally {
 				tx.end();
-				System.out.println("tx end");
 			}
 			
-			long finishTime = System.currentTimeMillis();
-			long hours = (finishTime - startTime) / 1000 / 60 / 60;
-			long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
-			long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
-			
-			System.out.println(finishTime - startTime);
-			System.out.println("expends:   " + hours + ":" + minutes + ":" + seconds);
 		}
 	}
 	

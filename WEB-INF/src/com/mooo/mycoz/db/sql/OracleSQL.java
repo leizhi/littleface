@@ -467,8 +467,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		
 			if(field.isUpdate()) {
 				isUpdate = true;
-				
-				if (DbUtil.search(this.getTable()).contains(field.getName())) {
+				if (DbUtil.isPrimaryKey(this.getTable(),field.getName())) {
 					byWhere = true;
 					
 					if(obj.getClass().isAssignableFrom(Integer.class)){
@@ -481,9 +480,9 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 						whereBy.append(field.getName()+" = '"+obj +"' AND ");
 					}
 					
-					continue;
+					//continue;
 				}
-				
+
 				if(obj.getClass().isAssignableFrom(Integer.class)){
 					updateSql.append(field.getName()+" = "+obj +",");
 				}else if(obj.getClass().isAssignableFrom(Date.class)){
@@ -663,6 +662,8 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 	@Override
 	public String countSQL() {
 		
+		beanFillField();
+
 		if(fields == null || columnValues == null)
 			return null;
 		
