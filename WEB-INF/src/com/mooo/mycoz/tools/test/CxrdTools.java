@@ -74,9 +74,9 @@ public class CxrdTools {
 				threadLevel[i] = 1;
 
 				threadPool[i].start();
+				
 				//System.out.println("===启动线程=====::::::" + i);
-
-				Thread.sleep(80); // wait other thread initialization
+				//Thread.sleep(80); // wait other thread initialization
 			}
 			
 			boolean forever = true;
@@ -134,8 +134,8 @@ public class CxrdTools {
 	}
 
 	public static void main(String[] args) throws IOException {
+		//new CxrdTools(20000,0.5);
 		new CxrdTools(800,0.5);
-		//new CxrdTools(5,0.5);
 		//new MultiThread();
 	}
 	
@@ -155,7 +155,7 @@ public class CxrdTools {
 					writeTransaction();
 					threadLevel[i] ++;
 					
-					Thread.sleep(5);
+					//Thread.sleep(5);
 				} catch (Exception e) {
 					e.printStackTrace();
 					
