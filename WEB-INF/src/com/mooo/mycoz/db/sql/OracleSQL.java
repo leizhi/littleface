@@ -17,7 +17,7 @@ import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class OracleSQL extends AbstractSQL implements DbSql{
+public class OracleSQL extends DbSession implements SQLProcess{
 	
 	private static Log log = LogFactory.getLog(OracleSQL.class);
 
@@ -748,7 +748,7 @@ public class OracleSQL extends AbstractSQL implements DbSql{
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(this.getClass());
 			
-			setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName()));
+			//setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName()));
 			
 			initialization();
 			

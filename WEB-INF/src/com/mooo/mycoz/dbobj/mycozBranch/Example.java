@@ -1,8 +1,8 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
-import com.mooo.mycoz.dbobj.DBObject;
+import com.mooo.mycoz.dbobj.DbFactory;
 
-public class Example extends DBObject {
+public class Example extends DbFactory {
 	private static final long serialVersionUID = 1L;
 	Integer id;
 	String name;

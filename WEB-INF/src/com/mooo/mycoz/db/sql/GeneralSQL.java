@@ -17,7 +17,7 @@ import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class MysqlSQL extends DbSession implements SQLProcess{
+public class GeneralSQL extends DbSession implements SQLProcess{
 	
 	private static Log log = LogFactory.getLog(OracleSQL.class);
 
@@ -566,7 +566,7 @@ public class MysqlSQL extends DbSession implements SQLProcess{
 			return null;
 		
 		Field field;
-		String key;
+		String key,value;
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
 		

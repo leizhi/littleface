@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class DbBulildSQL extends AbstractSQL implements DbSql{
+public class DbBulildSQL extends DbSession implements SQLProcess{
 	/**
 	 * 
 	 */

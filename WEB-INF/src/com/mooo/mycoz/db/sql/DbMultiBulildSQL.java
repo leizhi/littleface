@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class DbMultiBulildSQL implements DbMultiSql {
+public class DbMultiBulildSQL implements MultiSQLProcess {
 
 	public String catalog;
 	public Map<String,String> tables;
@@ -231,5 +231,11 @@ public class DbMultiBulildSQL implements DbMultiSql {
 		value = value.substring(0, value.length()-1);
 		
 		return value;
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 }

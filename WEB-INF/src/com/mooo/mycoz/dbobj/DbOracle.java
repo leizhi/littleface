@@ -17,7 +17,7 @@ import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 //public class DBObject extends DbBulildSQL{
-public class DBObject extends OracleSQL implements DbAction{
+public class DbOracle extends OracleSQL implements DbAction{
 	
 	private static Log log = LogFactory.getLog(DBObject.class);
 

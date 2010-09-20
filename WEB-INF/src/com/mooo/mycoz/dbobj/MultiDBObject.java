@@ -13,11 +13,11 @@ import java.util.Map;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbMultiBulildSQL;
-import com.mooo.mycoz.db.sql.DbMultiSql;
+import com.mooo.mycoz.db.sql.MultiSQLProcess;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class MultiDBObject extends DbMultiBulildSQL implements DbMultiSql{
+public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 	
 	/**
 	 * 

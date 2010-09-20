@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.OracleSQL;
@@ -61,10 +63,29 @@ public class Test {
 	
 	public static void main(String[] args) {
 
+		Example ex = new Example();
+		try {
+			//ex.setRecord(0, 20);
+			
+			List reList = ex.searchAndRetrieveList();
+			System.out.println("count:"+reList.size());
+
+			Iterator it = reList.iterator();
+			Example bean;
+			while (it.hasNext()) {
+				bean = (Example) it.next();
+				System.out.println("name:"+bean.getName()+" id:"+bean.getId());
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
 		//System.out.println(com.mooo.mycoz.util.IDGenerator.getNowTime());
 		//System.out.println(com.mooo.mycoz.util.IDGenerator.getNow());
 		//System.out.println(com.mooo.mycoz.util.IDGenerator.getNowYear());
-		new Test().searchSql();
+		/*new Test().searchSql();
 		
 		BufferTraffic bufferTraffic = new BufferTraffic();
 		try {
@@ -73,6 +94,7 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		/*
 		BufferTraffic bufferTraffic = new BufferTraffic();
 		bufferTraffic.setRemoteid("sdfsaf08");

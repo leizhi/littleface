@@ -12,12 +12,12 @@ import org.apache.commons.logging.LogFactory;
 
 //import com.mooo.mycoz.cache.CacheManager;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.OracleSQL;
+import com.mooo.mycoz.db.sql.MysqlSQL;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 //public class DBObject extends DbBulildSQL{
-public class DBObject extends OracleSQL implements DbAction{
+public class DbMysql extends MysqlSQL implements DbAction{
 	
 	private static Log log = LogFactory.getLog(DBObject.class);
 
@@ -37,7 +37,16 @@ public class DBObject extends OracleSQL implements DbAction{
 		return cacheManager.get(CACHE_TYPE, key);
 	}
 	*/
-	
+	public Class cls;
+
+	public Class getCls() {
+		return cls;
+	}
+
+	public void setCls(Class cls) {
+		this.cls = cls;
+	}
+
 	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
 		List<Object> retrieveList = null;
 		Statement stmt = null;
@@ -163,8 +172,12 @@ public class DBObject extends OracleSQL implements DbAction{
 			return retrieveList;
 	*/	
 		List<Object> retrieveList = null;
+		
+		//setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName(),null));
 
 		String doSql = searchSQL();
+		doSql += " LIMIT 10";
+		System.out.println("doSql:"+doSql);
 
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
@@ -187,7 +200,7 @@ public class DBObject extends OracleSQL implements DbAction{
 
 			while (result.next()) {
 
-				bean = this.getClass().newInstance();
+				bean = cls.newInstance();
 
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 					BeanUtil.bindProperty(bean,
@@ -418,12 +431,6 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	public void setCls(Class cls) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }
