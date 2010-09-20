@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.SQLAction;
 import com.mooo.mycoz.db.sql.SQLActionFactory;
 import com.mooo.mycoz.util.BeanUtil;
@@ -109,15 +110,66 @@ public class DbOperation implements DbAction{
 		
 	@Override
 	public Integer count(Object entity) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String doSql = sqlAction.countSQL(entity);
+		
+		if(log.isDebugEnabled())log.debug("doSql="+doSql);
+		
+		Statement stmt = null;
+		ResultSet result = null;
+		int total=0;
+		
+		try {
+					
+			stmt = sqlAction.getConnection().createStatement();
+			result = stmt.executeQuery(doSql);
+			
+			if(result.next())
+				total = result.getInt(1);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			sqlAction.close();
+		}
+		return total;
 	}
 
 
 	@Override
 	public void add(Object entity) throws SQLException {
-		// TODO Auto-generated method stub
-		
+		Statement stmt = null;
+		String doSql = sqlAction.addSQL(entity);
+		try{		
+			stmt = sqlAction.getConnection().createStatement();
+			stmt.execute(doSql);
+		}finally {
+
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			sqlAction.close();
+
+		}
 	}
 
 	public void save(Object entity) throws SQLException {

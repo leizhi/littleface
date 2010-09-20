@@ -62,6 +62,9 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	public Map columnValues;
 	
 	public void initialization(){
+		connection = DbConnectionManager.getConnection();
+		closeCon = true;
+
 		byWhere = false;
 		byGroup = false;
 		byOrder = false;
@@ -76,12 +79,29 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 
 		saveKey = new StringBuilder("(");
 		saveValue = new StringBuilder(") VALUES(");
-		saveSql = new StringBuilder("INSERT INTO "+catalog+"."+table);
+
+		saveSql = new StringBuilder("INSERT INTO ");
 		
-		updateSql = new StringBuilder("UPDATE "+catalog+"."+table+" SET ");
-		deleteSql = new StringBuilder("DELETE FROM "+catalog+"."+table);
-		searchSql = new StringBuilder("SELECT * FROM "+catalog+"."+table);
-		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM "+catalog+"."+table);	
+		updateSql = new StringBuilder("UPDATE ");
+		deleteSql = new StringBuilder("DELETE FROM ");
+		searchSql = new StringBuilder("SELECT * FROM ");
+		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM ");	
+		
+		if(catalog != null){
+			saveSql.append(catalog+".");
+			updateSql.append(catalog+".");
+			deleteSql.append(catalog+".");
+			searchSql.append(catalog+".");
+			countSql.append(catalog+".");
+		}
+		
+		if(table != null){
+			saveSql.append(table);
+			updateSql.append(table+" SET ");
+			deleteSql.append(table);
+			searchSql.append(table);
+			countSql.append(table);
+		}
 		
 		fields= new HashMap();
 		columnValues = new HashMap();
@@ -104,35 +124,23 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	}
 	
 	public Connection getConnection(){
-		
-		if (connection == null) {
-			connection = DbConnectionManager.getConnection();
-			closeCon = true;
-		}
-
 		return connection;
 	}
 	
 	public void setConnection(Connection connection){
-		if(connection != null ) {
 			this.connection = connection;
 			closeCon = false;
-		} else {
-			getConnection();
-		}
 	}
 
 	public void close() {
+		try {
+			if(connection != null)
+				connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		catalog = null;
 		table = null;
-		
-		if (connection != null) {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	///////////////////////////////

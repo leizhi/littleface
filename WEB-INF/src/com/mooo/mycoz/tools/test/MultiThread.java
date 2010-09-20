@@ -7,7 +7,7 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.dbobj.DBSession;
+import com.mooo.mycoz.db.DbOperation;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.util.Transaction;
 
@@ -15,6 +15,8 @@ public class MultiThread {
 	private static Log log = LogFactory.getLog(MultiThread.class);
 
 	private long maxLong = 9223372036854775807L;
+	private int maxInt = 2147483647;
+
 	//private double maxDouble = 1.79769313486231570e+308;
 	
 	private Thread[] threadPool;
@@ -60,7 +62,7 @@ public class MultiThread {
 				threadPool[i].start();
 				System.out.println("===启动线程=====::::::" + i);
 
-				Thread.sleep(80); // wait other thread initialization
+				Thread.sleep(400); // wait other thread initialization
 			}
 			
 			boolean forever = true;
@@ -118,8 +120,8 @@ public class MultiThread {
 	}
 
 	public static void main(String[] args) throws IOException {
-		new MultiThread(19000,0.5);
-		//new CxrdTools(5,0.5);
+		new MultiThread(500,0.5);
+		//new MultiThread(5,0.5);
 
 		//new MultiThread();
 	}
@@ -139,7 +141,7 @@ public class MultiThread {
 				try {
 					writeTransaction();
 					threadLevel[i] ++;
-					//Thread.sleep(200);
+					//Thread.sleep(500);
 				} catch (Exception e) {
 					e.printStackTrace();
 					
@@ -159,41 +161,42 @@ public class MultiThread {
 		public void writeTransaction (){
 			long startTime = System.currentTimeMillis();
 
-			Transaction tx = new Transaction();
+			//Transaction tx = new Transaction();
 			try {
-				tx.start();
+				//tx.start();
 				
-				DBSession session = DBSession.getInstance();
-				session.setConnection(tx.getConnection());
+				DbOperation session = DbOperation.getInstance();
+				//session.setConnection(tx.getConnection());
 				
 				Example ex = new Example();
-				ex.setId(new Random().nextDouble() * maxLong);
-				ex.setName(new Random().nextDouble() * maxLong+"名称");
-
+				ex.setId(new Random().nextDouble() * maxInt);
+				ex.setName(new Random().nextDouble() * maxInt+"名称");
+				session.add(ex);
+				
 				//ex.setId(new Random().nextInt(maxLong));
 				//ex.setName(new Random().nextInt(maxLong)+"");
 				//ex.searchAndRetrieveList();
-				System.out.println("find count="+session.count(ex));
+				//System.out.println("find count="+session.count(ex));
 
-				if(session.count(ex) < 1)
-					session.add(ex);
-				else
-					session.update(ex);
+				//if(session.count(ex) < 1)
+				//	session.add(ex);
+				//else
+				//	session.update(ex);
 
-				tx.commit();
+				//tx.commit();
 			}catch (SQLException e) {
 				e.printStackTrace();
 				if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
 				System.out.println("SQLException:"+e.getMessage());
-				tx.rollback();
+				//tx.rollback();
 			}catch (Exception e) {
 				e.printStackTrace();
 				if(log.isDebugEnabled()) log.debug("Exception:"+e.getMessage());
 				System.out.println("Exception:"+e.getMessage());
-				tx.rollback();
+				//tx.rollback();
 			}finally {
-				tx.end();
-				System.out.println("tx end");
+				//tx.end();
+				System.out.println("线程"+i+"执行完毕");
 			}
 			
 			long finishTime = System.currentTimeMillis();
@@ -202,7 +205,7 @@ public class MultiThread {
 			long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
 			
 			System.out.println(finishTime - startTime);
-			System.out.println("expends:   " + hours + ":" + minutes + ":" + seconds);
+			System.out.println("线程"+i+" expends:   " + hours + ":" + minutes + ":" + seconds);
 		}
 	}
 	
