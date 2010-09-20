@@ -1,10 +1,7 @@
-package com.mooo.mycoz.dbobj.mycozBranch;
+package com.mooo.mycoz.dbobj.sample;
 
-import com.mooo.mycoz.dbobj.DBObject;
-
-public class Example extends DBObject {
+public class Example {
 	
-	private static final long serialVersionUID = 1L;
 	Double id;
 	String name;
 	Double age;

@@ -11,11 +11,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.AbstractSQL;
+import com.mooo.mycoz.db.sql.DbGeneral;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class AbstractDb extends AbstractSQL implements DbAction{
+public class AbstractDb extends DbGeneral implements DbProcess{
 	private static Log log = LogFactory.getLog(AbstractDb.class);
 
 	/**
@@ -34,15 +34,6 @@ public class AbstractDb extends AbstractSQL implements DbAction{
 		return cacheManager.get(CACHE_TYPE, key);
 	}
 	*/
-	public Class cls;
-
-	public Class getCls() {
-		return cls;
-	}
-
-	public void setCls(Class cls) {
-		this.cls = cls;
-	}
 
 	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
 		List<Object> retrieveList = null;
@@ -197,7 +188,7 @@ public class AbstractDb extends AbstractSQL implements DbAction{
 
 			while (result.next()) {
 
-				bean = cls.newInstance();
+				bean = this.getClass().newInstance();
 
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 					BeanUtil.bindProperty(bean,

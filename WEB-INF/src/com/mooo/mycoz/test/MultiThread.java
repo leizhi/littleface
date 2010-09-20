@@ -7,6 +7,7 @@ import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.util.Transaction;
 
@@ -92,16 +93,16 @@ public class MultiThread  {
 			Transaction tx = new Transaction();
 			try {
 				tx.start();
-				
+				DBSession session = DBSession.getInstance();
+
 				Example ex = new Example();
-				ex.setConnection(tx.getConnection());
 				long startTime = System.currentTimeMillis();
 				//Runtime rt = Runtime.getRuntime();
 
 				//for(int i=0;i<100000;i++){
 				ex.setId((new Random().nextInt())*1d);
 				ex.setName("日本女"+new Random().nextInt());
-				ex.add();
+				session.add(ex);
 					
 					//System.out.println("add i:"+i);
 					//System.out.println("Total Memory:" + rt.totalMemory()+ " Free Memory:" + rt.freeMemory());

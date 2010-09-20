@@ -64,62 +64,12 @@ public class DbobjExample {
 			//System.out.println("Search SQL:"+bean.SearchSQL());
 	}
 	
-	public void saveBratchDbobj() {
-		Transaction tx = new Transaction();
-		try {
-			tx.start();
-			
-			Example ex = new Example();
-			ex.setConnection(tx.getConnection());
-			long startTime = System.currentTimeMillis();
-			//Runtime rt = Runtime.getRuntime();
-
-			for(int i=0;i<100000;i++){
-				
-				ex.setField("id", i+241+"");
-				ex.setField("name", "日本女"+(i+240));
-				ex.add();
-				
-				//System.out.println("add i:"+i);
-				//System.out.println("Total Memory:" + rt.totalMemory()+ " Free Memory:" + rt.freeMemory());
-			}
-			
-			System.out.println("==============================");
-
-			tx.commit();
-			
-			long finishTime = System.currentTimeMillis();
-			long hours = (finishTime - startTime) / 1000 / 60 / 60;
-			long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
-			long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
-			
-			System.out.println(finishTime - startTime);
-			System.out.println("expends:   " + hours + ":" + minutes + ":" + seconds);
-		} catch (SQLException e) {
-			System.out.println("SQLException:"+e.getMessage());
-			e.printStackTrace();
-			tx.rollback();
-		} catch (RuntimeException e) {
-			System.out.println("RuntimeException:"+e.getMessage());
-			e.printStackTrace();
-			tx.rollback();
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		} catch (Throwable e) {
-			System.out.println("Throwable:"+e.getMessage());
-			e.printStackTrace();
-			tx.rollback();
-		}finally {
-			tx.end();
-			System.out.println("tx end");
-		}
-	}
-
 	public void searchBean() throws SQLException{
 		Example ex = new Example();
-		ex.setRecord(1, 200000);
-		List examples = ex.searchAndRetrieveList();
+		//ex.setRecord(1, 200000);
+		DBSession session = DBSession.getInstance();
+
+		List examples = session.searchAndRetrieveList(ex);
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -148,11 +98,7 @@ public class DbobjExample {
 			
 			stmt = connection.createStatement();
 			
-			Example ex = new Example();
-			//ex.setTable("Example");
-			ex.searchSQL();
-			
-			rs = stmt.executeQuery(ex.searchSQL());
+			rs = stmt.executeQuery("");
 			
 			while(rs.next()){
 				System.out.println("id="+rs.getString("id")+" name="+rs.getString("name"));
@@ -297,10 +243,11 @@ public class DbobjExample {
 	
 	public void saveDbObject(){
 		try {
+			DBSession session = DBSession.getInstance();
+
 			Example bean = new Example();
-			bean.setField("id",IDGenerator.getNextID("Example")+"" );
-			bean.setField("name",IDGenerator.getNextID("Example")+"");
-			bean.add();
+			
+			session.add(bean);
 		}catch (SQLException e) {
 			e.printStackTrace();
 			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
@@ -337,14 +284,10 @@ public class DbobjExample {
 	
 	public void searchBeanL(){
 		try {
-			/*
-			LinearCode lc = new LinearCode();
-			lc.setCatalog("mycozShared");
-			lc.setTypeid(1);
-			lc.searchAndRetrieveList();
-			*/
+			DBSession session = DBSession.getInstance();
+
 			Example bean = new Example();
-			bean.searchAndRetrieveList();
+			session.searchAndRetrieveList(bean);
 			
 		}catch (SQLException e) {
 			e.printStackTrace();

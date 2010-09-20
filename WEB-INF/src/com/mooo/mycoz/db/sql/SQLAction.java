@@ -4,8 +4,7 @@ import java.sql.SQLException;
 
 import com.mooo.mycoz.db.DbCommon;
 
-public interface SQLProcess extends DbCommon {
-
+public interface SQLAction extends DbCommon{
 	String getTable();
 	
 	void setTable(String table);
@@ -26,16 +25,6 @@ public interface SQLProcess extends DbCommon {
 
 	void setRecord(int recordStart, int recordEnd);
 	
- 	String addSQL();
- 	
- 	String deleteSQL();
- 	
- 	String updateSQL();
- 	
- 	String searchSQL();
-
- 	String countSQL();
- 	
  	String addSQL(Object entity) throws SQLException;
  	
  	String deleteSQL(Object entity) throws SQLException;
@@ -46,4 +35,5 @@ public interface SQLProcess extends DbCommon {
 
  	String countSQL(Object entity) throws SQLException;
  	
+ 	void entityFillField(Object entity);
 }

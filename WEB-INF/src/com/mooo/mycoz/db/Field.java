@@ -1,4 +1,4 @@
-package com.mooo.mycoz.db.sql;
+package com.mooo.mycoz.db;
 
 public class Field {
 	

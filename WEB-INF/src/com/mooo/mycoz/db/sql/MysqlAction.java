@@ -1,31 +1,28 @@
 package com.mooo.mycoz.db.sql;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import com.mooo.mycoz.db.DbAbstract;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class MysqlSQL extends DbGeneral{
-	
-	private static Log log = LogFactory.getLog(OracleSQL.class);
+public class MysqlAction extends DbAbstract {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4971778169729898320L;
+	private static final long serialVersionUID = 8659111122527763888L;
 
-	public void entityFillField(Object entity){
+	public void entityFillField(Object entity) {
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
 			
-			//setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName(),null));
+			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName(),null));
 			
 			initialization();
 			
@@ -68,6 +65,5 @@ public class MysqlSQL extends DbGeneral{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(log.isDebugEnabled())log.debug("beanFillField ok");
 	}
 }

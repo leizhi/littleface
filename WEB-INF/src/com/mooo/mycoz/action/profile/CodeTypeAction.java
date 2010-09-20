@@ -34,12 +34,14 @@ public class CodeTypeAction extends BaseSupport{
 
 			CodeType tt = new CodeType();
 			tt.setCatalog("mycozShared");
+			tt.setTable("CodeType");
+			
 			//tt.setCategory("Tree");
 			if((value=request.getParameter("codeCategory")) != null){
 				tt.setField("Category", value);
 			}
 			
-			List<?> linearTypes = tt.searchAndRetrieveList();
+			List linearTypes = tt.searchAndRetrieveList();
 			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {

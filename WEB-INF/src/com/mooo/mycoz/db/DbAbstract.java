@@ -1,7 +1,10 @@
-package com.mooo.mycoz.db.sql;
+package com.mooo.mycoz.db;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,42 +16,50 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.db.sql.SQLAction;
 import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class AbstractSQL extends DbSession implements SQLProcess {
-
-	private static Log log = LogFactory.getLog(AbstractSQL.class);
+public abstract class DbAbstract implements SQLAction, Serializable{
+	
+	private static Log log = LogFactory.getLog(DbAbstract.class);
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4971778169729898320L;
-
-	boolean byWhere;
-	boolean byGroup;
-	boolean byOrder;
-
-	StringBuilder whereBy;
-	StringBuilder groupBy;
-	StringBuilder orderBy;
+	private static final long serialVersionUID = 5695615314838758248L;
 	
-	boolean isSave;
-	boolean isUpdate;
-	boolean isSearch;
+	public Connection connection;
+	public boolean closeCon;
 
-	StringBuilder saveKey;
-	StringBuilder saveValue;
-	StringBuilder saveSql;
+	public String catalog;
+	public String table;
 	
-	StringBuilder updateSql;
-	StringBuilder deleteSql;
-	StringBuilder searchSql;
-	StringBuilder countSql;
+	public boolean byWhere;
+	public boolean byGroup;
+	public boolean byOrder;
+
+	public StringBuilder whereBy;
+	public StringBuilder groupBy;
+	public StringBuilder orderBy;
 	
-	Map fields;
-	Map columnValues;
+	public boolean isSave;
+	public boolean isUpdate;
+	public boolean isSearch;
+
+	public StringBuilder saveKey;
+	public StringBuilder saveValue;
+	public StringBuilder saveSql;
+	
+	public StringBuilder updateSql;
+	public StringBuilder deleteSql;
+	public StringBuilder searchSql;
+	public StringBuilder countSql;
+	
+	public Map fields;
+	public Map columnValues;
 	
 	public void initialization(){
 		byWhere = false;
@@ -65,157 +76,66 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 
 		saveKey = new StringBuilder("(");
 		saveValue = new StringBuilder(") VALUES(");
-		saveSql = new StringBuilder("INSERT INTO "+table);
+		saveSql = new StringBuilder("INSERT INTO "+catalog+"."+table);
 		
-		updateSql = new StringBuilder("UPDATE "+table+" SET ");
-		deleteSql = new StringBuilder("DELETE FROM "+table);
-		searchSql = new StringBuilder("SELECT * FROM "+table);
-		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM "+table);	
+		updateSql = new StringBuilder("UPDATE "+catalog+"."+table+" SET ");
+		deleteSql = new StringBuilder("DELETE FROM "+catalog+"."+table);
+		searchSql = new StringBuilder("SELECT * FROM "+catalog+"."+table);
+		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM "+catalog+"."+table);	
 		
 		fields= new HashMap();
 		columnValues = new HashMap();
 	}
 	
-	public void buildSQL(){
-		
-		beanFillField();
-		
-		Field field;
-		String key,value;
-		
-		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
-			key = (String) it.next();
-			field = (Field) fields.get(key);
-			value = (String) columnValues.get(key);
-			
-			if(field.isSave()) {
-				isSave = true;
-				saveKey.append(field.getName()+",");
-
-				if (field.getType() == Types.DATE){
-					saveValue.append("date'"+value+"',");
-				} else if (field.getType() == Types.BIGINT) {
-					saveValue.append(value+",");
-				} else { 
-					saveValue.append("'"+value+"',");
-				}
-			}
-			
-			if(field.isUpdate()) {
-				isUpdate = true;
-				
-				if (field.getType() == Types.DATE)
-					updateSql.append(field.getName()+"=date'"+value+"',");
-				else if (field.getType() == Types.BIGINT)
-					updateSql.append(field.getName()+"="+value);
-				else 
-					updateSql.append(field.getName()+"='"+value+"',");
-			}
-					
-			if(field.isWhereByEqual()) {
-				byWhere = true;
-
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" = date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" = "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" = '"+value+"' AND ");
-			}
-			
-			if(field.isWhereByGreaterEqual()) {
-				byWhere = true;
-
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" >= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" >= "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" >= '"+value+"' AND");
-			}
-
-			if(field.isWhereByLessEqual()) {
-				byWhere = true;
-
-				if (field.getType() == Types.DATE)
-					whereBy.append(field.getName()+" <= date'"+value+"' AND ");
-				else if (field.getType() == Types.BIGINT)
-					whereBy.append(field.getName()+" <= "+value + " AND ");
-				else 
-					whereBy.append(field.getName()+" <= '"+value+"' AND ");
-			}
-	
-			if(field.isGroupBy()) {
-				byGroup = true;
-				groupBy.append(field.getName()+",");
-			}
-			
-			if(field.isOrderBy()) {
-				byOrder = true;
-				orderBy.append(field.getName()+",");
-			}
-			
-		}
-		
-		if(byWhere)
-			whereBy.delete(whereBy.lastIndexOf("AND"),whereBy.lastIndexOf("AND")+3);
-		if(byGroup)
-			groupBy.deleteCharAt(groupBy.lastIndexOf(","));
-		if(byOrder)
-			orderBy.deleteCharAt(orderBy.lastIndexOf(","));
-		
-		if(isSearch){
-			if(searchSql.lastIndexOf(",") > 0)
-				searchSql.deleteCharAt(searchSql.lastIndexOf(","));
-			
-			if(byWhere) {
-				searchSql.append(whereBy);
-				countSql.append(whereBy);
-			}
-			
-			if(byGroup) {
-				searchSql.append(groupBy);
-				countSql.append(groupBy);
-			}
-			
-			if(byOrder) {
-				searchSql.append(orderBy);
-				countSql.append(orderBy);
-			}
-		}
-		
-		if(isSave){
-			saveKey.deleteCharAt(saveKey.lastIndexOf(","));
-			saveValue.deleteCharAt(saveValue.lastIndexOf(","));
-			saveValue.append(")");
-			
-			saveSql.append(saveKey);
-			saveSql.append(saveValue);
-		}
-
-		if(isUpdate){
-			updateSql.deleteCharAt(updateSql.lastIndexOf(","));
-			
-			if(byWhere)
-				updateSql.append(whereBy);
-		}
-
-		if(byWhere)
-			deleteSql.append(whereBy);
-		
-		if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
-		if(log.isDebugEnabled())log.debug("findSql="+countSql);
-
-		if(log.isDebugEnabled())log.debug("saveSql="+saveSql);
-		if(log.isDebugEnabled())log.debug("updateSql="+updateSql);
-		if(log.isDebugEnabled())log.debug("deleteSql="+deleteSql);
-
-		if(log.isDebugEnabled())log.debug("whereBy="+whereBy);
-		if(log.isDebugEnabled())log.debug("groupBy="+groupBy);
-		if(log.isDebugEnabled())log.debug("orderBy="+orderBy);
+	public String getCatalog() {
+		return catalog;
 	}
 	
-	@Override
+	public void setCatalog(String catalog) {
+		this.catalog = catalog;
+	}
+	
+	public String getTable() {
+		return table;
+	}
+	
+	public void setTable(String table) {
+		this.table = table;
+	}
+	
+	public Connection getConnection(){
+		
+		if (connection == null) {
+			connection = DbConnectionManager.getConnection();
+			closeCon = true;
+		}
+
+		return connection;
+	}
+	
+	public void setConnection(Connection connection){
+		if(connection != null ) {
+			this.connection = connection;
+			closeCon = false;
+		} else {
+			getConnection();
+		}
+	}
+
+	public void close() {
+		catalog = null;
+		table = null;
+		
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	///////////////////////////////
 	public void setField(String field, String value) {
 		try {
 			if (field == null || value == null)
@@ -228,7 +148,6 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		}
 	}
 
-	@Override
 	public void setField(String field, Integer value) {
 		try {
 			if (field == null || value == null)
@@ -265,7 +184,6 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		}
 	}
 
-	@Override
 	public void setLike(String field, String value) {
 		// TODO Auto-generated method stub
 		((Field)fields.get(field)).setWhereByLike(true);
@@ -284,10 +202,7 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		((Field)fields.get(field)).setWhereByEqual(true);
 	}
 	
-	@Override
 	public void setGreaterEqual(String field, String value) {
-		// TODO Auto-generated method stub
-		//((Field)fields.get(field)).setWhereByGreaterEqual(true);
 		Field f = new Field(field);
 		f.setWhereByGreaterEqual(true);
 		f.setWhereByEqual(false);
@@ -296,22 +211,18 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		columnValues.put(field, value);
 	}
 
-	@Override
 	public void setLessEqual(String field, String value) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
 	public void setGroupBy(String field) {
 		((Field)fields.get(field)).setOrderBy(true);
 	}
 
-	@Override
 	public void setOrderBy(String field, String type) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
 	public void setRecord(int recordStart, int recordEnd) {
 		// TODO Auto-generated method stub
 	}
@@ -324,15 +235,17 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		((Field)fields.get(field)).setOrderBy(true);
 	}
 
-	@Override
-	public String addSQL() {
-		beanFillField();
-
+	public String addSQL(Object entity) {
+		if(entity != null)
+			entityFillField(entity);
+		else
+			entityFillField(this);
+		
 		if(fields == null || columnValues == null)
 			return null;
 		
 		Field field;
-		String key,value;
+		String key;
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
 			key = (String) it.next();
@@ -382,12 +295,14 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		return saveSql.toString();
 	}
 
-	@Override
-	public String deleteSQL() {
-		beanFillField();
-
+	public String deleteSQL(Object entity) {
+		if(entity != null)
+			entityFillField(entity);
+		else
+			entityFillField(this);
+		
 		Field field;
-		String key,value;
+		String key;
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
 			key = (String) it.next();
@@ -451,10 +366,12 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		return deleteSql.toString();
 	}
 
-	@Override
-	public String updateSQL() {
-		beanFillField();
-
+	public String updateSQL(Object entity) {
+		if(entity != null)
+			entityFillField(entity);
+		else
+			entityFillField(this);
+		
 		Field field;
 		String key;
 		whereBy=new StringBuilder(" WHERE ");
@@ -557,10 +474,11 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		return updateSql.toString();
 	}
 
-	@Override
-	public String searchSQL() {
-		
-		beanFillField();
+	public String searchSQL(Object entity) {
+		if(entity != null)
+			entityFillField(entity);
+		else
+			entityFillField(this);
 		
 		if(fields == null || columnValues == null)
 			return null;
@@ -659,16 +577,18 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		return searchSql.toString();
 	}
 
-	@Override
-	public String countSQL() {
+	public String countSQL(Object entity) {
 		
-		beanFillField();
-
+		if(entity != null)
+			entityFillField(entity);
+		else
+			entityFillField(this);
+		
 		if(fields == null || columnValues == null)
 			return null;
 		
 		Field field;
-		String key,value;
+		String key;
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
 			key = (String) it.next();
@@ -744,11 +664,11 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 		return countSql.toString();
 	}
 	
-	public void beanFillField(){
+	public void entityFillField(Object entity) {
 		try {
-			List<String> methods = ReflectUtil.getMethodNames(this.getClass());
+			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
 			
-			//setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName()));
+			//setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
 			
 			initialization();
 			
@@ -760,9 +680,9 @@ public class AbstractSQL extends DbSession implements SQLProcess {
 				if(method.indexOf("get")==0){
 					
 					Method getMethod;
-					getMethod = this.getClass().getMethod(method);
+					getMethod = entity.getClass().getMethod(method);
 					
-					Object obj = getMethod.invoke(this);
+					Object obj = getMethod.invoke(entity);
 					
 					if(obj !=null) {
 						field = method.substring(method.indexOf("get")+3);

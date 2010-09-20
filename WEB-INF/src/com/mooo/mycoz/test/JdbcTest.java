@@ -24,11 +24,8 @@ public class JdbcTest {
 			
 			stmt = connection.createStatement();
 			
-			Example ex = new Example();
 			//ex.setTable("Example");
-			ex.searchSQL();
-			
-			result = stmt.executeQuery(ex.searchSQL()+" LIMIT 20");
+			result = stmt.executeQuery("SELECT * FROM ");
 			
 			while(result.next()){
 				System.out.println("id="+result.getString("id")+" name="+result.getString("name"));

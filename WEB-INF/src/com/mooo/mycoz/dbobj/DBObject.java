@@ -1,5 +1,6 @@
 package com.mooo.mycoz.dbobj;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -11,13 +12,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 //import com.mooo.mycoz.cache.CacheManager;
-import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.OracleSQL;
+import com.mooo.mycoz.db.sql.SQLFactory;
+import com.mooo.mycoz.db.sql.SQLProcess;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-//public class DBObject extends DbBulildSQL{
-public class DBObject extends OracleSQL implements DbAction{
+public class DBObject implements DbProcess,SQLProcess{
 	
 	private static Log log = LogFactory.getLog(DBObject.class);
 
@@ -38,22 +38,23 @@ public class DBObject extends OracleSQL implements DbAction{
 	}
 	*/
 	
+	public SQLProcess sqlProcess;
+
+	public DBObject(){
+		sqlProcess = SQLFactory.getInstance();
+	}
+	
 	public List<Object> searchAndRetrieveList(String sql, Class<?> obj) {
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		ResultSet result = null;
-		boolean closeCon = false;
 
 		try {
 			retrieveList = new ArrayList<Object>();
 
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
 			
-			stmt = connection.createStatement();
+			stmt = sqlProcess.getConnection().createStatement();
 			result = stmt.executeQuery(sql);
 			
 			rsmd = result.getMetaData();
@@ -87,12 +88,8 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 
 		}
 		
@@ -103,17 +100,12 @@ public class DBObject extends OracleSQL implements DbAction{
 		List<Object> retrieveList = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
-		boolean closeCon = false;
 
 		try {
 			retrieveList = new ArrayList<Object>();
 			
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
+			stmt = sqlProcess.getConnection().createStatement();
+
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			rsmd = rs.getMetaData();
@@ -138,19 +130,15 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 
 		}
 		
 		return retrieveList;
 	}
 	
-	public List<Object> searchAndRetrieveList() throws SQLException{
+	public List searchAndRetrieveList() throws SQLException{
 
 /*
 		Object obj = getCache(doSql);
@@ -163,23 +151,23 @@ public class DBObject extends OracleSQL implements DbAction{
 			return retrieveList;
 	*/	
 		List<Object> retrieveList = null;
+		//sqlProcess.setCatalog(catalog);
+		sqlProcess = SQLFactory.getInstance();
+		sqlProcess.setTable(StringUtils.upperToPrefix(this.getClass().getSimpleName(),null));
 
-		String doSql = searchSQL();
+		String doSql = sqlProcess.searchSQL();
 
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		ResultSet result = null;
-		boolean closeCon = false;
 
 		try {
 			retrieveList = new ArrayList<Object>();
 			
-			if (connection == null || connection.isClosed()) {
-				connection = DbConnectionManager.getConnection();
-				closeCon = true;
-			}
+			sqlProcess = SQLFactory.getInstance();
 
-			stmt = connection.createStatement();
+			stmt = sqlProcess.getConnection().createStatement();
+
 			result = stmt.executeQuery(doSql);
 
 			rsmd = result.getMetaData();
@@ -215,12 +203,8 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 
 		}
 		return retrieveList;
@@ -228,23 +212,18 @@ public class DBObject extends OracleSQL implements DbAction{
 
 	public Integer count() throws SQLException{
 		
-		String doSql = countSQL();
+		String doSql = sqlProcess.countSQL();
 		
 		if(log.isDebugEnabled())log.debug("doSql="+doSql);
 		
 		Statement stmt = null;
 		ResultSet result = null;
-		boolean closeCon = false;
 		int total=0;
 		
 		try {
 			
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
+			stmt = sqlProcess.getConnection().createStatement();
+
 			result = stmt.executeQuery(doSql);
 			
 			if(result.next())
@@ -268,29 +247,19 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 
 		}
 		return total;
 	}
 	
 	public void add() throws SQLException {
-		
-		boolean closeCon = false;
 		Statement stmt = null;
 		try{
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
-			stmt.execute(addSQL());
+			stmt = sqlProcess.getConnection().createStatement();
+
+			stmt.execute(sqlProcess.addSQL());
 		}finally {
 
 			try {
@@ -300,28 +269,18 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 
 		}
 	}
 	
 	public void delete() throws SQLException {
 		Statement stmt = null;
-		boolean closeCon = false;
-
 		try{
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
-			stmt.execute(deleteSQL());
+			stmt = sqlProcess.getConnection().createStatement();
+
+			stmt.execute(sqlProcess.deleteSQL());
 
 		}finally {
 
@@ -332,26 +291,16 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 		}
 	}
 	public void update() throws SQLException{
-		boolean closeCon = false;
-
 		Statement stmt = null;
 		try{
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
-			stmt.execute(updateSQL());
+			stmt = sqlProcess.getConnection().createStatement();
+
+			stmt.execute(sqlProcess.updateSQL());
 		}finally {
 
 			try {
@@ -361,12 +310,8 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 		}
 	}
 
@@ -374,16 +319,11 @@ public class DBObject extends OracleSQL implements DbAction{
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		ResultSet result = null;
-		boolean closeCon = false;
 
 		try{
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
-			}
-			
-			stmt = connection.createStatement();
-			result = stmt.executeQuery(searchSQL());
+			stmt = sqlProcess.getConnection().createStatement();
+
+			result = stmt.executeQuery(sqlProcess.searchSQL());
 			
 			rsmd = result.getMetaData();
 			String value;
@@ -411,19 +351,149 @@ public class DBObject extends OracleSQL implements DbAction{
 				e.printStackTrace();
 			}
 			
-			try {
-				if (connection != null && closeCon)
-					connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			sqlProcess.close();
+
 		}
 	}
 
 	@Override
-	public void setCls(Class cls) {
+	public String getCatalog() {
+		return sqlProcess.getCatalog();
+	}
+
+	@Override
+	public void setCatalog(String catalog) {
+		sqlProcess.setCatalog(catalog);
+	}
+
+	@Override
+	public Connection getConnection() {
+		return sqlProcess.getConnection();
+	}
+
+	@Override
+	public void setConnection(Connection connection) {
+		sqlProcess.setConnection(connection);
+	}
+
+	@Override
+	public void close() {
+		sqlProcess.close();
+	}
+
+	@Override
+	public String getTable() {
+		return sqlProcess.getTable();
+	}
+
+	@Override
+	public void setTable(String table) {
+		sqlProcess.setTable(table);
+	}
+
+	@Override
+	public void setField(String field, String value) {
+		sqlProcess.setField(field, value);
+	}
+
+	@Override
+	public void setField(String field, Integer value) {
+		sqlProcess.setField(field, value);
+	}
+
+	@Override
+	public void setLike(String field, String value) {
+		sqlProcess.setLike(field, value);
+	}
+
+	@Override
+	public void setGreaterEqual(String field, String value) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setLessEqual(String field, String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGroupBy(String field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOrderBy(String field, String type) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRecord(int recordStart, int recordEnd) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String addSQL() {
+		// TODO Auto-generated method stub
+		return sqlProcess.addSQL();
+	}
+
+	@Override
+	public String deleteSQL() {
+		// TODO Auto-generated method stub
+		return sqlProcess.deleteSQL();
+	}
+
+	@Override
+	public String updateSQL() {
+		// TODO Auto-generated method stub
+		return sqlProcess.updateSQL();
+	}
+
+	@Override
+	public String searchSQL() {
+		// TODO Auto-generated method stub
+		return sqlProcess.searchSQL();
+	}
+
+	@Override
+	public String countSQL() {
+		// TODO Auto-generated method stub
+		return sqlProcess.countSQL();
+	}
+
+	@Override
+	public String addSQL(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String deleteSQL(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String updateSQL(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String searchSQL(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String countSQL(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

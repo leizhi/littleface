@@ -4,14 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mooo.mycoz.db.DbOperation;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.OracleSQL;
-import com.mooo.mycoz.dbobj.marketmoniter.BufferTraffic;
-import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 
 public class Test {
@@ -27,11 +24,12 @@ public class Test {
 			
 			stmt = connection.createStatement();
 			
-			//Example ex = new Example();
-			//ex.searchSQL();
+			Example ex = new Example();
+			ex.searchSQL();
 			
-			rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM buffer_traffic");
-			
+			//rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM buffer_traffic");
+			rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM Example");
+
 			while(rs.next()){
 				System.out.println("count ="+rs.getInt(1));
 			}
@@ -62,13 +60,18 @@ public class Test {
 	}
 	
 	public static void main(String[] args) {
-
+		//new Test().searchSql();
+		
 		Example ex = new Example();
+		ex.setCatalog("mycozBranch");
+		ex.setTable("Example");
 		try {
-			//ex.setRecord(0, 20);
-			
+			//DbOperation factory = DbOperation.getInstance();
+			//DbOperation factory = DbOperation.getInstance();
+			//List reList = de.searchAndRetrieveList(ex);
+			System.out.println("sql:"+ex.searchSQL());
+
 			List reList = ex.searchAndRetrieveList();
-			System.out.println("count:"+reList.size());
 
 			Iterator it = reList.iterator();
 			Example bean;
@@ -80,33 +83,9 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 		//System.out.println(com.mooo.mycoz.util.IDGenerator.getNowTime());
 		//System.out.println(com.mooo.mycoz.util.IDGenerator.getNow());
 		//System.out.println(com.mooo.mycoz.util.IDGenerator.getNowYear());
-		/*new Test().searchSql();
-		
-		BufferTraffic bufferTraffic = new BufferTraffic();
-		try {
-			System.out.println("count = "+bufferTraffic.count());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		/*
-		BufferTraffic bufferTraffic = new BufferTraffic();
-		bufferTraffic.setRemoteid("sdfsaf08");
-		bufferTraffic.setOperDate(new Date());
-		
-		try {
-			bufferTraffic.add();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println(e.getMessage());
-		}
-		*/
 	}
 }

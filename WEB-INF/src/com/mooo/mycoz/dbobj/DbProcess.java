@@ -3,9 +3,7 @@ package com.mooo.mycoz.dbobj;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.mooo.mycoz.db.sql.SQLProcess;
-
-public interface DbAction extends SQLProcess{
+public interface DbProcess {
 	
 	List<Object> searchAndRetrieveList() throws SQLException;
 
@@ -19,6 +17,4 @@ public interface DbAction extends SQLProcess{
 
 	void retrieve() throws SQLException;
 	
-	void setCls(Class<?> cls);
-
 }

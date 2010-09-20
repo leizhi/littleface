@@ -1,5 +1,7 @@
 package com.mooo.mycoz.db.sql;
 
+import com.mooo.mycoz.db.DbCommon;
+
 public interface MultiSQLProcess extends DbCommon {
  	
 	void addTable(String name, String alias);

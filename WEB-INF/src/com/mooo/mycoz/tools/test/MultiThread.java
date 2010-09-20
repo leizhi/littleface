@@ -7,6 +7,7 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.util.Transaction;
 
@@ -162,20 +163,22 @@ public class MultiThread {
 			try {
 				tx.start();
 				
+				DBSession session = DBSession.getInstance();
+				session.setConnection(tx.getConnection());
+				
 				Example ex = new Example();
-				ex.setConnection(tx.getConnection());
 				ex.setId(new Random().nextDouble() * maxLong);
 				ex.setName(new Random().nextDouble() * maxLong+"名称");
 
 				//ex.setId(new Random().nextInt(maxLong));
 				//ex.setName(new Random().nextInt(maxLong)+"");
 				//ex.searchAndRetrieveList();
-				System.out.println("find count="+ex.count());
+				System.out.println("find count="+session.count(ex));
 
-				if(ex.count() < 1)
-					ex.add();
+				if(session.count(ex) < 1)
+					session.add(ex);
 				else
-					ex.update();
+					session.update(ex);
 
 				tx.commit();
 			}catch (SQLException e) {

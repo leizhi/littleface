@@ -1,6 +1,5 @@
-package com.mooo.mycoz.dbobj;
+package com.mooo.mycoz.db;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -11,25 +10,23 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.db.DbAction;
-import com.mooo.mycoz.db.DbCommon;
 import com.mooo.mycoz.db.sql.SQLAction;
 import com.mooo.mycoz.db.sql.SQLActionFactory;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class DBSession implements DbAction,DbCommon{
+public class DbOperation implements DbAction{
 	
-	private static Log log = LogFactory.getLog(DBSession.class);
+	private static Log log = LogFactory.getLog(DbOperation.class);
 
     private static Object initLock = new Object();
-    private static DBSession factory = null;
+    private static DbOperation factory = null;
     
-	public static DBSession getInstance() {
+	public static DbOperation getInstance() {
 		if (factory == null) {
 			synchronized (initLock) {
 				if (factory == null) {
-					factory = new DBSession();
+					factory = new DbOperation();
 				}
 			}
 		}
@@ -40,7 +37,7 @@ public class DBSession implements DbAction,DbCommon{
 	
 	public SQLAction sqlAction;
 	
-	public DBSession(){
+	public DbOperation(){
 		sqlAction = SQLActionFactory.getInstance();
 	}
 	
@@ -144,36 +141,6 @@ public class DBSession implements DbAction,DbCommon{
 
 	@Override
 	public void retrieve(Object entity) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public String getCatalog() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setCatalog(String catalog) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Connection getConnection() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setConnection(Connection connection) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void close() {
 		// TODO Auto-generated method stub
 		
 	}

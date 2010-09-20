@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 
 public class SingleThread {
@@ -24,7 +25,8 @@ public class SingleThread {
 
 			connection = DbConnectionManager.getConnection();
 			stmt = connection.createStatement();
-			
+			DBSession session = DBSession.getInstance();
+
 			Example ex = new Example();
 			//long lo = 9223372036854775807L;
 			for(int i=0;i<2147483647 ;i++) {

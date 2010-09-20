@@ -12,7 +12,10 @@
 <entry key="DbConnectionDefaultPool.server">jdbc:mysql://127.0.0.1/mycozBranch?useUnicode=true&amp;characterEncoding=utf8</entry>
 <entry key="DbConnectionDefaultPool.username">mycoz</entry>
 <entry key="DbConnectionDefaultPool.password">xmlpj0#</entry>
-<entry key="DbFactory.className">com.mooo.mycoz.dbobj.DbMysql</entry>
+<!-- <entry key="DbFactory.className">com.mooo.mycoz.dbobj.DbMysql</entry> -->
+<entry key="DbFactory.className">com.mooo.mycoz.db.sql.DbEntity</entry>
+<entry key="SQLFactory.className">com.mooo.mycoz.db.sql.MysqlSQL</entry>
+<entry key="SQLActionFactory.className">com.mooo.mycoz.db.sql.MysqlAction</entry>
 
 <!-- configure oracle database
 <entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>
