@@ -27,7 +27,7 @@ do
   export CLASSPATH=$CLASSPATH:$lf
 done
 
-echo $CLASSPATH
+echo "export CLASSPATH=$CLASSPATH"
 
 cd $SRC
 
