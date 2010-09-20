@@ -19,6 +19,6 @@ public interface DbAction extends SQLProcess{
 
 	void retrieve() throws SQLException;
 	
-	void setCls(Class cls);
+	void setCls(Class<?> cls);
 
 }
