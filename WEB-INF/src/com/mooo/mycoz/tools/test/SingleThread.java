@@ -28,7 +28,7 @@ public class SingleThread {
 			Example ex = new Example();
 			//long lo = 9223372036854775807L;
 			for(int i=0;i<2147483647 ;i++) {
-				ex.setId(i);
+				ex.setId(i*1d);
 				ex.setName(i + "丑鬼");
 				try {
 					stmt.execute(ex.addSQL());

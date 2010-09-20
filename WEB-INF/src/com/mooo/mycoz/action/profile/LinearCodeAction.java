@@ -41,7 +41,7 @@ public class LinearCodeAction extends BaseSupport{
 		try {
 			if (log.isDebugEnabled()) log.debug("promptUpload");
 			CodeType codeType = new CodeType();
-			codeType.setId(new Integer(IDGenerator.getNextID("mycozShared.CodeType")));
+			codeType.setId(new Integer(IDGenerator.getNextID("mycozShared.CodeType").intValue()));
 			codeType.setName(request.getParameter("CodeType.name"));
 			codeType.setCategory("Linear");
 			request.setAttribute("codeType", codeType);

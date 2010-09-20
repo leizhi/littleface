@@ -4,16 +4,16 @@ import com.mooo.mycoz.dbobj.DbFactory;
 
 public class Example extends DbFactory {
 	private static final long serialVersionUID = 1L;
-	Integer id;
+	Double id;
 	String name;
-	Integer age;
+	Double age;
 	String school;
 
-	public Integer getId() {
+	public Double getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Double id) {
 		this.id = id;
 	}
 
@@ -25,11 +25,11 @@ public class Example extends DbFactory {
 		this.name = name;
 	}
 
-	public Integer getAge() {
+	public Double getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(Double age) {
 		this.age = age;
 	}
 

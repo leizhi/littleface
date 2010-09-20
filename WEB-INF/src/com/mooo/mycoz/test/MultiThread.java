@@ -99,7 +99,7 @@ public class MultiThread  {
 				//Runtime rt = Runtime.getRuntime();
 
 				//for(int i=0;i<100000;i++){
-				ex.setId(new Random().nextInt());
+				ex.setId((new Random().nextInt())*1d);
 				ex.setName("日本女"+new Random().nextInt());
 				ex.add();
 					

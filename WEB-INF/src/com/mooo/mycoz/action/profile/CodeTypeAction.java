@@ -59,7 +59,7 @@ public class CodeTypeAction extends BaseSupport{
 			request.setAttribute("codeCategory", codeCategory);
 			
 			CodeType codeType = new CodeType();
-			codeType.setId(new Integer(IDGenerator.getNextID("mycozShared.CodeType")));
+			codeType.setId(new Integer(IDGenerator.getNextID("mycozShared.CodeType").intValue()));
 			codeType.setName(request.getParameter("CodeType.name"));
 			codeType.setCategory("Linear");
 			request.setAttribute("codeType", codeType);
@@ -200,7 +200,7 @@ public class CodeTypeAction extends BaseSupport{
 			session.setCatalog("mycozShared");
 			
 			LinearCode bean = new LinearCode();
-			bean.setId(IDGenerator.getNextID("mycozShared.LinearCode"));
+			bean.setId(IDGenerator.getNextID("mycozShared.LinearCode").intValue());
 			
 			if((value=request.getParameter("LinearCode.name"))==null || value.equals("")){
 				return "listCode";

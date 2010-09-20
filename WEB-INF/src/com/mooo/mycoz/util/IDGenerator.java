@@ -32,24 +32,22 @@ public class IDGenerator {
 		return lMap;
 	} // getDCValues()
 
-	public synchronized static Integer getNextID(String table) {
+	public synchronized static Double getNextID(String table) {
 		
 		Connection connection=null;
         PreparedStatement pstmt = null;
-        Integer nextId=0;
+        Double nextId=0d;
         try {
 			connection = DbConnectionManager.getConnection();
             pstmt = connection.prepareStatement(SELECT_MAX_BY_TABLE+table);
             
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-            	nextId = rs.getInt("maxid");
+            	nextId = rs.getInt("maxid") * 1d;
             }
             
             if(nextId != null)
             	nextId ++;
-            else
-            	nextId=0;
             
 		}catch (SQLException e) {
 			e.printStackTrace();

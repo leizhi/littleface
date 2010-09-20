@@ -7,7 +7,7 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.dbobj.marketmoniter.Example;
+import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.util.Transaction;
 
 public class MultiThread {

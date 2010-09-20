@@ -51,7 +51,7 @@ public class LoginAction extends BaseSupport {
 			//DBSession dbSession = DBSession.getInstance();
 
 			AccessLog al = new AccessLog();
-			al.setId(IDGenerator.getNextID("AccessLog"));
+			al.setId(IDGenerator.getNextID("AccessLog").intValue());
 			al.setIp(getClinetIp(request));
 			al.setStartdate(new Timestamp(new Date().getTime()));
 			al.add();

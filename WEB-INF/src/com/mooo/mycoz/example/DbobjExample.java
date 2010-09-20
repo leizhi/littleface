@@ -234,12 +234,12 @@ public class DbobjExample {
 			session.setConnection(tx.getConnection());
 			
 			Example bean = new Example();
-			bean.setId(79);
+			bean.setId(79d);
 			bean.setName("79");
 			
 			session.save(bean);
 
-			bean.setId(80);
+			bean.setId(80d);
 			bean.setName("80");
 			
 			session.save(bean);
@@ -315,7 +315,7 @@ public class DbobjExample {
         try {
 			connection = DbConnectionManager.getConnection();
             pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1,IDGenerator.getNextID("Example"));
+            pstmt.setDouble(1, (IDGenerator.getNextID("Example") * 1d));
             pstmt.setString(2, IDGenerator.getNextID("Example").toString());
             pstmt.execute();
 		}catch (SQLException e) {

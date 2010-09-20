@@ -187,7 +187,7 @@ public class FileAction extends BaseSupport {
 			        try {
 			            con = DbConnectionManager.getConnection();
 			            pstmt = con.prepareStatement(INSERT_FILE);
-			            pstmt.setInt(1,new Integer(IDGenerator.getNextID("FileInfo")));
+			            pstmt.setInt(1,new Integer(IDGenerator.getNextID("FileInfo").intValue()));
 			            pstmt.setInt(2, new Integer(uf.getParameter("typeid").trim()));
 			            pstmt.setString(3, uf.getParameter("name").trim());
 						if (log.isDebugEnabled()) log.debug("date="+uf.getParameter("date").trim());
