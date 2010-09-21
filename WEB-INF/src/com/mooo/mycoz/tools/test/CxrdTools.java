@@ -2,7 +2,11 @@ package com.mooo.mycoz.tools.test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -10,6 +14,9 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mooo.mycoz.db.DbAction;
+import com.mooo.mycoz.db.DbOperation;
+import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.dbobj.marketmoniter.BufferPrice;
 import com.mooo.mycoz.dbobj.marketmoniter.BufferTraffic;
 import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
@@ -49,9 +56,11 @@ public class CxrdTools {
 		tx.start();
 		tx.end();
 		///////
+		DbAction dbAction = DbOperation.getInstance();
+
 		try {
-			busRemotesList = new BusRemotes().searchAndRetrieveList();
-			busSamplesList = new BusSamples().searchAndRetrieveList();
+			busRemotesList = dbAction.searchAndRetrieveList(new BusRemotes());
+			busSamplesList = dbAction.searchAndRetrieveList(new BusSamples());
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -152,7 +161,9 @@ public class CxrdTools {
 		public void run() {
 			while (true) {
 				try {
-					writeTransaction();
+					//writeTransaction();
+					
+					writeDb();
 					threadLevel[i] ++;
 					
 					//Thread.sleep(5);
@@ -175,6 +186,7 @@ public class CxrdTools {
 		public void writeTransaction (){
 
 			Transaction tx = new Transaction();
+			DbAction dbAction = DbOperation.getInstance();
 			try {
 				tx.start();
 				Random random;
@@ -226,12 +238,11 @@ public class CxrdTools {
 				double minPrice = saleMoney;
 				
 				BufferPrice bufferPrice = new BufferPrice();
-				bufferPrice.setConnection(tx.getConnection());
 				
 				bufferPrice.setRemoteid(remoteid);
 				bufferPrice.setSampleid(sampleid);
 
-				if (bufferPrice.count() > 0)
+				if (dbAction.count(bufferPrice) > 0)
 					new SQLException("is have .");
 				
 				bufferPrice.setSalePrice(salePrice);
@@ -242,25 +253,24 @@ public class CxrdTools {
 				bufferPrice.setMinPrice(minPrice);
 				bufferPrice.setIslocal(islocal.toString());
 				
-				bufferPrice.add();
+				dbAction.add(bufferPrice);
 					
 				BufferTraffic bufferTraffic = new BufferTraffic();
-				bufferTraffic.setConnection(tx.getConnection());
 				bufferTraffic.setRemoteid(remoteid);
 				bufferTraffic.setOperDate(operDate);
 
 				bd = new BigDecimal(saleMoney * saleQnty);
 				double totleMoney = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 				
-				if (bufferTraffic.count() > 0) {
-					bufferTraffic.retrieve();
+				if (dbAction.count(bufferTraffic) > 0) {
+					dbAction.retrieve(bufferTraffic);
 					bufferTraffic.setTradeAmount(bufferTraffic.getTradeAmount() + 1);
 					bufferTraffic.setSaleMoney(bufferTraffic.getSaleMoney()+ totleMoney);
-					bufferTraffic.update();
+					dbAction.update(bufferTraffic);
 				} else {
 					bufferTraffic.setTradeAmount(1);
 					bufferTraffic.setSaleMoney(totleMoney);
-					bufferTraffic.add();
+					dbAction.add(bufferTraffic);
 				}
 
 				tx.commit();
@@ -276,6 +286,144 @@ public class CxrdTools {
 				tx.rollback();
 			}finally {
 				tx.end();
+			}
+			
+		}
+		
+		public void writeDb(){
+			Connection con = null;
+			Statement stmt = null;
+			String sql = "";
+			try {
+				//mypool
+				con = DbConnectionManager.getConnection();
+				con.setAutoCommit(false);
+				
+				System.out.println("打开连接-------------");
+				System.out.println(con);
+				
+				stmt = con.createStatement();
+				sql = "INSERT INTO buffer_price(remoteid,sampleid,sale_price,islocal,oper_date,sale_qnty,sale_money,max_price,min_price)";
+				
+				Random random;
+				int randomId=0;
+				
+				random = new Random();
+				BusRemotes busRemotes=null;
+				randomId = busRemotesList.size();
+				if (randomId > 0) {
+					randomId = random.nextInt(randomId);
+					if(randomId < busRemotesList.size())
+						busRemotes = (BusRemotes) busRemotesList.get(randomId);
+					else
+						busRemotes = (BusRemotes) busRemotesList.get(randomId-1);
+				} else {
+					busRemotes = (BusRemotes) busRemotesList.get(0);
+				}
+				
+				random = new Random();
+				BusSamples busSamples=null;
+				randomId = busSamplesList.size();
+				if (randomId > 0) {
+					random.nextInt(randomId);
+					if(randomId < busRemotesList.size())
+						busSamples = (BusSamples) busSamplesList.get(randomId);
+					else
+						busSamples = (BusSamples) busSamplesList.get(randomId-1);
+				} else {
+					busSamples = (BusSamples) busSamplesList.get(0);
+				}
+				
+				String remoteid = busRemotes.getRemoteid();
+				String sampleid = busSamples.getSampleid();
+				
+				System.out.println("remoteid="+remoteid);
+				System.out.println("sampleid="+sampleid);
+				
+				//random.setSeed(10000000L);
+		       BigDecimal bd = new BigDecimal(random.nextDouble() * 10);
+		       double sale_price = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+		       int islocal = new Random().nextInt(2);
+		       Date oper_date = IDGenerator.randomDate();
+
+		       bd = new BigDecimal(random.nextDouble() * 100);
+		       double sale_qnty = bd.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+		       
+		       bd = new BigDecimal(random.nextDouble() * 100);
+		       double sale_money = bd.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+		       double max_price = sale_money;
+		       double min_price = sale_money;
+
+				System.out.println("sale_price="+sale_price);
+				System.out.println("islocal="+islocal);
+				System.out.println("oper_date="+oper_date);
+				System.out.println("sale_qnty="+sale_qnty);
+				
+				System.out.println("sale_money="+sale_money);
+				System.out.println("max_price="+max_price);
+				System.out.println("min_price="+min_price);
+
+				sql += " VALUES(" +"'"+remoteid+"',"
+						+"'"+sampleid+"',"
+						+sale_price+","
+						+islocal+","
+						+"date'"+new SimpleDateFormat("yyyy-MM-dd ").format(oper_date) +"',"
+						+sale_qnty+","
+						+sale_money+","
+						+max_price+","
+						+min_price
+						+")";
+				
+				System.out.println("SQL="+sql);
+				stmt.execute(sql);
+
+			    bd = new BigDecimal(sale_money*sale_qnty);
+			    double totle_money = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+			    // check 
+				sql = "SELECT COUNT(*) total from buffer_traffic WHERE  oper_date=date'"+oper_date+"' AND remoteid = '"+remoteid+"'";
+				System.out.println("SQL="+sql);
+				ResultSet result = stmt.executeQuery(sql);
+				int total=0;
+				
+				while (result.next()) {
+					total = result.getInt("total");
+				}
+				// if have
+				if(total > 0){
+					sql = "UPDATE buffer_traffic SET "
+							+"trade_amount=trade_amount+1,sale_money=sale_money+"+totle_money
+							+" WHERE oper_date=date'"+oper_date+"' AND remoteid = '"+remoteid+"'";
+				} else { // else not
+					sql = "INSERT INTO buffer_traffic(remoteid,oper_date,trade_amount,sale_money) ";
+					sql += " VALUES(" +"'"+remoteid+"',"
+						+"date'"+oper_date+"',"
+						+ 1 +","
+						+ totle_money
+						+")";
+				}
+				System.out.println("SQL="+sql);
+
+				stmt.execute(sql);
+				System.out.println("commit");
+				con.commit();
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+				try {
+					con.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("Exception: " + e.getMessage());
+
+			} finally {
+				try {
+					stmt.close();
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 			
 		}

@@ -1,8 +1,7 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
-import com.mooo.mycoz.dbobj.DBObject;
 
-public class TreeExample extends DBObject {
+public class TreeExample {
 
 	/**
 	 * 

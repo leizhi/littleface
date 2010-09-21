@@ -6,9 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.dbobj.DBObject;
 
-public class OriginalExample extends DBObject{
+public class OriginalExample{
 	/**
 	 * 
 	 */

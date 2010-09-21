@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.SQLAction;
 import com.mooo.mycoz.db.sql.SQLActionFactory;
 import com.mooo.mycoz.util.BeanUtil;
@@ -21,13 +20,13 @@ public class DbOperation implements DbAction{
 	private static Log log = LogFactory.getLog(DbOperation.class);
 
     private static Object initLock = new Object();
-    private static DbOperation factory = null;
+    private static DbAction factory = null;
     
-	public static DbOperation getInstance() {
+	public static DbAction getInstance() {
 		if (factory == null) {
 			synchronized (initLock) {
 				if (factory == null) {
-					factory = new DbOperation();
+					factory = (DbAction)new DbOperation();
 				}
 			}
 		}
@@ -166,9 +165,7 @@ public class DbOperation implements DbAction{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
-			sqlAction.close();
-
+			//sqlAction.close();
 		}
 	}
 

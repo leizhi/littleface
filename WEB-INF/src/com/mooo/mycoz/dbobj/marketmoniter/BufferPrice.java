@@ -1,8 +1,7 @@
 package com.mooo.mycoz.dbobj.marketmoniter;
 
 import java.util.*;
-import com.mooo.mycoz.dbobj.DBObject;
-public class BufferPrice extends DBObject {
+public class BufferPrice  {
 	private static final long serialVersionUID = 1L;
 	String remoteid;
 	String sampleid;

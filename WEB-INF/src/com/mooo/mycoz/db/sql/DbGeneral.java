@@ -1,5 +1,6 @@
 package com.mooo.mycoz.db.sql;
 
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Iterator;
 
@@ -18,10 +19,9 @@ public class DbGeneral extends DbAbstract implements SQLProcess {
 	 * 
 	 */
 	private static final long serialVersionUID = 4971778169729898320L;
-	
+
 	public DbGeneral(){
 		connection = DbConnectionManager.getConnection();
-		closeCon = true;
 	}
 	
 	public void buildSQL(){
@@ -186,6 +186,16 @@ public class DbGeneral extends DbAbstract implements SQLProcess {
 	@Override
 	public String countSQL() {	
 		return countSQL(null);
+	}
+
+	@Override
+	public void close() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

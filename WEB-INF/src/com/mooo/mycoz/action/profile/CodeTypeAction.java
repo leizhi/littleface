@@ -11,6 +11,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.db.DbAction;
+import com.mooo.mycoz.db.DbOperation;
 import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
@@ -20,6 +22,7 @@ import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class CodeTypeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(CodeTypeAction.class);
+	private DbAction dbAction = DbOperation.getInstance();
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -33,15 +36,13 @@ public class CodeTypeAction extends BaseSupport{
 			request.setAttribute("codeCategory", codeCategory);
 
 			CodeType tt = new CodeType();
-			tt.setCatalog("mycozShared");
-			tt.setTable("CodeType");
 			
 			//tt.setCategory("Tree");
 			if((value=request.getParameter("codeCategory")) != null){
-				tt.setField("Category", value);
+				tt.setCategory(value);
 			}
 			
-			List linearTypes = tt.searchAndRetrieveList();
+			List linearTypes = dbAction.searchAndRetrieveList(tt);
 			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {
@@ -149,9 +150,8 @@ public class CodeTypeAction extends BaseSupport{
 			CodeType codeType = new CodeType();
 			//codeType.setConnection(tx.getConnection());
 
-			codeType.setCatalog("mycozShared");
 			codeType.setId(new Integer (id));
-			codeType.retrieve();
+			dbAction.retrieve(codeType);
 			request.setAttribute("codeType", codeType);
 			
 			System.out.println("do listCode CodeType end expends :"+(System.currentTimeMillis() - finishTime));
@@ -162,9 +162,8 @@ public class CodeTypeAction extends BaseSupport{
 				LinearCode lc = new LinearCode();
 				//lc.setConnection(tx.getConnection());
 
-				lc.setCatalog("mycozShared");
 				lc.setTypeid(codeType.getId());
-				request.setAttribute("codes",lc.searchAndRetrieveList());
+				request.setAttribute("codes",dbAction.searchAndRetrieveList(lc));
 				
 			} else {
 				//TreeCode tc = new TreeCode();
@@ -240,14 +239,13 @@ public class CodeTypeAction extends BaseSupport{
 			//session.setCatalog("mycozShared");
 			
 			LinearCode bean = new LinearCode();
-			bean.setCatalog("mycozShared");
 			bean.setId(new Integer(id));
 			//bean.setUpdate("name", request.getParameter("LinearCode.name"));
 			
 			if(request.getParameter("LinearCode.name")==null || "".equals(request.getParameter("LinearCode.name"))){
 				return "listCode";
 			}
-			bean.update();
+			dbAction.update(bean);
 			
 			//ParamUtil.bindData(request, bean, "LinearCode");
 			//session.update(bean);
@@ -269,9 +267,8 @@ public class CodeTypeAction extends BaseSupport{
 			for(int i=0;i<ids.length;i++){
 				if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
 				LinearCode bean = new LinearCode();
-				bean.setCatalog("mycozShared");
 				bean.setId( new Integer(ids[i]));
-				bean.delete();
+				dbAction.delete(bean);
 			}
 		
 		} catch (Exception e) {

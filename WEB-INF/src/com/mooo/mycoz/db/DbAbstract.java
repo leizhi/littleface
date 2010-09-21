@@ -32,7 +32,6 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	private static final long serialVersionUID = 5695615314838758248L;
 	
 	public Connection connection;
-	public boolean closeCon;
 
 	public String catalog;
 	public String table;
@@ -63,7 +62,6 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	
 	public void initialization(){
 		connection = DbConnectionManager.getConnection();
-		closeCon = true;
 
 		byWhere = false;
 		byGroup = false;
@@ -123,13 +121,12 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 		this.table = table;
 	}
 	
-	public Connection getConnection(){
+	public Connection getConnection() {
 		return connection;
 	}
 	
 	public void setConnection(Connection connection){
 			this.connection = connection;
-			closeCon = false;
 	}
 
 	public void close() {
@@ -675,9 +672,8 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	public void entityFillField(Object entity) {
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
-			
-			//setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
-			
+			//default oracle database
+			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
 			initialization();
 			
 			String method;

@@ -1,8 +1,6 @@
 package com.mooo.mycoz.dbobj.mycozShared;
 
-import com.mooo.mycoz.dbobj.DBObject;
-
-public class LinearCode extends DBObject{
+public class LinearCode {
 	/**
 	 * 
 	 */

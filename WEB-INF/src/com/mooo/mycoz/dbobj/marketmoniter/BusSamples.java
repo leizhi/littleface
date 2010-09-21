@@ -1,8 +1,7 @@
 package com.mooo.mycoz.dbobj.marketmoniter;
 
 import java.util.*;
-import com.mooo.mycoz.dbobj.DBObject;
-public class BusSamples extends DBObject {
+public class BusSamples {
 	private static final long serialVersionUID = 1L;
 	String sampleid;
 	String cateid;

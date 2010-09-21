@@ -77,7 +77,7 @@ public class DbConnectionManager {
      * Returns a database connection from the currently active connection
      * provider.
      */
-    public static Connection getConnection() {
+    public synchronized static Connection getConnection() {
         Connection con=null;
         if (appServerSource == null && !checkedPooler){
             checkedPooler=true;

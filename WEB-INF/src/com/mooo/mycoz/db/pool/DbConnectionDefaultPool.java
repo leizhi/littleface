@@ -658,11 +658,12 @@ public class DbConnectionDefaultPool extends DbConnectionProvider {
 						}
 
 						try {
+							log.debug("-----> Connections Exhausted!  Will wait and try "
+									+ "again in loop " + String.valueOf(outerloop));
+							
 							Thread.sleep(2000);
 						} catch (InterruptedException e) {
 						}
-						log.debug("-----> Connections Exhausted!  Will wait and try "
-								+ "again in loop " + String.valueOf(outerloop));
 					}
 				} // End of try 10 times loop
 

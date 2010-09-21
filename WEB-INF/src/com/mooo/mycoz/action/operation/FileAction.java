@@ -21,6 +21,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.db.DbAction;
+import com.mooo.mycoz.db.DbOperation;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.dbobj.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
@@ -33,7 +35,8 @@ import com.mooo.mycoz.util.UploadFile;
 public class FileAction extends BaseSupport {
 	private static Log log = LogFactory.getLog(FileAction.class);
 	private static final String INSERT_FILE="INSERT INTO FileInfo(id,typeid,name,datetime,filePath) VALUES(?,?,?,?,?)";
-	 
+	private DbAction dbAction = DbOperation.getInstance();
+
 	public String list(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("list");
@@ -120,14 +123,13 @@ public class FileAction extends BaseSupport {
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("promptUpload");
-			
+
 			Map fileTypes = new HashMap();
 			
 			LinearCode lc = new LinearCode();
-			lc.setCatalog("mycozShared");
 			lc.setTypeid(1);
 			LinearCode bean;
-			List cts = lc.searchAndRetrieveList();
+			List cts = dbAction.searchAndRetrieveList(lc);
 
 			for(Iterator it = cts.iterator(); it.hasNext();){
 				bean = (LinearCode)it.next();
@@ -259,7 +261,7 @@ public class FileAction extends BaseSupport {
 				if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
 				FileInfo bean = new FileInfo();
 				bean.setId( new Integer(ids[i]));
-				bean.retrieve();
+				dbAction.retrieve(bean);
 				
 		    	File file = new File(uploadPath+bean.getFilepath());
 				if (log.isDebugEnabled()) log.debug("filePath="+uploadPath+bean.getFilepath());
@@ -267,7 +269,7 @@ public class FileAction extends BaseSupport {
 		    	if(file.exists())
 		    		file.delete();
 		    	
-				bean.delete();
+		    	dbAction.delete(bean);
 			}
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -289,7 +291,7 @@ public class FileAction extends BaseSupport {
 				if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
 				FileInfo bean = new FileInfo();
 				bean.setId( new Integer(ids[i]));
-				bean.retrieve();
+				dbAction.retrieve(bean);
 				
 		    	File file = new File(uploadPath+bean.getFilepath());
 		    	//response.setContentType("*.*");

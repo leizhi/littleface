@@ -2,9 +2,7 @@ package com.mooo.mycoz.dbobj.mycozBranch;
 
 import java.sql.Timestamp;
 
-import com.mooo.mycoz.dbobj.DBObject;
-
-public class AccessLog extends DBObject{
+public class AccessLog {
 	
 	/**
 	 * 

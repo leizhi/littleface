@@ -9,6 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.db.DbAction;
+import com.mooo.mycoz.db.DbOperation;
 import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.IDGenerator;
@@ -16,17 +18,16 @@ import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LinearCodeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(LinearCodeAction.class);
+	private DbAction dbAction = DbOperation.getInstance();
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("list");
 			CodeType tt = new CodeType();
-			tt.setCatalog("mycozShared");
-			//tt.setCategory("Tree");
-			tt.setField("Category", "Linear");
+			tt.setCategory("Linear");
 			
-			List<?> linearTypes = tt.searchAndRetrieveList();
+			List<?> linearTypes = dbAction.searchAndRetrieveList(tt);
 			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {
