@@ -10,37 +10,13 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.db.sql.SQLAction;
 import com.mooo.mycoz.db.sql.SQLActionFactory;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class DbOperation implements DbAction{
+public class DbOperation extends SQLActionFactory implements DbAction{
 	
 	private static Log log = LogFactory.getLog(DbOperation.class);
-
-    private static Object initLock = new Object();
-    private static DbAction factory = null;
-    
-	public static DbAction getInstance() {
-		if (factory == null) {
-			synchronized (initLock) {
-				if (factory == null) {
-					factory = (DbAction)new DbOperation();
-				}
-			}
-		}
-		return factory;
-	}
-	
-	public Object entity;
-	
-	public SQLAction sqlAction;
-	
-	public DbOperation(){
-		sqlAction = SQLActionFactory.getInstance();
-	}
-	
 	
     /**
 	 * 
@@ -53,7 +29,7 @@ public class DbOperation implements DbAction{
 		
 		List<Object> retrieveList = null;
 		
-		String doSql = sqlAction.searchSQL(entity);
+		String doSql = getInstance().searchSQL(entity);
 		//doSql += " LIMIT 10";
 		System.out.println("doSql:"+doSql);
 
@@ -66,7 +42,7 @@ public class DbOperation implements DbAction{
 		try {
 			retrieveList = new ArrayList<Object>();
 			
-			stmt = sqlAction.getConnection().createStatement();
+			stmt = getInstance().getConnection().createStatement();
 			result = stmt.executeQuery(doSql);
 
 			rsmd = result.getMetaData();
@@ -101,16 +77,16 @@ public class DbOperation implements DbAction{
 				e.printStackTrace();
 			}
 			
-			sqlAction.close();
+			getInstance().close();
 
 		}
 		return retrieveList;
 	}
 		
 	@Override
-	public Integer count(Object entity) throws SQLException {
+	public synchronized Integer count(Object entity) throws SQLException {
 		
-		String doSql = sqlAction.countSQL(entity);
+		String doSql = getInstance().countSQL(entity);
 		
 		if(log.isDebugEnabled())log.debug("doSql="+doSql);
 		
@@ -120,7 +96,7 @@ public class DbOperation implements DbAction{
 		
 		try {
 					
-			stmt = sqlAction.getConnection().createStatement();
+			stmt = getInstance().getConnection().createStatement();
 			result = stmt.executeQuery(doSql);
 			
 			if(result.next())
@@ -144,18 +120,18 @@ public class DbOperation implements DbAction{
 				e.printStackTrace();
 			}
 			
-			sqlAction.close();
+			getInstance().close();
 		}
 		return total;
 	}
 
 
 	@Override
-	public void add(Object entity) throws SQLException {
+	public synchronized void add(Object entity) throws SQLException {
 		Statement stmt = null;
-		String doSql = sqlAction.addSQL(entity);
+		String doSql = getInstance().addSQL(entity);
 		try{		
-			stmt = sqlAction.getConnection().createStatement();
+			stmt = getInstance().getConnection().createStatement();
 			stmt.execute(doSql);
 		}finally {
 
@@ -169,29 +145,28 @@ public class DbOperation implements DbAction{
 		}
 	}
 
-	public void save(Object entity) throws SQLException {
+	public synchronized void save(Object entity) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
-	public void delete(Object entity) throws SQLException {
+	public synchronized void delete(Object entity) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public void update(Object entity) throws SQLException {
+	public synchronized void update(Object entity) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public void retrieve(Object entity) throws SQLException {
+	public synchronized void retrieve(Object entity) throws SQLException {
 		// TODO Auto-generated method stub
-		
 	}
 	
 }

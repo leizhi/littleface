@@ -2,7 +2,7 @@ package com.mooo.mycoz.db.sql;
 
 import com.mooo.mycoz.util.PropertyManager;
 
-public abstract class SQLActionFactory implements SQLAction{
+public abstract class SQLActionFactory {
 	
     private static Object initLock = new Object();
     private static String className = "com.mooo.mycoz.db.sql.MysqlAction";

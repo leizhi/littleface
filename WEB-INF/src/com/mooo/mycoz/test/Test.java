@@ -82,17 +82,14 @@ public class Test {
 		int MaxInt = 2147483647;
 
 		try {
-			DbAction dbAction = DbOperation.getInstance();
+			DbAction dbAction = new DbOperation();
 			//dbAction.setConnection(tx.getConnection());
-			/*
 			Example ex = new Example();
 			ex.setId(new Random().nextDouble() * MaxInt);
-			ex.setName(new Random().nextDouble() * MaxInt+"名称");
+			ex.setName(new Random().nextDouble() * MaxInt+"敢死队");
 			dbAction.add(ex);
-			*/
 			
-			
-			List reList = dbAction.searchAndRetrieveList(new BusRemotes());
+			/*List reList = dbAction.searchAndRetrieveList(new BusRemotes());
 			System.out.println("sql:");
 
 			Iterator it = reList.iterator();
@@ -101,6 +98,7 @@ public class Test {
 				bean = (BusRemotes) it.next();
 				System.out.println("name:"+bean.getAddr()+" id:"+bean.getRemoteid());
 			}
+			*/
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

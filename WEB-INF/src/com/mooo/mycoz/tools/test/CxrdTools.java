@@ -56,7 +56,7 @@ public class CxrdTools {
 		tx.start();
 		tx.end();
 		///////
-		DbAction dbAction = DbOperation.getInstance();
+		DbAction dbAction = new DbOperation();
 
 		try {
 			busRemotesList = dbAction.searchAndRetrieveList(new BusRemotes());
@@ -186,7 +186,7 @@ public class CxrdTools {
 		public void writeTransaction (){
 
 			Transaction tx = new Transaction();
-			DbAction dbAction = DbOperation.getInstance();
+			DbAction dbAction = new DbOperation();
 			try {
 				tx.start();
 				Random random;

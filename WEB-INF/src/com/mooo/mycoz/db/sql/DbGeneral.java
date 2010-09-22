@@ -7,11 +7,11 @@ import java.util.Iterator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.db.DbAbstract;
+import com.mooo.mycoz.db.DbCore;
 import com.mooo.mycoz.db.Field;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 
-public class DbGeneral extends DbAbstract implements SQLProcess {
+public class DbGeneral extends DbCore implements SQLProcess {
 
 	private static Log log = LogFactory.getLog(DbGeneral.class);
 

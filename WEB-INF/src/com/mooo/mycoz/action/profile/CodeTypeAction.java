@@ -22,7 +22,7 @@ import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class CodeTypeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(CodeTypeAction.class);
-	private DbAction dbAction = DbOperation.getInstance();
+	private DbAction dbAction = new DbOperation();
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {

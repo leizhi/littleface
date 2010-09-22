@@ -18,7 +18,7 @@ import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class TreeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(TreeAction.class);
-	private DbAction dbAction = DbOperation.getInstance();
+	private DbAction dbAction = new DbOperation();
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {

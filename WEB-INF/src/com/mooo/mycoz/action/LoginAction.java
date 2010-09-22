@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import com.mooo.mycoz.db.DbAction;
 import com.mooo.mycoz.db.DbOperation;
-import com.mooo.mycoz.db.sql.SQLAction;
 import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
@@ -28,7 +27,7 @@ public class LoginAction extends BaseSupport {
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled())log.debug("promptLogin");
-			DbAction dbAction = DbOperation.getInstance();
+			DbAction dbAction = new DbOperation();
 
 			HttpSession session = request.getSession(true);
 			com.mooo.mycoz.util.SessionCounter.put(request.getSession().getId());

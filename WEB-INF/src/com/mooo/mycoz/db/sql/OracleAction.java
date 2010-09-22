@@ -6,11 +6,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mooo.mycoz.db.DbAbstract;
+import com.mooo.mycoz.db.DbCore;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class OracleAction extends DbAbstract{
+public class OracleAction extends DbCore{
 
 	/**
 	 * 

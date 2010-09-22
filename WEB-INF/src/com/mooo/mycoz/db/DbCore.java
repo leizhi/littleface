@@ -22,9 +22,9 @@ import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public abstract class DbAbstract implements SQLAction, Serializable{
+public abstract class DbCore implements SQLAction, Serializable{
 	
-	private static Log log = LogFactory.getLog(DbAbstract.class);
+	private static Log log = LogFactory.getLog(DbCore.class);
 
 	/**
 	 * 
@@ -32,6 +32,8 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	private static final long serialVersionUID = 5695615314838758248L;
 	
 	public Connection connection;
+	
+	public Connection myConnection;
 
 	public String catalog;
 	public String table;
@@ -61,8 +63,8 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	public Map columnValues;
 	
 	public void initialization(){
-		connection = DbConnectionManager.getConnection();
-
+		getConnection();
+		
 		byWhere = false;
 		byGroup = false;
 		byOrder = false;
@@ -122,6 +124,9 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 	}
 	
 	public Connection getConnection() {
+		if(connection == null)
+			connection = DbConnectionManager.getConnection();
+		
 		return connection;
 	}
 	
@@ -131,8 +136,10 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 
 	public void close() {
 		try {
-			if(connection != null)
+			if(connection != null) {
 				connection.close();
+			}
+			connection=null;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -674,6 +681,7 @@ public abstract class DbAbstract implements SQLAction, Serializable{
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
 			//default oracle database
 			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
+			
 			initialization();
 			
 			String method;

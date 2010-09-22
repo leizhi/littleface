@@ -3,9 +3,7 @@ package com.mooo.mycoz.action.operation;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +33,7 @@ import com.mooo.mycoz.util.UploadFile;
 public class FileAction extends BaseSupport {
 	private static Log log = LogFactory.getLog(FileAction.class);
 	private static final String INSERT_FILE="INSERT INTO FileInfo(id,typeid,name,datetime,filePath) VALUES(?,?,?,?,?)";
-	private DbAction dbAction = DbOperation.getInstance();
+	private DbAction dbAction = new DbOperation();
 
 	public String list(HttpServletRequest request, HttpServletResponse response) {
 		try {
