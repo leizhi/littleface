@@ -2,6 +2,7 @@ package com.mooo.mycoz.util;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+//import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -82,5 +83,68 @@ public class DbUtil {
 		
 		return retrieveList;
 
+	}
+	
+	public static int type(Connection connection,String catalog,String table,String column) {
+		
+		Connection myConn = null;
+		boolean isClose = true;
+		
+		Statement stmt = null;
+		ResultSet result = null;
+		//ResultSetMetaData rsmd = null;
+
+		try {
+			if(connection != null){
+				myConn = connection;
+				isClose = false;
+			} else {
+				myConn = DbConnectionManager.getConnection();
+				isClose = true;
+			}
+
+			//result = myConn.getMetaData().getColumns(null, schem, "FileInfo","name");
+			result = myConn.getMetaData().getColumns(catalog, null, table,column);
+			//rsmd = result.getMetaData();
+			//String columnName="";
+
+			while (result.next()) {
+				/*
+				for (int i = 0; i < rsmd.getColumnCount(); i++) {
+					columnName = rsmd.getColumnName(i + 1).toLowerCase();
+					System.out.println(columnName + "="+result.getString(columnName));
+				}*/
+				//System.out.println(result.getInt(5));
+
+				return result.getInt(5);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(isClose)
+					myConn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return 0;
 	}
 }

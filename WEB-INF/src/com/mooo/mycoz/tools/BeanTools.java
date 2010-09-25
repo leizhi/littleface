@@ -217,8 +217,8 @@ public class BeanTools {
 		//bd.build("bus_samples");
 		//bd.build("buffer_price");
 		//bd.build("buffer_traffic");
-		//bd.build("Example");
-		bd.build("mycozBranch","FileInfo");
+		bd.build("mycozBranch","Example");
+		//bd.build("mycozBranch","FileInfo");
 		//bd.build("mycozShared","CodeType");
 
 		//bd.buildInsert("buffer_traffic");

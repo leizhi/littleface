@@ -1,5 +1,7 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
+import java.util.Date;
+
 //import com.mooo.mycoz.dbobj.DBObject;
 
 //public class Example extends DBObject {
@@ -10,6 +12,15 @@ public class Example {
 	String name;
 	Double age;
 	String school;
+	Date createdate;
+
+	public Date getCreatedate() {
+		return createdate;
+	}
+
+	public void setCreatedate(Date createdate) {
+		this.createdate = createdate;
+	}
 
 	public Double getId() {
 		return id;

@@ -1,15 +1,11 @@
 package com.mooo.mycoz.db.sql;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -17,8 +13,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.db.Field;
 import com.mooo.mycoz.util.DbUtil;
-import com.mooo.mycoz.util.ReflectUtil;
-import com.mooo.mycoz.util.StringUtils;
 
 public abstract class AbstractSQL implements SQLProcess, Serializable{
 	
@@ -153,24 +147,12 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		}
 	}
 
-	public void setField(String field, Date value) {
+	public void setField(String field, Date value,int columnType) {
 		try {
 			if (field == null || value == null)
 				new Exception("set value is null");
 
-			fields.put(field, new Field(field,Types.TIMESTAMP));
-			columnValues.put(field, value);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-
-	public void setField(String field, Date value,int type) {
-		try {
-			if (field == null || value == null)
-				new Exception("set value is null");
-
-			fields.put(field, new Field(field,type));
+			fields.put(field, new Field(field,columnType));
 			columnValues.put(field, value);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -256,7 +238,7 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 					saveValue.append("'"+obj+"',");
 				}else if(obj.getClass().isAssignableFrom(Date.class)){
 					if(field.getType()==Types.TIMESTAMP){
-						saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"',");
+						saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"',");
 					} else {
 						saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd ").format(((Date)obj)) +"',");
 					}
@@ -658,109 +640,5 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		if(log.isDebugEnabled())log.debug("countSql="+countSql);
 		
 		return countSql.toString();
-	}
-	
-	public void entityFillField(Object entity) {
-		try {
-			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
-			//default oracle database
-			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
-			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
-			
-			initialization();
-			
-			String method;
-			String field;
-			
-			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
-				method = it.next();
-				if(method.indexOf("get")==0){
-					
-					Method getMethod;
-					getMethod = entity.getClass().getMethod(method);
-					
-					Object obj = getMethod.invoke(entity);
-					
-					if(obj !=null) {
-						field = method.substring(method.indexOf("get")+3);
-						if(obj.getClass().isAssignableFrom(Integer.class))
-							setField(StringUtils.upperToPrefix(field), (Integer)obj);
-						else if(obj.getClass().isAssignableFrom(String.class)){
-							setField(StringUtils.upperToPrefix(field), (String)obj);
-						}else if(obj.getClass().isAssignableFrom(Date.class)){
-							
-							setField(StringUtils.upperToPrefix(field), (Date)obj);
-						}else if(obj.getClass().isAssignableFrom(Double.class)){
-							setField(StringUtils.upperToPrefix(field), (Double)obj);
-						}
-					}
-				}
-			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void entityFillField(Connection connection,Object entity) {
-		try {
-			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
-			//default oracle database
-			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
-			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
-			
-			initialization();
-			
-			String sql = searchSQL(entity) + " LIMIT 1";
-			
-			String method;
-			String field;
-			
-			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
-				method = it.next();
-				if(method.indexOf("get")==0){
-					
-					Method getMethod;
-					getMethod = entity.getClass().getMethod(method);
-					
-					Object obj = getMethod.invoke(entity);
-					
-					if(obj !=null) {
-						field = method.substring(method.indexOf("get")+3);
-						if(obj.getClass().isAssignableFrom(Integer.class))
-							setField(StringUtils.upperToPrefix(field), (Integer)obj);
-						else if(obj.getClass().isAssignableFrom(String.class)){
-							setField(StringUtils.upperToPrefix(field), (String)obj);
-						}else if(obj.getClass().isAssignableFrom(Date.class)){
-							
-							setField(StringUtils.upperToPrefix(field), (Date)obj);
-						}else if(obj.getClass().isAssignableFrom(Double.class)){
-							setField(StringUtils.upperToPrefix(field), (Double)obj);
-						}
-					}
-				}
-			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

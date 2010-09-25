@@ -1,9 +1,6 @@
 package com.mooo.mycoz.action.operation;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +16,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
-import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.dbobj.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
@@ -30,7 +26,6 @@ import com.mooo.mycoz.util.UploadFile;
 
 public class FileAction extends BaseSupport {
 	private static Log log = LogFactory.getLog(FileAction.class);
-	private static final String INSERT_FILE="INSERT INTO FileInfo(id,typeid,name,datetime,filePath) VALUES(?,?,?,?,?)";
 
 	public String list(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -143,98 +138,73 @@ public class FileAction extends BaseSupport {
 	public String processUpload(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			if (log.isDebugEnabled()) log.debug("processUpload");
-			    
-			    	String value ="";
-			    	String uploadDirectory = "upload/";
-			    	String tmpDirectory = "tmp/";
-			    	String uploadPath = request.getRealPath("/")+uploadDirectory;
-			    	String tmpPath = request.getRealPath("/")+tmpDirectory;
-			    	
-					if (log.isDebugEnabled()) log.debug("uploadPath="+uploadPath);
+			if (log.isDebugEnabled())
+				log.debug("processUpload");
 
-				    File tmpFile = new File(tmpPath);
-				    File uploadFile = new File(uploadPath);
+			String value = "";
+			String uploadDirectory = "upload/";
+			String tmpDirectory = "tmp/";
+			String uploadPath = request.getRealPath("/") + uploadDirectory;
+			String tmpPath = request.getRealPath("/") + tmpDirectory;
 
-				       if (!tmpFile.exists()) {
-				    	   tmpFile.mkdirs();
-				       }
-				       
-				       if (!uploadFile.exists()) {
-				    	   uploadFile.mkdirs();
-				       }
-				       
-			    	UploadFile uf = new UploadFile();
-			    	uf.setRequest(request);
-			    	uf.setUploadPath(tmpPath);
-			    	uf.process();
+			if (log.isDebugEnabled())
+				log.debug("uploadPath=" + uploadPath);
 
-			    	value = uf.getParameter("name").trim();
-			    	
-					if (log.isDebugEnabled()) log.debug("name:"+value);
+			File tmpFile = new File(tmpPath);
+			File uploadFile = new File(uploadPath);
 
-			    	if (value==null || value.equals("")) 
-			    		throw new Exception("Input Name NULL");
-			    	
-					//DBSession session = DBSession.getInstance();
-			        //Finally, delete the forum itself and all permissions and properties
-			        //associated with it.
-//			        Connection con = null;
-//			        PreparedStatement pstmt = null;
-//			        try {
-//			            con = DbConnectionManager.getConnection();
-//			            pstmt = con.prepareStatement(INSERT_FILE);
-//			            pstmt.setInt(1,new Integer(IDGenerator.getNextID("FileInfo").intValue()));
-//			            pstmt.setInt(2, new Integer(uf.getParameter("typeid").trim()));
-//			            pstmt.setString(3, uf.getParameter("name").trim());
-//						if (log.isDebugEnabled()) log.debug("date="+uf.getParameter("date").trim());
-//
-//						Date inDate = new Date(uf.getParameter("date").trim());
-//						java.sql.Timestamp oDate= new java.sql.Timestamp(inDate.getTime());
-//						
-//						if (log.isDebugEnabled()) log.debug("oDate="+oDate);
-//
-//			            pstmt.setTimestamp(4, oDate);
-//			            
-//				    	Iterator<?> fileList = uf.getFileIterator();
-//				    	int i=0;
-//				    	while(fileList.hasNext()){
-//				    		value = (String)fileList.next();
-//				            pstmt.setString(5, value);
-//				    		i++;
-//				    		}
-//				    	
-//						if (log.isDebugEnabled()) log.debug("file="+uploadPath+value);
-//
-//				    	File inputFile = new File(uploadPath+value);
-//				    	FileInputStream fis = new FileInputStream(inputFile);
-//				    	
-//						if (log.isDebugEnabled()) log.debug("file="+uploadPath+value);
-//
-//			            pstmt.setBinaryStream(6, fis, fis.available());
-//						 
-//			            pstmt.execute();
-//			            pstmt.close();
-			            
-			            FileUtil.copy(new File(tmpPath+value), new File(uploadPath+value), true);
-			            
-			            //User perms
-			            //pstmt = con.prepareStatement(DELETE_FORUM_USER_PERMS);
-			            //pstmt.setInt(1,forum.getID());
-			            //pstmt.execute();
-			            //pstmt.close();
-//			        }
-//			        catch( SQLException sqle ) {
-//			            System.err.println("Error in sqle:" + sqle);
-//			        }
-//			        finally {
-//			            try {  pstmt.close(); }
-//			            catch (Exception e) { e.printStackTrace(); }
-//			            try {  con.close();   }
-//			            catch (Exception e) { e.printStackTrace(); }
-//			        }
-			        
-	           System.out.print("upload succeed");
+			if (!tmpFile.exists()) {
+				tmpFile.mkdirs();
+			}
+
+			if (!uploadFile.exists()) {
+				uploadFile.mkdirs();
+			}
+
+			UploadFile uf = new UploadFile();
+			uf.setRequest(request);
+			uf.setUploadPath(tmpPath);
+			uf.process();
+
+			value = uf.getParameter("name").trim();
+
+			if (log.isDebugEnabled())
+				log.debug("name:" + value);
+
+			if (value == null || value.equals(""))
+				throw new Exception("Input Name NULL");
+
+			// Finally, delete the forum itself and all permissions and
+			// properties
+			// associated with it.
+			FileInfo fi = new FileInfo();
+			fi.setId(new Integer(IDGenerator.getNextID("FileInfo").intValue()));
+			fi.setTypeid(new Integer(uf.getParameter("typeid").trim()));
+			fi.setName(uf.getParameter("name").trim());
+			// fi.setDatetime(new Date(uf.getParameter("date").trim()));
+			fi.setDatetime(new Date());
+
+			Iterator<?> fileList = uf.getFileIterator();
+			int i = 0;
+
+			while (fileList.hasNext()) {
+				value = (String) fileList.next();
+				fi.setFilepath(value);
+				i++;
+			}
+
+			dbProcess.add(fi);
+
+			FileUtil.copy(new File(tmpPath + value),
+					new File(uploadPath + value), true);
+
+			// User perms
+			// pstmt = con.prepareStatement(DELETE_FORUM_USER_PERMS);
+			// pstmt.setInt(1,forum.getID());
+			// pstmt.execute();
+			// pstmt.close();
+
+			System.out.print("upload succeed");
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());

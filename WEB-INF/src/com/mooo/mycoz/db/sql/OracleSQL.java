@@ -2,10 +2,12 @@ package com.mooo.mycoz.db.sql;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Types;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
@@ -26,7 +28,8 @@ public class OracleSQL extends AbstractSQL{
 			
 			String method;
 			String field;
-			
+			int columnType = 0;
+
 			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
 				method = it.next();
 				if(method.indexOf("get")==0){
@@ -38,12 +41,18 @@ public class OracleSQL extends AbstractSQL{
 					
 					if(obj !=null) {
 						field = method.substring(method.indexOf("get")+3);
+						columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(field));
+						
 						if(obj.getClass().isAssignableFrom(Integer.class))
 							setField(StringUtils.upperToPrefix(field), (Integer)obj);
 						else if(obj.getClass().isAssignableFrom(String.class)){
 							setField(StringUtils.upperToPrefix(field), (String)obj);
 						}else if(obj.getClass().isAssignableFrom(Date.class)){
-							setField(StringUtils.upperToPrefix(field), (Date)obj);
+							if(columnType == Types.TIMESTAMP){
+								setField(StringUtils.upperToPrefix(field), (Date)obj,Types.TIMESTAMP);
+							} else{
+								setField(StringUtils.upperToPrefix(field), (Date)obj,columnType);
+							}
 						}else if(obj.getClass().isAssignableFrom(Double.class)){
 							setField(StringUtils.upperToPrefix(field), (Double)obj);
 						}

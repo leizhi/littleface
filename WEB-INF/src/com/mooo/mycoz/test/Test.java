@@ -21,6 +21,7 @@ import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
+import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 public class Test {
@@ -28,52 +29,38 @@ public class Test {
 	public static void main(String[] args) {
 		
 		//System.out.println("StringUtils.getCatalog ="+StringUtils.getCatalog(BusRemotes.class,1));
-
+		//DbUtil.type(null,"mycozBranch","FileInfo","name");
 
 		long maxLong = 9223372036854775807L;
-		int MaxInt = 2147483647;
+		int maxInt = 2147483647;
 
 		try {
 			DbProcess dbAction = DbFactory.getInstance();
-			FileInfo fi = new FileInfo();
-			fi.setId(6);
-			fi.setTypeid(4);
-			fi.setName("没有6可能");
-			fi.setDatetime(new Date());
-			fi.setFilepath("filePath");
+//			FileInfo fi = new FileInfo();
+//			fi.setId(3);
+//			fi.setTypeid(4);
+//			fi.setName("没有3可能");
+//			fi.setDatetime(new Date());
+//			fi.setFilepath("filePathd");
+//			
+//			dbAction.add(fi);
 			
-			dbAction.add(fi);
-			
-			/*
-			CodeType codeType = new CodeType();
-			codeType.setId(new Integer ("1"));
-			dbAction.retrieve(codeType);
-			
-			System.out.println("getId="+codeType.getId());
-			System.out.println("getName="+codeType.getName());
-			System.out.println("getCategory="+codeType.getCategory());
-			
-			BusRemotes busRemotes = new BusRemotes();
-			busRemotes.setRemoteid("0014");
-			dbAction.retrieve(busRemotes);
-			
-			System.out.println("count="+busRemotes.getAddr());
-			System.out.println("count="+busRemotes.getRemotename());
-			System.out.println("count="+busRemotes.getMasterenterp());
-			System.out.println("count="+busRemotes.getZone());
+			Example ex = new Example();
+			ex.setId(new Random().nextDouble() * maxInt);
+			ex.setName(new Random().nextDouble() * maxInt+"名称");
+			ex.setCreatedate(new Date());
+			dbAction.add(ex);
 
-			
-			List reList = dbAction.searchAndRetrieveList(new BusRemotes());
-			System.out.println("sql:");
-			System.out.println("count="+dbAction.count(new BusRemotes()));
-
-			Iterator it = reList.iterator();
-			BusRemotes bean;
-			while (it.hasNext()) {
-				bean = (BusRemotes) it.next();
-				System.out.println("name:"+bean.getAddr()+" id:"+bean.getRemoteid());
-			}
-			*/
+//			List reList = dbAction.searchAndRetrieveList(fi);
+//			System.out.println("sql:");
+//			System.out.println("count="+dbAction.count(fi));
+//
+//			Iterator it = reList.iterator();
+//			FileInfo bean;
+//			while (it.hasNext()) {
+//				bean = (FileInfo) it.next();
+//				System.out.println("name:"+bean.getName()+" id:"+bean.getId());
+//			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
