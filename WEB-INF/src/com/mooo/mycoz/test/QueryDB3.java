@@ -78,8 +78,7 @@ public class QueryDB3 extends JFrame implements ActionListener {
 		JPanel p1 = new JPanel(); // \u521d\u59cb\u5316\u4e00\u4e2a\u9762\u677f
 
 		Query1 = new JButton(); // \u521d\u59cb\u5316\u6309\u94ae
-		Query1
-				.setText("\u3000\u3000\u3000\u3000\u3000\u3000    \u3000            \u67e5 \u8be2 \u6570 \u636e \u5e93 \u4e2d \u7684 \u6240 \u6709 \u8def \u51b5 \u4fe1 \u606f\u3000          \u3000   \u3000\u3000\u3000\u3000\u3000"); // \u8bbe\u7f6e\u6309\u94ae\u6587\u672c
+		Query1.setText("\u3000\u3000\u3000\u3000\u3000\u3000    \u3000            \u67e5 \u8be2 \u6570 \u636e \u5e93 \u4e2d \u7684 \u6240 \u6709 \u8def \u51b5 \u4fe1 \u606f\u3000          \u3000   \u3000\u3000\u3000\u3000\u3000"); // \u8bbe\u7f6e\u6309\u94ae\u6587\u672c
 		Query1.addActionListener(this);
 
 		p1.add(Query1);
