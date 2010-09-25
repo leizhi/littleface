@@ -1,5 +1,7 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
+import java.util.Date;
+
 
 public class FileInfo {
 	/**
@@ -12,7 +14,7 @@ public class FileInfo {
 	private String typename;
 	private String name;
 	private String filepath;
-	private String datetime;
+	private Date datetime;
 	private String size;
 	
 	public Integer getId() {
@@ -45,10 +47,10 @@ public class FileInfo {
 	public void setFilepath(String filepath) {
 		this.filepath = filepath;
 	}
-	public String getDatetime() {
+	public Date getDatetime() {
 		return datetime;
 	}
-	public void setDatetime(String datetime) {
+	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
 	}
 	public String getSize() {

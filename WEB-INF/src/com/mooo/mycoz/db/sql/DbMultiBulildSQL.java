@@ -233,9 +233,4 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		return value;
 	}
 
-	@Override
-	public void close() {
-		// TODO Auto-generated method stub
-		
-	}
 }

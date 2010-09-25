@@ -7,11 +7,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mooo.mycoz.db.DbCore;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class MysqlAction extends DbCore {
+public class MysqlSQL extends AbstractSQL {
 
 	/**
 	 * 
@@ -22,6 +21,7 @@ public class MysqlAction extends DbCore {
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
 			
+			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
 			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName(),null));
 			
 			initialization();

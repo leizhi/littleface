@@ -3,6 +3,8 @@ package com.mooo.mycoz.action;
 import java.util.List;
 
 import com.mooo.mycoz.commons.Pager;
+import com.mooo.mycoz.db.DbFactory;
+import com.mooo.mycoz.db.DbProcess;
 
 /**
  * Base Action class for the controller package.
@@ -14,6 +16,8 @@ public class BaseSupport {
 	
 	public static final String USER_SESSION_KEY = "UserSessionKey";
 	
+	public DbProcess dbProcess;
+
 	/*
 	 * configure general action
 	 */
@@ -47,6 +51,7 @@ public class BaseSupport {
 	public BaseSupport() {
 		//pager = new Pager();
 		this.setLayout("skin/office/default");
+		dbProcess = DbFactory.getInstance();
 	}
 	
 }

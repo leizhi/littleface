@@ -1,9 +1,12 @@
 package com.mooo.mycoz.db.sql;
 
-import com.mooo.mycoz.db.DbCommon;
 
-public interface MultiSQLProcess extends DbCommon {
+public interface MultiSQLProcess {
  	
+	String getCatalog();
+
+	void setCatalog(String catalog);
+	
 	void addTable(String name, String alias);
 	
 	void addTable(String catalog, String name, String alias);

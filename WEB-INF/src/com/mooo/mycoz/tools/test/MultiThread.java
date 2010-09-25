@@ -1,41 +1,29 @@
 package com.mooo.mycoz.tools.test;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.db.DbAction;
-import com.mooo.mycoz.db.DbFork;
-import com.mooo.mycoz.db.DbOperation;
+import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.MysqlAction;
-import com.mooo.mycoz.db.sql.SQLAction;
-import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
-import com.mooo.mycoz.dbobj.marketmoniter.BusSamples;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
-import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.Transaction;
 
 public class MultiThread {
 	private static Log log = LogFactory.getLog(MultiThread.class);
 
-	//private static final long maxLong = 9223372036854775807L;
 	private static final int maxInt = 2147483647;
-	private static final int maxThread=800;
+	//private static final long maxLong = 9223372036854775807L;
 	//private static final double maxDouble = 1.79769313486231570e+308;
-	
+	private static final int maxThread=800;
+
 	private Thread[] threadPool;
-	
 	private int maxConnMSec;
 	//private int maxConnPool=25;
 
@@ -65,7 +53,7 @@ public class MultiThread {
 				maxConns=maxThread;
 			
 			// create threadPool
-			DoThread doThread = new DoThread();
+			//DoThread doThread = new DoThread();
 			for (int i = 0; i < maxConns;i++) {
 				
 				//threadPool[i] = new Thread(doThread);
@@ -133,200 +121,108 @@ public class MultiThread {
 	class DoThread implements Runnable  {
 		private Object initLock = new Object();
 		
-		private Connection connection;
-		private Statement stmt;
+		private DbProcess dbAction;
+		
 		private long createTime;
-		private String sql;
-		private DbFork dbFork;
 
 		public DoThread(){
 			createTime = System.currentTimeMillis();
-			dbFork = new DbFork();
+			dbAction = DbFactory.getInstance();
 		}
 		
 		public void run() {
 			boolean forever = true;
 			while (forever) {
-				try {
 					synchronized (initLock) {
-//						if(log.isDebugEnabled()) log.debug(Thread.currentThread().getName()+"打印 count:");
-						
-//						System.out.println("name \t\tPriority \t\tisAlive \tState \t\t\tisInterrupted \tisDaemon");
-//						System.out.println(Thread.currentThread().getName() + "\t\t" + Thread.currentThread().getPriority() +
-//							"\t\t" + Thread.currentThread().isAlive() + "\t\t" + Thread.currentThread().getState() + 
-//								"\t\t" + Thread.currentThread().isInterrupted() +
-//								"\t\t\t" + Thread.currentThread().isDaemon());
-						
-						Example ex = new Example();
-						ex.setId(new Random().nextDouble() * maxInt);
-						ex.setName(new Random().nextDouble() * maxInt + "名称");
-						
-						try {
-							dbFork.add(ex);
-						} catch (SQLException e) {
-							e.printStackTrace();
-							
-							Thread.sleep(20); // do other
-							continue;
-						}
-						
+						//writeJDBC();
+						writeTransaction();
 						long age = System.currentTimeMillis() - createTime;
 						if (age > maxConnMSec) { // Force a reset at the max
 							System.out.println("===超时 退出=====");
 							break;
 						}
-						//LOOP Run
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					
-					System.out.println("异常退出..");
-					break;
-				}
-			} // while
+					} //synchronized end
+			} // loop run
 		} // end run
-		
-		/*
-		public void run() {
-			boolean forever = true;
-			while (forever) {
+
+		public void writeJDBC(){
+			Connection connection = null;
+			Statement stmt = null;
+			String sql = null;
+			try {
+				//mypool
+				connection = DbConnectionManager.getConnection();
+				connection.setAutoCommit(false);
+				
+				System.out.println("打开连接-------------");
+				System.out.println(connection);
+				
+				stmt = connection.createStatement();
+				sql = "INSERT INTO Example(id,name) VALUES(";
+				sql += (new Random().nextDouble() * maxInt)+",";
+				sql += "'"+(new Random().nextDouble() * maxInt) + "名称"+"'";
+				sql += ")";
+			
+
+				stmt.execute(sql);
+				System.out.println("commit");
+				connection.commit();
+				
+			}catch (SQLException e) {
+				e.printStackTrace();
 				try {
-					synchronized (initLock) {
+					connection.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("SQLException: " + e.getMessage());
 
-//						if(log.isDebugEnabled()) log.debug(Thread.currentThread().getName()+"打印 count:");
-							
-//						System.out.println("name \t\tPriority \t\tisAlive \tState \t\t\tisInterrupted \tisDaemon");
-//						System.out.println(Thread.currentThread().getName() + "\t\t" + Thread.currentThread().getPriority() +
-//							"\t\t" + Thread.currentThread().isAlive() + "\t\t" + Thread.currentThread().getState() + 
-//								"\t\t" + Thread.currentThread().isInterrupted() +
-//								"\t\t\t" + Thread.currentThread().isDaemon());
+			}catch (Exception e) {
+				e.printStackTrace();
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				System.out.println("Exception: " + e.getMessage());
 
-						//Example ex = new Example();
-						//ex.setId(new Random().nextDouble() * maxInt);
-						//ex.setName(new Random().nextDouble() * maxInt + "名称");
-						sql = "INSERT INTO Example(id,name) VALUES(";
-						sql += (new Random().nextDouble() * maxInt)+",";
-						sql += "'"+(new Random().nextDouble() * maxInt) + "名称"+"'";
-						sql += ")";
-						
-						//System.out.println("AddSQL="+sql);
-
-						//System.out.println("Connection:"+sa.getConnection());
-						connection = DbConnectionManager.getConnection();
-						stmt = connection.createStatement();
-						//System.out.println("stmt:"+stmt);
-
-						try {
-							stmt.execute(sql);
-						} catch (SQLException e) {
-							e.printStackTrace();
-							
-							Thread.sleep(20); // do other
-							continue;
-						}
-						
-						long age = System.currentTimeMillis() - createTime;
-						if (age > maxConnMSec) { // Force a reset at the max
-							System.out.println("===超时 退出=====");
-							break;
-						}
-						//LOOP Run
-					}
-					
+			} finally {
+				try {
+					stmt.close();
+					connection.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
-					
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} // do other
-					continue;
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					
-					System.out.println("异常退出..");
-					break;
-				}finally {
-
-					try {
-						if (stmt != null){
-							stmt.close();
-							stmt = null;
-						}
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					
-					try {
-						if (connection != null)
-							connection.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					
 				}
 			}
+			
+		}
+		
+		public void writeTransaction (){
+			Transaction tx = new Transaction();
+			try {
+				tx.start();
+				
+				Example ex = new Example();
+				ex.setId(new Random().nextDouble() * maxInt);
+				ex.setName(new Random().nextDouble() * maxInt + "名称");
+				
+				dbAction.add(tx.getConnection(),ex);
+				
+				tx.commit();
+			}catch (SQLException e) {
+				e.printStackTrace();
+				if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
+				System.out.println("SQLException:"+e.getMessage());
+				tx.rollback();
+			}catch (Exception e) {
+				e.printStackTrace();
+				if(log.isDebugEnabled()) log.debug("Exception:"+e.getMessage());
+				System.out.println("Exception:"+e.getMessage());
+				tx.rollback();
+			}finally {
+				tx.end();
+			}
+			
 		}
 	}
-	*/
-	/*
-	class DoThread implements Runnable  {
-		private Object initLock = new Object();
-		private DbAction dbAction;
-		private long createTime;
-		
-		public DoThread(){
-			System.out.println("线程初始化");
-			createTime = System.currentTimeMillis();
-			dbAction = new DbOperation();
-		}
-		
-		public void run() {
-			boolean forever = true;
-			while (forever) {
-				try {
-					synchronized (initLock) {
-//						if(log.isDebugEnabled()) log.debug(Thread.currentThread().getName()+"打印 count:");
-						
-//						System.out.println("name \t\tPriority \t\tisAlive \tState \t\t\tisInterrupted \tisDaemon");
-//						System.out.println(Thread.currentThread().getName() + "\t\t" + Thread.currentThread().getPriority() +
-//							"\t\t" + Thread.currentThread().isAlive() + "\t\t" + Thread.currentThread().getState() + 
-//								"\t\t" + Thread.currentThread().isInterrupted() +
-//								"\t\t\t" + Thread.currentThread().isDaemon());
-						
-						Example ex = new Example();
-						ex.setId(new Random().nextDouble() * maxInt);
-						ex.setName(new Random().nextDouble() * maxInt + "名称");
-						
-						try {
-							dbAction.add(ex);
-						} catch (SQLException e) {
-							e.printStackTrace();
-							
-							Thread.sleep(20); // do other
-							continue;
-						}
-						
-						long age = System.currentTimeMillis() - createTime;
-						if (age > maxConnMSec) { // Force a reset at the max
-							System.out.println("===超时 退出=====");
-							break;
-						}
-						//LOOP Run
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					
-					System.out.println("异常退出..");
-					break;
-				}
-			}
-		}
-	}*/
-}
 }

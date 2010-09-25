@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.MysqlAction;
-import com.mooo.mycoz.db.sql.SQLAction;
+import com.mooo.mycoz.db.sql.MysqlSQL;
+import com.mooo.mycoz.db.sql.SQLProcess;
 
 public class ThreadDemo{
 
@@ -33,7 +33,7 @@ public class ThreadDemo{
 		private int i;
 		private Connection conn;
 		private Statement stmt;
-		private SQLAction sa;
+		private SQLProcess sa;
 		private int count = 0;
 
 		public DoThread() throws SQLException{
@@ -45,7 +45,7 @@ public class ThreadDemo{
 			
 			if(sa == null){
 				synchronized (initLock) {
-					sa = new MysqlAction();
+					sa = new MysqlSQL();
 				}
 			}
 			
@@ -66,7 +66,7 @@ public class ThreadDemo{
 			
 			if(sa == null){
 				synchronized (initLock) {
-					sa = new MysqlAction();
+					sa = new MysqlSQL();
 				}
 			}
 			

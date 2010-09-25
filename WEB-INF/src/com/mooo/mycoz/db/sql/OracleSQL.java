@@ -6,11 +6,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mooo.mycoz.db.DbCore;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public class OracleAction extends DbCore{
+public class OracleSQL extends AbstractSQL{
 
 	/**
 	 * 
@@ -20,6 +19,7 @@ public class OracleAction extends DbCore{
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
 			
+			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
 			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
 			
 			initialization();
@@ -63,5 +63,10 @@ public class OracleAction extends DbCore{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void setRecord(int recordStart, int recordEnd){
+		searchSql.append("rownum <="+recordEnd);
+		searchSql.append("rownum >="+recordStart);
 	}
 }

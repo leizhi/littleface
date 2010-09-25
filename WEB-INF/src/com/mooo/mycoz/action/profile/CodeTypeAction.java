@@ -11,9 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
-import com.mooo.mycoz.db.DbAction;
-import com.mooo.mycoz.db.DbOperation;
-import com.mooo.mycoz.dbobj.DBSession;
+import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.IDGenerator;
@@ -22,7 +20,6 @@ import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class CodeTypeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(CodeTypeAction.class);
-	private DbAction dbAction = new DbOperation();
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -42,7 +39,7 @@ public class CodeTypeAction extends BaseSupport{
 				tt.setCategory(value);
 			}
 			
-			List linearTypes = dbAction.searchAndRetrieveList(tt);
+			List linearTypes = dbProcess.searchAndRetrieveList(tt);
 			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {
@@ -78,8 +75,6 @@ public class CodeTypeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
-			DBSession session = DBSession.getInstance();
-			session.setCatalog("mycozShared");
 			
 			CodeType bean = new CodeType();
 			if(request.getParameter("CodeType.name")==null || "".equals(request.getParameter("CodeType.name"))){
@@ -90,7 +85,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("name="+request.getParameter("CodeType.name"));
 			if (log.isDebugEnabled()) log.debug("category="+request.getParameter("CodeType.category"));
 
-			session.save(bean);
+			dbProcess.add(bean);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -116,10 +111,9 @@ public class CodeTypeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("processUpload");
-			DBSession session = DBSession.getInstance();
 			CodeType bean = new CodeType();
 			HttpParamUtil.bindData(request, bean, "CodeType");
-			session.update(bean);
+			dbProcess.update(bean);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -138,7 +132,7 @@ public class CodeTypeAction extends BaseSupport{
 			//tx.start();
 			
 			if (log.isDebugEnabled()) log.debug("listCode");
-			String 	id = request.getParameter("LinearCode.typeid");
+			String id = request.getParameter("LinearCode.typeid");
 			if(id==null)
 				id= request.getParameter("id");
 			
@@ -151,7 +145,13 @@ public class CodeTypeAction extends BaseSupport{
 			//codeType.setConnection(tx.getConnection());
 
 			codeType.setId(new Integer (id));
-			dbAction.retrieve(codeType);
+			
+			dbProcess.retrieve(codeType);
+			
+			System.out.println("codeType ID :"+codeType.getId());
+			
+			System.out.println("codeType Category :"+codeType.getCategory());
+
 			request.setAttribute("codeType", codeType);
 			
 			System.out.println("do listCode CodeType end expends :"+(System.currentTimeMillis() - finishTime));
@@ -163,7 +163,7 @@ public class CodeTypeAction extends BaseSupport{
 				//lc.setConnection(tx.getConnection());
 
 				lc.setTypeid(codeType.getId());
-				request.setAttribute("codes",dbAction.searchAndRetrieveList(lc));
+				request.setAttribute("codes",dbProcess.searchAndRetrieveList(lc));
 				
 			} else {
 				//TreeCode tc = new TreeCode();
@@ -196,9 +196,6 @@ public class CodeTypeAction extends BaseSupport{
 
 			//ParamUtil.add(request,"mycozShared.LinearCode");
 			String value;
-			DBSession session = DBSession.getInstance();
-			session.setConnection(tx.getConnection());
-			session.setCatalog("mycozShared");
 			
 			LinearCode bean = new LinearCode();
 			bean.setId(IDGenerator.getNextID("mycozShared.LinearCode").intValue());
@@ -208,7 +205,7 @@ public class CodeTypeAction extends BaseSupport{
 			}
 			
 			HttpParamUtil.bindData(request, bean, "LinearCode");
-			session.save(bean);
+			dbProcess.add(bean);
 			
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -245,7 +242,7 @@ public class CodeTypeAction extends BaseSupport{
 			if(request.getParameter("LinearCode.name")==null || "".equals(request.getParameter("LinearCode.name"))){
 				return "listCode";
 			}
-			dbAction.update(bean);
+			dbProcess.update(bean);
 			
 			//ParamUtil.bindData(request, bean, "LinearCode");
 			//session.update(bean);
@@ -268,7 +265,7 @@ public class CodeTypeAction extends BaseSupport{
 				if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
 				LinearCode bean = new LinearCode();
 				bean.setId( new Integer(ids[i]));
-				dbAction.delete(bean);
+				dbProcess.delete(bean);
 			}
 		
 		} catch (Exception e) {

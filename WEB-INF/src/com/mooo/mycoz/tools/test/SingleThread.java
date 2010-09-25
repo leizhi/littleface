@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Random;
 
-import com.mooo.mycoz.db.DbAction;
-import com.mooo.mycoz.db.DbOperation;
+import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.MysqlAction;
-import com.mooo.mycoz.db.sql.SQLAction;
+import com.mooo.mycoz.db.sql.MysqlSQL;
+import com.mooo.mycoz.db.sql.SQLProcess;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 
 public class SingleThread {
@@ -32,7 +32,7 @@ public class SingleThread {
 			stmt = connection.createStatement();
 			//DBSession session = DBSession.getInstance();
 
-	  		SQLAction sa = new MysqlAction();
+	  		SQLProcess sa = new MysqlSQL();
 			boolean forever = true;
 			
 			while (forever) {
@@ -87,7 +87,7 @@ public class SingleThread {
 
 		long startTime = System.currentTimeMillis();
 		System.out.println("startTime:" + startTime);
-		DbAction dbAction = new DbOperation();
+		DbProcess dbAction = DbFactory.getInstance();
 		try {
 			int maxConnMSec=0;
 			

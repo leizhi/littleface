@@ -27,23 +27,27 @@ public class DbUtil {
 		return true;
 	}
 	
-	public static List<?> primaryKey(String table) {
+	public static List<?> primaryKey(Connection connection,String table) {
 		
 		List<String> retrieveList = null;
+		
+		Connection myConn = null;
+		boolean isClose = true;
+		
 		Statement stmt = null;
 		ResultSet result = null;
-		boolean closeCon = false;
-		Connection connection = null;
-		
 		try {
 			retrieveList = new ArrayList<String>();
 
-			if(connection == null || connection.isClosed()){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
+			if(connection != null){
+				myConn = connection;
+				isClose = false;
+			} else {
+				myConn = DbConnectionManager.getConnection();
+				isClose = true;
 			}
 
-			result = connection.getMetaData().getPrimaryKeys(null,null, table.toUpperCase());
+			result = myConn.getMetaData().getPrimaryKeys(null,null, table.toUpperCase());
 			
 			while (result.next()) {
 				retrieveList.add(result.getString(4).toLowerCase());
@@ -68,8 +72,8 @@ public class DbUtil {
 			}
 			
 			try {
-				if (connection != null && closeCon)
-					connection.close();
+				if(isClose)
+					myConn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

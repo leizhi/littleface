@@ -7,8 +7,9 @@ import java.sql.*;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.pool.*;
-import com.mooo.mycoz.dbobj.DBSession;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.Transaction;
@@ -22,7 +23,8 @@ import org.apache.commons.logging.LogFactory;
 
 public class DbobjExample {
 	private static Log log = LogFactory.getLog(DbobjExample.class);
-
+	private DbProcess dbAction = DbFactory.getInstance();
+	
 	public static void main(String[] args) {	
 		//long startTime = System.currentTimeMillis();
 		DbobjExample td = new DbobjExample();
@@ -67,9 +69,7 @@ public class DbobjExample {
 	public void searchBean() throws SQLException{
 		Example ex = new Example();
 		//ex.setRecord(1, 200000);
-		DBSession session = DBSession.getInstance();
-
-		List examples = session.searchAndRetrieveList(ex);
+		List examples = dbAction.searchAndRetrieveList(ex);
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -176,19 +176,17 @@ public class DbobjExample {
 		try {
 			tx.start();
 			
-			DBSession session = DBSession.getInstance();
-			session.setConnection(tx.getConnection());
 			
 			Example bean = new Example();
 			bean.setId(79d);
 			bean.setName("79");
 			
-			session.save(bean);
+			dbAction.add(bean);
 
 			bean.setId(80d);
 			bean.setName("80");
 			
-			session.save(bean);
+			dbAction.add(bean);
 			
 			tx.commit();
 		}catch (SQLException e) {
@@ -204,11 +202,10 @@ public class DbobjExample {
 	public void saveAction(){
 		try {
 			
-			DBSession session = DBSession.getInstance();
 			Example bean = new Example();
 			bean.setId(IDGenerator.getNextID("Example"));
 			bean.setName(IDGenerator.getNextID("Example")+"");
-			session.save(bean);
+			dbAction.add(bean);
 			
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -222,13 +219,10 @@ public class DbobjExample {
 		try {
 			tx.start();
 			
-			DBSession session = DBSession.getInstance();
-			session.setConnection(tx.getConnection());
-			
 			Example bean = new Example();
 			bean.setId(IDGenerator.getNextID("Example"));
 			bean.setName(IDGenerator.getNextID("Example")+"");
-			session.save(bean);
+			dbAction.add(bean);
 			
 			tx.commit();
 		}catch (SQLException e) {
@@ -243,11 +237,8 @@ public class DbobjExample {
 	
 	public void saveDbObject(){
 		try {
-			DBSession session = DBSession.getInstance();
-
 			Example bean = new Example();
-			
-			session.add(bean);
+			dbAction.add(bean);
 		}catch (SQLException e) {
 			e.printStackTrace();
 			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
@@ -284,10 +275,8 @@ public class DbobjExample {
 	
 	public void searchBeanL(){
 		try {
-			DBSession session = DBSession.getInstance();
-
 			Example bean = new Example();
-			session.searchAndRetrieveList(bean);
+			dbAction.searchAndRetrieveList(bean);
 			
 		}catch (SQLException e) {
 			e.printStackTrace();

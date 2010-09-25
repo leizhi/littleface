@@ -13,7 +13,7 @@ import com.mooo.mycoz.util.StringUtils;
 
 public class BeanTools {
 	
-	public void build(String table){
+	public void build(String catalog, String table){
 		Connection con = null;
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
@@ -21,17 +21,19 @@ public class BeanTools {
 		try {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append("import java.util.*;\n");
-		buffer.append("import com.mooo.mycoz.dbobj.DBObject;\n");
+		//buffer.append("import com.mooo.mycoz.dbobj.DBObject;\n");
 		buffer.append("public class ");
 		
 		ResultSet rs = null;
 		//mypool
 		con = DbConnectionManager.getConnection();
+		con.setCatalog(catalog);
+		
 		System.out.println("打开连接-------------");
 		System.out.println(con);
 		
 		DatabaseMetaData db =  DbConnectionManager.getConnection().getMetaData();
-		rs = db.getPrimaryKeys(null, null, table.toUpperCase());
+		rs = db.getPrimaryKeys(catalog, null, StringUtils.upperToPrefix(table, null));
 		rsmd = rs.getMetaData();
 		
 		while (rs.next()) {
@@ -43,7 +45,7 @@ public class BeanTools {
 		
 		// 表信息
 		String[] t = { "TABLE", "VIEW" };
-		ResultSet tableRs = db.getTables(null, null, table, t);
+		ResultSet tableRs = db.getTables(catalog, null, table, t);
 		while (tableRs.next()) {
 		for (int i = 1; i < 6; i++) {
 		System.out.print(tableRs.getString(i) + " ");
@@ -51,7 +53,7 @@ public class BeanTools {
 		System.out.println("+++++++++++++++++++++++++++++++++");
 		}
 		// 列信息
-		rs = db.getColumns(null, null, table, null);
+		rs = db.getColumns(catalog, null, table, null);
 		while (rs.next()) {
 		for (int i = 1; i < 19; i++) {
 		System.out.print(rs.getString(i) + " ");
@@ -60,7 +62,7 @@ public class BeanTools {
 
 		}
 		//主键信息
-		ResultSet pkRs = db.getPrimaryKeys(null, null, table);
+		ResultSet pkRs = db.getPrimaryKeys(catalog, null, table);
 		while (pkRs.next()) {
 		for (int i = 1; i < 6; i++) {
 		System.out.print(pkRs.getString(i) + " ");
@@ -72,7 +74,8 @@ public class BeanTools {
 		sql = "SELECT  * FROM "+table;
 		System.out.println(sql);
 		buffer.append(StringUtils.prefixToUpper(table));
-		buffer.append(" extends DBObject {\n");
+		//buffer.append(" extends DBObject {\n");
+		buffer.append(" {\n");
 		buffer.append("\tprivate static final long serialVersionUID = 1L;\n");
 
 		System.out.println("beanName="+StringUtils.upperToPrefix(table));
@@ -87,6 +90,7 @@ public class BeanTools {
 		String columnName="";
 
 		StringBuilder gsMethod = new StringBuilder();
+		
 		for (int i = 0; i < rsmd.getColumnCount(); i++) {
 			type = rsmd.getColumnType(i+1);
 			precision = rsmd.getPrecision(i+1);
@@ -209,12 +213,14 @@ public class BeanTools {
 	 */
 	public static void main(String[] args) {
 		BeanTools bd = new BeanTools();
-		bd.build("bus_remotes");
+		//bd.build("bus_remotes");
 		//bd.build("bus_samples");
 		//bd.build("buffer_price");
 		//bd.build("buffer_traffic");
-		bd.build("Example");
-		
+		//bd.build("Example");
+		bd.build("mycozBranch","FileInfo");
+		//bd.build("mycozShared","CodeType");
+
 		//bd.buildInsert("buffer_traffic");
 
 	}

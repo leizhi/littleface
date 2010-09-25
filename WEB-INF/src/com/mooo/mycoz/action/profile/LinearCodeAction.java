@@ -9,16 +9,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
-import com.mooo.mycoz.db.DbAction;
-import com.mooo.mycoz.db.DbOperation;
-import com.mooo.mycoz.dbobj.DBSession;
+import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LinearCodeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(LinearCodeAction.class);
-	private DbAction dbAction = new DbOperation();
 
 	public String list(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -27,7 +24,7 @@ public class LinearCodeAction extends BaseSupport{
 			CodeType tt = new CodeType();
 			tt.setCategory("Linear");
 			
-			List<?> linearTypes = dbAction.searchAndRetrieveList(tt);
+			List<?> linearTypes = dbProcess.searchAndRetrieveList(tt);
 			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {
@@ -58,8 +55,6 @@ public class LinearCodeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
-			DBSession session = DBSession.getInstance();
-			session.setCatalog("mycozShared");
 			
 			CodeType bean = new CodeType();
 			if(request.getParameter("CodeType.name")==null || "".equals(request.getParameter("CodeType.name"))){
@@ -70,7 +65,7 @@ public class LinearCodeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("name="+request.getParameter("CodeType.name"));
 			if (log.isDebugEnabled()) log.debug("category="+request.getParameter("CodeType.category"));
 
-			session.save(bean);
+			dbProcess.add(bean);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -96,10 +91,9 @@ public class LinearCodeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("processUpload");
-			DBSession session = DBSession.getInstance();
 			CodeType bean = new CodeType();
 			HttpParamUtil.bindData(request, bean, "CodeType");
-			session.update(bean);
+			dbProcess.update(bean);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())

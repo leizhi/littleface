@@ -56,8 +56,14 @@
  */
 package com.mooo.mycoz.util;
 
-import java.security.*; //import java.text.*;
-import java.util.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -747,5 +753,32 @@ public class StringUtils {
 			funName += objName.substring(1);
 		}
 		return funName;
+	}
+	
+	public static String getCatalog(Class<?> cls,int begin) {
+
+		String value=null;
+		LinkedList<String> stack = new LinkedList<String>();
+
+		String clsName = cls.getName();
+		
+		StringTokenizer st = new StringTokenizer(clsName,".");
+		while(st.hasMoreTokens()){
+			value = st.nextToken();
+			stack.push(value);
+		}
+		
+		int i=0;
+		while(stack.size() > 0){
+			value = (String) stack.pop();
+			
+			if (i==begin){
+				return value;
+			} else{
+				i++;
+			}
+		}
+		
+		return null;
 	}
 }

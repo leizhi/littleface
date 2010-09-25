@@ -1,10 +1,9 @@
-package com.mooo.mycoz.db;
+package com.mooo.mycoz.db.sql;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,25 +15,20 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.db.sql.SQLAction;
+import com.mooo.mycoz.db.Field;
 import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.ReflectUtil;
 import com.mooo.mycoz.util.StringUtils;
 
-public abstract class DbCore implements SQLAction, Serializable{
+public abstract class AbstractSQL implements SQLProcess, Serializable{
 	
-	private static Log log = LogFactory.getLog(DbCore.class);
+	private static Log log = LogFactory.getLog(AbstractSQL.class);
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5695615314838758248L;
 	
-	public Connection connection;
-	
-	public Connection myConnection;
-
 	public String catalog;
 	public String table;
 	
@@ -63,7 +57,6 @@ public abstract class DbCore implements SQLAction, Serializable{
 	public Map columnValues;
 	
 	public void initialization(){
-		getConnection();
 		
 		byWhere = false;
 		byGroup = false;
@@ -123,30 +116,6 @@ public abstract class DbCore implements SQLAction, Serializable{
 		this.table = table;
 	}
 	
-	public Connection getConnection() {
-		if(connection == null)
-			connection = DbConnectionManager.getConnection();
-		
-		return connection;
-	}
-	
-	public void setConnection(Connection connection){
-			this.connection = connection;
-	}
-
-	public void close() {
-		try {
-			if(connection != null) {
-				connection.close();
-			}
-			connection=null;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		catalog = null;
-		table = null;
-	}
-	
 	///////////////////////////////
 	public void setField(String field, String value) {
 		try {
@@ -196,6 +165,17 @@ public abstract class DbCore implements SQLAction, Serializable{
 		}
 	}
 
+	public void setField(String field, Date value,int type) {
+		try {
+			if (field == null || value == null)
+				new Exception("set value is null");
+
+			fields.put(field, new Field(field,type));
+			columnValues.put(field, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 	public void setLike(String field, String value) {
 		// TODO Auto-generated method stub
 		((Field)fields.get(field)).setWhereByLike(true);
@@ -275,7 +255,11 @@ public abstract class DbCore implements SQLAction, Serializable{
 				}else if(obj.getClass().isAssignableFrom(String.class)){
 					saveValue.append("'"+obj+"',");
 				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"',");
+					if(field.getType()==Types.TIMESTAMP){
+						saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"',");
+					} else {
+						saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd ").format(((Date)obj)) +"',");
+					}
 				}else if(obj.getClass().isAssignableFrom(Double.class)){
 					saveValue.append(obj+",");
 				}
@@ -680,6 +664,7 @@ public abstract class DbCore implements SQLAction, Serializable{
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
 			//default oracle database
+			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
 			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
 			
 			initialization();
@@ -703,6 +688,60 @@ public abstract class DbCore implements SQLAction, Serializable{
 						else if(obj.getClass().isAssignableFrom(String.class)){
 							setField(StringUtils.upperToPrefix(field), (String)obj);
 						}else if(obj.getClass().isAssignableFrom(Date.class)){
+							
+							setField(StringUtils.upperToPrefix(field), (Date)obj);
+						}else if(obj.getClass().isAssignableFrom(Double.class)){
+							setField(StringUtils.upperToPrefix(field), (Double)obj);
+						}
+					}
+				}
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void entityFillField(Connection connection,Object entity) {
+		try {
+			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
+			//default oracle database
+			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
+			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
+			
+			initialization();
+			
+			String sql = searchSQL(entity) + " LIMIT 1";
+			
+			String method;
+			String field;
+			
+			for (Iterator<String> it = methods.iterator(); it.hasNext();) {
+				method = it.next();
+				if(method.indexOf("get")==0){
+					
+					Method getMethod;
+					getMethod = entity.getClass().getMethod(method);
+					
+					Object obj = getMethod.invoke(entity);
+					
+					if(obj !=null) {
+						field = method.substring(method.indexOf("get")+3);
+						if(obj.getClass().isAssignableFrom(Integer.class))
+							setField(StringUtils.upperToPrefix(field), (Integer)obj);
+						else if(obj.getClass().isAssignableFrom(String.class)){
+							setField(StringUtils.upperToPrefix(field), (String)obj);
+						}else if(obj.getClass().isAssignableFrom(Date.class)){
+							
 							setField(StringUtils.upperToPrefix(field), (Date)obj);
 						}else if(obj.getClass().isAssignableFrom(Double.class)){
 							setField(StringUtils.upperToPrefix(field), (Double)obj);
