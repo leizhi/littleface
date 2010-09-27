@@ -215,9 +215,9 @@ public class BeanTools {
 		BeanTools bd = new BeanTools();
 		//bd.build("bus_remotes");
 		//bd.build("bus_samples");
-		//bd.build("buffer_price");
+		bd.build("marketmoniter","buffer_price");
 		//bd.build("buffer_traffic");
-		bd.build("mycozBranch","Example");
+		//bd.build("mycozBranch","Example");
 		//bd.build("mycozBranch","FileInfo");
 		//bd.build("mycozShared","CodeType");
 

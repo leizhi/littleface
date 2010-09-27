@@ -1,18 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="/jsp/incl/static.inc"%>
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!--ArborText, Inc., 1988-2000, v.4002-->
-<html xmlns="http://www.w3.org/1999/xhtml" lang="EN">
-<head>
-<link href=".css" type="text/css" rel="stylesheet"/>
-
-</head>
-<body background="images/bg_ship.gif">
-<fmt:bundle basename="MessageBundle">
 <div id="container">
-<div id="header"></div>
+
 <div id="gtop" style="width: 100%;height: 20px;text-align: left;color: #add2da;font-size: 12px;">
 <script language="javascript">
 
@@ -113,21 +101,3 @@ function parseURL(url) {
 	
 </script>
 </div>
-
-<div id="ghead" style="width: 100%;height: 20px;text-align: left;background-color: #095f77;color: #add2da;font-size: 12px;">
-	<fmt:message key="main.WelcomeTo" />
-	<fmt:message key="main.XPCsystem" />
-</div>
-
-<div id="gbar" style="width: 100%;height: 20px;text-align: left;background-color: #eeeeee;color: #add2da;font-size: 12px;">
-	<span><a><fmt:message key="main.WelcomeTo" /></a>|</span>
-	<span><a><fmt:message key="main.WelcomeTo" /></a>|</span>
-	<span><a><fmt:message key="main.WelcomeTo" /></a>|</span>
-</div>
-
-<div id="wrapper">
-</div>
-</div>
-</fmt:bundle>
-</body>
-</html>

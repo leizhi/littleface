@@ -13,7 +13,6 @@
 <entry key="DbConnectionDefaultPool.username">mycoz</entry>
 <entry key="DbConnectionDefaultPool.password">xmlpj0#</entry>
 <entry key="DbFactory.className">com.mooo.mycoz.db.DbMysql</entry>
-
  
 <!-- configure oracle database
 <entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>

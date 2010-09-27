@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ include file="/jsp/incl/static.inc"%>
-<!DOCTYPE form PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title><fmt:message key="CodeType"/></title>
@@ -90,15 +89,18 @@ Edit
 </c:url>
 
 <form method="post" action="${list}">
-<div class="command">
-<input type="submit" id="List" value="<fmt:message key="List"/>">
-<input type="submit" id="Add" value="<fmt:message key="Add"/>" onclick="return docommit('${promptAdd}')">
-<input type="submit" id="Edit" value="<fmt:message key="Edit"/>" onclick="return edit('${promptUpdate}')">
-<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="return remove('${processDelete}')">
-<input type="submit" id="CodeManager" value="<fmt:message key="CodeManager"/>" onclick="return edit('${listCode}');">
-</div>
+<%@ include file="../incl/g_top.jsp" %>
+<%@ include file="../incl/g_block.jsp" %>
+<%@ include file="../incl/g_bar.jsp" %>
 
-<div>
+<jsp:include page="../incl/g_head.jsp">
+<jsp:param value="CodeType" name="title"/>
+</jsp:include>
+
+	<table align="center">
+	<tr>
+		<td>码表类型</td>
+		<td>
 			<select name="codeCategory">
 				<c:forEach var="items" items="${codeCategory}" varStatus="s">
 					
@@ -111,11 +113,31 @@ Edit
 					</option>
 				</c:forEach>
 			</select>
-</div>
-<div>
-<fmt:message key="CodeType"/>
-<table>
-<tr>
+		</td>
+		<td></td>
+		<td></td>
+	</tr>
+	
+	<tr >
+		<td colspan="4">
+		<span>
+			<input type="submit" id="List" value="<fmt:message key="List"/>">
+			<input type="submit" id="Add" value="<fmt:message key="Add"/>" onclick="return docommit('${promptAdd}')">
+			<input type="submit" id="Edit" value="<fmt:message key="Edit"/>" onclick="return edit('${promptUpdate}')">
+			<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="return remove('${processDelete}')">
+			<input type="submit" id="CodeManager" value="<fmt:message key="CodeManager"/>" onclick="return edit('${listCode}');">
+		</span>
+		 </td>
+	</tr>
+	</table>
+<jsp:include page="../incl/g_tail.jsp" />
+
+<jsp:include page="../incl/g_head.jsp">
+<jsp:param value="list" name="title"/>
+</jsp:include>
+
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
+<tr bgcolor="#649caa">
 <td><fmt:message key="ID"/></td>
 <td><fmt:message key="Name"/></td>
 <td><fmt:message key="Category"/></td>
@@ -129,8 +151,9 @@ Edit
 </tr>
 </c:forEach>
 </table>
-</div>
+<jsp:include page="../incl/g_tail.jsp" />
 
+<jsp:include page="../incl/g_footer.jsp" />
 </form>
 </fmt:bundle>
 </body>

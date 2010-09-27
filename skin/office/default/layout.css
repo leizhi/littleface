@@ -11,8 +11,9 @@ body {
 	width: 100%;
 	height: 100%;
 	text-align: left;
-	background: #dcdcdc;
+	background: #ffffff;
 	border: 1px solid #000000;
+	border: 0px solid #000000;
 	margin: auto;
 }
 
@@ -98,16 +99,15 @@ body {
 }
 
 #footer {
+	width: 100%;
 	height: 25px;
-	background: #c0c0c0;
+	background-color: #99b1cc;
 	color: #333333;
 	border: solid black;
 	border-width: 1px 0 0 0;
 	margin: 0;
 	text-align: center;
 	clear: both;
-	margin-left: 40%;
-	
 }
 
 ul {

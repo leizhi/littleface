@@ -31,15 +31,15 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 
 <ul>
 <li class="title"><fmt:message key="File"/></li>
-<li><a href="<c:url value="/File.do"/>" target="main"><fmt:message key="File"/></a></li>
-<li><a href="<c:url value="/CodeType.do"/>" target="main"><fmt:message key="CodeType"/></a></li>
+<li><a href="<c:url value="/File.do?bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
+<li><a href="<c:url value="/CodeType.do?bar=0&subbar=0"/>" target="main"><fmt:message key="CodeType"/></a></li>
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
 
 <ul>
 <li class="title"><fmt:message key="File"/></li>
-<li><a href="<c:url value="/File.do"/>" target="main"><fmt:message key="File"/></a></li>
-<li><a href="<c:url value="/CodeType.do"/>" target="main"><fmt:message key="CodeType"/></a></li>
+<li><a href="<c:url value="/File.do?bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
+<li><a href="<c:url value="/CodeType.do?bar=0&subbar=0"/>" target="main"><fmt:message key="CodeType"/></a></li>
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
 </div>

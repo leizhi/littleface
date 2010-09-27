@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ include file="/jsp/incl/static.inc"%>
-<!DOCTYPE form PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title><fmt:message key="File"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
-<link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
+<link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
+<link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript">
 function docommit(url) {
 	document.forms[0].action=url;
@@ -37,18 +36,50 @@ function docommit(url) {
 </c:url>
 
 <form method="post" action="${listFile}">
-<div class="command">
-<input type="submit" value="<fmt:message key="List"/>">
-<input type="submit" value="<fmt:message key="Upload"/>" onclick="docommit('${promptUpload}')">
-<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
-<input type="submit" value="<fmt:message key="Download"/>" onclick="docommit('${processDownload}')">
-<input type="submit" value="<fmt:message key="Browse"/>" onclick="docommit('${processDownload}')">
-</div>
+<%@ include file="../incl/g_top.jsp" %>
+<%@ include file="../incl/g_block.jsp" %>
 
-<div>
-<fmt:message key="File"/>
-<table>
-<tr>
+<%@ include file="../incl/g_bar.jsp" %>
+
+<jsp:include page="../incl/g_head.jsp">
+<jsp:param value="Search File" name="title"/>
+</jsp:include>
+
+	<table align="center">
+	<tr>
+		<td>索引名称</td>
+		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
+		<td>类型</td>
+		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
+	</tr>
+	
+	<tr>
+		<td>索引名称</td>
+		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
+		<td>类型</td>
+		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
+	</tr>
+	
+	<tr >
+		<td colspan="4">
+		<span>
+				<input type="submit" value="<fmt:message key="List"/>">
+				<input type="submit" value="<fmt:message key="Upload"/>" onclick="docommit('${promptUpload}')">
+				<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
+				<input type="submit" value="<fmt:message key="Download"/>" onclick="docommit('${processDownload}')">
+				<input type="submit" value="<fmt:message key="Browse"/>" onclick="docommit('${processDownload}')">
+		</span>
+		 </td>
+	</tr>
+	</table>
+<jsp:include page="../incl/g_tail.jsp" />
+
+<jsp:include page="../incl/g_head.jsp">
+<jsp:param value="List File" name="title"/>
+</jsp:include>
+
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
+<tr bgcolor="#649caa">
 <td><fmt:message key="ID"/></td>
 <td><fmt:message key="Type"/></td>
 <td><fmt:message key="Name"/></td>
@@ -68,7 +99,9 @@ function docommit(url) {
 </tr>
 </c:forEach>
 </table>
-</div>
+<jsp:include page="../incl/g_tail.jsp" />
+
+<jsp:include page="../incl/g_footer.jsp" />
 
 </form>
 </fmt:bundle>

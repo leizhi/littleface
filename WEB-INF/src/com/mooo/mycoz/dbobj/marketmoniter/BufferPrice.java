@@ -12,6 +12,7 @@ public class BufferPrice  {
 	Double saleMoney;
 	Double maxPrice;
 	Double minPrice;
+	Integer paycount;
 	public String getRemoteid() {
 	return remoteid;
 	}
@@ -65,5 +66,11 @@ public class BufferPrice  {
 	}
 	public void setMinPrice(Double minPrice) {
 	 this.minPrice = minPrice;
+	}
+	public Integer getPaycount() {
+	return paycount;
+	}
+	public void setPaycount(Integer paycount) {
+	 this.paycount = paycount;
 	}
 }

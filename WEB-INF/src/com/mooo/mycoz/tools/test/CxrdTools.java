@@ -44,8 +44,8 @@ public class CxrdTools {
 		tx.start();
 		tx.end();
 		
-		//maxConnMSec = (int) (maxConnTime * 86400000.0); // 86400 sec/day
-		maxConnMSec = (int) (maxConnTime * 1000.0);		// loop 1 seconds.
+		maxConnMSec = (int) (maxConnTime * 86400000.0); // 86400 sec/day
+		//maxConnMSec = (int) (maxConnTime * 1000.0);		// loop 1 seconds.
 		//maxConnMSec = (int) (maxConnTime * 3000.0);		// loop 1 seconds.
 
 		if (maxConnMSec < 30000) { // Recycle no less than 30 seconds.
@@ -175,7 +175,7 @@ public class CxrdTools {
 				System.out.println(connection);
 				
 				stmt = connection.createStatement();
-				sql = "INSERT INTO buffer_price(remoteid,sampleid,sale_price,islocal,oper_date,sale_qnty,sale_money,max_price,min_price)";
+				sql = "INSERT INTO buffer_price(remoteid,sampleid,sale_price,islocal,oper_date,sale_qnty,sale_money,max_price,min_price,paycount)";
 				
 				Random random;
 				int randomId=0;
@@ -243,7 +243,8 @@ public class CxrdTools {
 						+sale_qnty+","
 						+sale_money+","
 						+max_price+","
-						+min_price
+						+min_price+","
+						+new Random().nextInt(5)
 						+")";
 				
 				System.out.println("SQL="+sql);
