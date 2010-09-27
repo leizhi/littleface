@@ -79,7 +79,7 @@ function edit(url){
 <c:url value="/CodeType.do" var="processUpdate">
 	<c:param name="method">processUpdate</c:param>
 </c:url>
-Edit
+
 <c:url value="/CodeType.do" var="processDelete">
 	<c:param name="method">processDelete</c:param>
 </c:url>
