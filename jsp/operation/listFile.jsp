@@ -98,6 +98,9 @@ function docommit(url) {
 <td><c:out value="${item.datetime}"></c:out></td>
 </tr>
 </c:forEach>
+
+<jsp:include page="../incl/pageNavigation.jsp" />
+
 </table>
 <jsp:include page="../incl/g_tail.jsp" />
 

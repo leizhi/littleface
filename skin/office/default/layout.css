@@ -99,13 +99,14 @@ body {
 }
 
 #footer {
-	width: 100%;
+	position:absolute;
+	bottom:0;
+	width: 96%;
 	height: 25px;
-	background-color: #99b1cc;
-	color: #333333;
+	color: #000000;
 	border: solid black;
 	border-width: 1px 0 0 0;
-	margin: 0;
+	margin-bottom: 0px;
 	text-align: center;
 	clear: both;
 }
