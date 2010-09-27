@@ -5,9 +5,34 @@
 <head>
 <title><fmt:message key="CodeType"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
-<link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
+<link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
+<link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="jsp/js/util.js"></script>
+<script type="text/javascript" src="jsp/js/mootools.js" ></script>
+
+<link rel="stylesheet" href="../../jsp/styles/global.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../jsp/styles/formcheck.css" type="text/css" media="screen" />
+<script type="text/javascript" src="../../jsp/js/mootools.js"> </script>
+<script type="text/javascript" src="../../jsp/js/zh.js"> </script>
+<script type="text/javascript" src="../../jsp/js/formcheck.js"> </script>
+<script type="text/javascript" src="../../jsp/js/util.js"> </script>
+
+<style type="text/css">
+</style>
+<script language="javascript">
+function toSet(index){
+	$$('input[type="checkbox"]').each(function(element){
+		element.checked = false; // 全选
+		});
+	$('choose'+index).checked=true;
+	
+	$('id').value = $('choose'+index).value;
+	$('name').value = $('name'+index).value;
+	$('tbCodeType.id').value = $('tbCodeType.id'+index).value;
+
+	//alert('ok');
+}
+</script>
 </head>
 
 <body>
@@ -66,5 +91,8 @@
 
 </form>
 </fmt:bundle>
+<script type="text/javascript">
+    new FormCheck('userForm');
+</script>
 </body>
 </html>

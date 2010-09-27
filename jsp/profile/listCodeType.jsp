@@ -4,9 +4,25 @@
 <head>
 <title><fmt:message key="CodeType"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
-<link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
+<link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
+<link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="jsp/js/util.js"></script>
+<script type="text/javascript" src="jsp/js/mootools.js" ></script>
+<script type="text/javascript" src="jsp/js/util.js" ></script>
+<script language="javascript">
+function toSet(obj){
+	//alert(obj.value);
+	
+	if(obj.checked){
+		$('id').value = obj.value;
+	} else {
+		$('id').value = null;
+	}
+	//alert($('id').value);
+	
+	//alert('ok');
+}
+</script>
 <script type="text/javascript">
 function checkbox(){
 	var selectedObj = document.all["id"];
@@ -138,16 +154,23 @@ function edit(url){
 
 <table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
 <tr bgcolor="#649caa">
-<td><fmt:message key="ID"/></td>
-<td><fmt:message key="Name"/></td>
-<td><fmt:message key="Category"/></td>
+<th width="10px"> <input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></th>
+<th><fmt:message key="Name"/></th>
+<th><fmt:message key="Category"/></th>
 </tr>
 
 <c:forEach var="item" items="${linearTypes}" varStatus="status">
+<c:url value="/CodeType.do" var="editCode">
+	<c:param name="method">listCode</c:param>
+	<c:param name="id">${item.id}</c:param>
+</c:url>
+
 <tr>
-<td><input type="checkbox" name="id" id="id" value="${item.id}"> </td>
-<td><c:out value="${item.name}"></c:out></td>
-<td><fmt:message key="${item.category}"/></td>
+<!-- 复选框 start -->
+<td><input type="checkbox" name="choose" id="choose" value="${empty id?0:id}" onclick="toSet(this)"/></td>
+<!-- 复选框 end-->
+<td onclick="openLookup('${editCode}');"><c:out value="${item.name}"></c:out></td>
+<td onclick="openLookup('${editCode}');"><fmt:message key="${item.category}"/></td>
 </tr>
 </c:forEach>
 </table>
