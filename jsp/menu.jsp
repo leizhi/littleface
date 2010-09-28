@@ -35,12 +35,35 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 <li><a href="<c:url value="/CodeType.do?bar=0&subbar=1"/>" target="main"><fmt:message key="CodeType"/></a></li>
 </ul>
 
+<c:url value="/Account.do" var="searchAccount">
+	<c:param name="method">search</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">0</c:param>
+</c:url>
+
+<c:url value="/Account.do" var="talkAccount">
+	<c:param name="method">talk</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">1</c:param>
+</c:url>
+
+<c:url value="/Account.do" var="messageAccount">
+	<c:param name="method">message</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">2</c:param>
+</c:url>
+
+<c:url value="/Account.do" var="blogAccount">
+	<c:param name="method">blog</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">3</c:param>
+</c:url>
 <ul>
 <li class="title"><fmt:message key="Consort"/></li>
-<li><a href="<c:url value="/File.do?bar=1&subbar=0"/>" target="main"><fmt:message key="Search"/></a></li>
-<li><a href="<c:url value="/CodeType.do?bar=1&subbar=1"/>" target="main"><fmt:message key="Talk"/></a></li>
-<li><a href="<c:url value="/CodeType.do?bar=1&subbar=2"/>" target="main"><fmt:message key="Message"/></a></li>
-<li><a href="<c:url value="/CodeType.do?bar=1&subbar=3"/>" target="main"><fmt:message key="Blog"/></a></li>
+<li><a href="${searchAccount}" target="main"><fmt:message key="Search"/></a></li>
+<li><a href="${talkAccount}" target="main"><fmt:message key="Talk"/></a></li>
+<li><a href="${messageAccount}" target="main"><fmt:message key="Message"/></a></li>
+<li><a href="${blogAccount}" target="main"><fmt:message key="Blog"/></a></li>
 </ul>
 
 <ul>

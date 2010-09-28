@@ -17,41 +17,34 @@ public class User {
 
 	private static Log log = LogFactory.getLog(User.class);
 
-	private Integer id;
-	private Integer stateid;
-	private String name;
-	private String password;
-
+	Integer id;
+	Integer stateid;
+	String name;
+	String password;
+	
 	public Integer getId() {
-		return id;
+	return id;
 	}
-
 	public void setId(Integer id) {
-		this.id = id;
+	 this.id = id;
 	}
-
 	public Integer getStateid() {
-		return stateid;
+	return stateid;
 	}
-
 	public void setStateid(Integer stateid) {
-		this.stateid = stateid;
+	 this.stateid = stateid;
 	}
-
 	public String getName() {
-		return name;
+	return name;
 	}
-
 	public void setName(String name) {
-		this.name = name;
+	 this.name = name;
 	}
-
 	public String getPassword() {
-		return password;
+	return password;
 	}
-
 	public void setPassword(String password) {
-		this.password = password;
+	 this.password = password;
 	}
 
 	public boolean loginCheck() {

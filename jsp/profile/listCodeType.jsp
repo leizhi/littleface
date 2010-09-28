@@ -154,9 +154,9 @@ function edit(url){
 
 <table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
 <tr bgcolor="#649caa">
-<th width="10px"> <input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></th>
-<th><fmt:message key="Name"/></th>
-<th><fmt:message key="Category"/></th>
+<td width="10px"> <input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></td>
+<td><fmt:message key="Name"/></td>
+<td><fmt:message key="Category"/></td>
 </tr>
 
 <c:forEach var="item" items="${linearTypes}" varStatus="status">

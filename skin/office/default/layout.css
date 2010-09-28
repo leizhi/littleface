@@ -99,29 +99,28 @@ body {
 }
 
 #footer {
-	position:absolute;
-	bottom:0;
+	/*position:absolute;*/
 	width: 96%;
 	height: 25px;
-	color: #000000;
+	text-align: center;
+/*	color: #000000;
 	border: solid black;
 	border-width: 1px 0 0 0;
 	margin-bottom: 0px;
 	text-align: center;
-	clear: both;
+	clear: both;*/
 }
 
 ul {
-	list-style: none;
-	width: 100%;
 	padding: 0;
 	margin: auto;
+	width: 100%;
+	list-style: none;
 }
 
 li {
 	padding: 0;
 	margin: auto;
-	/*border: 1px solid #005AA7;*/
 	width: 100%;
 	text-align: left;
 }

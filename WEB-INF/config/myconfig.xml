@@ -77,5 +77,13 @@
 			<result name="processDeleteCode">/LinearCode.do</result>
 			<result name="listCode">/LinearCode.do</result>
 		</action>
+		
+		<action	name="Account" default="search"
+			class="com.mooo.mycoz.action.operation.AccountAction">
+			<result name="search">/jsp/operation/searchAccount.jsp</result>
+			<result name="talk">/jsp/operation/talkAccount.jsp</result>
+			<result name="message">/jsp/operation/messageAccount.jsp</result>
+			<result name="blog">/jsp/operation/blogAccount.jsp</result>
+		</action>
 	</package>
 </struts>
