@@ -131,7 +131,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `LinearCode` WRITE;
 /*!40000 ALTER TABLE `LinearCode` DISABLE KEYS */;
-INSERT INTO `LinearCode` VALUES (1,1,'图片'),(2,1,'声音'),(3,1,'视频');
+INSERT INTO `LinearCode` VALUES (5,1,'win32安装'),(4,1,'压缩'),(1,1,'图片'),(2,1,'声音'),(3,1,'视频');
 /*!40000 ALTER TABLE `LinearCode` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-08-19 16:06:45
+-- Dump completed on 2010-09-28 13:17:18
