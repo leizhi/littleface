@@ -85,5 +85,11 @@
 			<result name="message">/jsp/operation/messageAccount.jsp</result>
 			<result name="blog">/jsp/operation/blogAccount.jsp</result>
 		</action>
+		
+		<action	name="My" default="search"
+			class="com.mooo.mycoz.action.profile.MyAction">
+			<result name="general">/jsp/profile/generalMy.jsp</result>
+			<result name="password">/jsp/profile/passwordMy.jsp</result>
+		</action>
 	</package>
 </struts>

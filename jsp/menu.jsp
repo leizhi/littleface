@@ -66,10 +66,21 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 <li><a href="${blogAccount}" target="main"><fmt:message key="Blog"/></a></li>
 </ul>
 
+<c:url value="/My.do" var="generalMy">
+	<c:param name="method">general</c:param>
+	<c:param name="bar">2</c:param>
+	<c:param name="subbar">0</c:param>
+</c:url>
+
+<c:url value="/My.do" var="passwordMy">
+	<c:param name="method">password</c:param>
+	<c:param name="bar">2</c:param>
+	<c:param name="subbar">1</c:param>
+</c:url>
 <ul>
 <li class="title"><fmt:message key="Account"/></li>
-<li><a href="<c:url value="/File.do?bar=2&subbar=0"/>" target="main"><fmt:message key="General"/></a></li>
-<li><a href="<c:url value="/File.do?bar=2&subbar=1"/>" target="main"><fmt:message key="Password"/></a></li>
+<li><a href="${generalMy}" target="main"><fmt:message key="General"/></a></li>
+<li><a href="${passwordMy}" target="main"><fmt:message key="Password"/></a></li>
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
 </div>

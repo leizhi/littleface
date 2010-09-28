@@ -14,11 +14,10 @@ public class AccountAction extends BaseSupport{
 	
 	public String search(HttpServletRequest request, HttpServletResponse response) {
 		
-		List accounts = new ArrayList();
+		List<?> accounts = new ArrayList<Object>();
 		try {
 			accounts = dbProcess.searchAndRetrieveList(new User());
 			request.setAttribute("accounts", accounts);
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
