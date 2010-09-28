@@ -57,70 +57,128 @@ function docommit(url) {
 <jsp:param value="Search Account" name="title"/>
 </jsp:include>
 
-	<table align="center">
-	<tr>
-		<td>年龄</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>性别</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr>
-		<td>地区</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>名称</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr >
-		<td colspan="4" align="center">
-		<span>
-				<input type="submit" value="<fmt:message key="List"/>">
-		</span>
-		 </td>
-	</tr>
-	</table>
-<jsp:include page="../incl/g_tail.jsp" />
+<div style="float: left;width: 49%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="List Account" name="title"/>
-</jsp:include>
-
-<c:forEach var="item" items="${accounts}" varStatus="status">
-<div style="float: left;width: 24%;text-align: left;background-color: #fff;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
-
-<div style="width: 100%;height:13px;background-color: #464646;margin:1px;">
-<span>姓名:${item.name}</span>
-</div>
-
-<div style="width: 100%;margin-left:1px;">
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
-</div>
-
-<div style="float: left;width: 100%;">
 <ul>
-<li>性别:男</li>
-<li>年龄:29</li>
-<li>生日:xxxxxxxx29</li>
-<li>地址:下xxxxxxxxxxxxxxxxxx</li>
-<li>爱好:下xxxxxxxxxxxxxxxxxx </li>
-<li><span><a href="">详细</a></span>
-<span><a href="">交谈</a></span>
-<span><a href="">发消息</a></span>
-<span><a href="">加为好友</a></span>
+<li class="title">
+
+<div style="float: left;width: 59%;text-align: left;">
+<span><fmt:message key="General"/></span>
+</div>
+<div style="float: left;width: 40%;text-align: right;">
+<span><a href=""><fmt:message key="Edit"/></a></span>
+
+</div>
+<div style="clear: both;"></div>
+</li>
+
+<li><span><fmt:message key="Name"/></span><span></span></li>
+<li><span><fmt:message key="Sex"/></span><span></span></li>
+<li><span><fmt:message key="Height"/></span><span></span></li>
+<li><span><fmt:message key="Weight"/></span><span></span></li>
+<li><span><fmt:message key="Birthday"/></span><span></span></li>
+<li><span><fmt:message key="Career"/></span><span></span></li>
+<li><span><fmt:message key="Education"/></span><span></span></li>
+<li><span><fmt:message key="Married"/></span><span></span></li>
+<li><span><fmt:message key="QQ"/></span><span></span></li>
+<li><span><fmt:message key="Email"/></span><span></span></li>
+<li><span><fmt:message key="Secret"/></span><span></span></li>
+</ul>
+
+</div>
+
+<div style="float: left;width: 50%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+
+<ul>
+<li class="title">
+
+<div style="float: left;width: 59%;text-align: left;">
+<span><fmt:message key="Address"/></span>
+</div>
+<div style="float: left;width: 40%;text-align: right;">
+<span><a href=""><fmt:message key="Edit"/></a></span>
+
+</div>
+<div style="clear: both;"></div>
+</li>
+
+<li><span><fmt:message key="Country"/></span><span></span></li>
+<li><span><fmt:message key="City"/></span><span></span></li>
+<li><span><fmt:message key="PostalCode"/></span><span></span></li>
+<li><span><fmt:message key="Address"/></span><span></span></li>
+<li><span><fmt:message key="Tel"/></span><span></span></li>
+<li><span><fmt:message key="MobileNo"/></span><span></span></li>
+</ul>
+
+</div>
+<div style="clear: both;"></div>
+<!-- one row end -->
+
+<div style="float: left;width: 49%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+
+<ul>
+<li class="title">
+
+<div style="float: left;width: 59%;text-align: left;">
+<span><fmt:message key="Images"/></span>
+</div>
+<div style="float: left;width: 40%;text-align: right;">
+<span><a href=""><fmt:message key="Edit"/></a></span>
+
+</div>
+<div style="clear: both;"></div>
+</li>
+<li><img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
+<img width="80px" height="60px" src=""/>
 </li>
 </ul>
-</div>
 
 </div>
-</c:forEach>
- 
+
+<div style="float: left;width: 50%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+
+<ul>
+<li class="title">
+
+<div style="float: left;width: 59%;text-align: left;">
+<span><fmt:message key="Friend"/></span>
+</div>
+<div style="float: left;width: 40%;text-align: right;">
+<span><a href=""><fmt:message key="Edit"/></a></span>
+
+</div>
+<div style="clear: both;"></div>
+</li>
+
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+<li><span>abc@163.com</span></li>
+</ul>
+
+</div>
+<div style="clear: both;"></div>
+
 <jsp:include page="../incl/g_tail.jsp" />
 
 <jsp:include page="../incl/g_footer.jsp" />
-
 </form>
 </fmt:bundle>
 </body>

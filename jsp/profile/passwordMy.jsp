@@ -57,70 +57,24 @@ function docommit(url) {
 <jsp:param value="Search Account" name="title"/>
 </jsp:include>
 
-	<table align="center">
-	<tr>
-		<td>年龄</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>性别</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr>
-		<td>地区</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>名称</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr >
-		<td colspan="4" align="center">
-		<span>
-				<input type="submit" value="<fmt:message key="List"/>">
-		</span>
-		 </td>
-	</tr>
-	</table>
-<jsp:include page="../incl/g_tail.jsp" />
-
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="List Account" name="title"/>
-</jsp:include>
-
-<c:forEach var="item" items="${accounts}" varStatus="status">
-<div style="float: left;width: 24%;text-align: left;background-color: #fff;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
-
-<div style="width: 100%;height:13px;background-color: #464646;margin:1px;">
-<span>姓名:${item.name}</span>
-</div>
-
-<div style="width: 100%;margin-left:1px;">
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
-</div>
-
-<div style="float: left;width: 100%;">
 <ul>
-<li>性别:男</li>
-<li>年龄:29</li>
-<li>生日:xxxxxxxx29</li>
-<li>地址:下xxxxxxxxxxxxxxxxxx</li>
-<li>爱好:下xxxxxxxxxxxxxxxxxx </li>
-<li><span><a href="">详细</a></span>
-<span><a href="">交谈</a></span>
-<span><a href="">发消息</a></span>
-<span><a href="">加为好友</a></span>
-</li>
-</ul>
-</div>
+<li style="float: left;width: 50%;text-align: right;"><span><fmt:message key="OldPassword"/></span></li>
+<li style="float: left;width: 50%;text-align: left;"><span> <input type="password"/></span></li>
 
-</div>
-</c:forEach>
- 
+<li style="float: left;width: 50%;text-align: right;"><span><fmt:message key="NewPassword"/></span></li>
+<li style="float: left;width: 50%;text-align: left;"><span> <input type="password"/></span></li>
+
+<li style="float: left;width: 50%;text-align: right;"><span><fmt:message key="DoublePassword"/></span></li>
+<li style="float: left;width: 50%;text-align: left;"><span> <input type="password"/></span></li>
+
+<li style="float: left;width: 50%;text-align: right;">&nbsp;</li>
+<li style="float: left;width: 50%;text-align: left;"><span> <input type="submit" value="submit"/></span></li>
+
+</ul>
+
 <jsp:include page="../incl/g_tail.jsp" />
 
 <jsp:include page="../incl/g_footer.jsp" />
-
 </form>
 </fmt:bundle>
 </body>
