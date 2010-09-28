@@ -74,11 +74,12 @@ function parseURL(url) {
 	
 	var prefix = new Array();
 	
-	var bar = new Array("文件","文件");
+	var bar = new Array("文件","配偶","帐户");
 	
 	var subbar = new Array( 
 			new Array("文件","码表类型"),
-			new Array("文件","码表类型")
+			new Array("搜索","交谈","消息","博客"),
+			new Array("基本信息","密 码")
 			);
 	
 	for(var i=0;i<prefix.length;i++){

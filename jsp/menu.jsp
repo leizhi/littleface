@@ -33,13 +33,20 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 <li class="title"><fmt:message key="File"/></li>
 <li><a href="<c:url value="/File.do?bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
 <li><a href="<c:url value="/CodeType.do?bar=0&subbar=1"/>" target="main"><fmt:message key="CodeType"/></a></li>
-<li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
 
 <ul>
-<li class="title"><fmt:message key="File"/></li>
-<li><a href="<c:url value="/File.do?bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
-<li><a href="<c:url value="/CodeType.do?bar=0&subbar=0"/>" target="main"><fmt:message key="CodeType"/></a></li>
+<li class="title"><fmt:message key="Consort"/></li>
+<li><a href="<c:url value="/File.do?bar=1&subbar=0"/>" target="main"><fmt:message key="Search"/></a></li>
+<li><a href="<c:url value="/CodeType.do?bar=1&subbar=1"/>" target="main"><fmt:message key="Talk"/></a></li>
+<li><a href="<c:url value="/CodeType.do?bar=1&subbar=2"/>" target="main"><fmt:message key="Message"/></a></li>
+<li><a href="<c:url value="/CodeType.do?bar=1&subbar=3"/>" target="main"><fmt:message key="Blog"/></a></li>
+</ul>
+
+<ul>
+<li class="title"><fmt:message key="Account"/></li>
+<li><a href="<c:url value="/File.do?bar=2&subbar=0"/>" target="main"><fmt:message key="General"/></a></li>
+<li><a href="<c:url value="/File.do?bar=2&subbar=1"/>" target="main"><fmt:message key="Password"/></a></li>
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
 </div>
