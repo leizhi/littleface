@@ -50,4 +50,26 @@ do
   fi
 done
 
+#compie xml
+xflist=`find -name "*.xml" -print`
+for xf in $xflist
+do
+	cf=${CLASSES}${xf}
+	if [ $cf -ot $xf ]; then
+		echo "cp -f $xf to $PWD/WEB-INF/classes..."
+		cp -f  $xf $cf
+	fi
+done
+
+#compiel .properties
+xflist=`find -name "*.properties" -print`
+for xf in $xflist
+do      
+        cf=${CLASSES}${xf}
+        if [ $cf -ot $xf ]; then
+                echo "cp -f $xf to $PWD/WEB-INF/classes..."
+                cp -f  $xf $cf
+        fi
+done
+
 cd $PWD
