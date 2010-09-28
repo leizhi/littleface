@@ -112,3 +112,8 @@ function submitPage(pageNo){
 		$('pageNo').value=pageNo;
 		document.forms[0].submit();
 }
+
+function docommit(url) {
+	document.forms[0].action=url;
+	document.forms[0].submit();
+}
