@@ -215,10 +215,12 @@ public class BeanTools {
 		BeanTools bd = new BeanTools();
 		//bd.build("bus_remotes");
 		//bd.build("bus_samples");
-		bd.build("marketmoniter","buffer_price");
+		//bd.build("marketmoniter","buffer_price");
 		//bd.build("buffer_traffic");
 		//bd.build("mycozBranch","Example");
 		//bd.build("mycozBranch","FileInfo");
+		bd.build("mycozBranch","AccessLog");
+
 		//bd.build("mycozShared","CodeType");
 
 		//bd.buildInsert("buffer_traffic");

@@ -1,6 +1,5 @@
 package com.mooo.mycoz.action;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Locale;
 
@@ -51,7 +50,7 @@ public class LoginAction extends BaseSupport {
 			AccessLog al = new AccessLog();
 			al.setId(IDGenerator.getNextID("AccessLog").intValue());
 			al.setIp(getClinetIp(request));
-			al.setStartdate(new Timestamp(new Date().getTime()));
+			al.setStartdate(new Date());
 			dbProcess.add(al);
 			
 		} catch (Exception e) {
