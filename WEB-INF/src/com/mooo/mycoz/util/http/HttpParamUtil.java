@@ -4,20 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
 import com.mooo.mycoz.util.BeanUtil;
-import com.mooo.mycoz.util.Transaction;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -155,99 +148,6 @@ public class HttpParamUtil {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	//Transaction
-	public static void add(HttpServletRequest request, String table) {
-		@SuppressWarnings("unchecked")
-		Enumeration<String> em = request.getParameterNames();
-		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		ResultSet rs = null;
-		Transaction tx = new Transaction();
-		
-		try {
-			tx.start();
-
-			StringBuffer sql =  new StringBuffer("INSERT INTO " + table);
-			StringBuffer fileds = new StringBuffer();
-			StringBuffer values = new StringBuffer();
-			String value,colName;
-			
-			List<String> col = new ArrayList<String>();
-			
-			stmt = tx.getConnection().createStatement();
-			rs = stmt.executeQuery("SELECT * FROM " + table);
-			rsmd = rs.getMetaData();
-
-			for (int i = 0; i < rsmd.getColumnCount(); i++) {
-				col.add(rsmd.getColumnName(i + 1).toUpperCase());
-			}
-			
-			while (em.hasMoreElements()) {
-				String name = em.nextElement();
-				StringTokenizer st = new StringTokenizer(name, ".");
-				
-					if (st.countTokens() > 1) {
-						
-						if (st.nextToken().equals(table)) {
-							
-							value = request.getParameter(name);
-							colName = st.nextToken();
-							
-							if (col.contains(colName.toUpperCase())) {
-								
-								if (fileds.length() > 0) {
-									fileds.append("," + colName);
-									values.append(",'" + value + "'");
-								} else {
-									fileds.append("(" + colName);
-									values.append(" VALUES ('" + value + "'");
-								}
-							}
-						}
-					} // must conform to the rules
-			}
-			
-			if (fileds.length() > 0)
-				fileds.append(") ");
-			if (values.length() > 0)
-				values.append(") ");
-
-			if (sql.length() > 0)
-				sql.append(fileds);
-			if (sql.length() > 0)
-				sql.append(values);
-			
-			if (log.isDebugEnabled()) log.debug("add sql=" + sql);
-			System.out.println("add sql=" + sql);
-
-			stmt = tx.getConnection().createStatement();
-			stmt.executeUpdate(sql.toString());
-			
-			// rs = stmt.executeQuery(sql);
-			// while (rs.next()) {
-			// System.out.println("Name=" + rs.getString("XZQH_MC"));
-			// }
-			tx.commit();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-		} finally {
-			
-			try {
-				if(rs != null)
-					rs.close();
-				if(stmt != null)
-					stmt.close();
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			tx.end();
-		}
-
 	}
 
 }

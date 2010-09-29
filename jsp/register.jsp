@@ -106,7 +106,7 @@ border:1px #999 solid; background:#CEE7FF;">
 --%>
 <div style="width: 100%;text-align: center;">
 <input type="submit" value="<fmt:message key="Ok"/>">
-<input type="submit" value="<fmt:message key="Black"/>" onclick="return false;">
+<input type="submit" value="<fmt:message key="Black"/>" onclick="history.go(-1);return false;">
 </div>
 
 </div>

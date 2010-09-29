@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
+import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.http.HttpParamUtil;
@@ -28,9 +29,6 @@ public class LoginAction extends BaseSupport {
 			com.mooo.mycoz.util.SessionCounter.put(request.getSession().getId());
 			session.setAttribute(request.getSession().getId(), "Guest");
 
-			request.setAttribute("name", request.getParameter("name"));
-			request.setAttribute("password", request.getParameter("password"));
-			
 			Locale locale = Locale.getDefault();
 			//if (log.isDebugEnabled()) log.debug("request locale: " + request.getParameter("locale"));
 	
@@ -67,6 +65,10 @@ public class LoginAction extends BaseSupport {
 			
 			User user = new User();
 			HttpParamUtil.bindData(request, user, "user");
+
+			BeanUtil.noNull(user.getName());
+			BeanUtil.noNull(user.getPassword());
+
 			user.setPassword(StringUtils.hash(user.getPassword()));
 
 			if (log.isDebugEnabled())log.debug("name= " + user.getName());

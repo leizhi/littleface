@@ -147,4 +147,9 @@ public class BeanUtil {
 		// 把对象填充
 		setMethod.invoke(bean, new Object[] { obj });
 	}
+	
+	public static void noNull(Object obj) throws NullPointerException{
+		if(obj == null)
+			new NullPointerException("cant no null");
+	}
 }
