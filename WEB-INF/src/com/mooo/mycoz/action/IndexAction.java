@@ -23,6 +23,8 @@ public class IndexAction  extends BaseSupport {
 			Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
 			boolean isAuthenticated = (null != userID);
 			
+			if (log.isDebugEnabled()) log.debug("isAuthenticated OK: "+isAuthenticated);
+
 			if (!isAuthenticated) {
 				return "promptLogin";
 			}

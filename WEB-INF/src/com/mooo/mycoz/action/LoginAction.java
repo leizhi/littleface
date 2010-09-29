@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LoginAction extends BaseSupport {
@@ -65,14 +66,22 @@ public class LoginAction extends BaseSupport {
 		try {
 			
 			User user = new User();
-			HttpParamUtil.bindData(request, user, "User");
+			HttpParamUtil.bindData(request, user, "user");
+			user.setPassword(StringUtils.hash(user.getPassword()));
 
 			if (log.isDebugEnabled())log.debug("name= " + user.getName());
 			if (log.isDebugEnabled())log.debug("password= " + user.getPassword());
+			if (log.isDebugEnabled())log.debug("count= " + dbProcess.count(user));
+			if (log.isDebugEnabled())log.debug("okkkkkkkkkkkkkkkkkkkkkkkkkk");
 
-			if(!user.loginCheck()){
+			if (dbProcess.count(user) < 1) {
+				if (log.isDebugEnabled())log.debug("<1");
+
 				return "promptLogin";
 			} else {
+				if (log.isDebugEnabled())log.debug("else");
+				dbProcess.retrieve(user);
+				
 				HttpSession hs = request.getSession(true);
 				hs.setAttribute(USER_SESSION_KEY, user.getId());
 			}
@@ -85,13 +94,12 @@ public class LoginAction extends BaseSupport {
 
 	}
 	
-	public String promptRegister(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String promptRegister(HttpServletRequest request,HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled())log.debug("promptRegister");
-
-			request.setAttribute("name", request.getParameter("name"));
-			request.setAttribute("password", request.getParameter("password"));
+			User user = new User();
+			user.setId(IDGenerator.getNextID("User").intValue());
+			request.setAttribute("user", user);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -104,8 +112,10 @@ public class LoginAction extends BaseSupport {
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled())log.debug("promptRegister");
+			
 			User user = new User();
-			HttpParamUtil.bindData(request, user, "User");
+			HttpParamUtil.bindData(request, user, "user");
+			user.setPassword(StringUtils.hash(user.getPassword()));
 			dbProcess.add(user);
 			
 		} catch (Exception e) {

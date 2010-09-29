@@ -23,6 +23,8 @@
 			class="com.mooo.mycoz.action.LoginAction">
 			<result name="promptLogin">/jsp/login.jsp</result>
 			<result name="processLogin">/Index.do</result>
+			<result name="promptRegister">/jsp/register.jsp</result>
+			<result name="processRegister">/jsp/registerSuccess.jsp</result>
 			<result name="processLogout">/Login.do</result>
 		</action>
 				

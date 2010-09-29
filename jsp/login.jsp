@@ -32,6 +32,10 @@
 	<c:param name="method">promptLogin</c:param>
 </c:url>
 
+<c:url value="/Login.do" var="promptRegister">
+	<c:param name="method">promptRegister</c:param>
+</c:url>
+
 <form method="post" action="${processLogin}">
 <div style="position:absolute;top:50%;left:50%;width:500px;height:200px; margin-top:-150px; margin-left:-250px;
 border:1px #999 solid; background:#CEE7FF;">
@@ -64,18 +68,19 @@ border:1px #999 solid; background:#CEE7FF;">
 
 <div style="width: 100%;">
 <div style="float: left;width: 40%;text-align: right;"><fmt:message key="UserName"/>:root</div>
-<div style="float: left;width: 59%;text-align: left;"><input type="text" name="User.name"></div>
+<div style="float: left;width: 59%;text-align: left;"><input type="text" name="user.name"></div>
 <div style="clear: both;"></div>
 </div>
 
 <div style="width: 100%;">
 <div style="float: left;width: 40%;text-align: right;"><fmt:message key="Password"/>:root</div>
-<div style="float: left;width: 59%;text-align: left;"><input type="password" name="User.password"></div>
+<div style="float: left;width: 59%;text-align: left;"><input type="password" name="user.password"></div>
 <div style="clear: both;"></div>
 </div>
 
 <div style="width: 100%;text-align: center;">
 <input type="submit" value="<fmt:message key="Login"/>">
+<input type="submit" value="<fmt:message key="Register"/>" onclick="docommit('${promptRegister}');return false;">
 </div>
 
 </div>

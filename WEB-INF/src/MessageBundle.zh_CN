@@ -96,3 +96,5 @@ Friend=好友列表
 OldPassword=旧密码
 NewPassword=新密码
 DoublePassword=二次新密码
+Ok=确定
+RegisterSuccess=注册成功
