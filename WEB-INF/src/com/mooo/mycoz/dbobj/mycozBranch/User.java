@@ -18,21 +18,15 @@ public class User {
 	private static Log log = LogFactory.getLog(User.class);
 
 	Integer id;
-	Integer stateid;
 	String name;
 	String password;
-	
+	String alias;
+	String active;
 	public Integer getId() {
 	return id;
 	}
 	public void setId(Integer id) {
 	 this.id = id;
-	}
-	public Integer getStateid() {
-	return stateid;
-	}
-	public void setStateid(Integer stateid) {
-	 this.stateid = stateid;
 	}
 	public String getName() {
 	return name;
@@ -45,6 +39,18 @@ public class User {
 	}
 	public void setPassword(String password) {
 	 this.password = password;
+	}
+	public String getAlias() {
+	return alias;
+	}
+	public void setAlias(String alias) {
+	 this.alias = alias;
+	}
+	public String getActive() {
+	return active;
+	}
+	public void setActive(String active) {
+	 this.active = active;
 	}
 
 	public boolean loginCheck() {
@@ -59,8 +65,8 @@ public class User {
 		Statement stmt = null;
 		ResultSet rs = null;
 
-		sql = "SELECT ID,Name,Password FROM User";
-		sql += " WHERE Password=Password('" + password.replaceAll("'", "")
+		sql = "SELECT id,name,password FROM User";
+		sql += " WHERE password=Password('" + password.replaceAll("'", "")
 				+ "')";
 		boolean isLogin = false;
 		

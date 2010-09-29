@@ -319,13 +319,56 @@ DROP TABLE IF EXISTS `User`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `User` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `StateID` int(11) NOT NULL DEFAULT '0',
-  `Name` varchar(50) DEFAULT NULL,
-  `Password` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Name` (`Name`),
-  KEY `StateID` (`StateID`)
+  `id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(50) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `alias` varchar(50) DEFAULT NULL,
+  `active` char(1) DEFAULT 'Y',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `UserInfo`
+--
+
+DROP TABLE IF EXISTS `UserInfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserInfo` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) DEFAULT NULL,
+  `sexId` int(11) DEFAULT NULL,
+  `height` decimal(5,2) DEFAULT NULL,
+  `heightUnitId` int(11) DEFAULT NULL,
+  `weight` decimal(5,2) DEFAULT NULL,
+  `weightUnitId` int(11) DEFAULT NULL,
+  `birthday` datetime DEFAULT NULL,
+  `careerId` int(11) DEFAULT NULL,
+  `educationId` int(11) DEFAULT NULL,
+  `marriedId` int(11) DEFAULT NULL,
+  `qq` varchar(50) DEFAULT NULL,
+  `secret` char(1) DEFAULT 'N',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userId` (`userId`),
+  KEY `sexId` (`sexId`),
+  KEY `height` (`height`),
+  KEY `heightUnitId` (`heightUnitId`),
+  KEY `weight` (`weight`),
+  KEY `weightUnitId` (`weightUnitId`),
+  KEY `birthday` (`birthday`),
+  KEY `careerId` (`careerId`),
+  KEY `educationId` (`educationId`),
+  KEY `marriedId` (`marriedId`),
+  KEY `qq` (`qq`),
+  CONSTRAINT `UserInfo_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`ID`),
+  CONSTRAINT `UserInfo_ibfk_2` FOREIGN KEY (`sexId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
+  CONSTRAINT `UserInfo_ibfk_3` FOREIGN KEY (`heightUnitId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
+  CONSTRAINT `UserInfo_ibfk_4` FOREIGN KEY (`weightUnitId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
+  CONSTRAINT `UserInfo_ibfk_5` FOREIGN KEY (`careerId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
+  CONSTRAINT `UserInfo_ibfk_6` FOREIGN KEY (`educationId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
+  CONSTRAINT `UserInfo_ibfk_7` FOREIGN KEY (`marriedId`) REFERENCES `mycozShared`.`LinearCode` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -342,4 +385,4 @@ CREATE TABLE `User` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-09-28 13:17:18
+-- Dump completed on 2010-09-29 10:30:21

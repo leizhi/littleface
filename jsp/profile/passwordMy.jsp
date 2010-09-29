@@ -57,20 +57,27 @@ function docommit(url) {
 <jsp:param value="Search Account" name="title"/>
 </jsp:include>
 
-<ul>
-<li style="float: left;width: 50%;text-align: right;"><span><fmt:message key="OldPassword"/></span></li>
-<li style="float: left;width: 50%;text-align: left;"><span> <input type="password"/></span></li>
+<div style="width: 100%;">
+<div style="float: left;width: 50%;text-align: right;"><fmt:message key="OldPassword"/></div>
+<div style="float: left;width: 49%;text-align: left;"><input type="password"/></div>
+<div style="clear: both;"></div>
+</div>
 
-<li style="float: left;width: 50%;text-align: right;"><span><fmt:message key="NewPassword"/></span></li>
-<li style="float: left;width: 50%;text-align: left;"><span> <input type="password"/></span></li>
+<div style="width: 100%;">
+<div style="float: left;width: 50%;text-align: right;"><fmt:message key="NewPassword"/></div>
+<div style="float: left;width: 49%;text-align: left;"><input type="password"/></div>
+<div style="clear: both;"></div>
+</div>
 
-<li style="float: left;width: 50%;text-align: right;"><span><fmt:message key="DoublePassword"/></span></li>
-<li style="float: left;width: 50%;text-align: left;"><span> <input type="password"/></span></li>
+<div style="width: 100%;">
+<div style="float: left;width: 50%;text-align: right;"><fmt:message key="DoublePassword"/></div>
+<div style="float: left;width: 49%;text-align: left;"><input type="password"/></div>
+<div style="clear: both;"></div>
+</div>
 
-<li style="float: left;width: 50%;text-align: right;">&nbsp;</li>
-<li style="float: left;width: 50%;text-align: left;"><span> <input type="submit" value="submit"/></span></li>
-
-</ul>
+<div style="width: 100%;text-align: center;">
+<input type="submit" value="submit"/>
+</div>
 
 <jsp:include page="../incl/g_tail.jsp" />
 

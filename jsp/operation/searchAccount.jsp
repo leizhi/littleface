@@ -87,10 +87,10 @@ function docommit(url) {
 </jsp:include>
 
 <c:forEach var="item" items="${accounts}" varStatus="status">
-<div style="float: left;width: 24%;text-align: left;background-color: #fff;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+<div style="float: left;width: 24.5%;text-align: left;background-color: #fff;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
 <div style="width: 100%;height:13px;background-color: #464646;margin:1px;">
-<span>姓名:${item.name}</span>
+<span>姓名:${item.name} &nbsp;</span>
 </div>
 
 <div style="width: 100%;margin-left:1px;">
@@ -99,8 +99,8 @@ function docommit(url) {
 <span><img width="80px" height="60px" src=""/></span>
 </div>
 
-<div style="float: left;width: 100%;">
-<ul>
+<div style="width: 100%;margin-left:1px;">
+<ul style="width: 100%;margin-left:0px;">
 <li>性别:男</li>
 <li>年龄:29</li>
 <li>生日:xxxxxxxx29</li>

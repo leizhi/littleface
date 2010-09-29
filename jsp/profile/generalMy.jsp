@@ -59,7 +59,7 @@ function docommit(url) {
 
 <div style="float: left;width: 49%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
-<ul>
+<ul style="width: 100%;margin-left:0px;">
 <li class="title">
 
 <div style="float: left;width: 59%;text-align: left;">
@@ -89,7 +89,7 @@ function docommit(url) {
 
 <div style="float: left;width: 50%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
-<ul>
+<ul style="width: 100%;margin-left:0px;">
 <li class="title">
 
 <div style="float: left;width: 59%;text-align: left;">
@@ -116,7 +116,7 @@ function docommit(url) {
 
 <div style="float: left;width: 49%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
-<ul>
+<ul style="width: 100%;margin-left:0px;">
 <li class="title">
 
 <div style="float: left;width: 59%;text-align: left;">
@@ -145,7 +145,7 @@ function docommit(url) {
 
 <div style="float: left;width: 50%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
-<ul>
+<ul style="width: 100%;margin-left:0px;">
 <li class="title">
 
 <div style="float: left;width: 59%;text-align: left;">
