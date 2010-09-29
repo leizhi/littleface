@@ -32,16 +32,17 @@
 	<c:param name="method">promptLogin</c:param>
 </c:url>
 
-<div id="bodyblock">
 <form method="post" action="${processLogin}">
-<div id="login">
-	<table align="center">
-		<tbody>
-			<tr><td align="left" colspan="2">
-			<a href="${processLogin}">
-				<img src="jsp/images/xpcLogo.gif" alt="Go to main page." border=0 />
-			</a>
+<div style="position:absolute;top:50%;left:50%;width:500px;height:200px; margin-top:-150px; margin-left:-250px;
+border:1px #999 solid; background:#CEE7FF;">
 
+<div style="width: 100%;">
+<div style="float: left;width: 40%;text-align: right;">
+	<a href="${processLogin}">
+		<img width="80px" height="40px" src="jsp/images/xpcLogo.gif" alt="Go to main page." border=0 />
+	</a>
+</div>
+<div style="float: left;width: 59%;text-align: left; margin-top: 20px;">
 			<select name="locale" onchange="docommit('${promptLogin}')">
 				<c:forEach var="items" items="${locales}" varStatus="s">
 					<option value="${items}"
@@ -57,28 +58,28 @@
 					</option>
 				</c:forEach>
 			</select>
-			
-			</td>
-			</tr>
-		
-			<tr>
-  				<td><br><b><fmt:message key="UserName"/>:root</b></td>
- 				<td><br><input type="text" name="User.name"></td>
-			</tr>
+</div>
+<div style="clear: both;"></div>
+</div>
 
-			<tr>
-  				<td><b><fmt:message key="Password"/>:root</b></td>
-  				<td><input type="password" name="User.password"></td>
-			</tr>
-			
-			<tr><td align="right" colspan="2"> <input type="submit" value="<fmt:message key="Login"/>"></td></tr>
-			<tr><td align="center" colspan="2"><font size=-2 color=#999999>Copyright&copy;2010 mooo.com </font></tr>
-			
-		</tbody>
-	</table>
+<div style="width: 100%;">
+<div style="float: left;width: 40%;text-align: right;"><fmt:message key="UserName"/>:root</div>
+<div style="float: left;width: 59%;text-align: left;"><input type="text" name="User.name"></div>
+<div style="clear: both;"></div>
+</div>
+
+<div style="width: 100%;">
+<div style="float: left;width: 40%;text-align: right;"><fmt:message key="Password"/>:root</div>
+<div style="float: left;width: 59%;text-align: left;"><input type="password" name="User.password"></div>
+<div style="clear: both;"></div>
+</div>
+
+<div style="width: 100%;text-align: center;">
+<input type="submit" value="<fmt:message key="Login"/>">
+</div>
+
 </div>
 </form>
-</div>
 
 </body>
 </html>
