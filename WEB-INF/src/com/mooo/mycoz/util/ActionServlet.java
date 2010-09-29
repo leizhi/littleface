@@ -95,7 +95,7 @@ public class ActionServlet extends HttpServlet {
 			HttpSession session = request.getSession(true);
 			Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
 			boolean isAuthenticated = (null != userID);
-
+			
 			if (!isAuthenticated) {
 				if(!execPath.equals("Login") || !execPath.equals("Index"))
 					execPath="Login";
