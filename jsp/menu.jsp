@@ -41,28 +41,14 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 	<c:param name="subbar">0</c:param>
 </c:url>
 
-<c:url value="/Account.do" var="talkAccount">
-	<c:param name="method">talk</c:param>
-	<c:param name="bar">1</c:param>
-	<c:param name="subbar">1</c:param>
-</c:url>
-
-<c:url value="/Account.do" var="messageAccount">
-	<c:param name="method">message</c:param>
-	<c:param name="bar">1</c:param>
-	<c:param name="subbar">2</c:param>
-</c:url>
-
 <c:url value="/Account.do" var="blogAccount">
 	<c:param name="method">blog</c:param>
 	<c:param name="bar">1</c:param>
-	<c:param name="subbar">3</c:param>
+	<c:param name="subbar">1</c:param>
 </c:url>
 <ul>
 <li class="title"><fmt:message key="Consort"/></li>
 <li><a href="${searchAccount}" target="main"><fmt:message key="Search"/></a></li>
-<li><a href="${talkAccount}" target="main"><fmt:message key="Talk"/></a></li>
-<li><a href="${messageAccount}" target="main"><fmt:message key="Message"/></a></li>
 <li><a href="${blogAccount}" target="main"><fmt:message key="Blog"/></a></li>
 </ul>
 

@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
+<script type="text/javascript" src="jsp/js/util.js"></script>
+
 <style type="text/css">
 .title {
 background-color:#464646;
@@ -17,13 +19,6 @@ color:blue;
 }
 
 </style>
-
-<script type="text/javascript">
-function docommit(url) {
-	document.forms[0].action=url;
-	document.forms[0].submit();
-}
-</script>
 </head>
 
 <body>
@@ -106,8 +101,14 @@ function docommit(url) {
 <li>生日:xxxxxxxx29</li>
 <li>地址:下xxxxxxxxxxxxxxxxxx</li>
 <li>爱好:下xxxxxxxxxxxxxxxxxx </li>
+
+<c:url value="/Account.do" var="talk">
+	<c:param name="method">talk</c:param>
+	<c:param name="id">${item.id}</c:param>
+</c:url>
+
 <li><span><a href="">详细</a></span>
-<span><a href="">交谈</a></span>
+<span><a onclick="javascript:openLookup('${talk}');">交谈</a></span>
 <span><a href="">发消息</a></span>
 <span><a href="">加为好友</a></span>
 </li>

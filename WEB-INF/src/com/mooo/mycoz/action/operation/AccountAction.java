@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
+import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class AccountAction extends BaseSupport{
 	
@@ -26,14 +27,28 @@ public class AccountAction extends BaseSupport{
 	}
 	
 	public String talk(HttpServletRequest request, HttpServletResponse response) {
-		return "search";
+		User account = new User();
+		HttpParamUtil.bindData(request, account);
+
+		//account.setId(new Integer(request.getParameter("id")));
+
+		try {
+			dbProcess.retrieve(account);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		request.setAttribute("account", account);
+
+		return "talk";
 	}
 	
 	public String message(HttpServletRequest request, HttpServletResponse response) {
-		return "search";
+		return "message";
 	}
 	
 	public String blog(HttpServletRequest request, HttpServletResponse response) {
-		return "search";
+		return "blog";
 	}
 }

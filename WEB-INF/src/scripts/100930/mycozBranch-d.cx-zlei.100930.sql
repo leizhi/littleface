@@ -305,9 +305,9 @@ CREATE TABLE `TreeExample` (
   `school` varchar(50) DEFAULT 'NULL',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  KEY `Example_ibfk_1` (`age`),
-  KEY `Example_ibfk_2` (`school`),
-  KEY `Example_ibfk_3` (`treeId`)
+  KEY `TreeExample_ibfk_1` (`age`),
+  KEY `TreeExample_ibfk_2` (`school`),
+  KEY `TreeExample_ibfk_3` (`treeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -385,4 +385,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-09-29 10:30:21
+-- Dump completed on 2010-09-30 10:35:32

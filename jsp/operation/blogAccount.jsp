@@ -87,34 +87,7 @@ function docommit(url) {
 </jsp:include>
 
 <c:forEach var="item" items="${accounts}" varStatus="status">
-<div style="float: left;width: 24%;text-align: left;background-color: #fff;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
-<div style="width: 100%;height:13px;background-color: #464646;margin:1px;">
-<span>姓名:${item.name}</span>
-</div>
-
-<div style="width: 100%;margin-left:1px;">
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
-</div>
-
-<div style="float: left;width: 100%;">
-<ul>
-<li>性别:男</li>
-<li>年龄:29</li>
-<li>生日:xxxxxxxx29</li>
-<li>地址:下xxxxxxxxxxxxxxxxxx</li>
-<li>爱好:下xxxxxxxxxxxxxxxxxx </li>
-<li><span><a href="">详细</a></span>
-<span><a href="">交谈</a></span>
-<span><a href="">发消息</a></span>
-<span><a href="">加为好友</a></span>
-</li>
-</ul>
-</div>
-
-</div>
 </c:forEach>
  
 <jsp:include page="../incl/g_tail.jsp" />
