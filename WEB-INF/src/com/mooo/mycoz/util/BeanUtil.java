@@ -149,7 +149,8 @@ public class BeanUtil {
 	}
 	
 	public static void noNull(Object obj) throws NullPointerException{
-		if(obj == null)
+		if(obj == null){
 			new NullPointerException("cant no null");
+		}
 	}
 }

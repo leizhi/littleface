@@ -66,8 +66,8 @@ public class LoginAction extends BaseSupport {
 			User user = new User();
 			HttpParamUtil.bindData(request, user, "user");
 
-			BeanUtil.noNull(user.getName());
-			BeanUtil.noNull(user.getPassword());
+			StringUtils.noNull(user.getName());
+			StringUtils.noNull(user.getPassword());
 
 			user.setPassword(StringUtils.hash(user.getPassword()));
 
@@ -117,6 +117,10 @@ public class LoginAction extends BaseSupport {
 			
 			User user = new User();
 			HttpParamUtil.bindData(request, user, "user");
+			
+			BeanUtil.noNull(user.getName());
+			BeanUtil.noNull(user.getPassword());
+			
 			user.setPassword(StringUtils.hash(user.getPassword()));
 			dbProcess.add(user);
 			
