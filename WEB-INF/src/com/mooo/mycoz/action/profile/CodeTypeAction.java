@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
-import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.IDGenerator;
@@ -39,7 +38,7 @@ public class CodeTypeAction extends BaseSupport{
 				tt.setCategory(value);
 			}
 			
-			List linearTypes = dbProcess.searchAndRetrieveList(tt);
+			List<?> linearTypes = dbProcess.searchAndRetrieveList(tt);
 			request.setAttribute("linearTypes", linearTypes);
 			
 		} catch (Exception e) {

@@ -9,9 +9,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
-import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LinearCodeAction extends BaseSupport{
@@ -56,16 +56,10 @@ public class LinearCodeAction extends BaseSupport{
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
 			
-			CodeType bean = new CodeType();
-			if(request.getParameter("CodeType.name")==null || "".equals(request.getParameter("CodeType.name"))){
-				return "promptAdd";
-			}
-			
-			HttpParamUtil.bindData(request, bean, "CodeType");
-			if (log.isDebugEnabled()) log.debug("name="+request.getParameter("CodeType.name"));
-			if (log.isDebugEnabled()) log.debug("category="+request.getParameter("CodeType.category"));
-
-			dbProcess.add(bean);
+			CodeType codeType = new CodeType();
+			HttpParamUtil.bindData(request, codeType, "CodeType");
+			StringUtils.noNull(codeType.getName());
+			dbProcess.add(codeType);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
