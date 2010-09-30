@@ -43,6 +43,12 @@ border:1px #999 solid; background:#CEE7FF;">
 <div style="float: left;width: 59%;text-align: left;"><input type="password" name="user.password" value="${user.password}"></div>
 <div style="clear: both;"></div>
 </div>
+
+<div style="width: 100%;">
+<div style="float: left;width: 40%;text-align: right;"><fmt:message key="Password"/></div>
+<div style="float: left;width: 59%;text-align: left;"><input type="password" name="dpassword"></div>
+<div style="clear: both;"></div>
+</div>
 <%--
 <div style="width: 100%;">
 <div style="float: left;width: 40%;text-align: right;"><fmt:message key="Sex"/></div>

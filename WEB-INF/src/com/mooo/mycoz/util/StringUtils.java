@@ -784,7 +784,7 @@ public class StringUtils {
 	
 	public static void noNull(String str) throws NullPointerException{
 		if(str == null || str.equals("")){
-			new NullPointerException("cant no null");
+			throw new NullPointerException("cant no null");
 		}
 	}
 }

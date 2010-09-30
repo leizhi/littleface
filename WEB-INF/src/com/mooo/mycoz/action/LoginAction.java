@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
-import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.http.HttpParamUtil;
@@ -44,7 +43,6 @@ public class LoginAction extends BaseSupport {
 			request.setAttribute("locale", locale);
 
 			if (log.isDebugEnabled()) log.debug("IP:"+getClinetIp(request));
-			//DBSession dbSession = DBSession.getInstance();
 
 			AccessLog al = new AccessLog();
 			al.setId(IDGenerator.getNextID("AccessLog").intValue());
@@ -114,12 +112,23 @@ public class LoginAction extends BaseSupport {
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled())log.debug("promptRegister");
+			String value="";
 			
 			User user = new User();
 			HttpParamUtil.bindData(request, user, "user");
 			
-			BeanUtil.noNull(user.getName());
-			BeanUtil.noNull(user.getPassword());
+			StringUtils.noNull(user.getName());
+			StringUtils.noNull(user.getPassword());
+			
+			value = request.getParameter("dpassword");
+			
+			if (log.isDebugEnabled()) log.debug("dpassword=" + value);
+			if (log.isDebugEnabled()) log.debug("password=" + user.getPassword());
+
+			if(!value.equals(user.getPassword())){
+				if (log.isDebugEnabled()) log.debug("not as same password");
+				throw new Exception("not as same password");
+			}
 			
 			user.setPassword(StringUtils.hash(user.getPassword()));
 			dbProcess.add(user);
