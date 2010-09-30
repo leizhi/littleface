@@ -140,8 +140,7 @@ function edit(url){
 			<input type="submit" id="List" value="<fmt:message key="List"/>">
 			<input type="submit" id="Add" value="<fmt:message key="Add"/>" onclick="return docommit('${promptAdd}')">
 			<input type="submit" id="Edit" value="<fmt:message key="Edit"/>" onclick="return edit('${promptUpdate}')">
-			<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="return remove('${processDelete}')">
-			<input type="submit" id="CodeManager" value="<fmt:message key="CodeManager"/>" onclick="return edit('${listCode}');">
+			<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="return subcommit('${processDelete}')">
 		</span>
 		 </td>
 	</tr>
@@ -167,7 +166,7 @@ function edit(url){
 
 <tr>
 <!-- 复选框 start -->
-<td><input type="checkbox" name="choose" id="choose" value="${empty id?0:id}" onclick="toSet(this)"/></td>
+<td><input type="checkbox" name="choose" id="choose" value="${item.id}" onclick="toSet(this)"/></td>
 <!-- 复选框 end-->
 <td onclick="openLookup('${editCode}');"><c:out value="${item.name}"></c:out></td>
 <td onclick="openLookup('${editCode}');"><fmt:message key="${item.category}"/></td>

@@ -91,7 +91,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `CodeType` WRITE;
 /*!40000 ALTER TABLE `CodeType` DISABLE KEYS */;
-INSERT INTO `CodeType` VALUES (2,'dsafdas','Linear'),(4,'kljlk','Linear'),(3,'sadfasdf','Linear'),(5,'sdfasdf','Tree'),(6,'yyyyyyyyyyy','Linear'),(1,'文件类型','Linear');
+INSERT INTO `CodeType` VALUES (1,'文件类型','Linear'),(2,'论坛类型','Linear');
 /*!40000 ALTER TABLE `CodeType` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +131,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `LinearCode` WRITE;
 /*!40000 ALTER TABLE `LinearCode` DISABLE KEYS */;
-INSERT INTO `LinearCode` VALUES (5,1,'win32安装'),(4,1,'压缩'),(1,1,'图片'),(2,1,'声音'),(3,1,'视频');
+INSERT INTO `LinearCode` VALUES (3,1,'mp3'),(4,2,'军事'),(2,1,'压缩'),(1,1,'图片'),(7,2,'技术联盟'),(5,2,'文艺'),(6,2,'游戏');
 /*!40000 ALTER TABLE `LinearCode` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-09-30 10:35:32
+-- Dump completed on 2010-09-30 15:38:06

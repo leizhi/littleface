@@ -58,11 +58,11 @@ function toSet(index){
 
 <form method="post" action="${listCode}">
 <div class="command">
-<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${listCodeType}')">
 <input type="submit" value="<fmt:message key="List"/>">
 <input type="submit" value="<fmt:message key="Add"/>" onclick="docommit('${processAddCode}')">
 <input type="submit" value="<fmt:message key="Update"/>" onclick="docommit('${processUpdateCode}')">
 <input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDeleteCode}')">
+<input type="submit" value="<fmt:message key="CLose"/>" onclick="javascript:window.close();">
 </div>
 
 <div>

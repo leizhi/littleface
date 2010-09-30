@@ -43,7 +43,6 @@
 <input type="submit" value="<fmt:message key="Add"/>" onclick="docommit('${promptAdd}')">
 <input type="submit" value="<fmt:message key="Edit"/>" onclick="docommit('${promptUpdate}')">
 <input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
-<input type="submit" value="<fmt:message key="CodeManager"/>" onclick="docommit('${codeManager}')">
 </div>
 
 <div>

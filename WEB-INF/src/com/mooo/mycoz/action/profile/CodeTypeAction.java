@@ -122,6 +122,25 @@ public class CodeTypeAction extends BaseSupport{
 		return "success";
 	}
 	
+	public String processDelete(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			if (log.isDebugEnabled()) log.debug("processDelete");
+			
+			String[] choose =  request.getParameterValues("choose");
+			for(int i=0;i<choose.length;i++){
+				if (log.isDebugEnabled()) log.debug("choose="+choose[i]);
+				CodeType bean = new CodeType();
+				bean.setId( new Integer(choose[i]));
+				dbProcess.delete(bean);
+			}
+		} catch (Exception e) {
+			if (log.isDebugEnabled())
+				log.debug("Exception Load error of: " + e.getMessage());
+		}
+		return "list";
+	}
+	
 	public String listCode(HttpServletRequest request,
 			HttpServletResponse response) {
 		long startTime = System.currentTimeMillis();

@@ -70,30 +70,6 @@ CREATE TABLE `AddressBook` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Blog`
---
-
-DROP TABLE IF EXISTS `Blog`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Blog` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `UserID` int(11) NOT NULL DEFAULT '0',
-  `CategoryID` int(11) NOT NULL DEFAULT '0',
-  `Title` varchar(50) DEFAULT 'NULL',
-  `Description` text,
-  `LastDate` date DEFAULT NULL,
-  `Date` date DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Title` (`Title`),
-  KEY `Blog_ibfk_1` (`UserID`),
-  KEY `Blog_ibfk_2` (`CategoryID`),
-  CONSTRAINT `Blog_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`),
-  CONSTRAINT `Blog_ibfk_2` FOREIGN KEY (`CategoryID`) REFERENCES `mycozShared`.`BlogCategory` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `Example`
 --
 
@@ -131,6 +107,29 @@ CREATE TABLE `FileInfo` (
   KEY `name` (`name`),
   KEY `dateTime` (`datetime`),
   KEY `filepath` (`filepath`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Forum`
+--
+
+DROP TABLE IF EXISTS `Forum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Forum` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `categoryId` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(50) DEFAULT 'NULL',
+  `modifiedDate` date DEFAULT NULL,
+  `creationDate` date DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `categoryId` (`categoryId`),
+  KEY `modifiedDate` (`modifiedDate`),
+  KEY `creationDate` (`creationDate`),
+  CONSTRAINT `Forum_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `mycozShared`.`LinearCode` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -228,18 +227,28 @@ DROP TABLE IF EXISTS `Message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Message` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `UserID` int(11) NOT NULL DEFAULT '0',
-  `BlogID` int(11) NOT NULL DEFAULT '0',
-  `MessageDate` date DEFAULT NULL,
-  `Title` varchar(50) DEFAULT 'NULL',
-  `Description` text,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Title` (`Title`),
-  KEY `Message_ibfk_1` (`UserID`),
-  KEY `Message_ibfk_2` (`BlogID`),
-  CONSTRAINT `Message_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `User` (`ID`),
-  CONSTRAINT `Message_ibfk_2` FOREIGN KEY (`BlogID`) REFERENCES `Blog` (`ID`)
+  `id` int(11) NOT NULL DEFAULT '0',
+  `threadId` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) NOT NULL DEFAULT '0',
+  `subject` varchar(255) DEFAULT 'NULL',
+  `body` text,
+  `modifiedDate` date DEFAULT NULL,
+  `creationDate` date DEFAULT NULL,
+  `approved` char(1) NOT NULL DEFAULT 'N',
+  `isRoot` char(1) NOT NULL DEFAULT 'N',
+  `ranking` int(11) DEFAULT '0',
+  `replyPrivateUserId` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `threadId` (`threadId`),
+  KEY `userId` (`userId`),
+  KEY `subject` (`subject`),
+  KEY `modifiedDate` (`modifiedDate`),
+  KEY `creationDate` (`creationDate`),
+  KEY `ranking` (`ranking`),
+  KEY `replyPrivateUserId` (`replyPrivateUserId`),
+  CONSTRAINT `Message_ibfk_1` FOREIGN KEY (`threadId`) REFERENCES `Thread` (`id`),
+  CONSTRAINT `Message_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`ID`),
+  CONSTRAINT `Message_ibfk_3` FOREIGN KEY (`replyPrivateUserId`) REFERENCES `User` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -287,6 +296,30 @@ CREATE TABLE `Property` (
   CONSTRAINT `Property_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`ID`),
   CONSTRAINT `Property_ibfk_2` FOREIGN KEY (`propertyStatus`) REFERENCES `mycozShared`.`LinearCode` (`id`),
   CONSTRAINT `Property_ibfk_3` FOREIGN KEY (`propertyType`) REFERENCES `mycozShared`.`LinearCode` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Thread`
+--
+
+DROP TABLE IF EXISTS `Thread`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Thread` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `forumId` int(11) NOT NULL DEFAULT '0',
+  `approved` char(1) NOT NULL DEFAULT 'N',
+  `ranking` int(11) DEFAULT '0',
+  `closedflag` char(1) NOT NULL DEFAULT 'N',
+  `modifiedDate` date DEFAULT NULL,
+  `creationDate` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `forumId` (`forumId`),
+  KEY `ranking` (`ranking`),
+  KEY `modifiedDate` (`modifiedDate`),
+  KEY `creationDate` (`creationDate`),
+  CONSTRAINT `Thread_ibfk_1` FOREIGN KEY (`forumId`) REFERENCES `Forum` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -385,4 +418,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-09-30 10:35:32
+-- Dump completed on 2010-09-30 15:38:06

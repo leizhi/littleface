@@ -8,29 +8,23 @@ public class CodeType {
 	Integer id;
 	String name;
 	String category;
-
 	public Integer getId() {
-		return id;
+	return id;
 	}
-
 	public void setId(Integer id) {
-		this.id = id;
+	 this.id = id;
 	}
-
 	public String getName() {
-		return name;
+	return name;
 	}
-
 	public void setName(String name) {
-		this.name = name;
+	 this.name = name;
 	}
-
 	public String getCategory() {
-		return category;
+	return category;
 	}
-
 	public void setCategory(String category) {
-		this.category = category;
+	 this.category = category;
 	}
 	
 }

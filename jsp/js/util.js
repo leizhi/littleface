@@ -19,13 +19,17 @@ function href(action) {
 	window.location.href=action;
 }
 
-function subcommit(method) {
-	var action = document.forms[0].action;
-	action = action+"!"+method+".action"
-	//window.alert(action);
-	document.forms[0].action=action;
+function subcommit(url) {
+	document.forms[0].action=url;
+	//window.alert(url);
 	document.forms[0].submit();
+	//var action = document.forms[0].action;
+	//action = action+"&method="+method;
+	//window.alert(action);
+	//document.forms[0].action=action;
+	//document.forms[0].submit();
 }
+
 function onlyNum()
 {
  //第一个if定义除数字外可响应的键,如46对应Delete键,若要响应Tab键,可在后面加上&&!(event.keyCode==9),若要允许输入小数点,则可加上&&!(event.keyCode==190),其它类似
