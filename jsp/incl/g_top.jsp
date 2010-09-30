@@ -61,9 +61,10 @@ function parseURL(url) {
 
 		//document.write(myURL.query+"<br>");
 		
-	var barIndex=getUrl(myURL.query,"bar");
-	var subbarIndex=getUrl(myURL.query,"subbar");
-
+	//var barIndex=getUrl(myURL.query,"bar");
+	//var subbarIndex=getUrl(myURL.query,"subbar");
+	var barIndex=${param.bar };
+	var subbarIndex=${param.subbar };
 	//document.write("<input type=\"hidden\" name=\"bar\" id=\"bar\" value=\""+barIndex+"\"/>");
 	//document.write("<input type=\"hidden\" name=\"subbar\"  id=\"subbar\" value=\""+subbarIndex+"\"/>");
 	
@@ -101,4 +102,6 @@ function parseURL(url) {
 	*/
 	
 </script>
+<input type="hidden" name="bar" value="${param.bar }">
+<input type="hidden" name="subbar" value="${param.subbar }">
 </div>
