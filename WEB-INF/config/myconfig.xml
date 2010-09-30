@@ -37,23 +37,14 @@
 			class="com.mooo.mycoz.action.operation.FileAction">
 			<result name="list">/jsp/operation/listFile.jsp</result>
 			<result name="promptUpload">/jsp/operation/uploadFile.jsp</result>
-			<result name="processUpload">/File.do</result>
-			<result name="processDelete">/File.do</result>
-			<result name="processDownload">/File.do</result>
 		</action>
 		
 		<action name="CodeType" default="list"
 			class="com.mooo.mycoz.action.profile.CodeTypeAction">
 			<result name="list">/jsp/profile/listCodeType.jsp</result>
 			<result name="promptAdd">/jsp/profile/addCodeType.jsp</result>
-			<result name="processAdd">/CodeType.do</result>
 			<result name="promptUpdate">/jsp/profile/editCodeType.jsp</result>
-			<result name="processUpdate">/CodeType.do</result>
-			<result name="processDelete">/CodeType.do</result>
 			<result name="listCode">/jsp/profile/listCode.jsp</result>
-			<result name="processAddCode"></result>
-			<result name="processUpdateCode"></result>
-			<result name="processDeleteCode"></result>			
 		</action>
 				
 		<action name="Tree" default="list"

@@ -14,7 +14,7 @@ import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.Transaction;
+import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class CodeTypeAction extends BaseSupport{
@@ -24,22 +24,18 @@ public class CodeTypeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("list");
-			String value;
 			
-			List<String> codeCategory = new ArrayList<String>();
-			codeCategory.add("Linear");
-			codeCategory.add("Tree");
-			request.setAttribute("codeCategory", codeCategory);
+			List<String> category = new ArrayList<String>();
+			category.add("Linear");
+			category.add("Tree");
+			request.setAttribute("category", category);
+			request.setAttribute("categoryDefault", request.getParameter("query.category"));
 
-			CodeType tt = new CodeType();
+			CodeType codeType = new CodeType();
+			HttpParamUtil.bindData(request, codeType, "query");
 			
-			//tt.setCategory("Tree");
-			if((value=request.getParameter("codeCategory")) != null){
-				tt.setCategory(value);
-			}
-			
-			List<?> linearTypes = dbProcess.searchAndRetrieveList(tt);
-			request.setAttribute("linearTypes", linearTypes);
+			List<?> codeTypes = dbProcess.searchAndRetrieveList(codeType);
+			request.setAttribute("codeTypes", codeTypes);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -52,15 +48,16 @@ public class CodeTypeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("promptAdd");
+			
 			List<String> codeCategory = new ArrayList<String>();
 			codeCategory.add("Linear");
 			codeCategory.add("Tree");
 			request.setAttribute("codeCategory", codeCategory);
 			
 			CodeType codeType = new CodeType();
-			codeType.setId(new Integer(IDGenerator.getNextID("mycozShared.CodeType").intValue()));
-			codeType.setName(request.getParameter("CodeType.name"));
-			codeType.setCategory("Linear");
+			HttpParamUtil.bindData(request, codeType, "codeType");
+			codeType.setId(IDGenerator.getNextID("mycozShared.CodeType").intValue());
+			
 			request.setAttribute("codeType", codeType);
 			
 		} catch (Exception e) {
@@ -75,23 +72,17 @@ public class CodeTypeAction extends BaseSupport{
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
 			
-			CodeType bean = new CodeType();
-			if(request.getParameter("CodeType.name")==null || "".equals(request.getParameter("CodeType.name"))){
-				return "promptAdd";
-			}
-			
-			HttpParamUtil.bindData(request, bean, "CodeType");
-			if (log.isDebugEnabled()) log.debug("name="+request.getParameter("CodeType.name"));
-			if (log.isDebugEnabled()) log.debug("category="+request.getParameter("CodeType.category"));
-
-			dbProcess.add(bean);
+			CodeType codeType = new CodeType();
+			HttpParamUtil.bindData(request, codeType, "codeType");
+			StringUtils.noNull(codeType.getName());
+			dbProcess.add(codeType);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
 			return "promptAdd";
 		}
-		return "success";
+		return "list";
 	}
 	
 	public String promptUpdate(HttpServletRequest request,
@@ -118,7 +109,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
 		}
-		return "success";
+		return "list";
 	}
 	
 	public String processDelete(HttpServletRequest request,
@@ -142,103 +133,55 @@ public class CodeTypeAction extends BaseSupport{
 	
 	public String listCode(HttpServletRequest request,
 			HttpServletResponse response) {
-		long startTime = System.currentTimeMillis();
-		long finishTime = System.currentTimeMillis();
-		//Transaction tx = new Transaction();
-
 		try {
-			//tx.start();
 			
 			if (log.isDebugEnabled()) log.debug("listCode");
-			String id = request.getParameter("LinearCode.typeid");
-			if(id==null)
-				id= request.getParameter("id");
-			
-			request.setAttribute("id",id);
-			
-			System.out.println("do listCode CodeType start expends :"+(System.currentTimeMillis() - finishTime));
-			finishTime = System.currentTimeMillis();
-			
-			CodeType codeType = new CodeType();
-			//codeType.setConnection(tx.getConnection());
 
-			codeType.setId(new Integer (id));
-			
+			CodeType codeType = new CodeType();
+			HttpParamUtil.bindData(request, codeType, "codeType");
 			dbProcess.retrieve(codeType);
 			
-			System.out.println("codeType ID :"+codeType.getId());
-			
-			System.out.println("codeType Category :"+codeType.getCategory());
-
 			request.setAttribute("codeType", codeType);
-			
-			System.out.println("do listCode CodeType end expends :"+(System.currentTimeMillis() - finishTime));
-			finishTime = System.currentTimeMillis();
 			
 			if(codeType.getCategory().equals("Linear")){
 				
 				LinearCode lc = new LinearCode();
-				//lc.setConnection(tx.getConnection());
-
 				lc.setTypeid(codeType.getId());
 				request.setAttribute("codes",dbProcess.searchAndRetrieveList(lc));
 				
 			} else {
 				//TreeCode tc = new TreeCode();
 			}
-			System.out.println("do listCode end expends :"+(System.currentTimeMillis() - startTime));
+			
 		}catch (SQLException e) {
 				e.printStackTrace();
 				if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
-				System.out.println("SQLException:"+e.getMessage());
-				//tx.rollback();
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
-			//tx.rollback();
-
-		} finally {
-			//tx.end();
-		}
-		
+		} 
 		return "success";
-	}	
+	}
+	
 	public String processAddCode(HttpServletRequest request,
 			HttpServletResponse response) {
-		long startTime = System.currentTimeMillis();
-		Transaction tx = new Transaction();
-
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
-			tx.start();
-
-			//ParamUtil.add(request,"mycozShared.LinearCode");
-			String value;
 			
-			LinearCode bean = new LinearCode();
-			bean.setId(IDGenerator.getNextID("mycozShared.LinearCode").intValue());
+			LinearCode linearCode = new LinearCode();
+			HttpParamUtil.bindData(request, linearCode, "LinearCode");
+			linearCode.setId(IDGenerator.getNextID("mycozShared.LinearCode").intValue());
 			
-			if((value=request.getParameter("LinearCode.name"))==null || value.equals("")){
-				return "listCode";
-			}
-			
-			HttpParamUtil.bindData(request, bean, "LinearCode");
-			dbProcess.add(bean);
+			dbProcess.add(linearCode);
 			
 		}catch (SQLException e) {
 			e.printStackTrace();
 			if(log.isDebugEnabled()) log.debug("SQLException:"+e.getMessage());
 			System.out.println("SQLException:"+e.getMessage());
-			tx.rollback();
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
-			tx.rollback();
-		} finally {
-			tx.end();
-		}
-		
-		System.out.println("do processAdd end expends :"+(System.currentTimeMillis() - startTime));
+		} 
 		
 		return "listCode";
 	}
@@ -247,23 +190,16 @@ public class CodeTypeAction extends BaseSupport{
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("processAdd");
-			//ParamUtil.add(request,"mycozShared.LinearCode");
 			String id =  request.getParameter("id");
 
-			//DBSession session = DBSession.getInstance();
-			//session.setCatalog("mycozShared");
-			
 			LinearCode bean = new LinearCode();
 			bean.setId(new Integer(id));
-			//bean.setUpdate("name", request.getParameter("LinearCode.name"));
 			
 			if(request.getParameter("LinearCode.name")==null || "".equals(request.getParameter("LinearCode.name"))){
 				return "listCode";
 			}
 			dbProcess.update(bean);
 			
-			//ParamUtil.bindData(request, bean, "LinearCode");
-			//session.update(bean);
 			
 		} catch (Exception e) {
 			if (log.isDebugEnabled())

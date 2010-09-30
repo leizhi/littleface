@@ -210,7 +210,7 @@ public class FileAction extends BaseSupport {
 				log.debug("Exception Load error of: " + e.getMessage());
 			return "promptUpload";
 		}
-		return "success";
+		return "list";
 	}
 
 	public String processDelete(HttpServletRequest request,

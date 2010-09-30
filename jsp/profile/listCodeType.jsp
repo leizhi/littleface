@@ -9,20 +9,7 @@
 <script type="text/javascript" src="jsp/js/util.js"></script>
 <script type="text/javascript" src="jsp/js/mootools.js" ></script>
 <script type="text/javascript" src="jsp/js/util.js" ></script>
-<script language="javascript">
-function toSet(obj){
-	//alert(obj.value);
-	
-	if(obj.checked){
-		$('id').value = obj.value;
-	} else {
-		$('id').value = null;
-	}
-	//alert($('id').value);
-	
-	//alert('ok');
-}
-</script>
+
 <script type="text/javascript">
 function checkbox(){
 	var selectedObj = document.all["id"];
@@ -33,25 +20,6 @@ function checkbox(){
  		}
 	}
 	return count;
-	/*
-	var edit = document.getElementById("Edit");
-	var remove = document.getElementById("Delete");
-	var codeManager= document.getElementById("CodeManager");
-	if(count > 0){
-		remove.style.display="inline";
-	} else {
-		remove.style.display="none";
-	}
-	
-	if(count == 1){
-		edit.style.display="inline";
-		codeManager.style.display="inline";		
-	} else {
-		edit.style.display="none";
-		codeManager.style.display="none";
-	}
-	alert("count="+count);
-	*/
 }
 
 
@@ -84,25 +52,14 @@ function edit(url){
 	<c:param name="method">promptAdd</c:param>
 </c:url>
 
-<c:url value="/CodeType.do" var="processAdd">
-	<c:param name="method">processAdd</c:param>
-</c:url>
-
 <c:url value="/CodeType.do" var="promptUpdate">
 	<c:param name="method">promptUpdate</c:param>
-</c:url>
-
-<c:url value="/CodeType.do" var="processUpdate">
-	<c:param name="method">processUpdate</c:param>
 </c:url>
 
 <c:url value="/CodeType.do" var="processDelete">
 	<c:param name="method">processDelete</c:param>
 </c:url>
 
-<c:url value="/CodeType.do" var="listCode">
-	<c:param name="method">listCode</c:param>
-</c:url>
 
 <form method="post" action="${list}">
 <%@ include file="../incl/g_top.jsp" %>
@@ -117,11 +74,11 @@ function edit(url){
 	<tr>
 		<td>码表类型</td>
 		<td>
-			<select name="codeCategory">
-				<c:forEach var="items" items="${codeCategory}" varStatus="s">
+			<select name="query.category">
+				<c:forEach var="items" items="${category}" varStatus="s">
 					
 					<option value="${items}"
-					<c:if test="${items==param.codeCategory}">
+					<c:if test="${items==categoryDefault}">
 						selected="selected"
 					</c:if>
 						>
@@ -130,6 +87,7 @@ function edit(url){
 				</c:forEach>
 			</select>
 		</td>
+				
 		<td></td>
 		<td></td>
 	</tr>
@@ -138,9 +96,9 @@ function edit(url){
 		<td colspan="4">
 		<span>
 			<input type="submit" id="List" value="<fmt:message key="List"/>">
-			<input type="submit" id="Add" value="<fmt:message key="Add"/>" onclick="return docommit('${promptAdd}')">
-			<input type="submit" id="Edit" value="<fmt:message key="Edit"/>" onclick="return edit('${promptUpdate}')">
-			<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="return subcommit('${processDelete}')">
+			<input type="submit" id="Add" value="<fmt:message key="Add"/>" onclick="docommit('${promptAdd}');return false;">
+			<input type="submit" id="Edit" value="<fmt:message key="Edit"/>" onclick="docommit('${promptUpdate}');return false;">
+			<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}');return false;">
 		</span>
 		 </td>
 	</tr>
@@ -158,18 +116,18 @@ function edit(url){
 <td><fmt:message key="Category"/></td>
 </tr>
 
-<c:forEach var="item" items="${linearTypes}" varStatus="status">
+<c:forEach var="item" items="${codeTypes}" varStatus="status">
 <c:url value="/CodeType.do" var="editCode">
 	<c:param name="method">listCode</c:param>
-	<c:param name="id">${item.id}</c:param>
+	<c:param name="codeType.id">${item.id}</c:param>
 </c:url>
 
 <tr>
 <!-- 复选框 start -->
-<td><input type="checkbox" name="choose" id="choose" value="${item.id}" onclick="toSet(this)"/></td>
+<td><input type="checkbox" name="choose" id="choose" value="${item.id}"/></td>
 <!-- 复选框 end-->
-<td onclick="openLookup('${editCode}');"><c:out value="${item.name}"></c:out></td>
-<td onclick="openLookup('${editCode}');"><fmt:message key="${item.category}"/></td>
+<td onclick="openLookup('${editCode}');"> <c:out value="${item.name}"/> </td>
+<td onclick="openLookup('${editCode}');"> <c:out value="${item.category}"/> </td>
 </tr>
 </c:forEach>
 </table>

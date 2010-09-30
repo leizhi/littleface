@@ -28,9 +28,6 @@ function toSet(index){
 	
 	$('id').value = $('choose'+index).value;
 	$('name').value = $('name'+index).value;
-	$('tbCodeType.id').value = $('tbCodeType.id'+index).value;
-
-	//alert('ok');
 }
 </script>
 </head>
@@ -62,13 +59,13 @@ function toSet(index){
 <input type="submit" value="<fmt:message key="Add"/>" onclick="docommit('${processAddCode}')">
 <input type="submit" value="<fmt:message key="Update"/>" onclick="docommit('${processUpdateCode}')">
 <input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDeleteCode}')">
-<input type="submit" value="<fmt:message key="CLose"/>" onclick="javascript:window.close();">
+<input type="submit" value="<fmt:message key="Close"/>" onclick="javascript:window.close();">
 </div>
 
 <div>
 <fmt:message key="Name"/>:
-<input type="text" name="LinearCode.name">
-<input type="hidden" name="LinearCode.typeid" value="${id}">
+<input type="text" name="linearCode.name">
+<input type="hidden" name="linearCode.typeId" value="${codeType.id}">
 </div>
 
 <div>
@@ -76,13 +73,14 @@ function toSet(index){
 
 <table>
 <tr>
+<td><input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></td>
 <td><fmt:message key="ID"/></td>
 <td><fmt:message key="Name"/></td>
 </tr>
 
 <c:forEach var="item" items="${codes}" varStatus="status">
 <tr>
-<td><input type="checkbox" name="id" value="${item.id}"> </td>
+<td><input type="checkbox" name="choose" id="choose${item.id}" onclick="toSet('${item.id}');" value="${item.id}"/></td>
 <td><c:out value="${item.name}"/></td>
 </tr>
 </c:forEach>

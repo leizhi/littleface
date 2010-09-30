@@ -5,7 +5,7 @@
 
 <html>
 <head>
-<title><fmt:message key="UpdateTree"/></title>
+<title><fmt:message key="UpdateCodeType"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
 <link type="text/css" rel="stylesheet" href="skin/office/default/presentation.css" />
@@ -32,28 +32,28 @@
 </head>
 
 <body>
-<c:url value="/Tree.do" var="tree"/>
-<c:url value="/Tree.do" var="processUpdate">
+<c:url value="/CodeType.do" var="listCodeType"/>
+<c:url value="/CodeType.do" var="processUpdate">
 	<c:param name="method">processUpdate</c:param>
 </c:url>
 
 <form method="post" action="${processUpdate}">
 
 <div class="command">
-<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${tree}')">
+<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${listCodeType}')">
 <input type="submit" value="<fmt:message key="OK"/>">
 </div>
 
 <div>
-<fmt:message key="UpdateTree"/>
+<fmt:message key="UpdateCodeType"/>
 <div id="formresponse">
-<input type="hidden" id="TreeType.id" name="TreeType.id" value="${TreeType.id}"/>
+<input type="hidden" id="codeType.id" name="codeType.id" value="${codeType.id}"/>
 
 <table align="center" style="font-size:0.9em;">
 
 <tr>
 <td><fmt:message key="Name" /></td>
-<td><input type="text" id="TreeType.name" name="TreeType.name" value="${TreeType.name}" size="15" maxlength="255"/></td>
+<td><input type="text" id="codeType.name" name="codeType.name" value="${codeType.name}" size="15" maxlength="255"/></td>
 </tr>
 
 </table>

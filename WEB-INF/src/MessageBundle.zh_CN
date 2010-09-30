@@ -98,3 +98,5 @@ NewPassword=新密码
 DoublePassword=二次新密码
 Ok=确定
 RegisterSuccess=注册成功
+Close=关闭
+Update=更新

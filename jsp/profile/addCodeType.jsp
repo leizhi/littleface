@@ -48,14 +48,14 @@
 <div>
 <fmt:message key="AddCodeType"/>
 <div id="formresponse">
-<input type="hidden" id="CodeType.id" name="CodeType.id" value="${codeType.id}"/>
+<input type="hidden" id="codeType.id" name="codeType.id" value="${codeType.id}"/>
 
 <table align="center" style="font-size:0.9em;">
 
 <tr>
 <td><fmt:message key="Category" /></td>
 <td>
-<select id="CodeType.category" name="CodeType.category">
+<select id="codeType.category" name="codeType.category">
 	<c:forEach var="items" items="${codeCategory}" varStatus="s">
 	<option value="${items}"
 	<c:if test="${items==param.codeCategory}">
@@ -70,7 +70,7 @@
 
 <tr>
 <td><fmt:message key="Name" /></td>
-<td><input type="text" id="CodeType.name" name="CodeType.name" value="${codeType.name}" size="15" maxlength="255"/></td>
+<td><input type="text" id="codeType.name" name="codeType.name" value="${codeType.name}" size="15" maxlength="255"/></td>
 </tr>
 
 </table>
