@@ -67,8 +67,11 @@ ${item.user.name }
 </div>
 
 <div style="float: right;width: 80%;background-color: #99b1cc;">
-${item.subject }  <fmt:formatDate value="${item.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/>
+<c:out value="${item.subject }"/>
+<fmt:formatDate value="${item.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/>
+<a href=""><fmt:message key="Reply"/></a>
 </div>
+
 <div style="clear: both;"></div>
 
 <div style="float: left;width: 20%;">
