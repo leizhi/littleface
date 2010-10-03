@@ -64,6 +64,39 @@ public class IDGenerator {
 		}
 		return nextId;
 	} // getNextID(String table)
+
+	public synchronized static int getNextID(Connection connection,String table) {
+		
+        PreparedStatement pstmt = null;
+        ResultSet result = null;
+        int nextId=0;
+        try {
+			pstmt = connection.prepareStatement(SELECT_MAX_BY_TABLE + table);
+			result = pstmt.executeQuery();
+			while (result.next()) {
+				nextId = result.getInt("maxid");
+			}
+
+			nextId++;
+		}catch (SQLException e) {
+			e.printStackTrace();
+	   }finally {
+			try {
+				if(result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(pstmt != null)
+					pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return nextId;
+	} // getNextID(String table)
 	
 	public static List<?> search(Class<?> clazz){
 		List<?> searchList = null;

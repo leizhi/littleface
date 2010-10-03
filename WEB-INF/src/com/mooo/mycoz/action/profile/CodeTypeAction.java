@@ -146,7 +146,7 @@ public class CodeTypeAction extends BaseSupport{
 			if(codeType.getCategory().equals("Linear")){
 				
 				LinearCode lc = new LinearCode();
-				lc.setTypeid(codeType.getId());
+				lc.setTypeId(codeType.getId());
 				request.setAttribute("codes",dbProcess.searchAndRetrieveList(lc));
 				
 			} else {

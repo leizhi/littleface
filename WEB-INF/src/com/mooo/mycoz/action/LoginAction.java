@@ -85,7 +85,6 @@ public class LoginAction extends BaseSupport {
 				HttpSession hs = request.getSession(true);
 				hs.setAttribute(USER_SESSION_KEY, user.getId());
 			}
-			
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 			return "promptLogin";

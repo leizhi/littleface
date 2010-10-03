@@ -78,7 +78,7 @@ public class BeanTools {
 		buffer.append(" {\n");
 		buffer.append("\tprivate static final long serialVersionUID = 1L;\n");
 
-		System.out.println("beanName="+StringUtils.upperToPrefix(table));
+		System.out.println("beanName="+StringUtils.upperToPrefix(table,null));
 
 		stmt = con.createStatement();
 		rs = stmt.executeQuery(sql);
@@ -95,8 +95,11 @@ public class BeanTools {
 			type = rsmd.getColumnType(i+1);
 			precision = rsmd.getPrecision(i+1);
 			scale = rsmd.getScale(i+1);
+			columnName = rsmd.getColumnName(i + 1);
 			
-			columnName = StringUtils.prefixToUpperNot(rsmd.getColumnName(i + 1));
+			System.out.println(columnName+" Precision: "+ precision+" Scale: "+scale);
+
+			columnName = StringUtils.prefixToUpperNot(columnName,null);
 			
 			System.out.println(columnName+" Precision: "+ precision+" Scale: "+scale);
 
@@ -223,8 +226,10 @@ public class BeanTools {
 		//bd.build("mycozBranch","User");
 		//bd.build("mycozBranch","Account");
 		//bd.build("mycozBranch","UserInfo");
-		bd.build("mycozShared","LinearCode");
+		//bd.build("mycozShared","LinearCode");
 		//bd.build("mycozShared","CodeType");
+		bd.build("mycozBranch","ForumThread");
+		//bd.build("mycozBranch","Message");
 
 		//bd.buildInsert("buffer_traffic");
 

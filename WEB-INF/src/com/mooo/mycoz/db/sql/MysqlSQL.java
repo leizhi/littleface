@@ -43,20 +43,20 @@ public class MysqlSQL extends AbstractSQL {
 					
 					if(obj !=null) {
 						field = method.substring(method.indexOf("get")+3);
-						columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(field));
+						columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(field,null));
 						
 						if(obj.getClass().isAssignableFrom(Integer.class))
-							setField(StringUtils.upperToPrefix(field), (Integer)obj);
+							setField(StringUtils.upperToPrefix(field,null), (Integer)obj);
 						else if(obj.getClass().isAssignableFrom(String.class)){
-							setField(StringUtils.upperToPrefix(field), (String)obj);
+							setField(StringUtils.upperToPrefix(field,null), (String)obj);
 						}else if(obj.getClass().isAssignableFrom(Date.class)){
 							if(columnType == Types.TIMESTAMP){
-								setField(StringUtils.upperToPrefix(field), (Date)obj,Types.TIMESTAMP);
+								setField(StringUtils.upperToPrefix(field,null), (Date)obj,Types.TIMESTAMP);
 							} else{
-								setField(StringUtils.upperToPrefix(field), (Date)obj,columnType);
+								setField(StringUtils.upperToPrefix(field,null), (Date)obj,columnType);
 							}
 						}else if(obj.getClass().isAssignableFrom(Double.class)){
-							setField(StringUtils.upperToPrefix(field), (Double)obj);
+							setField(StringUtils.upperToPrefix(field,null), (Double)obj);
 						}
 					}
 				}

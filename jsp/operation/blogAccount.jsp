@@ -57,39 +57,80 @@ function docommit(url) {
 <jsp:param value="Search Account" name="title"/>
 </jsp:include>
 
-	<table align="center">
-	<tr>
-		<td>年龄</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>性别</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr>
-		<td>地区</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>名称</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr >
-		<td colspan="4" align="center">
-		<span>
-				<input type="submit" value="<fmt:message key="List"/>">
-		</span>
-		 </td>
-	</tr>
-	</table>
+<div>
+
+<c:url value="/ForumThread.do" var="promptCreateThread">
+	<c:param name="method">promptCreateThread</c:param>
+</c:url>
+
+
+<a href="${promptCreateThread }">CreateThread</a>
+<a href="${listMessage }">DeleteThread</a>
+<a href="${listMessage }">UpdateThread</a>
+</div>
+
 <jsp:include page="../incl/g_tail.jsp" />
 
 <jsp:include page="../incl/g_head.jsp">
-<jsp:param value="List Account" name="title"/>
+<jsp:param value="List Forum" name="title"/>
 </jsp:include>
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#e8f3fd id=small>
+<tr>
+<td><fmt:message key="Title"/></td>
+<td><fmt:message key="Author"/></td>
+<td><fmt:message key="Reply"/></td>
+<td><fmt:message key="View"/></td>
+<td><fmt:message key="LastVisit"/></td>
+</tr>
 
-<c:forEach var="item" items="${accounts}" varStatus="status">
+<c:forEach var="item" items="${forumThreads}" varStatus="status">
+<tr>
+<c:url value="/ForumThread.do" var="listMessage">
+	<c:param name="method">listMessage</c:param>
+	<c:param name="threadId">${item.id }</c:param>
+</c:url>
 
+<td><a href="${listMessage }"><c:out value="${item.subject }"/></a></td>
+<td><c:out value="${item.user.name }"/></td>
+<td><c:out value="${item.id }"/></td>
+<td><c:out value="${item.id }"/></td>
+<td><c:out value="${item.id }"/></td>
+</tr>
 </c:forEach>
- 
+
+</table>
+
+
+<%--
+<c:forEach var="item" items="${forums}" varStatus="status">
+
+<div style="float: left;width: 100%;text-align: left;background-color: #fff;color: #000000;font-size: 12px;border: 1px solid #ffffff;">
+
+<div style="width: 100%;height:20px;background-color: #649caa;">
+<span><c:out value="${item.name }"></c:out></span>
+</div>
+
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
+<tr>
+<td><fmt:message key="Title"/></td>
+<td><fmt:message key="Author"/></td>
+<td><fmt:message key="Reply"/></td>
+<td><fmt:message key="View"/></td>
+<td><fmt:message key="LastVisit"/></td>
+</tr>
+
+<tr>
+<td>Title</td>
+<td>Author</td>
+<td>Reply</td>
+<td>View</td>
+<td>LastVisit</td>
+</tr>
+</table>
+
+</div>
+</c:forEach>
+ --%>
 <jsp:include page="../incl/g_tail.jsp" />
 
 <jsp:include page="../incl/g_footer.jsp" />

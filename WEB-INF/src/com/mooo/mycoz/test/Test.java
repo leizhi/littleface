@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.db.DbFactory;
@@ -20,6 +22,7 @@ import com.mooo.mycoz.db.sql.SQLProcess;
 import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
+import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.StringUtils;
@@ -28,14 +31,25 @@ public class Test {
 
 	public static void main(String[] args) {
 		
+		String value=null;
+		String str="RefjobID";
+		Pattern p = Pattern.compile("[A-Z]*");
+		Matcher m = p.matcher(str);
+		
+		while(m.find()){
+			value = m.group();
+			System.out.println("value="+value);
+			//result += prefix+m.group().toLowerCase();
+		}
+		
 		//System.out.println("StringUtils.getCatalog ="+StringUtils.getCatalog(BusRemotes.class,1));
 		//DbUtil.type(null,"mycozBranch","FileInfo","name");
 
-		long maxLong = 9223372036854775807L;
-		int maxInt = 2147483647;
-
-		try {
-			DbProcess dbAction = DbFactory.getInstance();
+//		long maxLong = 9223372036854775807L;
+//		int maxInt = 2147483647;
+//
+//		try {
+//			DbProcess dbAction = DbFactory.getInstance();
 //			FileInfo fi = new FileInfo();
 //			fi.setId(3);
 //			fi.setTypeid(4);
@@ -44,13 +58,16 @@ public class Test {
 //			fi.setFilepath("filePathd");
 //			
 //			dbAction.add(fi);
-			
+	/*		
 			Example ex = new Example();
 			ex.setId(new Random().nextDouble() * maxInt);
 			ex.setName(new Random().nextDouble() * maxInt+"名称");
 			ex.setCreatedate(new Date());
 			dbAction.add(ex);
-
+*/
+//			ForumThread forumThread = new ForumThread();
+//			System.out.println("count="+dbAction.count(forumThread));
+			
 //			List reList = dbAction.searchAndRetrieveList(fi);
 //			System.out.println("sql:");
 //			System.out.println("count="+dbAction.count(fi));
@@ -61,10 +78,9 @@ public class Test {
 //				bean = (FileInfo) it.next();
 //				System.out.println("name:"+bean.getName()+" id:"+bean.getId());
 //			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 		
 		/*
 		int maxInt = 2147483647;

@@ -664,30 +664,36 @@ public class StringUtils {
 	}
 
 	public synchronized static final String prefixToUpperNot(String str){
+		return prefixToUpperNot(str,"_");
+	}
+
+	public synchronized static final String prefixToUpperNot(String str,String prefix){
 		String result = null;
 		
-		if (str != null && str.length() > 1) {
-			result = prefixToUpper(str, "_");
+		if (str != null && str.length() > 1 && prefix!=null && !prefix.equals("")) {
+			result = prefixToUpper(str, prefix);
 			result = result.substring(0, 1).toLowerCase() + result.substring(1);
+		} else{
+			result=str;
 		}
 		
 		return result;
 	}
 	
+	//database field change bean field
 	public synchronized static final String prefixToUpper(String str,String prefix){
 		
-		if(str != null && str.length() > 0)
-			str = str.toLowerCase();
-		else if (str != null && str.indexOf(prefix) < 0)
+		if(prefix == null)
 			return str;
-		else
-			return null;
 		
-		StringTokenizer tokens = new StringTokenizer(str, prefix);
-
-		String result="";
+		if (str != null && str.indexOf(prefix) < 0){
+			return str;
+		}
+		
+		//spit prefix
+		String result=str;
 		String tmp="";
-		
+		StringTokenizer tokens = new StringTokenizer(str, prefix);
 		while (tokens.hasMoreTokens()) {
 				tmp = tokens.nextToken();
 				result += tmp.substring(0, 1).toUpperCase()+tmp.substring(1);
@@ -697,8 +703,9 @@ public class StringUtils {
 
 	}
 	
+	//default not spilt
 	public synchronized static final String upperToPrefix(String str){
-		return upperToPrefix(str,"_");
+		return upperToPrefix(str,null);
 	}
 	
 	public synchronized static final String upperToPrefix(String str,String prefix){
@@ -709,6 +716,28 @@ public class StringUtils {
 		String result="";
 
 		Pattern p = Pattern.compile("[A-Z]+[a-z]*");
+		Matcher m = p.matcher(str);
+		
+		while(m.find()){
+			result += prefix+m.group().toLowerCase();
+		}
+		
+		if(result != null && result.length() > 2) {
+			result = result.substring(1);
+		}
+		
+		return result;
+	}
+	
+	//default split case , specially prefix
+	public synchronized static final String formatHump(String str,String prefix){
+		
+		if(prefix==null || prefix.equals(""))
+			return str;
+		
+		String result="";
+
+		Pattern p = Pattern.compile("[A-Z]*");
 		Matcher m = p.matcher(str);
 		
 		while(m.find()){

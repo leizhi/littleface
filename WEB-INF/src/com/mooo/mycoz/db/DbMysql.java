@@ -71,7 +71,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 					BeanUtil.bindProperty(bean,
-							StringUtils.prefixToUpper(rsmd.getColumnName(i)),
+							StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
 							result.getString(i), null);
 				}
 				retrieveList.add(bean);
@@ -320,7 +320,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			while (result.next()) {
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 					BeanUtil.bindProperty(entity,
-							StringUtils.prefixToUpper(rsmd.getColumnName(i)),
+							StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
 							result.getString(i), null);
 				}
 			}

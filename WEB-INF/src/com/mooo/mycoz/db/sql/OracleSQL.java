@@ -22,7 +22,7 @@ public class OracleSQL extends AbstractSQL{
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
 			
 			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
-			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName()));
+			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName(),"_"));
 			
 			initialization();
 			
@@ -41,20 +41,20 @@ public class OracleSQL extends AbstractSQL{
 					
 					if(obj !=null) {
 						field = method.substring(method.indexOf("get")+3);
-						columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(field));
+						columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(field,"_"));
 						
 						if(obj.getClass().isAssignableFrom(Integer.class))
-							setField(StringUtils.upperToPrefix(field), (Integer)obj);
+							setField(StringUtils.upperToPrefix(field,"_"), (Integer)obj);
 						else if(obj.getClass().isAssignableFrom(String.class)){
-							setField(StringUtils.upperToPrefix(field), (String)obj);
+							setField(StringUtils.upperToPrefix(field,"_"), (String)obj);
 						}else if(obj.getClass().isAssignableFrom(Date.class)){
 							if(columnType == Types.TIMESTAMP){
-								setField(StringUtils.upperToPrefix(field), (Date)obj,Types.TIMESTAMP);
+								setField(StringUtils.upperToPrefix(field,"_"), (Date)obj,Types.TIMESTAMP);
 							} else{
-								setField(StringUtils.upperToPrefix(field), (Date)obj,columnType);
+								setField(StringUtils.upperToPrefix(field,"_"), (Date)obj,columnType);
 							}
 						}else if(obj.getClass().isAssignableFrom(Double.class)){
-							setField(StringUtils.upperToPrefix(field), (Double)obj);
+							setField(StringUtils.upperToPrefix(field,"_"), (Double)obj);
 						}
 					}
 				}

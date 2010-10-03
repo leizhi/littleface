@@ -117,7 +117,7 @@ public class FileAction extends BaseSupport {
 			Map fileTypes = new HashMap();
 			
 			LinearCode lc = new LinearCode();
-			lc.setTypeid(1);
+			lc.setTypeId(1);
 			LinearCode bean;
 			List cts = dbProcess.searchAndRetrieveList(lc);
 

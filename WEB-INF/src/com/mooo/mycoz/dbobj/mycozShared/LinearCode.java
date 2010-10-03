@@ -5,8 +5,9 @@ public class LinearCode {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	Integer id;
-	Integer typeid;
+	Integer typeId;
 	String name;
 	public Integer getId() {
 	return id;
@@ -14,11 +15,11 @@ public class LinearCode {
 	public void setId(Integer id) {
 	 this.id = id;
 	}
-	public Integer getTypeid() {
-	return typeid;
+	public Integer getTypeId() {
+	return typeId;
 	}
-	public void setTypeid(Integer typeid) {
-	 this.typeid = typeid;
+	public void setTypeId(Integer typeId) {
+	 this.typeId = typeId;
 	}
 	public String getName() {
 	return name;

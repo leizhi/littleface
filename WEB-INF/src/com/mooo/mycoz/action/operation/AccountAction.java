@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
+import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class AccountAction extends BaseSupport{
@@ -49,6 +51,21 @@ public class AccountAction extends BaseSupport{
 	}
 	
 	public String blog(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			/*LinearCode linearCode = new LinearCode();
+			linearCode.setTypeId(2);
+			
+			forums = dbProcess.searchAndRetrieveList(linearCode);
+			request.setAttribute("forums", forums);
+			*/
+			ForumThread forumThread = new ForumThread();
+			
+			List<?> forumThreads = dbProcess.searchAndRetrieveList(forumThread);
+			request.setAttribute("forumThreads", forumThreads);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return "blog";
 	}
 }
