@@ -79,7 +79,7 @@ function parseURL(url) {
 	
 	var subbar = new Array( 
 			new Array("文件","码表类型"),
-			new Array("搜索","交谈","消息","博客"),
+			new Array("搜索","博客"),
 			new Array("基本信息","密 码")
 			);
 	

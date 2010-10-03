@@ -84,5 +84,12 @@
 			<result name="general">/jsp/profile/generalMy.jsp</result>
 			<result name="password">/jsp/profile/passwordMy.jsp</result>
 		</action>
+		
+		<action	name="ForumThread" default="listMessage"
+			class="com.mooo.mycoz.action.operation.ForumThreadAction">
+			<result name="listMessage">/jsp/operation/listMessage.jsp</result>
+			<result name="promptCreateThread">/jsp/operation/createThread.jsp</result>
+			<result name="promptCreateMessage">/jsp/operation/createMessage.jsp</result>
+		</action>
 	</package>
 </struts>
