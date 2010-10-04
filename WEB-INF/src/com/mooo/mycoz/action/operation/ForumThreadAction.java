@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
+import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
@@ -67,6 +68,12 @@ public class ForumThreadAction extends BaseSupport{
 			ForumThread forumThread = new ForumThread();
 			forumThread.setId(new Integer(threadId) );
 			dbProcess.retrieve(forumThread);
+			
+			User user = new User();
+			user.setId(forumThread.getUserId());
+			dbProcess.retrieve(user);
+			forumThread.setUser(user);
+			
 			request.setAttribute("forumThread", forumThread);
 
 			Message message = new Message();
