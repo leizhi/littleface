@@ -65,8 +65,6 @@ function docommit(url) {
 
 
 <a href="${promptCreateThread }">CreateThread</a>
-<a href="${listMessage }">DeleteThread</a>
-<a href="${listMessage }">UpdateThread</a>
 </div>
 
 <jsp:include page="../incl/g_tail.jsp" />
@@ -92,9 +90,9 @@ function docommit(url) {
 
 <td><a href="${listMessage }"><c:out value="${item.subject }"/></a></td>
 <td><c:out value="${item.user.name }"/></td>
-<td><c:out value="${item.id }"/></td>
-<td><c:out value="${item.id }"/></td>
-<td><c:out value="${item.id }"/></td>
+<td><c:out value="${item.reply }"/></td>
+<td><c:out value="${item.reply }"/></td>
+<td><c:out value="${item.replyPrivateUser.name }"/> <fmt:formatDate value="${item.modifiedDate }" pattern="yyyy/MM/dd"/></td>
 </tr>
 </c:forEach>
 

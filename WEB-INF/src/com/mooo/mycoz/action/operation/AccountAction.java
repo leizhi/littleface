@@ -2,6 +2,7 @@ package com.mooo.mycoz.action.operation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
+import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
-import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class AccountAction extends BaseSupport{
@@ -60,7 +61,29 @@ public class AccountAction extends BaseSupport{
 			*/
 			ForumThread forumThread = new ForumThread();
 			
-			List<?> forumThreads = dbProcess.searchAndRetrieveList(forumThread);
+			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread);
+			
+			List forumThreads = new ArrayList<ForumThread>();
+			User user = new User();
+			Message message = new Message();
+
+			for (Iterator<?> it = forumThreadList.iterator(); it.hasNext();) {
+				forumThread = (ForumThread) it.next();
+				
+				user.setId(forumThread.getUserId());
+				dbProcess.retrieve(user);
+				forumThread.setUser(user);
+				
+				user.setId(forumThread.getReplyPrivateUserId());
+				dbProcess.retrieve(user);
+				forumThread.setReplyPrivateUser(user);
+				
+				message.setThreadId(forumThread.getId());
+				forumThread.setReply(dbProcess.count(message));
+				
+				forumThreads.add(forumThread);
+			}
+			
 			request.setAttribute("forumThreads", forumThreads);
 
 		} catch (SQLException e) {

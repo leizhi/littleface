@@ -1,10 +1,6 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
-import java.sql.SQLException;
 import java.util.Date;
-
-import com.mooo.mycoz.db.DbFactory;
-import com.mooo.mycoz.db.DbProcess;
 
 public class ForumThread {
 	Integer id;
@@ -85,29 +81,27 @@ public class ForumThread {
 	 this.replyPrivateUserId = replyPrivateUserId;
 	}
 	
+
+	User user;
+	User replyPrivateUser;
+	Integer reply;
+	
 	public User getUser() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		User user = new User();
-		user.setId(this.getUserId());
-		try {
-			dbProcess.retrieve(user);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 		return user;
 	}
-
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public User getReplyPrivateUser() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		User user = new User();
-		user.setId(this.getReplyPrivateUserId());
-		try {
-			dbProcess.retrieve(user);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return user;
+		return replyPrivateUser;
+	}
+	public void setReplyPrivateUser(User replyPrivateUser) {
+		this.replyPrivateUser = replyPrivateUser;
+	}
+	public Integer getReply() {
+		return reply;
+	}
+	public void setReply(Integer reply) {
+		this.reply = reply;
 	}
 }
