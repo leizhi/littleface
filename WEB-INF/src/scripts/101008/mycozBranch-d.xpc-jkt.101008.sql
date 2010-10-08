@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.48, for redhat-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.48
+-- Server version	5.1.49-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -146,8 +146,8 @@ CREATE TABLE `ForumThread` (
   `userId` int(11) NOT NULL DEFAULT '0',
   `subject` varchar(255) DEFAULT 'NULL',
   `body` text,
-  `modifiedDate` date DEFAULT NULL,
-  `creationDate` date DEFAULT NULL,
+  `modifiedDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `creationDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `approved` char(1) NOT NULL DEFAULT 'N',
   `ranking` int(11) DEFAULT '0',
   `closed` char(1) NOT NULL DEFAULT 'N',
@@ -265,8 +265,8 @@ CREATE TABLE `Message` (
   `userId` int(11) NOT NULL DEFAULT '0',
   `subject` varchar(255) DEFAULT 'NULL',
   `body` text,
-  `modifiedDate` date DEFAULT NULL,
-  `creationDate` date DEFAULT NULL,
+  `modifiedDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `creationDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `approved` char(1) NOT NULL DEFAULT 'N',
   `ranking` int(11) DEFAULT '0',
   `replyPrivateUserId` int(11) DEFAULT '0',
@@ -416,14 +416,3 @@ CREATE TABLE `UserInfo` (
 --
 -- Dumping routines for database 'mycozBranch'
 --
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2010-10-03 19:30:49
