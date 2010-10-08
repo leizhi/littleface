@@ -64,16 +64,18 @@ public class AccountAction extends BaseSupport{
 			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread);
 			
 			List forumThreads = new ArrayList<ForumThread>();
-			User user = new User();
+			User user = null;
 			Message message = new Message();
 
 			for (Iterator<?> it = forumThreadList.iterator(); it.hasNext();) {
 				forumThread = (ForumThread) it.next();
 				
+				user = new User();
 				user.setId(forumThread.getUserId());
 				dbProcess.retrieve(user);
 				forumThread.setUser(user);
 				
+				user = new User();
 				user.setId(forumThread.getReplyPrivateUserId());
 				dbProcess.retrieve(user);
 				forumThread.setReplyPrivateUser(user);

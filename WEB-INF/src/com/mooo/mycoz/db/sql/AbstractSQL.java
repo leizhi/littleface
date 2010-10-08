@@ -375,13 +375,17 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 						whereBy.append(field.getName()+" = '"+obj +"' AND ");
 					}
 					
-					//continue;
+					continue;
 				}
 
 				if(obj.getClass().isAssignableFrom(Integer.class)){
 					updateSql.append(field.getName()+" = "+obj +",");
 				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					updateSql.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"',");
+					if(field.getType()==Types.TIMESTAMP){
+						updateSql.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"',");
+					} else {
+						updateSql.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"',");
+					}
 				}else if(obj.getClass().isAssignableFrom(Double.class)){
 					updateSql.append(field.getName()+" = "+obj +",");
 				} else {
@@ -448,6 +452,7 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		}
 
 		if(log.isDebugEnabled())log.debug("updateSql="+updateSql);
+		System.out.println("updateSql="+updateSql);
 
 		return updateSql.toString();
 	}

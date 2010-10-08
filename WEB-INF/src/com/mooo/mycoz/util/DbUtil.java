@@ -12,23 +12,38 @@ import java.util.List;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 public class DbUtil {
-	public static HashMap<String,List<String>> primaryKeys;
 	
-	public static boolean isPrimaryKey(String table,String field){
+    private static Object initLock = new Object();
+    private static HashMap<String,List<String>> primaryKeys;
+
+    public static boolean isPrimaryKey(String table,String field) {
+		if (primaryKeys == null) {
+			synchronized (initLock) {
+				if (primaryKeys == null ) {
+					primaryKeys = new HashMap<String,List<String>>();
+				}
+			}
+		}
+        
+		if(!primaryKeys.containsKey(table)){
+			primaryKeys.put(table, primaryKey(null, table));
+		}
+		
 		try {
 			if (primaryKeys.containsKey(table)) {
-				if (primaryKeys.get(table).contains(field))
+				if (primaryKeys.get(table).contains(field.toLowerCase())){
+					System.out.println("is primaryKey");
 					return true;
+				}
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		
-		//return false;
-		return true;
-	}
+		return false;
+    }
 	
-	public static List<?> primaryKey(Connection connection,String table) {
+	public static List<String> primaryKey(Connection connection,String table) {
 		
 		List<String> retrieveList = null;
 		
@@ -48,7 +63,7 @@ public class DbUtil {
 				isClose = true;
 			}
 
-			result = myConn.getMetaData().getPrimaryKeys(null,null, table.toUpperCase());
+			result = myConn.getMetaData().getPrimaryKeys(null,null, StringUtils.upperToPrefix(table, null));
 			
 			while (result.next()) {
 				retrieveList.add(result.getString(4).toLowerCase());

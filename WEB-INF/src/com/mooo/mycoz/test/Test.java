@@ -60,13 +60,20 @@ public class Test {
 //			
 //			dbAction.add(fi);
 			AccessLog ex = new AccessLog();
-			dbAction.searchAndRetrieveList(ex);
-			List reList = dbAction.searchAndRetrieveList(ex);
-			AccessLog bean;
-			for (Iterator it = reList.iterator(); it.hasNext();) {
-				bean = (AccessLog)it.next();
-				System.out.println("name:"+bean.getStartdate()+" id:"+bean.getId());
-			}
+			ex.setId(5);
+			dbAction.retrieve(ex);
+			
+			ex.setIp("192.168.0.1");
+
+			dbAction.update(ex);
+			
+//			dbAction.searchAndRetrieveList(ex);
+//			List reList = dbAction.searchAndRetrieveList(ex);
+//			AccessLog bean;
+//			for (Iterator it = reList.iterator(); it.hasNext();) {
+//				bean = (AccessLog)it.next();
+//				System.out.println("name:"+bean.getStartdate()+" id:"+bean.getId());
+//			}
 //			ex.setId(new Random().nextDouble() * maxInt);
 //			ex.setName(new Random().nextDouble() * maxInt+"名称");
 //			ex.setCreatedate(new Date());

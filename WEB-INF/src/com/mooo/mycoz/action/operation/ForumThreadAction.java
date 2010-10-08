@@ -16,6 +16,7 @@ import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.Transaction;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class ForumThreadAction extends BaseSupport{
@@ -93,7 +94,10 @@ public class ForumThreadAction extends BaseSupport{
 	}
 	
 	public String createMessage(HttpServletRequest request, HttpServletResponse response) {
-		try {			
+		Transaction tx = new Transaction();
+		try {
+			tx.start();
+			
 			String threadId = (String)request.getParameter("threadId");
 			request.setAttribute("threadId", threadId);
 			if (log.isDebugEnabled()) log.debug("threadId="+threadId);
@@ -113,10 +117,21 @@ public class ForumThreadAction extends BaseSupport{
 			message.setCreationDate(now);
 			message.setModifiedDate(now);
 			message.setThreadId(new Integer(threadId));
-			dbProcess.add(message);
+			dbProcess.add(tx.getConnection(),message);
 			
+			ForumThread forumThread = new ForumThread();
+			forumThread.setId(new Integer(threadId));
+			forumThread.setReplyPrivateUserId(new Integer(userId));
+			forumThread.setModifiedDate(new Date());
+			
+			dbProcess.update(tx.getConnection(),forumThread);
+			
+			tx.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			tx.rollback();
+		} finally{
+			tx.end();
 		}
 		return "listMessage";
 	}
