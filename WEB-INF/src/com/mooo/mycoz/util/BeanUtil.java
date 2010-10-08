@@ -4,24 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.regex.Pattern;
-
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 
 public class BeanUtil {
 	//private static Log log = LogFactory.getLog(BeanUtil.class);
 
-	private static String DATE_FORMAT_1 = "yyyy-MM-dd";
-
-	private static String DATE_FORMAT_2 = "yyyy-MM-dd HH:mm:ss";
-
-	private static String DATE_MATCHER_1 = "^\\d{4}(\\-)\\d{1,2}\\1\\d{1,2}$";
-
-	private static String DATE_MATCHER_2 = "^\\d{4}(\\-)\\d{1,2}\\1\\d{1,2}(\\s([0-1]\\d|[2][0-3])\\:[0-5]\\d\\:[0-5]\\d)$";
-
-	//private static String FORMAT_NAME = "format_";
-	
 	/**
 	 * 动态赋值给系统对象 String Integer Long Float Date 等
 	 * 
@@ -39,7 +25,7 @@ public class BeanUtil {
 	 * @throws ParseException
 	 */
 	public static void bindProperty(Object bean, String propertyName,
-			String value, String format) throws NoSuchMethodException,
+			String value) throws NoSuchMethodException,
 			InvocationTargetException, IllegalAccessException, ParseException,
 			InstantiationException {
 
@@ -69,33 +55,36 @@ public class BeanUtil {
 					new Class[] { String.class });
 			Object valueObj = valueOf.invoke(cl, new Object[] { value });
 			setMethod.invoke(bean, new Object[] { valueObj });
-		} else if (cl == java.util.Date.class || cl == java.sql.Date.class) {
-			java.text.SimpleDateFormat simpleDateFormat = null;
-			String formatChar = null;
-
-			// 判断格式参数存在
-			if (format != null) {
-				formatChar = format;
-				// 分别2个默认的格式化规制
-			} else if (Pattern.compile(DATE_MATCHER_1).matcher(value).find()) {
-				formatChar = DATE_FORMAT_1;
-				// 分别2个默认的格式化规制
-			} else if (Pattern.compile(DATE_MATCHER_2).matcher(value).find()) {
-				formatChar = DATE_FORMAT_2;
-			}
-
-			if (formatChar != null) {
-				simpleDateFormat = new java.text.SimpleDateFormat(formatChar);
-				Date date = simpleDateFormat.parse(value);
-				Object dateObj = cl.newInstance();
-				Method setTime = cl.getMethod("setTime",new Class[] { long.class });
-				setTime.invoke(dateObj, new Object[] { date.getTime() });
-				setMethod.invoke(bean, new Object[] { dateObj });
-			}
 		}
-
 	}
 
+	public static void bindProperty(Object bean, String propertyName,
+			Date date) throws NoSuchMethodException,
+			InvocationTargetException, IllegalAccessException, ParseException,
+			InstantiationException {
+
+		// 得到方法名
+		String funName = StringUtils.getFunName(propertyName);
+		// get方法
+		Method getMethod = bean.getClass().getMethod("get" + funName);
+		// 得到参数类型
+		Class<?> cl = getMethod.getReturnType();
+		// set方法
+		Method setMethod = bean.getClass().getMethod("set" + funName,new Class[] { cl });
+
+		// 当参数为空时直接赋予NULL值
+		if (date == null) {
+			setMethod.invoke(bean, new Object[] { null });
+			return;
+		}
+		
+		if (cl == java.util.Date.class || cl == java.sql.Date.class) {
+			Object dateObj = cl.newInstance();
+			Method setTime = cl.getMethod("setTime", new Class[] { long.class });
+			setTime.invoke(dateObj, new Object[] { date.getTime() });
+			setMethod.invoke(bean, new Object[] { dateObj });
+		}
+	}
 	/**
 	 * 动态赋值给自定义对象 member.city.id = 110 bean = member objName = city propertyName
 	 * = id value = 110
@@ -117,7 +106,7 @@ public class BeanUtil {
 	 * @throws InstantiationException
 	 */
 	public static void bindSubObject(Object bean, String objName,
-			String propertyName, String value, String format)
+			String propertyName, String value)
 			throws NoSuchMethodException, InvocationTargetException,
 			IllegalAccessException, ParseException, InstantiationException {
 		String funName = StringUtils.getFunName(objName);
@@ -141,7 +130,7 @@ public class BeanUtil {
 		}
 
 		// 设置普通系统对象的属性
-		BeanUtil.bindProperty(obj, propertyName, value, format);
+		BeanUtil.bindProperty(obj, propertyName, value);
 		Method setMethod = bean.getClass().getMethod("set" + funName,
 				new Class[] { cls });
 		// 把对象填充

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,15 +65,25 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 
 			rsmd = result.getMetaData();
 			Object bean;
+			int type=0;
 
 			while (result.next()) {
 
 				bean = entity.getClass().newInstance();
 
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
-					BeanUtil.bindProperty(bean,
-							StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
-							result.getString(i), null);
+					type = rsmd.getColumnType(i);
+					
+					if(type == Types.TIMESTAMP){
+						BeanUtil.bindProperty(bean,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getTimestamp(i));
+					}else {
+						BeanUtil.bindProperty(bean,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getString(i));	
+					}
+
 				}
 				retrieveList.add(bean);
 			}
@@ -321,7 +332,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 					BeanUtil.bindProperty(entity,
 							StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
-							result.getString(i), null);
+							result.getString(i));
 				}
 			}
 			// addCache(doSql, retrieveList);

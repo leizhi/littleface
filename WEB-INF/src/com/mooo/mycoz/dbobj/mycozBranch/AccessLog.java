@@ -13,36 +13,28 @@ public class AccessLog {
 	String ip;
 	Date startdate;
 	Date enddate;
-
 	public Integer getId() {
-		return id;
+	return id;
 	}
-
 	public void setId(Integer id) {
-		this.id = id;
+	 this.id = id;
 	}
-
 	public String getIp() {
-		return ip;
+	return ip;
 	}
-
 	public void setIp(String ip) {
-		this.ip = ip;
+	 this.ip = ip;
 	}
-
 	public Date getStartdate() {
-		return startdate;
+	return startdate;
 	}
-
 	public void setStartdate(Date startdate) {
-		this.startdate = startdate;
+	 this.startdate = startdate;
 	}
-
 	public Date getEnddate() {
-		return enddate;
+	return enddate;
 	}
-
 	public void setEnddate(Date enddate) {
-		this.enddate = enddate;
+	 this.enddate = enddate;
 	}
 }

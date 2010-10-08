@@ -77,7 +77,7 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 						
 						if(value.equals(catalog+"."+table)){
 							column = rsmd.getColumnName(i).toLowerCase();
-							BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(column),rs.getString(i), null);
+							BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(column),rs.getString(i));
 						}
 					}
 					re.put(key, bean);

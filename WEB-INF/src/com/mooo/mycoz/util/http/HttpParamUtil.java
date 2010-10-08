@@ -18,8 +18,6 @@ import org.apache.commons.logging.LogFactory;
 public class HttpParamUtil {
 	private static Log log = LogFactory.getLog(HttpParamUtil.class);
 
-	private static String FORMAT_NAME = "format_";
-
 	/**
 	 * 动态从request.getParameter里绑定javaBean属性值.
 	 * 
@@ -62,9 +60,9 @@ public class HttpParamUtil {
 					int start = name.indexOf(".");
 					String objName = name.substring(0, start);
 					String propertyName = name.substring(start + 1, name.length());
-					BeanUtil.bindSubObject(bean, objName, propertyName, value, request.getParameter(FORMAT_NAME + name));
+					BeanUtil.bindSubObject(bean, objName, propertyName, value);
 				} else {
-					BeanUtil.bindProperty(bean, name, value, request.getParameter(FORMAT_NAME + name));
+					BeanUtil.bindProperty(bean, name, value);
 				}
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace(); // To change body of catch statement use

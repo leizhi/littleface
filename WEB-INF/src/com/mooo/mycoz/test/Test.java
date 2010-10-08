@@ -20,6 +20,7 @@ import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.MysqlSQL;
 import com.mooo.mycoz.db.sql.SQLProcess;
 import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
+import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.Example;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
@@ -31,25 +32,25 @@ public class Test {
 
 	public static void main(String[] args) {
 		
-		String value=null;
-		String str="RefjobID";
-		Pattern p = Pattern.compile("[A-Z]*");
-		Matcher m = p.matcher(str);
-		
-		while(m.find()){
-			value = m.group();
-			System.out.println("value="+value);
-			//result += prefix+m.group().toLowerCase();
-		}
+//		String value=null;
+//		String str="RefjobID";
+//		Pattern p = Pattern.compile("[A-Z]*");
+//		Matcher m = p.matcher(str);
+//		
+//		while(m.find()){
+//			value = m.group();
+//			System.out.println("value="+value);
+//			//result += prefix+m.group().toLowerCase();
+//		}
 		
 		//System.out.println("StringUtils.getCatalog ="+StringUtils.getCatalog(BusRemotes.class,1));
 		//DbUtil.type(null,"mycozBranch","FileInfo","name");
 
-//		long maxLong = 9223372036854775807L;
-//		int maxInt = 2147483647;
-//
-//		try {
-//			DbProcess dbAction = DbFactory.getInstance();
+		long maxLong = 9223372036854775807L;
+		int maxInt = 2147483647;
+
+		try {
+			DbProcess dbAction = DbFactory.getInstance();
 //			FileInfo fi = new FileInfo();
 //			fi.setId(3);
 //			fi.setTypeid(4);
@@ -58,19 +59,24 @@ public class Test {
 //			fi.setFilepath("filePathd");
 //			
 //			dbAction.add(fi);
-	/*		
-			Example ex = new Example();
-			ex.setId(new Random().nextDouble() * maxInt);
-			ex.setName(new Random().nextDouble() * maxInt+"名称");
-			ex.setCreatedate(new Date());
-			dbAction.add(ex);
-*/
+			AccessLog ex = new AccessLog();
+			dbAction.searchAndRetrieveList(ex);
+			List reList = dbAction.searchAndRetrieveList(ex);
+			AccessLog bean;
+			for (Iterator it = reList.iterator(); it.hasNext();) {
+				bean = (AccessLog)it.next();
+				System.out.println("name:"+bean.getStartdate()+" id:"+bean.getId());
+			}
+//			ex.setId(new Random().nextDouble() * maxInt);
+//			ex.setName(new Random().nextDouble() * maxInt+"名称");
+//			ex.setCreatedate(new Date());
+//			dbAction.add(ex);
 //			ForumThread forumThread = new ForumThread();
 //			System.out.println("count="+dbAction.count(forumThread));
 			
-//			List reList = dbAction.searchAndRetrieveList(fi);
+//			List reList = dbAction.searchAndRetrieveList(ex);
 //			System.out.println("sql:");
-//			System.out.println("count="+dbAction.count(fi));
+//			System.out.println("count="+dbAction.count(ex));
 //
 //			Iterator it = reList.iterator();
 //			FileInfo bean;
@@ -78,9 +84,9 @@ public class Test {
 //				bean = (FileInfo) it.next();
 //				System.out.println("name:"+bean.getName()+" id:"+bean.getId());
 //			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		/*
 		int maxInt = 2147483647;

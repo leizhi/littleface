@@ -73,7 +73,7 @@ public class DbOracle extends OracleSQL implements DbProcess{
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 					BeanUtil.bindProperty(bean,
 							StringUtils.prefixToUpper(rsmd.getColumnName(i)),
-							result.getString(i), null);
+							result.getString(i));
 				}
 				retrieveList.add(bean);
 			}
@@ -325,7 +325,7 @@ public class DbOracle extends OracleSQL implements DbProcess{
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
 					BeanUtil.bindProperty(entity,
 							StringUtils.prefixToUpper(rsmd.getColumnName(i)),
-							result.getString(i), null);
+							result.getString(i));
 				}
 				//retrieveList.add(bean);
 			}
