@@ -2,7 +2,6 @@
 body {
 	margin:0;
 	padding:0;
-	background: #ffffff;
 	font-size:12px;
 	color: #000000;
 	text-align: center;
@@ -128,5 +127,5 @@ li {
 }
 
 .mbody {
-	background: #095f77;
+	background: #edeee8;
 	}

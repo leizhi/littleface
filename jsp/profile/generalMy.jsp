@@ -8,12 +8,12 @@
 <link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
 <style type="text/css">
 .title {
-background-color:#464646;
-color:blue;
+background-color:#e3e9ff;
+color:#000;
 }
 li {
-background-color:#c0c0c0;
-color:blue;
+background-color: #edf0f9;
+color:#000;
 }
 
 </style>
@@ -57,7 +57,7 @@ function docommit(url) {
 <jsp:param value="Search Account" name="title"/>
 </jsp:include>
 
-<div style="float: left;width: 49%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+<div style="float: left;width: 49%;text-align: left;background-color: #617daf;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
 <ul style="width: 100%;margin-left:0px;">
 <li class="title">
@@ -72,7 +72,7 @@ function docommit(url) {
 <div style="clear: both;"></div>
 </li>
 
-<li><span><fmt:message key="Name"/></span><span></span></li>
+<li><span><fmt:message key="Name"/></span><span><c:out value="${user.name }"/></span></li>
 <li><span><fmt:message key="Sex"/></span><span></span></li>
 <li><span><fmt:message key="Height"/></span><span></span></li>
 <li><span><fmt:message key="Weight"/></span><span></span></li>
@@ -143,7 +143,7 @@ function docommit(url) {
 
 </div>
 
-<div style="float: left;width: 50%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+<div style="float: left;width: 50%;text-align: left;background-color: #fcfdfe;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
 
 <ul style="width: 100%;margin-left:0px;">
 <li class="title">

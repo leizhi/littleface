@@ -38,7 +38,7 @@
 
 <form method="post" action="${processLogin}">
 <div style="position:absolute;top:50%;left:50%;width:500px;height:200px; margin-top:-150px; margin-left:-250px;
-border:1px #999 solid; background:#CEE7FF;">
+border:1px #999 solid; background:#c3d9ff;">
 
 <div style="width: 100%;">
 <div style="float: left;width: 40%;text-align: right;">

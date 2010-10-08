@@ -11,17 +11,12 @@
 <link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
 <style type="text/css">
 .title {
-background-color:#464646;
-color:blue;
+background-color: #dde5ff;
+color:#000;
 }
-li {
-background-color:#c0c0c0;
-color:blue;
-}
-
 </style>
 </head>
-<body class="mbody">
+<body>
 <div>
 online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 

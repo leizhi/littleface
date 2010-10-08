@@ -9,7 +9,7 @@
 <style type="text/css">
 .title {
 background-color:#464646;
-color:blue;
+color:#ffffff;
 }
 li {
 background-color:#c0c0c0;
@@ -72,7 +72,7 @@ function docommit(url) {
 <jsp:include page="../incl/g_head.jsp">
 <jsp:param value="List Forum" name="title"/>
 </jsp:include>
-<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#e8f3fd id=small>
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#fcfdfe id=small>
 <tr>
 <td><fmt:message key="Title"/></td>
 <td><fmt:message key="Author"/></td>

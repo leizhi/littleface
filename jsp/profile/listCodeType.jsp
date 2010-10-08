@@ -109,8 +109,8 @@ function edit(url){
 <jsp:param value="list" name="title"/>
 </jsp:include>
 
-<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
-<tr bgcolor="#649caa">
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#edf0f9 id=small>
+<tr bgcolor="#e3e9ff">
 <td width="10px"> <input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></td>
 <td><fmt:message key="Name"/></td>
 <td><fmt:message key="Category"/></td>

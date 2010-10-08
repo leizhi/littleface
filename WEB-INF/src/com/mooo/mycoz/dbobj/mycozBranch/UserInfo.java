@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class UserInfo {
 	Integer id;
-	Integer userid;
-	Integer sexid;
+	Integer userId;
+	Integer sexId;
 	Double height;
-	Integer heightunitid;
+	Integer heightUnitId;
 	Double weight;
-	Integer weightunitid;
+	Integer weightUnitId;
 	Date birthday;
-	Integer careerid;
-	Integer educationid;
-	Integer marriedid;
+	Integer careerId;
+	Integer educationId;
+	Integer marriedId;
 	String qq;
 	String secret;
 	public Integer getId() {
@@ -22,17 +22,17 @@ public class UserInfo {
 	public void setId(Integer id) {
 	 this.id = id;
 	}
-	public Integer getUserid() {
-	return userid;
+	public Integer getUserId() {
+	return userId;
 	}
-	public void setUserid(Integer userid) {
-	 this.userid = userid;
+	public void setUserId(Integer userId) {
+	 this.userId = userId;
 	}
-	public Integer getSexid() {
-	return sexid;
+	public Integer getSexId() {
+	return sexId;
 	}
-	public void setSexid(Integer sexid) {
-	 this.sexid = sexid;
+	public void setSexId(Integer sexId) {
+	 this.sexId = sexId;
 	}
 	public Double getHeight() {
 	return height;
@@ -40,11 +40,11 @@ public class UserInfo {
 	public void setHeight(Double height) {
 	 this.height = height;
 	}
-	public Integer getHeightunitid() {
-	return heightunitid;
+	public Integer getHeightUnitId() {
+	return heightUnitId;
 	}
-	public void setHeightunitid(Integer heightunitid) {
-	 this.heightunitid = heightunitid;
+	public void setHeightUnitId(Integer heightUnitId) {
+	 this.heightUnitId = heightUnitId;
 	}
 	public Double getWeight() {
 	return weight;
@@ -52,11 +52,11 @@ public class UserInfo {
 	public void setWeight(Double weight) {
 	 this.weight = weight;
 	}
-	public Integer getWeightunitid() {
-	return weightunitid;
+	public Integer getWeightUnitId() {
+	return weightUnitId;
 	}
-	public void setWeightunitid(Integer weightunitid) {
-	 this.weightunitid = weightunitid;
+	public void setWeightUnitId(Integer weightUnitId) {
+	 this.weightUnitId = weightUnitId;
 	}
 	public Date getBirthday() {
 	return birthday;
@@ -64,23 +64,23 @@ public class UserInfo {
 	public void setBirthday(Date birthday) {
 	 this.birthday = birthday;
 	}
-	public Integer getCareerid() {
-	return careerid;
+	public Integer getCareerId() {
+	return careerId;
 	}
-	public void setCareerid(Integer careerid) {
-	 this.careerid = careerid;
+	public void setCareerId(Integer careerId) {
+	 this.careerId = careerId;
 	}
-	public Integer getEducationid() {
-	return educationid;
+	public Integer getEducationId() {
+	return educationId;
 	}
-	public void setEducationid(Integer educationid) {
-	 this.educationid = educationid;
+	public void setEducationId(Integer educationId) {
+	 this.educationId = educationId;
 	}
-	public Integer getMarriedid() {
-	return marriedid;
+	public Integer getMarriedId() {
+	return marriedId;
 	}
-	public void setMarriedid(Integer marriedid) {
-	 this.marriedid = marriedid;
+	public void setMarriedId(Integer marriedId) {
+	 this.marriedId = marriedId;
 	}
 	public String getQq() {
 	return qq;

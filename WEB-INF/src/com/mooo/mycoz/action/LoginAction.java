@@ -11,9 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
+import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
+import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.StringUtils;
+import com.mooo.mycoz.util.Transaction;
 import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LoginAction extends BaseSupport {
@@ -107,9 +110,11 @@ public class LoginAction extends BaseSupport {
 		return "success";
 	}
 
-	public String processRegister(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String processRegister(HttpServletRequest request,HttpServletResponse response) {
+		Transaction tx = new Transaction();
 		try {
+			tx.start();
+
 			if (log.isDebugEnabled())log.debug("promptRegister");
 			String value="";
 			
@@ -130,12 +135,26 @@ public class LoginAction extends BaseSupport {
 			}
 			
 			user.setPassword(StringUtils.hash(user.getPassword()));
-			dbProcess.add(user);
+			dbProcess.add(tx.getConnection(),user);
 			
-		} catch (Exception e) {
-			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
-			return "promptRegister";
-		}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(IDGenerator.getNextID("UserInfo").intValue());
+			userInfo.setUserId(user.getId());
+			dbProcess.add(tx.getConnection(),userInfo);
+			
+			AddressBook addressBook = new AddressBook();
+			addressBook.setId(IDGenerator.getNextID("AddressBook").intValue());
+			addressBook.setUserId(user.getId());
+			dbProcess.add(tx.getConnection(),addressBook);
+
+			tx.commit();
+	} catch (Exception e) {
+		if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
+		tx.rollback();
+		return "promptRegister";
+	} finally {
+		tx.end();
+	}
 		return "success";
 	}
 	

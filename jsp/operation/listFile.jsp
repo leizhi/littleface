@@ -78,8 +78,8 @@ function docommit(url) {
 <jsp:param value="List File" name="title"/>
 </jsp:include>
 
-<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
-<tr bgcolor="#649caa">
+<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#edf0f9 id=small>
+<tr bgcolor="#e3e9ff">
 <td><fmt:message key="ID"/></td>
 <td><fmt:message key="Type"/></td>
 <td><fmt:message key="Name"/></td>

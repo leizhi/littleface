@@ -230,7 +230,9 @@ public class BeanTools {
 		//bd.build("mycozShared","CodeType");
 		//bd.build("mycozBranch","ForumThread");
 		//bd.build("mycozBranch","Message");
-		bd.build("mycozBranch","AccessLog");
+		//bd.build("mycozBranch","AccessLog");
+		//bd.build("mycozBranch","UserInfo");
+		bd.build("mycozBranch","AddressBook");
 
 		//bd.buildInsert("buffer_traffic");
 

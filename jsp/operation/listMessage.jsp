@@ -37,22 +37,22 @@ function docommit(url) {
 
 <input type="hidden" name="threadId" value="${threadId }"/>
 
-<div style="width: 100%;background: #649caa;">
+<div style="width: 100%;background: #edf0f9;">
 
-<div style="float: left;width: 20%;background-color: #99b1cc;">
+<div style="float: left;width: 20%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
 ${forumThread.user.name }
 </div>
 
-<div style="float: right;width: 80%;background-color: #99b1cc;">
+<div style="float: right;width: 80%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
 ${forumThread.subject }  <fmt:formatDate value="${forumThread.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/>
 </div>
 <div style="clear: both;"></div>
 
-<div style="float: left;width: 20%;">
+<div style="float: left;width: 20%;height:auto !important; height:150px; min-height:150px;">
 ${forumThread.user.name }
 </div>
 
-<div style="float: right;width: 80%;">
+<div style="float: right;width: 80%;height:auto !important; height:150px; min-height:150px;">
 ${forumThread.body }
 </div>
 <div style="clear: both;"></div>
@@ -60,13 +60,13 @@ ${forumThread.body }
 </div>
 
 <c:forEach var="item" items="${messages}" varStatus="status">
-<div style="width: 100%;background: #649caa;">
+<div style="width: 100%;background: #edf0f9;">
 
-<div style="float: left;width: 20%;background-color: #99b1cc;">
+<div style="float: left;width: 20%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
 ${item.user.name }
 </div>
 
-<div style="float: right;width: 80%;background-color: #99b1cc;">
+<div style="float: right;width: 80%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
 <c:out value="${item.subject }"/>
 <fmt:formatDate value="${item.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/>
 <a href=""><fmt:message key="Reply"/></a>
@@ -74,11 +74,11 @@ ${item.user.name }
 
 <div style="clear: both;"></div>
 
-<div style="float: left;width: 20%;">
+<div style="float: left;width: 20%;height:auto !important; height:150px; min-height:150px;">
 ${item.user.name }
 </div>
 
-<div style="float: right;width: 80%;">
+<div style="float: right;width: 80%;height:auto !important; height:150px; min-height:150px;">
 ${item.body }
 </div>
 <div style="clear: both;"></div>
