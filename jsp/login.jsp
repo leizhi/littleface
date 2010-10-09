@@ -8,8 +8,8 @@
 </c:if>
 
 <c:if test="${empty param.locale}">
-	<fmt:setLocale value="${locale}" scope="session" />
-	<fmt:setTimeZone value="${locale}" scope="session" />
+	<fmt:setLocale value="${header.locale}" scope="session" />
+	<fmt:setTimeZone value="${header.locale}" scope="session" />
 </c:if>
 
 <fmt:bundle basename="MessageBundle">

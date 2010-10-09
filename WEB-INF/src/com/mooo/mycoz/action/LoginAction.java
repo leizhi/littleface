@@ -36,7 +36,12 @@ public class LoginAction extends BaseSupport {
 			locales[0] = new Locale("zh","CN");
 			locales[1] = new Locale("en","US");
 
-			Locale locale = Locale.getDefault();
+			Locale locale = request.getLocale(); // Locale.getDefault();
+			
+//			if(locale == null){
+//				locale = Locale.getDefault();
+//			}
+			
 			Object cobj = session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
 
 			if (cobj != null && cobj instanceof Locale) {
