@@ -7,11 +7,6 @@
 	<fmt:setTimeZone value="${param.locale}" scope="session" />
 </c:if>
 
-<c:if test="${empty param.locale}">
-	<fmt:setLocale value="${header.locale}" scope="session" />
-	<fmt:setTimeZone value="${header.locale}" scope="session" />
-</c:if>
-
 <fmt:bundle basename="MessageBundle">
 <html>
 <head>
@@ -51,9 +46,6 @@ border:1px #999 solid; background:#c3d9ff;">
 				<c:forEach var="items" items="${locales}" varStatus="s">
 					<option value="${items}"
 
-					<c:if test="${empty param.locale and items==header.locale}">
-						selected="selected"
-					</c:if>
 					<c:if test="${!empty param.locale and items==param.locale}">
 						selected="selected"
 					</c:if>					

@@ -1,5 +1,7 @@
 package com.mooo.mycoz.action;
 
+import java.util.Locale;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -29,6 +31,9 @@ public class IndexAction  extends BaseSupport {
 				return "promptLogin";
 			}
 			
+			Locale locale = request.getLocale();
+			request.setAttribute("locale", locale);
+
 			if (log.isDebugEnabled()) log.debug("promptIndexStateRun OK: ");
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
