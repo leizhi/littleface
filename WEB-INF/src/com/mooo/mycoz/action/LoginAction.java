@@ -31,17 +31,18 @@ public class LoginAction extends BaseSupport {
 			com.mooo.mycoz.util.SessionCounter.put(request.getSession().getId());
 			session.setAttribute(request.getSession().getId(), "Guest");
 
+			//Locale[] locales = java.text.NumberFormat.getAvailableLocales();
+			Locale[] locales = new Locale[2];
+			locales[0] = new Locale("zh","CN");
+			locales[1] = new Locale("en","US");
+
 			Locale locale = Locale.getDefault();
-			//if (log.isDebugEnabled()) log.debug("request locale: " + request.getParameter("locale"));
-	
 			Object cobj = session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
-			//if (log.isDebugEnabled()) log.debug("fmt locale: " + cobj);
 
 			if (cobj != null && cobj instanceof Locale) {
 				locale = (Locale) cobj;
 			}
-
-			Locale[] locales = java.text.NumberFormat.getAvailableLocales();
+			
 			request.setAttribute("locales", locales);
 			request.setAttribute("locale", locale);
 
