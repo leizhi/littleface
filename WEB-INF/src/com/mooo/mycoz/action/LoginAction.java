@@ -22,7 +22,7 @@ import com.mooo.mycoz.util.http.HttpParamUtil;
 public class LoginAction extends BaseSupport {
 
 	private static Log log = LogFactory.getLog(LoginAction.class);
-
+	
 	public String promptLogin(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
@@ -35,21 +35,7 @@ public class LoginAction extends BaseSupport {
 			Locale[] locales = new Locale[2];
 			locales[0] = new Locale("zh","CN");
 			locales[1] = new Locale("en","US");
-
-			Locale locale = request.getLocale(); // Locale.getDefault();
-			
-//			if(locale == null){
-//				locale = Locale.getDefault();
-//			}
-			
-			Object cobj = session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
-
-			if (cobj != null && cobj instanceof Locale) {
-				locale = (Locale) cobj;
-			}
-			
 			request.setAttribute("locales", locales);
-			request.setAttribute("locale", locale);
 
 			if (log.isDebugEnabled()) log.debug("IP:"+getClinetIp(request));
 
@@ -66,8 +52,7 @@ public class LoginAction extends BaseSupport {
 		return "success";
 	}
 
-	public String processLogin(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String processLogin(HttpServletRequest request,HttpServletResponse response) {
 		try {
 			
 			User user = new User();

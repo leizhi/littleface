@@ -1,3 +1,5 @@
+<%@ page import="java.util.*" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ include file="/jsp/incl/static.inc" %>
 <!DOCTYPE form PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -6,7 +8,19 @@
 	<fmt:setLocale value="${param.locale}" scope="session" />
 	<fmt:setTimeZone value="${param.locale}" scope="session" />
 </c:if>
+<c:if test="${empty param.locale}">
+	<fmt:setLocale value="${header.locale}" scope="session" />
+	<fmt:setTimeZone value="${header.locale}" scope="session" />
+</c:if>
+<%
+Locale locale = Locale.getDefault();
+Object cobj = session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
+if (cobj != null && cobj instanceof Locale) {
+	locale = (Locale) cobj;
+}
 
+Locale.setDefault(locale);
+%>
 <fmt:bundle basename="MessageBundle">
 <html>
 <head>
@@ -46,13 +60,16 @@ border:1px #999 solid; background:#c3d9ff;">
 				<c:forEach var="items" items="${locales}" varStatus="s">
 					<option value="${items}"
 
+					<c:if test="${empty param.locale and items==header.locale}">
+						selected="selected"
+					</c:if>
 					<c:if test="${!empty param.locale and items==param.locale}">
 						selected="selected"
-					</c:if>					
+					</c:if>
 						>
 					${items.displayName}
 					</option>
-				</c:forEach>
+				--</c:forEach>
 			</select>
 </div>
 <div style="clear: both;"></div>
