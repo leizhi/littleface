@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
+<script type="text/javascript" src="jsp/js/util.js"></script>
+<script type="text/javascript" src="jsp/js/tw-sack.js" ></script>
 
 <style type="text/css">
 .box {
@@ -55,6 +57,48 @@
 function docommit(url) {
 	document.forms[0].action=url;
 	document.forms[0].submit();
+}
+</script>
+
+<script type="text/javascript">
+var ajax = new sack();
+
+function whenLoading(){
+	var e = document.getElementById('replaceme'); 
+	e.innerHTML = "<p>Sending Data...</p>";
+}
+
+function whenLoaded(){
+	var e = document.getElementById('replaceme'); 
+	e.innerHTML = "<p>Data Sent...</p>";
+}
+
+function whenInteractive(){
+	var e = document.getElementById('replaceme'); 
+	e.innerHTML = "<p>getting data...</p>";
+}
+
+function whenCompleted(){
+	var e = document.getElementById('sackdata'); 
+	if (ajax.responseStatus){
+		var string = "<p>Status Code: " + ajax.responseStatus[0] + "</p><p>Status Message: " + ajax.responseStatus[1] + "</p><p>URLString Sent: " + ajax.URLString + "</p>";
+	} else {
+		var string = "<p>URLString Sent: " + ajax.URLString + "</p>";
+	}
+	e.innerHTML = string;
+}
+
+function doit(){
+	var form = document.getElementById('form');
+	ajax.setVar("myTextBox", form.mytext.value); // recomended method of setting data to be parsed.
+	ajax.requestFile = "sackdemo.php";
+	ajax.method = form.method.value;
+	ajax.element = 'replaceme';
+	ajax.onLoading = whenLoading;
+	ajax.onLoaded = whenLoaded; 
+	ajax.onInteractive = whenInteractive;
+	ajax.onCompletion = whenCompleted;
+	ajax.runAJAX();
 }
 </script>
 </head>
