@@ -6,16 +6,49 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
+
 <style type="text/css">
-.title {
-background-color:#e3e9ff;
-color:#000;
-}
-li {
-background-color: #edf0f9;
-color:#000;
+.box {
+	margin: 0;
+	padding: 0;
+	width: 49%;
+	float: left;
+	text-align: left;
+	background-color: edf0f9;
+	color: 000000;
+	font-size: 12px;
+	border: 1px solid #ffffff;
 }
 
+.box ul {
+	width: 100%;
+}
+
+.box li {
+	background-color: #edf0f9;
+	float: left;
+	display: block;
+}
+
+.box ul .tl {
+	text-align:center;
+	background-color:e3e9ff;
+	width: 20%;
+}
+
+.box ul .tr {
+	text-align:right;
+	background-color:e3e9ff;
+	width: 80%;
+}
+
+.box ul .left {
+	text-align:center;
+	width: 20%;
+}
+.box ul .right {
+	width: 80%;
+}
 </style>
 
 <script type="text/javascript">
@@ -56,128 +89,133 @@ function docommit(url) {
 <jsp:include page="../incl/g_head.jsp">
 <jsp:param value="Search Account" name="title"/>
 </jsp:include>
+	
+<div class="box">
+	<ul>
+		<li class="tl"><fmt:message key="General"/></li>
+		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
+		<li style="clear: both;"/>
+				
+		<li class="left"><fmt:message key="Name" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
 
-<div style="float: left;width: 49%;text-align: left;background-color: #617daf;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
-
-<ul style="width: 100%;margin-left:0px;">
-<li class="title">
-
-<div style="float: left;width: 59%;text-align: left;">
-<span><fmt:message key="General"/></span>
+		<li class="left"><fmt:message key="Sex" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Height" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Weight" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Birthday" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Career" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Education" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Married" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="QQ" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Email" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Secret" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+	</ul>
 </div>
-<div style="float: left;width: 40%;text-align: right;">
-<span><a href=""><fmt:message key="Edit"/></a></span>
 
-</div>
-<div style="clear: both;"></div>
-</li>
+<div class="box">
 
-<li><span><fmt:message key="Name"/></span><span><c:out value="${user.name }"/></span></li>
-<li><span><fmt:message key="Sex"/></span><span></span></li>
-<li><span><fmt:message key="Height"/></span><span></span></li>
-<li><span><fmt:message key="Weight"/></span><span></span></li>
-<li><span><fmt:message key="Birthday"/></span><span></span></li>
-<li><span><fmt:message key="Career"/></span><span></span></li>
-<li><span><fmt:message key="Education"/></span><span></span></li>
-<li><span><fmt:message key="Married"/></span><span></span></li>
-<li><span><fmt:message key="QQ"/></span><span></span></li>
-<li><span><fmt:message key="Email"/></span><span></span></li>
-<li><span><fmt:message key="Secret"/></span><span></span></li>
-</ul>
+	<ul>
+		<li class="tl"><fmt:message key="Address"/></li>
+		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
+		<li style="clear: both;"/>
+				
+		<li class="left"><fmt:message key="Country" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
 
-</div>
-
-<div style="float: left;width: 50%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
-
-<ul style="width: 100%;margin-left:0px;">
-<li class="title">
-
-<div style="float: left;width: 59%;text-align: left;">
-<span><fmt:message key="Address"/></span>
-</div>
-<div style="float: left;width: 40%;text-align: right;">
-<span><a href=""><fmt:message key="Edit"/></a></span>
-
-</div>
-<div style="clear: both;"></div>
-</li>
-
-<li><span><fmt:message key="Country"/></span><span></span></li>
-<li><span><fmt:message key="City"/></span><span></span></li>
-<li><span><fmt:message key="PostalCode"/></span><span></span></li>
-<li><span><fmt:message key="Address"/></span><span></span></li>
-<li><span><fmt:message key="Tel"/></span><span></span></li>
-<li><span><fmt:message key="MobileNo"/></span><span></span></li>
-</ul>
-
+		<li class="left"><fmt:message key="City" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="PostalCode" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Address" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="Tel" /></li>
+		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li style="clear: both;"/>
+		
+		<li class="left"><fmt:message key="MobileNo" /></li>
+		<li class="right"><c:out value="${user.name }" /></li>
+		<li style="clear: both;"/>
+	</ul>
 </div>
 <div style="clear: both;"></div>
 <!-- one row end -->
 
-<div style="float: left;width: 49%;text-align: left;background-color: #bbbccc;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+<div class="box">
 
-<ul style="width: 100%;margin-left:0px;">
-<li class="title">
-
-<div style="float: left;width: 59%;text-align: left;">
-<span><fmt:message key="Images"/></span>
-</div>
-<div style="float: left;width: 40%;text-align: right;">
-<span><a href=""><fmt:message key="Edit"/></a></span>
-
-</div>
-<div style="clear: both;"></div>
-</li>
-<li><img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-<img width="80px" height="60px" src=""/>
-</li>
-</ul>
-
+	<ul>
+		<li class="tl"><fmt:message key="Images"/></li>
+		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
+		<li style="clear: both;"/>
+				
+		<li>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+			<img width="80px" height="60px" src=""/>
+		</li>
+	</ul>
 </div>
 
-<div style="float: left;width: 50%;text-align: left;background-color: #fcfdfe;color: #add2da;font-size: 12px;border: 1px solid #ffffff;">
+<div class="box">
 
-<ul style="width: 100%;margin-left:0px;">
-<li class="title">
-
-<div style="float: left;width: 59%;text-align: left;">
-<span><fmt:message key="Friend"/></span>
-</div>
-<div style="float: left;width: 40%;text-align: right;">
-<span><a href=""><fmt:message key="Edit"/></a></span>
-
-</div>
-<div style="clear: both;"></div>
-</li>
-
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-<li><span>abc@163.com</span></li>
-</ul>
-
+	<ul>
+		<li class="tl"><fmt:message key="Friend"/></li>
+		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
+		<li style="clear: both;"/>
+				
+		<li>abc@163.com</li>
+		<li>abc@163.com</li>
+		<li>abc@163.com</li>
+		<li>abc@163.com</li>
+		<li>abc@163.com</li>
+	</ul>
 </div>
 <div style="clear: both;"></div>
 
 <jsp:include page="../incl/g_tail.jsp" />
-
+ 
 <jsp:include page="../incl/g_footer.jsp" />
 </form>
 </fmt:bundle>
