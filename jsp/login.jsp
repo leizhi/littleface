@@ -8,9 +8,10 @@
 	<fmt:setLocale value="${param.locale}" scope="session" />
 	<fmt:setTimeZone value="${param.locale}" scope="session" />
 </c:if>
+
 <c:if test="${empty param.locale}">
-	<fmt:setLocale value="${header.locale}" scope="session" />
-	<fmt:setTimeZone value="${header.locale}" scope="session" />
+	<fmt:setLocale value="zh_CN" scope="session" />
+	<fmt:setTimeZone value="zh_CN" scope="session" />
 </c:if>
 <%
 Locale locale = Locale.getDefault();
@@ -60,7 +61,7 @@ border:1px #999 solid; background:#c3d9ff;">
 				<c:forEach var="items" items="${locales}" varStatus="s">
 					<option value="${items}"
 
-					<c:if test="${empty param.locale and items==header.locale}">
+					<c:if test="${empty param.locale and items=='zh_CN'}">
 						selected="selected"
 					</c:if>
 					<c:if test="${!empty param.locale and items==param.locale}">
