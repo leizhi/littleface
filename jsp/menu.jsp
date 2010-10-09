@@ -53,15 +53,15 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 	<c:param name="subbar">0</c:param>
 </c:url>
 
-<c:url value="/My.do" var="passwordMy">
-	<c:param name="method">password</c:param>
+<c:url value="/My.do" var="promptChangePassword">
+	<c:param name="method">promptChangePassword</c:param>
 	<c:param name="bar">2</c:param>
 	<c:param name="subbar">1</c:param>
 </c:url>
 <ul>
 <li class="title"><fmt:message key="Account"/></li>
 <li><a href="${generalMy}" target="main"><fmt:message key="General"/></a></li>
-<li><a href="${passwordMy}" target="main"><fmt:message key="Password"/></a></li>
+<li><a href="${promptChangePassword}" target="main"><fmt:message key="Password"/></a></li>
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
 </div>

@@ -82,7 +82,7 @@
 		<action	name="My" default="search"
 			class="com.mooo.mycoz.action.profile.MyAction">
 			<result name="general">/jsp/profile/generalMy.jsp</result>
-			<result name="password">/jsp/profile/passwordMy.jsp</result>
+			<result name="promptChangePassword">/jsp/profile/changePassword.jsp</result>
 		</action>
 		
 		<action	name="ForumThread" default="listMessage"

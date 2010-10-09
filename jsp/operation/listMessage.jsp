@@ -6,17 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
-<style type="text/css">
-.title {
-background-color:#464646;
-color:blue;
-}
-li {
-background-color:#c0c0c0;
-color:blue;
-}
-
-</style>
 
 <script type="text/javascript">
 function docommit(url) {
