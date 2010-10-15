@@ -92,7 +92,7 @@ function docommit(url) {
 <td><c:out value="${item.user.name }"/></td>
 <td><c:out value="${item.reply }"/></td>
 <td><fmt:formatDate value="${item.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/> </td>
-<td><c:out value="${item.replyPrivateUser.name }"/> <fmt:formatDate value="${item.modifiedDate }" pattern="yyyy/MM/dd hh:mm:ss"/></td>
+<td><fmt:formatDate value="${item.modifiedDate }" pattern="yyyy/MM/dd hh:mm:ss"/> By <c:out value="${item.replyPrivateUser.name }"/> </td>
 </tr>
 </c:forEach>
 
