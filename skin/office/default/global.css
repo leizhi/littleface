@@ -1,0 +1,124 @@
+/* * {
+	margin: 0px auto;
+	padding: 0px;
+	border: 0px;
+}
+*/
+html,body,#container {
+	margin: 0px auto;
+	padding: 0px;
+	border: 0px;
+	width: 100%;
+	height: 100%;
+	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
+	font-size: 12px;
+	color: #000000;
+	text-align: center;
+	background-color: #ffffff;
+}
+img{
+	border:0px;
+}
+.clear {
+	clear: both; /* left right*/
+}
+
+input,select {
+	background-color: transparent;
+	color: #005AA7;
+	text-align: left;
+}
+
+label {
+	background-color: transparent;
+	color: #005AA7;
+}
+
+a:link {
+	color: #5eb2c1;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #5eb2c1;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #557b82;
+	text-decoration: underline;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	border: 1px solid #005AA7;
+	width: 80%;
+}
+
+span {
+	border: 0px solid #005AA7;
+}
+
+.line {
+	width: 80%;
+	height: 2px;
+	//background-color: Blue;
+	margin-top: 10px;
+}
+
+.display {
+	display: table;
+	overflow: hidden;
+	//position: relative;
+	width: 100%;
+	height: 100%;
+	color: #005AA7;
+}
+
+table,td,th {
+	border: 1px #000 solid;
+	border: 0;
+	border-collapse: collapse;
+	padding: 2px;
+	text-align: left;
+	nowrap;
+}
+
+table {
+	/*width: 80%;*/
+	margin: auto;
+}
+
+thead td,thead th {
+	background-color: #d3eaef;
+}
+
+caption,tfoot td,tfoot th {
+	background-color: #c8d6ff;
+}
+
+tbody /*tbody td,tbody th*/ {
+	margin: 2px 0 2px 0;
+	text-align: left;
+	width: 25px;
+}
+
+caption {
+	color: #2b6ee7;
+}
+
+tfoot td {
+	text-align: center;
+}
+tfoot tr td {
+	width: 800px;
+}
+
+/*
+caption,tfoot {
+	display: none;
+}
+*/
