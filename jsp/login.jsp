@@ -77,13 +77,13 @@ border:1px #999 solid; background:#c3d9ff;">
 </div>
 
 <div style="width: 100%;">
-<div style="float: left;width: 40%;text-align: right;"><fmt:message key="UserName"/>:root</div>
+<div style="float: left;width: 40%;text-align: right;"><fmt:message key="UserName"/>:</div>
 <div style="float: left;width: 59%;text-align: left;"><input type="text" name="user.name"></div>
 <div style="clear: both;"></div>
 </div>
 
 <div style="width: 100%;">
-<div style="float: left;width: 40%;text-align: right;"><fmt:message key="Password"/>:root</div>
+<div style="float: left;width: 40%;text-align: right;"><fmt:message key="Password"/>:</div>
 <div style="float: left;width: 59%;text-align: left;"><input type="password" name="user.password"></div>
 <div style="clear: both;"></div>
 </div>
