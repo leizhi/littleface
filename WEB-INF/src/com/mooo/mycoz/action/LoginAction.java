@@ -15,9 +15,9 @@ import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.Transaction;
-import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LoginAction extends BaseSupport {
 
@@ -56,7 +56,7 @@ public class LoginAction extends BaseSupport {
 		try {
 			
 			User user = new User();
-			HttpParamUtil.bindData(request, user, "user");
+			ParamUtil.bindData(request, user, "user");
 
 			StringUtils.noNull(user.getName());
 			StringUtils.noNull(user.getPassword());
@@ -110,7 +110,7 @@ public class LoginAction extends BaseSupport {
 			String value="";
 			
 			User user = new User();
-			HttpParamUtil.bindData(request, user, "user");
+			ParamUtil.bindData(request, user, "user");
 			
 			StringUtils.noNull(user.getName());
 			StringUtils.noNull(user.getPassword());

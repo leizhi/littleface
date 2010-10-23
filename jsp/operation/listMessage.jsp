@@ -42,7 +42,7 @@ ${forumThread.user.name }
 </div>
 
 <div style="float: right;width: 80%;height:auto !important; height:150px; min-height:150px;">
-${forumThread.body }
+<textarea rows="8" cols="40" readonly="readonly">${forumThread.body }</textarea>
 </div>
 <div style="clear: both;"></div>
 
@@ -68,7 +68,7 @@ ${item.user.name }
 </div>
 
 <div style="float: right;width: 80%;height:auto !important; height:150px; min-height:150px;">
-${item.body }
+<textarea rows="8" cols="40" readonly="readonly">${item.body }</textarea>
 </div>
 <div style="clear: both;"></div>
 

@@ -10,8 +10,8 @@
 </c:if>
 
 <c:if test="${empty param.locale}">
-	<fmt:setLocale value="zh_CN" scope="session" />
-	<fmt:setTimeZone value="zh_CN" scope="session" />
+	<fmt:setLocale value="en_US" scope="session" />
+	<fmt:setTimeZone value="en_US" scope="session" />
 </c:if>
 <%
 Locale locale = Locale.getDefault();

@@ -1,4 +1,4 @@
-package com.mooo.mycoz.util.http;
+package com.mooo.mycoz.util;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -10,13 +10,12 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
-import com.mooo.mycoz.util.BeanUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class HttpParamUtil {
-	private static Log log = LogFactory.getLog(HttpParamUtil.class);
+public class ParamUtil {
+	private static Log log = LogFactory.getLog(ParamUtil.class);
 
 	/**
 	 * 动态从request.getParameter里绑定javaBean属性值.

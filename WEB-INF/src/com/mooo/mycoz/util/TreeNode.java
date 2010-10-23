@@ -4,27 +4,37 @@ import java.util.List;
 
 public interface TreeNode {
 
-	void addChild(TreeNode child);
+	public Integer getParentId();
 
-	void removeChild(TreeNode child);
+	public void setParentId(Integer parentId);
 
-	Integer getChildCount();
+	public TreeNode getParent();
 
-	List<TreeNode> getChildList();
+	public void setParent(TreeNode parent);
 
-	void setParent(TreeNode parent);
+	public Integer getId();
 
-	void setParentId(Integer parentId);
+	public void setId(Integer id);
 
-	void setId(Integer id);
+	public Integer getLevelId();
 
-	Integer getId();
+	public void setLevelId(Integer levelId);
 
-	Integer getParentId();
+	public Object getObj();
 
-	Integer getLevelId();
+	public void setObj(Object obj);
 
-	void setLevelId(Integer levelId);
+	public void addChild(TreeNode child);
 
-	void remove();
+	public void removeChild(TreeNode child);
+
+	public void remove();
+
+	public Integer getChildCount();
+
+	public List<TreeNode> getChildList();
+
+	public void setChildList(List<TreeNode> childList);
+
+	public boolean haveChild();
 }

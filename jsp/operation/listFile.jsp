@@ -31,10 +31,6 @@ function docommit(url) {
 	<c:param name="method">processDelete</c:param>
 </c:url>
 
-<c:url value="/File.do" var="processDownload">
-	<c:param name="method">processDownload</c:param>
-</c:url>
-
 <form method="post" action="${listFile}">
 <%@ include file="../incl/g_top.jsp" %>
 <%@ include file="../incl/g_block.jsp" %>
@@ -94,7 +90,11 @@ function docommit(url) {
 <td><c:out value="${item.typename}"></c:out></td>
 <td><c:out value="${item.name}"></c:out></td>
 <td><c:out value="${item.size}"></c:out></td>
-<td><a href="upload/${item.filepath}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
+<c:url value="/File.do" var="download">
+	<c:param name="method">download</c:param>
+	<c:param name="fileName">${item.filepath}</c:param>
+</c:url>
+<td><a href="${download}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
 <td><c:out value="${item.datetime}"></c:out></td>
 </tr>
 </c:forEach>

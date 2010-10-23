@@ -37,6 +37,7 @@
 			class="com.mooo.mycoz.action.operation.FileAction">
 			<result name="list">/jsp/operation/listFile.jsp</result>
 			<result name="promptUpload">/jsp/operation/uploadFile.jsp</result>
+			<result name="download">/jsp/operation/downloadFile.jsp</result>
 		</action>
 		
 		<action name="CodeType" default="list"

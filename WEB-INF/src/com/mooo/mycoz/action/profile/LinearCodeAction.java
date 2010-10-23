@@ -11,8 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.StringUtils;
-import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class LinearCodeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(LinearCodeAction.class);
@@ -57,7 +57,7 @@ public class LinearCodeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("processAdd");
 			
 			CodeType codeType = new CodeType();
-			HttpParamUtil.bindData(request, codeType, "CodeType");
+			ParamUtil.bindData(request, codeType, "CodeType");
 			StringUtils.noNull(codeType.getName());
 			dbProcess.add(codeType);
 			
@@ -86,7 +86,7 @@ public class LinearCodeAction extends BaseSupport{
 		try {
 			if (log.isDebugEnabled()) log.debug("processUpload");
 			CodeType bean = new CodeType();
-			HttpParamUtil.bindData(request, bean, "CodeType");
+			ParamUtil.bindData(request, bean, "CodeType");
 			dbProcess.update(bean);
 			
 		} catch (Exception e) {

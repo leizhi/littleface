@@ -1,11 +1,4 @@
-package com.mooo.mycoz.util.tree;
-
 /**
- * Created by IntelliJ IDEA.
- * User: aaflatooni
- * Date: Jan 23, 2007
- * Time: 1:06:24 AM
- * To chang/**
  * Copyright (C) 2001 Yasna.com. All rights reserved.
  *
  * ===================================================================
@@ -112,12 +105,49 @@ package com.mooo.mycoz.util.tree;
  */
 
 /**
- * This class is created in order to allow for proper interface of serialization.
+ *  TreeObject.java
  */
-public class TreeNodeSerializable extends TreeObject {
 
-    public TreeNodeSerializable() {
-        super(0);
-    }
-}
+package com.mooo.mycoz.util;
 
+public class TreeObject {
+	
+	private Integer id;
+	private Integer level;
+	private String name;
+	private String link;
+	private boolean visible;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
+	}
+	public boolean isVisible() {
+		return visible;
+	}
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	
+
+} 

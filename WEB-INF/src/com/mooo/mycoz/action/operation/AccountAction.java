@@ -12,7 +12,7 @@ import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
-import com.mooo.mycoz.util.http.HttpParamUtil;
+import com.mooo.mycoz.util.ParamUtil;
 
 public class AccountAction extends BaseSupport{
 	
@@ -31,7 +31,7 @@ public class AccountAction extends BaseSupport{
 	
 	public String talk(HttpServletRequest request, HttpServletResponse response) {
 		User account = new User();
-		HttpParamUtil.bindData(request, account);
+		ParamUtil.bindData(request, account);
 
 		//account.setId(new Integer(request.getParameter("id")));
 

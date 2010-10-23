@@ -14,8 +14,8 @@ import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.StringUtils;
-import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class CodeTypeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(CodeTypeAction.class);
@@ -32,7 +32,7 @@ public class CodeTypeAction extends BaseSupport{
 			request.setAttribute("categoryDefault", request.getParameter("query.category"));
 
 			CodeType codeType = new CodeType();
-			HttpParamUtil.bindData(request, codeType, "query");
+			ParamUtil.bindData(request, codeType, "query");
 			
 			List<?> codeTypes = dbProcess.searchAndRetrieveList(codeType);
 			request.setAttribute("codeTypes", codeTypes);
@@ -55,7 +55,7 @@ public class CodeTypeAction extends BaseSupport{
 			request.setAttribute("codeCategory", codeCategory);
 			
 			CodeType codeType = new CodeType();
-			HttpParamUtil.bindData(request, codeType, "codeType");
+			ParamUtil.bindData(request, codeType, "codeType");
 			codeType.setId(IDGenerator.getNextID("mycozShared.CodeType").intValue());
 			
 			request.setAttribute("codeType", codeType);
@@ -73,7 +73,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("processAdd");
 			
 			CodeType codeType = new CodeType();
-			HttpParamUtil.bindData(request, codeType, "codeType");
+			ParamUtil.bindData(request, codeType, "codeType");
 			StringUtils.noNull(codeType.getName());
 			dbProcess.add(codeType);
 			
@@ -102,7 +102,7 @@ public class CodeTypeAction extends BaseSupport{
 		try {
 			if (log.isDebugEnabled()) log.debug("processUpload");
 			CodeType bean = new CodeType();
-			HttpParamUtil.bindData(request, bean, "CodeType");
+			ParamUtil.bindData(request, bean, "CodeType");
 			dbProcess.update(bean);
 			
 		} catch (Exception e) {
@@ -138,7 +138,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("listCode");
 
 			CodeType codeType = new CodeType();
-			HttpParamUtil.bindData(request, codeType, "codeType");
+			ParamUtil.bindData(request, codeType, "codeType");
 			dbProcess.retrieve(codeType);
 			
 			request.setAttribute("codeType", codeType);
@@ -169,7 +169,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("processAdd");
 			
 			LinearCode linearCode = new LinearCode();
-			HttpParamUtil.bindData(request, linearCode, "LinearCode");
+			ParamUtil.bindData(request, linearCode, "LinearCode");
 			linearCode.setId(IDGenerator.getNextID("mycozShared.LinearCode").intValue());
 			
 			dbProcess.add(linearCode);

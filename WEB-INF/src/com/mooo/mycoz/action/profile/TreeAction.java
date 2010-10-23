@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozShared.CodeType;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.http.HttpParamUtil;
+import com.mooo.mycoz.util.ParamUtil;
 
 public class TreeAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(TreeAction.class);
@@ -60,7 +60,7 @@ public class TreeAction extends BaseSupport{
 				return "promptAdd";
 			}
 			
-			HttpParamUtil.bindData(request, bean, "CodeType");
+			ParamUtil.bindData(request, bean, "CodeType");
 			if (log.isDebugEnabled()) log.debug("name="+request.getParameter("CodeType.name"));
 			if (log.isDebugEnabled()) log.debug("category="+request.getParameter("CodeType.category"));
 
@@ -91,7 +91,7 @@ public class TreeAction extends BaseSupport{
 		try {
 			if (log.isDebugEnabled()) log.debug("processUpload");
 			CodeType bean = new CodeType();
-			HttpParamUtil.bindData(request, bean, "CodeType");
+			ParamUtil.bindData(request, bean, "CodeType");
 			dbProcess.update(bean);
 			
 		} catch (Exception e) {

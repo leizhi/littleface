@@ -16,8 +16,8 @@ import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.Transaction;
-import com.mooo.mycoz.util.http.HttpParamUtil;
 
 public class ForumThreadAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(ForumThreadAction.class);
@@ -32,7 +32,7 @@ public class ForumThreadAction extends BaseSupport{
 	public String processCreateThread(HttpServletRequest request, HttpServletResponse response) {
 		try {			
 			ForumThread forumThread = new ForumThread();
-			HttpParamUtil.bindData(request, forumThread,"forumThread");
+			ParamUtil.bindData(request, forumThread,"forumThread");
 
 			forumThread.setId(IDGenerator.getNextID("ForumThread").intValue());
 			Date now = new Date();
@@ -108,7 +108,7 @@ public class ForumThreadAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("userId="+userId);
 
 			Message message = new Message();
-			HttpParamUtil.bindData(request, message,"message");
+			ParamUtil.bindData(request, message,"message");
 			
 			message.setId(IDGenerator.getNextID("Message").intValue());
 			message.setUserId(new Integer(userId));
