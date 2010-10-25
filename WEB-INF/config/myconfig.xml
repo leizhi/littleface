@@ -38,6 +38,7 @@
 			<result name="list">/jsp/operation/listFile.jsp</result>
 			<result name="promptUpload">/jsp/operation/uploadFile.jsp</result>
 			<result name="download">/jsp/operation/downloadFile.jsp</result>
+			<result name="tree">/jsp/operation/treeFile.jsp</result>
 		</action>
 		
 		<action name="CodeType" default="list"

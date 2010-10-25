@@ -247,4 +247,8 @@ public class FileAction extends BaseSupport {
 		request.setAttribute("fileName", request.getParameter("fileName"));
 		return "download";
 	}
+	
+	public String tree(HttpServletRequest request,HttpServletResponse response) {
+		return "success";
+	}
 }

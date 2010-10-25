@@ -27,6 +27,7 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 <ul>
 <li class="title"><fmt:message key="File"/></li>
 <li><a href="<c:url value="/File.do?bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
+<li><a href="<c:url value="/File.do?method=tree&bar=0&subbar=0"/>" target="main"><fmt:message key="TreeFile"/></a></li>
 <li><a href="<c:url value="/CodeType.do?bar=0&subbar=1"/>" target="main"><fmt:message key="CodeType"/></a></li>
 </ul>
 
