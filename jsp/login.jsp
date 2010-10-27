@@ -61,7 +61,7 @@ border:1px #999 solid; background:#c3d9ff;">
 				<c:forEach var="items" items="${locales}" varStatus="s">
 					<option value="${items}"
 
-					<c:if test="${empty param.locale and items=='zh_CN'}">
+					<c:if test="${empty param.locale and items=='en_US'}">
 						selected="selected"
 					</c:if>
 					<c:if test="${!empty param.locale and items==param.locale}">

@@ -36,54 +36,48 @@ function docommit(url) {
 <%@ include file="../incl/g_block.jsp" %>
 
 <%@ include file="../incl/g_bar.jsp" %>
+<div id="container">
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="Search File" name="title"/>
-</jsp:include>
+<div style="text-align:left;">
+	<table>
+		<caption>Search File</caption>
 
-	<table align="center">
-	<tr>
-		<td>索引名称</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>类型</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr>
-		<td>索引名称</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>类型</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-	</tr>
-	
-	<tr >
-		<td colspan="4">
-		<span>
-				<input type="submit" value="<fmt:message key="List"/>">
-				<input type="submit" value="<fmt:message key="Upload"/>" onclick="docommit('${promptUpload}')">
-				<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')">
-				<input type="submit" value="<fmt:message key="Download"/>" onclick="docommit('${processDownload}')">
-				<input type="submit" value="<fmt:message key="Browse"/>" onclick="docommit('${processDownload}')">
-		</span>
-		 </td>
-	</tr>
+		<tbody>
+			<tr>
+				<td style="text-align: right;">内容简要</td>
+				<td><input name="" value="" /></td>
+				<td style="text-align: right;">日期</td>
+				<td><input name="" value="" /></td>
+			</tr>
+
+			<tr>
+				<td colspan="4" style="text-align: center;">
+					<input type="submit" value="<fmt:message key="List"/>"> 
+					<input type="submit" value="<fmt:message key="Upload"/>" onclick="docommit('${promptUpload}')"/> 
+					<input type="submit" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}')"/>
+				</td>
+			</tr>
+
+		</tbody>
+
 	</table>
-<jsp:include page="../incl/g_tail.jsp" />
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="List File" name="title"/>
-</jsp:include>
 
-<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#edf0f9 id=small>
-<tr bgcolor="#e3e9ff">
-<td><fmt:message key="ID"/></td>
-<td><fmt:message key="Type"/></td>
-<td><fmt:message key="Name"/></td>
-<td><fmt:message key="Size"/></td>
-<td><fmt:message key="Download"/></td>
-<td><fmt:message key="Date"/></td>
+<table>
+<caption>List File</caption>
+
+<thead>
+<tr>
+<th><fmt:message key="ID"/></th>
+<th><fmt:message key="Type"/></th>
+<th><fmt:message key="Name"/></th>
+<th><fmt:message key="Size"/></th>
+<th><fmt:message key="Download"/></th>
+<th><fmt:message key="Date"/></th>
 </tr>
+</thead>
 
+<tbody>
 <c:forEach var="item" items="${files}" varStatus="status">
 <tr>
 <td><input type="checkbox" name="id" value="${item.id}"> </td>
@@ -98,13 +92,22 @@ function docommit(url) {
 <td><c:out value="${item.datetime}"></c:out></td>
 </tr>
 </c:forEach>
+</tbody>
 
-<jsp:include page="../incl/pageNavigation.jsp" />
+<tfoot>
+<tr>
+<!-- 分页 -->
+<td colspan="6" style="width: 600px;">
+<%@ include file="../incl/pageNavigation.jsp"%>
+</td>
+</tr>
+</tfoot>
 
 </table>
-<jsp:include page="../incl/g_tail.jsp" />
+</div>
 
 <jsp:include page="../incl/g_footer.jsp" />
+</div>
 
 </form>
 </fmt:bundle>

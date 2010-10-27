@@ -33,8 +33,8 @@ public class LoginAction extends BaseSupport {
 
 			//Locale[] locales = java.text.NumberFormat.getAvailableLocales();
 			Locale[] locales = new Locale[2];
-			locales[0] = new Locale("zh","CN");
-			locales[1] = new Locale("en","US");
+			locales[0] = new Locale("en","US");
+			locales[1] = new Locale("zh","CN");
 			request.setAttribute("locales", locales);
 
 			if (log.isDebugEnabled()) log.debug("IP:"+getClinetIp(request));

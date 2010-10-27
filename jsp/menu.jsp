@@ -10,15 +10,33 @@
 <link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
 <link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
 <style type="text/css">
+ul {
+	padding: 0;
+	margin: 0 auto;
+	border: 0px solid #000000;
+	width: 100%;
+	list-style: none;
+}
+
+li {
+	padding: 0;
+	border: 0px solid #000000;
+	margin: 0 auto;
+	width: 100%;
+	text-align: left;
+	background-color:  #fff;
+}
+
 .title {
-background-color: #dde5ff;
-color:#000;
+	background-color: #dde5ff;
+	color: #2b6ee7;
 }
 </style>
 </head>
 <body>
-<div>
-online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
+<div id="container">
+
+<span>online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%></span>
 
 <c:url value="/Login.do" var="processLogout">
 	<c:param name="method">processLogout</c:param>
@@ -27,7 +45,7 @@ online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%>
 <ul>
 <li class="title"><fmt:message key="File"/></li>
 <li><a href="<c:url value="/File.do?bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
-<li><a href="<c:url value="/File.do?method=tree&bar=0&subbar=0"/>" target="main"><fmt:message key="TreeFile"/></a></li>
+<li><a href="<c:url value="/File.do?method=tree&bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
 <li><a href="<c:url value="/CodeType.do?bar=0&subbar=1"/>" target="main"><fmt:message key="CodeType"/></a></li>
 </ul>
 

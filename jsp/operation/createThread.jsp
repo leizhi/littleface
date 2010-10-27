@@ -18,10 +18,10 @@
 <%@ include file="../incl/g_top.jsp" %>
 <%@ include file="../incl/g_block.jsp" %>
 <%@ include file="../incl/g_bar.jsp" %>
+<div id="container">
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="Create Thread" name="title"/>
-</jsp:include>
+<div>
+<span>Create Thread</span>
 
 <input type="hidden" name="forumThread.id" value="${forumThread.id }"/>
 
@@ -47,10 +47,9 @@
 
 </div>
 
-<jsp:include page="../incl/g_tail.jsp" />
-
+</div>
 <jsp:include page="../incl/g_footer.jsp" />
-
+</div>
 </form>
 </fmt:bundle>
 </body>

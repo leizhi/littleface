@@ -109,11 +109,12 @@ function edit(url){
 <%@ include file="../incl/g_block.jsp" %>
 <%@ include file="../incl/g_bar.jsp" %>
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="CodeType" name="title"/>
-</jsp:include>
+<div id="container">
 
+<div style="text-align:left;">
 	<table align="center">
+	<caption>CodeType</caption>
+	
 	<tr>
 		<td>码表类型</td>
 		<td>
@@ -146,19 +147,18 @@ function edit(url){
 		 </td>
 	</tr>
 	</table>
-<jsp:include page="../incl/g_tail.jsp" />
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="list" name="title"/>
-</jsp:include>
-
-<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#ffffff id=small>
-<tr bgcolor="#649caa">
-<td width="10px"> <input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></td>
-<td><fmt:message key="Name"/></td>
-<td><fmt:message key="Category"/></td>
+<table>
+<caption>list</caption>
+<thead>
+<tr>
+<th><input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></th>
+<th><fmt:message key="Name"/></th>
+<th><fmt:message key="Category"/></th>
 </tr>
+</thead>
 
+<tbody>
 <c:forEach var="item" items="${linearTypes}" varStatus="status">
 <c:url value="/CodeType.do" var="editCode">
 	<c:param name="method">listCode</c:param>
@@ -173,10 +173,22 @@ function edit(url){
 <td onclick="openLookup('${editCode}');"><fmt:message key="${item.category}"/></td>
 </tr>
 </c:forEach>
+</tbody>
+
+<tfoot>
+<tr>
+<!-- 分页 -->
+<td colspan="3" style="width: 600px;">
+<%@ include file="../incl/pageNavigation.jsp"%>
+</td>
+</tr>
+</tfoot>
+
 </table>
-<jsp:include page="../incl/g_tail.jsp" />
+</div>
 
 <jsp:include page="../incl/g_footer.jsp" />
+</div>
 </form>
 </fmt:bundle>
 </body>

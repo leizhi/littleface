@@ -31,6 +31,21 @@
 		padding-left:10px;
 	}
 	</style>
+	
+<script type="text/javascript">
+	function change(obj){
+		//alert(obj);
+		if (navigator.userAgent.indexOf("MSIE")!=-1) {
+			var arr = obj.value.split("\\");
+			document.getElementById('name').value=arr[arr.length-1];
+		}else if (navigator.userAgent.indexOf("Firefox")!=-1 || navigator.userAgent.indexOf("Mozilla")!=-1) {
+	    		document.getElementById('name').value=obj.files.item(0).fileName;
+		}else {
+	         alert("Not IE or Firefox (userAgent=" + navigator.userAgent + ")");
+		}
+	}
+</script>
+
 </head>
 
 <body>
@@ -44,51 +59,63 @@
 <%@ include file="../incl/g_block.jsp" %>
 <%@ include file="../incl/g_bar.jsp" %>
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="UploadFile" name="title"/>
-</jsp:include>
+<div id="container">
 
-<table align="center">
-	<tr>
-		<td><fmt:message key="Name" /></td>
-		<td><input type="text" id="name" name="name" size="15" maxlength="255"/></td>
-		<td><fmt:message key="Type" /></td>
-		<td>
-					<select name="typeid">
-						<c:forEach var="items" items="${fileTypes}" varStatus="s">
-							<option value="${items.key}"
-		
-							<c:if test="${items.key==param.typeid}">
-								selected="selected"
-							</c:if>			
-								>
-							${items.value}
-							</option>
-						</c:forEach>
-					</select>
-		</td>
-	</tr>
-	
-	<tr>
-		<td><fmt:message key="File" /></td>
-		<td><input type="file" id="file" name="file"/></td>
-		<td><fmt:message key="Date" /></td>
-		<td>
-		<input type="text" id="date" name="date" size="15" maxlength="255" readonly/> 
-		<img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="choosedate"/>" onclick="displayCalendar(document.forms[0].date,'yyyy/mm/dd hh:ii',this,true)">
-		</td>
-	</tr>
-	
-	<tr >
-		<td colspan="4">
-		<span>
-			<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${file}')">
-			<input type="submit" value="<fmt:message key="OK"/>">
-		</span>
-		 </td>
-	</tr>
-	</table>
-<jsp:include page="../incl/g_tail.jsp" />
+<div style="text-align:center;">
+
+<table>
+<caption>UploadFile</caption>
+
+<tbody>
+<tr>
+<td style="text-align:right;width:40%;"><fmt:message key="Name" /></td>
+<td><input type="text" id="name" name="name" size="15" maxlength="255"/></td>
+</tr>
+
+<tr>
+<td style="text-align:right;"><fmt:message key="Type" /></td>
+<td>					
+<select name="typeid">
+	<c:forEach var="items" items="${fileTypes}" varStatus="s">
+		<option value="${items.key}"
+
+		<c:if test="${items.key==param.typeid}">
+			selected="selected"
+		</c:if>			
+			>
+		${items.value}
+		</option>
+	</c:forEach>
+</select>
+</td>
+</tr>
+
+<tr>
+<td style="text-align:right;"><fmt:message key="File" /></td>
+<td><input type="file" id="file" name="file" onchange="change(this)"/></td>
+</tr>
+
+<tr>
+<td style="text-align:right;"><fmt:message key="Date" /></td>
+<td>
+<input type="text" id="date" name="date" size="15" maxlength="255" readonly/>
+<img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="choosedate"/>" onclick="displayCalendar(document.forms[0].date,'yyyy/mm/dd hh:ii',this,true)"/>
+</td>
+</tr>
+
+</tbody>
+
+<tfoot>
+<tr>
+<td colspan="2">
+<input type="submit" value="<fmt:message key="Black"/>" onclick="docommit('${file}')"/>
+<input type="submit" value="<fmt:message key="OK"/>"/>
+</td>
+</tr>
+</tfoot>
+</table>
+
+</div>
 
 <jsp:include page="../incl/g_footer.jsp" />
 </div>

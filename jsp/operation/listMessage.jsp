@@ -26,7 +26,7 @@ function docommit(url) {
 
 <input type="hidden" name="threadId" value="${threadId }"/>
 
-<div style="width: 100%;background: #edf0f9;">
+<div style="width: 100%;background: #edf0f9;text-align: left;">
 
 <div style="float: left;width: 20%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
 ${forumThread.user.name }
@@ -49,7 +49,7 @@ ${forumThread.user.name }
 </div>
 
 <c:forEach var="item" items="${messages}" varStatus="status">
-<div style="width: 100%;background: #edf0f9;">
+<div style="width: 100%;background: #edf0f9;text-align: left;">
 
 <div style="float: left;width: 20%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
 ${item.user.name }
@@ -82,7 +82,7 @@ ${item.user.name }
 <fmt:message key="Subject"/>
 </div>
 
-<div style="float: right;width: 80%;">
+<div style="float: right;width: 80%;text-align: left;">
 <input type="text" name="message.subject"/>
 </div>
 <div style="clear: both;"></div>
@@ -91,7 +91,7 @@ ${item.user.name }
 <fmt:message key="Body"/>
 </div>
 
-<div style="float: right;width: 80%;">
+<div style="float: right;width: 80%;text-align: left;">
 <textarea rows="8" cols="40" name="message.body"></textarea>
 </div>
 <div style="clear: both;"></div>

@@ -130,9 +130,7 @@ function doit(){
 
 <%@ include file="../incl/g_bar.jsp" %>
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="Search Account" name="title"/>
-</jsp:include>
+<div id="container">
 	
 <div class="box">
 	<ul>
@@ -258,9 +256,9 @@ function doit(){
 </div>
 <div style="clear: both;"></div>
 
-<jsp:include page="../incl/g_tail.jsp" />
- 
 <jsp:include page="../incl/g_footer.jsp" />
+</div>
+
 </form>
 </fmt:bundle>
 </body>

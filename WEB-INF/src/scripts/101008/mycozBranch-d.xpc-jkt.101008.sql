@@ -108,6 +108,18 @@ CREATE TABLE `FileInfo` (
   KEY `dateTime` (`datetime`),
   KEY `filepath` (`filepath`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `FileTree` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `parentId` int(11) NOT NULL DEFAULT '0',
+  `childId` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_id` (`parentId`,`childId`),
+  KEY `parentId` (`parentId`),
+  KEY `childId` (`childId`),
+  CONSTRAINT `FileTree_ibfk_1` FOREIGN KEY (`parentId`) REFERENCES `FileInfo` (`id`),
+  CONSTRAINT `FileTree_ibfk_2` FOREIGN KEY (`childId`) REFERENCES `FileInfo` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

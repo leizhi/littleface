@@ -29,9 +29,7 @@ function docommit(url) {
 
 <%@ include file="../incl/g_bar.jsp" %>
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="Change Password" name="title"/>
-</jsp:include>
+<div id="container">
 
 <div style="width: 100%;">
 <div style="float: left;width: 50%;text-align: right;"><fmt:message key="OldPassword"/></div>
@@ -55,9 +53,9 @@ function docommit(url) {
 <input type="submit" value="change"/>
 </div>
 
-<jsp:include page="../incl/g_tail.jsp" />
-
 <jsp:include page="../incl/g_footer.jsp" />
+</div>
+
 </form>
 </fmt:bundle>
 </body>

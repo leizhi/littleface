@@ -46,41 +46,37 @@ color:#000;
 <%@ include file="../incl/g_top.jsp" %>
 <%@ include file="../incl/g_block.jsp" %>
 
-<%@ include file="../incl/g_bar.jsp" %>
+<div id="container">
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="Search Account" name="title"/>
-</jsp:include>
+<div style="text-align:left;">
 
-	<table align="center">
+	<table>
+	<caption>Search Account</caption>
+	<tbody>
 	<tr>
-		<td>年龄</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>性别</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
+		<td style="text-align: right;">年龄</td>
+		<td><input name="" value=""/></td>
+		<td style="text-align: right;">性别</td>
+		<td><input name="" value=""/></td>
 	</tr>
 	
 	<tr>
-		<td>地区</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
-		<td>名称</td>
-		<td><input name="" value="" style="font-size:10px; border:solid 1px #7aaebd;"/></td>
+		<td style="text-align: right;">地区</td>
+		<td><input name="" value=""/></td>
+		<td style="text-align: right;">名称</td>
+		<td><input name="" value=""/></td>
 	</tr>
 	
-	<tr >
-		<td colspan="4" align="center">
-		<span>
+	<tr>
+		<td colspan="4" style="text-align: center;">
 				<input type="submit" value="<fmt:message key="List"/>">
-		</span>
 		 </td>
 	</tr>
+	</tbody>
 	</table>
-<jsp:include page="../incl/g_tail.jsp" />
+</div>
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="List Account" name="title"/>
-</jsp:include>
-
+<div>
 <c:forEach var="item" items="${accounts}" varStatus="status">
 <div style="float: left;width: 24.5%;text-align: left;font-size: 12px;border: 1px solid #ffffff;background-color: #edf0f9;">
 
@@ -117,10 +113,11 @@ color:#000;
 
 </div>
 </c:forEach>
- 
-<jsp:include page="../incl/g_tail.jsp" />
+</div>
+<div style="clear: both;"></div>
 
 <jsp:include page="../incl/g_footer.jsp" />
+</div>
 
 </form>
 </fmt:bundle>

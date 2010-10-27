@@ -66,13 +66,16 @@ function edit(url){
 <%@ include file="../incl/g_block.jsp" %>
 <%@ include file="../incl/g_bar.jsp" %>
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="CodeType" name="title"/>
-</jsp:include>
+<div id="container">
+
+<div style="text-align:left;">
 
 	<table align="center">
+	<caption>CodeType</caption>
+			<tbody>
+	
 	<tr>
-		<td>码表类型</td>
+		<td style="text-align: right;">码表类型</td>
 		<td>
 			<select name="query.category">
 				<c:forEach var="items" items="${category}" varStatus="s">
@@ -88,34 +91,30 @@ function edit(url){
 			</select>
 		</td>
 				
-		<td></td>
+		<td style="text-align: right;"></td>
 		<td></td>
 	</tr>
 	
 	<tr >
-		<td colspan="4">
-		<span>
+		<td colspan="4"  style="text-align: center;">
 			<input type="submit" id="List" value="<fmt:message key="List"/>">
 			<input type="submit" id="Add" value="<fmt:message key="Add"/>" onclick="docommit('${promptAdd}');return false;">
 			<input type="submit" id="Edit" value="<fmt:message key="Edit"/>" onclick="docommit('${promptUpdate}');return false;">
 			<input type="submit" id="Delete" value="<fmt:message key="Delete"/>" onclick="docommit('${processDelete}');return false;">
-		</span>
 		 </td>
 	</tr>
 	</table>
-<jsp:include page="../incl/g_tail.jsp" />
 
-<jsp:include page="../incl/g_head.jsp">
-<jsp:param value="list" name="title"/>
-</jsp:include>
-
-<table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor=#edf0f9 id=small>
-<tr bgcolor="#e3e9ff">
-<td width="10px"> <input type="checkbox" onclick="isChecked();" name="chooseAll" id="chooseAll" /></td>
-<td><fmt:message key="Name"/></td>
-<td><fmt:message key="Category"/></td>
+<table>
+<caption>list</caption>
+<thead>
+<tr>
+<th><fmt:message key="Name"/></th>
+<th><fmt:message key="Name"/></th>
+<th><fmt:message key="Category"/></th>
 </tr>
-
+</thead>
+<tbody>
 <c:forEach var="item" items="${codeTypes}" varStatus="status">
 <c:url value="/CodeType.do" var="editCode">
 	<c:param name="method">listCode</c:param>
@@ -130,10 +129,21 @@ function edit(url){
 <td onclick="openLookup('${editCode}');"> <c:out value="${item.category}"/> </td>
 </tr>
 </c:forEach>
+</tbody>
+
+<tfoot>
+<tr>
+<!-- 分页 -->
+<td colspan="6" style="width: 600px;">
+<%@ include file="../incl/pageNavigation.jsp"%>
+</td>
+</tr>
+</tfoot>
 </table>
-<jsp:include page="../incl/g_tail.jsp" />
+</div>
 
 <jsp:include page="../incl/g_footer.jsp" />
+</div>
 </form>
 </fmt:bundle>
 </body>
