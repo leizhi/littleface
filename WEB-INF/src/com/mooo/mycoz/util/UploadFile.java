@@ -37,11 +37,11 @@ public class UploadFile {
     /** 每次读取得字节的大小 */
     private static int BUFSIZE = 1024 * 8;
     /** 存储参数的Hashtable */
-    private Hashtable paramHt = new Hashtable();
+    private Hashtable<String,ArrayList<String>> paramHt = new Hashtable<String,ArrayList<String>>();
     /** 存储上传的文件的文件名的ArrayList */
-    private ArrayList updFileArr = new ArrayList();
+    private ArrayList<String> updFileArr = new ArrayList<String>();
     /** 存储上传的文件的文件名的ArrayList */
-    private List fileList = new Vector();
+    private List<String> fileList = new Vector<String>();
     /**
      * 设定request对象。
      *
@@ -87,8 +87,8 @@ public class UploadFile {
             FileOutputStream baos = null;
             BufferedOutputStream bos = null;
             // 存储参数的Hashtable
-            paramHt = new Hashtable();
-            updFileArr = new ArrayList();
+            paramHt = new Hashtable<String,ArrayList<String>>();
+            updFileArr = new ArrayList<String>();
             int rtnPos = 0;
             byte[] buffs = new byte[BUFSIZE * 8];
             // &#65533;取得ContentType
@@ -113,10 +113,11 @@ public class UploadFile {
                             updFileArr.add(fName);
                         } else {
                             Object obj = paramHt.get(name);
-                            ArrayList al = new ArrayList();
+                            ArrayList<String> al = new ArrayList<String>();
                             if (obj != null) {
-                                al = (ArrayList) obj;
-                            }
+                                al = (ArrayList<String>) paramHt.get(name);
+                            	}
+                            
                             al.add(value);
                             System.out.println(value);
                             paramHt.put(name, al);
@@ -169,9 +170,9 @@ public class UploadFile {
                             updFileArr.add(fName);
                         } else {
                             Object obj = paramHt.get(name);
-                            ArrayList al = new ArrayList();
+                            ArrayList<String> al = new ArrayList<String>();
                             if (obj != null) {
-                                al = (ArrayList) obj;
+                                al = (ArrayList<String>) paramHt.get(name);
                             }
                             al.add(value);
                             paramHt.put(name, al);
@@ -222,7 +223,7 @@ public class UploadFile {
         String value = "";
         if ( name == null || name.trim().length() == 0 )
             return value;
-        value = (paramHt.get(name) == null)?"":(String)((ArrayList)paramHt.get(name)).get(0);
+        value = (paramHt.get(name) == null)?"":(String)((ArrayList<String>)paramHt.get(name)).get(0);
         return value;
     }
     public String[] getParameters(String name){
@@ -230,7 +231,7 @@ public class UploadFile {
             return null;
         if ( paramHt.get(name) == null )
             return null;
-        ArrayList al = (ArrayList)paramHt.get(name);
+        ArrayList<String> al = (ArrayList<String>)paramHt.get(name);
         String[] strArr = new String[al.size()];
         for ( int i=0;i<al.size();i++ )
             strArr[i] = (String)al.get(i);
@@ -264,7 +265,7 @@ public class UploadFile {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         return input.substring(0,index) + sdf.format(dt) + input.substring(index);
     }
-    public Iterator getFileIterator(){
-	return fileList.iterator();
+    public Iterator<String> getFileIterator(){
+    	return fileList.iterator();
     }
 }

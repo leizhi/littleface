@@ -1,40 +1,55 @@
 package com.mooo.mycoz.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface TreeNode {
+public class TreeNode {
+	private TreeNode parent;
+	private List<TreeNode> childList;
+	
+	public TreeNode(){
+		parent = null;
+		childList = new ArrayList<TreeNode>();
+	}
 
-	public Integer getParentId();
+	public TreeNode getParent() {
+		return parent;
+	}
 
-	public void setParentId(Integer parentId);
+	public void setParent(TreeNode parent) {
+		this.parent = parent;
+	}
 
-	public TreeNode getParent();
+	public List<TreeNode> getChildList() {
+		return childList;
+	}
 
-	public void setParent(TreeNode parent);
+	public void setChildList(List<TreeNode> childList) {
+		this.childList = childList;
+	}
 
-	public Integer getId();
+	public void addChild(TreeNode child) {
+		childList.add(child);
+	}
 
-	public void setId(Integer id);
+	public void removeChild(TreeNode child) {
+		childList.remove(child);
+	}
+	
+	public void remove() {
+		parent = null;
+		childList.clear();
+		childList = null;
+	}
 
-	public Integer getLevelId();
+	public Integer getChildCount() {
+		return childList.size();
+	}
 
-	public void setLevelId(Integer levelId);
-
-	public Object getObj();
-
-	public void setObj(Object obj);
-
-	public void addChild(TreeNode child);
-
-	public void removeChild(TreeNode child);
-
-	public void remove();
-
-	public Integer getChildCount();
-
-	public List<TreeNode> getChildList();
-
-	public void setChildList(List<TreeNode> childList);
-
-	public boolean haveChild();
+	public boolean haveChild() {
+		if (getChildCount() > 0)
+			return true;
+		else
+			return false;
+	}
 }

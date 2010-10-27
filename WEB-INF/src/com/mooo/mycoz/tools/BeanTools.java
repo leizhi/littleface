@@ -232,7 +232,8 @@ public class BeanTools {
 		//bd.build("mycozBranch","Message");
 		//bd.build("mycozBranch","AccessLog");
 		//bd.build("mycozBranch","UserInfo");
-		bd.build("mycozBranch","AddressBook");
+		//bd.build("mycozBranch","AddressBook");
+		bd.build("mycozBranch","FileTree");
 
 		//bd.buildInsert("buffer_traffic");
 

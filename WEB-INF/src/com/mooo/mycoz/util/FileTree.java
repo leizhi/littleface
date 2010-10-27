@@ -2,31 +2,35 @@ package com.mooo.mycoz.util;
 
 import java.util.Iterator;
 
-public class MultipleTree {
-	private TreeNode root;
-	private int count;
+import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
+import com.mooo.mycoz.dbobj.mycozBranch.FileNode;
 
+public class FileTree {
+	private FileNode root;
+	private int count;
+	
+	public FileNode getRoot() {
+		FileInfo fi = new FileInfo();
+		
+		return root;
+	}
+	public void setRoot(FileNode root) {
+		this.root = root;
+	}
 	public int getCount() {
 		return count;
 	}
-
 	public void setCount(int count) {
 		this.count = count;
 	}
-
-	public TreeNode getRoot() {
-		return root;
+	
+	/////////////////////////////
+	public FileTree() {
+		count = 0;
+		root = new FileNode();
 	}
 
-	public void setRoot(TreeNode root) {
-		this.root = root;
-	}
-
-	public MultipleTree() {
-		root = new MultipleTreeNode();
-	}
-
-	public void addChild(TreeNode treeNode, TreeNode child) {
+	public void addChild(FileNode treeNode, FileNode child) {
 		if (inTreeNode(root, treeNode)) {
 			child.setParent(treeNode);
 			child.setId(getMax() + 1);
@@ -45,13 +49,13 @@ public class MultipleTree {
 
 	}
 
-	public void removeChild(TreeNode treeNode, TreeNode child) {
+	public void removeChild(FileNode treeNode, FileNode child) {
 		clearAll(child);
 		treeNode.removeChild(child);
 	}
 
 	/* first checkNode(root,checkNode) */
-	public boolean inTreeNode(TreeNode treeNode, TreeNode checkNode) {
+	public boolean inTreeNode(FileNode treeNode, FileNode checkNode) {
 
 		if (treeNode == null || checkNode == null)
 			return false;
@@ -62,7 +66,7 @@ public class MultipleTree {
 		if (treeNode.getChildCount() > 0) {
 			Iterator<?> iterator = treeNode.getChildList().iterator();
 			while (iterator.hasNext()) {
-				boolean isHave = inTreeNode((TreeNode) iterator.next(),
+				boolean isHave = inTreeNode((FileNode) iterator.next(),
 						checkNode);
 				if (isHave)
 					return true;
@@ -74,27 +78,27 @@ public class MultipleTree {
 
 	}
 
-	public void clearAll(TreeNode treeNode) {
+	public void clearAll(FileNode treeNode) {
 		if (inTreeNode(root, treeNode)) {
 
 			if (treeNode.getChildCount() > 0) {
 				Iterator<?> iterator = treeNode.getChildList().iterator();
 				while (iterator.hasNext()) {
-					clearAll((TreeNode) iterator.next());
+					clearAll((FileNode) iterator.next());
 				}
 			}
 			treeNode.remove();
 		}
 	}
 
-	public int getMax(TreeNode treeNode) {
+	public int getMax(FileNode treeNode) {
 
 		count += treeNode.getChildCount();
 
 		if (treeNode.getChildCount() > 0) {
 			Iterator<?> iterator = treeNode.getChildList().iterator();
 			while (iterator.hasNext()) {
-				getMax((TreeNode) iterator.next());
+				getMax((FileNode) iterator.next());
 			}
 		}
 		return count;
@@ -105,7 +109,7 @@ public class MultipleTree {
 		return getMax(root);
 	}
 
-	public TreeNode getTreeNode(TreeNode treeNode, int index) {
+	public FileNode getTreeNode(FileNode treeNode, int index) {
 
 		if (treeNode.getId() == index && index != 0)
 			return treeNode;
@@ -114,7 +118,7 @@ public class MultipleTree {
 			Iterator<?> iterator = treeNode.getChildList().iterator();
 
 			while (iterator.hasNext()) {
-				TreeNode tn = getTreeNode((TreeNode) iterator.next(), index);
+				FileNode tn = getTreeNode((FileNode) iterator.next(), index);
 
 				if (tn != null)
 					return tn;
@@ -124,8 +128,9 @@ public class MultipleTree {
 		return null;
 	}
 
-	public TreeNode getTreeNode(int index) {
+	public FileNode getTreeNode(int index) {
 		return getTreeNode(root, index);
 	}
-
+	
+	
 }

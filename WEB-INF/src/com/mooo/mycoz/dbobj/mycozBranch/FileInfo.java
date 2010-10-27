@@ -10,12 +10,11 @@ public class FileInfo {
 	private static final long serialVersionUID = 63855371401315925L;
 	
 	private Integer id;
-	private Integer typeid;
-	private String typename;
 	private String name;
 	private String filepath;
 	private Date datetime;
 	private String size;
+	private String folder;
 	
 	public Integer getId() {
 		return id;
@@ -23,18 +22,7 @@ public class FileInfo {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getTypeid() {
-		return typeid;
-	}
-	public void setTypeid(Integer typeid) {
-		this.typeid = typeid;
-	}
-	public String getTypename() {
-		return typename;
-	}
-	public void setTypename(String typename) {
-		this.typename = typename;
-	}
+
 	public String getName() {
 		return name;
 	}
@@ -59,5 +47,11 @@ public class FileInfo {
 	public void setSize(String size) {
 		this.size = size;
 	}
-	
+	public String getFolder() {
+		return folder;
+	}
+	public void setFolder(String folder) {
+		this.folder = folder;
+	}
+
 }

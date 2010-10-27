@@ -39,7 +39,33 @@ public class FileAction extends BaseSupport {
 			String value = null;
 
 			DecimalFormat df = new DecimalFormat("###0.00");
+			FileInfo fileInfo = new FileInfo();
+			List retrives = dbProcess.searchAndRetrieveList(fileInfo);
+			
+			List files = new ArrayList();
+			FileInfo fi;
+			File checkFile;
+			
+			for (Iterator it = retrives.iterator(); it.hasNext();) {
+				fi = (FileInfo)it.next();
+				
+				value = fi.getFilepath();
 
+				checkFile = new File(uploadPath + value);
+				if (log.isDebugEnabled()) log.debug("checkFile = "+(checkFile.exists()));
+
+				if (!checkFile.exists()){ 
+					
+				}
+				
+				fileBit = checkFile.length();
+				fileK = fileBit / 1024;
+				fileM = fileK / 1024;
+				fi.setSize(df.format(fileM) + "M");
+				
+				files.add(fi);
+			}
+/*
 			MultiDBObject mdb = new MultiDBObject();
 			mdb.addTable(CodeType.class, "ct");
 			mdb.addTable(LinearCode.class, "lc");
@@ -81,18 +107,18 @@ public class FileAction extends BaseSupport {
 				if (log.isDebugEnabled()) log.debug("checkFile = "+(checkFile.exists()));
 
 				if (!checkFile.exists()){ 
-					/*
-					Blob fileBlob = rs.getBlob("fi.file");
-					InputStream in = fileBlob.getBinaryStream();
-					FileOutputStream out = new FileOutputStream(checkFile);
-					int len=(int)fileBlob.length();
-				     byte[] buffer=new byte[len];  // 建立缓冲区
-				     while((len=in.read(buffer)) != -1){
-				    	 out.write(buffer,0,len);
-				     }
-				     out.close();      
-				     in.close();
-				     */
+					
+//					Blob fileBlob = rs.getBlob("fi.file");
+//					InputStream in = fileBlob.getBinaryStream();
+//					FileOutputStream out = new FileOutputStream(checkFile);
+//					int len=(int)fileBlob.length();
+//				     byte[] buffer=new byte[len];  // 建立缓冲区
+//				     while((len=in.read(buffer)) != -1){
+//				    	 out.write(buffer,0,len);
+//				     }
+//				     out.close();      
+//				     in.close();
+				     
 				}
 				fileBit = checkFile.length();
 				fileK = fileBit / 1024;
@@ -101,6 +127,7 @@ public class FileAction extends BaseSupport {
 				
 				files.add(fi);
 			}
+			*/
 			request.setAttribute("files", files);
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -179,7 +206,6 @@ public class FileAction extends BaseSupport {
 			// associated with it.
 			FileInfo fi = new FileInfo();
 			fi.setId(new Integer(IDGenerator.getNextID("FileInfo").intValue()));
-			fi.setTypeid(new Integer(uf.getParameter("typeid").trim()));
 			fi.setName(uf.getParameter("name").trim());
 			// fi.setDatetime(new Date(uf.getParameter("date").trim()));
 			fi.setDatetime(new Date());
@@ -195,8 +221,7 @@ public class FileAction extends BaseSupport {
 
 			dbProcess.add(fi);
 
-			FileUtil.copy(new File(tmpPath + value),
-					new File(uploadPath + value), true);
+			FileUtil.copy(new File(tmpPath + value),new File(uploadPath + value), true);
 
 			// User perms
 			// pstmt = con.prepareStatement(DELETE_FORUM_USER_PERMS);

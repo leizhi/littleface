@@ -72,6 +72,20 @@ CREATE TABLE `AddressBook` (
 --
 -- Table structure for table `Example`
 --
+DROP TABLE IF EXISTS `FileNode`;
+CREATE TABLE `FileNode` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `parentId` int(11) NOT NULL DEFAULT '0',
+  `childId` int(11) NOT NULL DEFAULT '0',
+  `levelId` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_id` (`parentId`,`childId`),
+  KEY `parentId` (`parentId`),
+  KEY `childId` (`childId`),
+  KEY `levelId` (`levelId`),
+  CONSTRAINT `FileNode_ibfk_1` FOREIGN KEY (`parentId`) REFERENCES `FileInfo` (`id`),
+  CONSTRAINT `FileNode_ibfk_2` FOREIGN KEY (`childId`) REFERENCES `FileInfo` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 DROP TABLE IF EXISTS `Example`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

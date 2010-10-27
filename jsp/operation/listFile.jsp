@@ -69,7 +69,6 @@ function docommit(url) {
 <thead>
 <tr>
 <th><fmt:message key="ID"/></th>
-<th><fmt:message key="Type"/></th>
 <th><fmt:message key="Name"/></th>
 <th><fmt:message key="Size"/></th>
 <th><fmt:message key="Download"/></th>
@@ -81,7 +80,6 @@ function docommit(url) {
 <c:forEach var="item" items="${files}" varStatus="status">
 <tr>
 <td><input type="checkbox" name="id" value="${item.id}"> </td>
-<td><c:out value="${item.typename}"></c:out></td>
 <td><c:out value="${item.name}"></c:out></td>
 <td><c:out value="${item.size}"></c:out></td>
 <c:url value="/File.do" var="download">
@@ -89,7 +87,7 @@ function docommit(url) {
 	<c:param name="fileName">${item.filepath}</c:param>
 </c:url>
 <td><a href="${download}"><img src="jsp/images/down.gif" border=0 alt=""/></a> </td>
-<td><c:out value="${item.datetime}"></c:out></td>
+<td><fmt:formatDate value="${item.datetime }" pattern="yyyy/MM/dd hh:mm:ss"/></td>
 </tr>
 </c:forEach>
 </tbody>
@@ -97,7 +95,7 @@ function docommit(url) {
 <tfoot>
 <tr>
 <!-- 分页 -->
-<td colspan="6" style="width: 600px;">
+<td colspan="5" style="width: 600px;">
 <%@ include file="../incl/pageNavigation.jsp"%>
 </td>
 </tr>

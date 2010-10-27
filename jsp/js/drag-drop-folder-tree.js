@@ -104,7 +104,6 @@ Owner of DHTMLgoodies.com
 		this.deleteAllowed = true;
 		this.currentlyActiveItem = false;
 		this.filePathRenameItem = 'folderTree_updateItem.jsp';
-		this.filePathRenameItem = '/sdweather/management/file/file-info!item.action';
 		this.filePathDeleteItem = 'folderTree_updateItem.jsp';
 		this.ajaxObjects = new Array();
 		this.helpObj = false;
