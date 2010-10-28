@@ -1,6 +1,7 @@
 package com.mooo.mycoz.action.operation;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,16 +13,20 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import oracle.jdbc.dbaccess.DBStatement;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
-import com.mooo.mycoz.dbobj.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
-import com.mooo.mycoz.dbobj.mycozShared.CodeType;
+import com.mooo.mycoz.dbobj.mycozBranch.FileTree;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.FileUtil;
 import com.mooo.mycoz.util.IDGenerator;
+import com.mooo.mycoz.util.StringUtils;
+import com.mooo.mycoz.util.Transaction;
+import com.mooo.mycoz.util.TreeUtil;
 import com.mooo.mycoz.util.UploadFile;
 
 public class FileAction extends BaseSupport {
@@ -165,8 +170,7 @@ public class FileAction extends BaseSupport {
 	public String processUpload(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			if (log.isDebugEnabled())
-				log.debug("processUpload");
+			if (log.isDebugEnabled()) log.debug("processUpload");
 
 			String value = "";
 			String uploadDirectory = "upload/";
@@ -272,8 +276,169 @@ public class FileAction extends BaseSupport {
 		request.setAttribute("fileName", request.getParameter("fileName"));
 		return "download";
 	}
+
+	public String retrieve(HttpServletRequest request,HttpServletResponse response) {
+		String fileId = request.getParameter("fileId");
+		System.out.println("fileId ====== " + request.getParameter("fileId"));
+
+		FileInfo fileInfo = new FileInfo();
+		fileInfo.setId(new Integer(fileId));
+		try {
+			dbProcess.retrieve(fileInfo);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		request.setAttribute("fileInfo", fileInfo);
+
+		return "retrieve";
+	}
+	
+	public String mkdir(HttpServletRequest request,HttpServletResponse response) {
+		String parentId = request.getParameter("parentId");
+		System.out.println("fileId ====== " + request.getParameter("parentId"));
+		Transaction tx = new Transaction();
+
+		try {
+			tx.start();
+			
+			FileInfo folder = new FileInfo();
+		   folder.setId(IDGenerator.getNextID(tx.getConnection(), "FileInfo"));
+		   folder.setName(request.getParameter("folderName"));
+		   folder.setFolder("Y");
+			dbProcess.add(tx.getConnection(),folder);
+
+			FileTree fileTree = new FileTree();
+			fileTree.setId(IDGenerator.getNextID(tx.getConnection(), "FileTree"));
+			fileTree.setParentId(new Integer(parentId));
+			fileTree.setChildId(folder.getId());
+
+			dbProcess.add(tx.getConnection(),fileTree);
+
+			tx.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+		} finally {
+			tx.end();
+		}
+
+		return "tree";
+	}
+	
+	public String upload(HttpServletRequest request, HttpServletResponse response) {
+		if (log.isDebugEnabled())
+			log.debug("processUpload");
+
+		String value = "";
+		String uploadDirectory = "upload/";
+		String tmpDirectory = "tmp/";
+		String uploadPath = request.getRealPath("/") + uploadDirectory;
+		String tmpPath = request.getRealPath("/") + tmpDirectory;
+
+		if (log.isDebugEnabled())
+			log.debug("uploadPath=" + uploadPath);
+
+		File tmpFile = new File(tmpPath);
+		File uploadFile = new File(uploadPath);
+
+		if (!tmpFile.exists()) {
+			tmpFile.mkdirs();
+		}
+
+		if (!uploadFile.exists()) {
+			uploadFile.mkdirs();
+		}
+
+		UploadFile uf = new UploadFile();
+		uf.setRequest(request);
+		uf.setUploadPath(tmpPath);
+		uf.process();
+
+		value = uf.getParameter("name").trim();
+		if (log.isDebugEnabled())
+			log.debug("name:" + value);
+
+		StringUtils.noNull(value);
+
+		// Finally, delete the forum itself and all permissions and
+		// properties
+		// associated with it.
+		String parentId = uf.getParameter("parentId").trim();
+		
+		System.out.println("parentId ====== " + parentId);
+
+		Transaction tx = new Transaction();
+
+		try {
+			tx.start();
+
+			FileInfo fileInfo = new FileInfo();
+			fileInfo.setId(IDGenerator.getNextID(tx.getConnection(), "FileInfo"));
+			fileInfo.setName(uf.getParameter("name").trim());
+			fileInfo.setFolder("N");
+			fileInfo.setDatetime(new Date());
+			
+			Iterator<?> fileList = uf.getFileIterator();
+			int i = 0;
+
+			while (fileList.hasNext()) {
+				value = (String) fileList.next();
+				fileInfo.setFilepath(value);
+				i++;
+			}
+			
+			dbProcess.add(tx.getConnection(), fileInfo);
+			
+			FileTree fileTree = new FileTree();
+			fileTree.setId(IDGenerator.getNextID(tx.getConnection(), "FileTree"));
+			
+			if (log.isDebugEnabled())log.debug("OK!");
+
+			if (log.isDebugEnabled())log.debug("parentId Integer ====== " +  Integer.valueOf(parentId.trim()).intValue());
+
+			fileTree.setParentId(Integer.valueOf(parentId.trim()).intValue());
+			
+			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getId());
+			if (log.isDebugEnabled())log.debug("fileInfo.getId() ====== " + fileInfo.getId());
+
+			fileTree.setChildId(fileInfo.getId());
+			
+			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getId());
+			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getParentId());
+			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getChildId());
+			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getLevelId());
+
+			
+			dbProcess.add(tx.getConnection(), fileTree);
+
+			FileUtil.copy(new File(tmpPath + value), new File(uploadPath	+ value), true);
+
+			tx.commit();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			tx.rollback();
+		} catch (Exception e) {
+			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
+			tx.rollback();
+
+		} finally {
+			tx.end();
+		}
+
+		System.out.print("upload succeed");
+
+		return "tree";
+	}
 	
 	public String tree(HttpServletRequest request,HttpServletResponse response) {
+		TreeUtil fileTreeNode = new TreeUtil();
+		String stringTree = fileTreeNode.buildTree();
+		//System.out.println("treeString ====== " + stringTree);
+		request.setAttribute("stringTree", stringTree);
+
 		return "success";
 	}
 }

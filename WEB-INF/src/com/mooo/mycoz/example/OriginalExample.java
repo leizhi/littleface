@@ -1,4 +1,4 @@
-package com.mooo.mycoz.dbobj.mycozBranch;
+package com.mooo.mycoz.example;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

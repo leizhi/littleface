@@ -33,12 +33,13 @@
 			<result name="show">/jsp/menu.jsp</result>
 		</action>
 		
-		<action name="File" default="list"
+		<action name="File" default="tree"
 			class="com.mooo.mycoz.action.operation.FileAction">
 			<result name="list">/jsp/operation/listFile.jsp</result>
 			<result name="promptUpload">/jsp/operation/uploadFile.jsp</result>
 			<result name="download">/jsp/operation/downloadFile.jsp</result>
 			<result name="tree">/jsp/operation/treeFile.jsp</result>
+			<result name="retrieve">/jsp/operation/retrieveFile.jsp</result>
 		</action>
 		
 		<action name="CodeType" default="list"

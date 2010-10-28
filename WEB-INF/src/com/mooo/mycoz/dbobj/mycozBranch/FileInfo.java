@@ -2,7 +2,6 @@ package com.mooo.mycoz.dbobj.mycozBranch;
 
 import java.util.Date;
 
-
 public class FileInfo {
 	/**
 	 * 

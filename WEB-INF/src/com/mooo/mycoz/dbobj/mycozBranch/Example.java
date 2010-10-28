@@ -2,9 +2,6 @@ package com.mooo.mycoz.dbobj.mycozBranch;
 
 import java.util.Date;
 
-//import com.mooo.mycoz.dbobj.DBObject;
-
-//public class Example extends DBObject {
 public class Example {
 	
 	private static final long serialVersionUID = 1L;

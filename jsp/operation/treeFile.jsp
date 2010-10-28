@@ -31,10 +31,12 @@ Alf Magne Kalleland
 
 ************************************************************************************************************/
 </script>
-<script type="text/javascript" src="../../jsp/js/util/ShowCalendar.js"></script>
 
 <link href="skin/office/default/drag-drop-folder-tree.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/context-menu.css" type="text/css" rel="stylesheet"/>
+<link type="text/css" rel="stylesheet" href="skin/office/default/dhtmlgoodies_calendar.css?random=20100901" media="screen" />
+<script type="text/javascript" src="jsp/js/util.js"></script>
+<script type="text/javascript" src="jsp/js/dhtmlgoodies_calendar.js?random=20101018"></script>
 
 <style type="text/css">
 /* CSS for the demo */
@@ -81,9 +83,18 @@ tfoot tr td {
 	width: 800px;
 }
 </style>
-<s:url action="file-info" method="retrieve" var="ajaxRetrieve"></s:url>
-<s:url action="file-info" method="upload" var="ajaxUpload"></s:url>
-<s:url action="file-info" method="mkdir" var="ajaxMkdir"></s:url>
+
+<c:url value="/File.do" var="ajaxRetrieve">
+	<c:param name="method">retrieve</c:param>
+</c:url>
+
+<c:url value="/File.do" var="ajaxUpload">
+	<c:param name="method">upload</c:param>
+</c:url>
+
+<c:url value="/File.do" var="ajaxMkdir">
+	<c:param name="method">mkdir</c:param>
+</c:url>
 
 <script type="text/javascript">
 var ajax = new sack();
@@ -91,7 +102,7 @@ var ajax = new sack();
 //Use something like this if you want to save data by Ajax.
 function retrieve(id) {
 	//alert(id);
-	ajax.setVar("treeId", id); // recomended method of setting data to be parsed.
+	ajax.setVar("fileId", id); // recomended method of setting data to be parsed.
 	ajax.requestFile = "${ajaxRetrieve}";
 	ajax.onCompletion = whenCompleted;
 	ajax.runAJAX();
@@ -197,29 +208,24 @@ function change(obj){
 <tr>
 <td style="text-align:right;">父文件夹</td>
 <td><input type="text" id="parent" readonly="readonly"/>
-<input type="hidden" name="tbFileTree.id" id="parentId"/></td>
+<input type="hidden" name="parentId" id="parentId"/></td>
 </tr>
 
 <tr>
 <td style="text-align:right;">名称</td>
-<td><input type="text" name="bFileInfo.name" id="fileName"/></td>
+<td><input type="text" name="name" id="fileName"/></td>
 </tr>
-
-<tr>
-<td style="text-align:right;">文件号</td>
-<td><input type="text" name="bFileInfo.fileNo" id="fileNo"/></td>
-</tr>
-
+<%--
 <tr>
 <td style="text-align:right;">上传日期</td>
-<td><input type="text" name="bFileInfo.createTime" id="createTime"/>
-<img src="../../jsp/images/miniDate.gif" onclick="new Calendar().show(document.getElementById('createTime'));"/>
+<td><input type="text" name="datetime" id="datetime"/>
+<img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="choosedate"/>" onclick="displayCalendar(document.forms[0].datetime,'yyyy/mm/dd hh:ii',this,true)"/>
 </td>
 </tr>
-
+--%>
 <tr id="rowFile">
 <td style="text-align:right;">文件</td>
-<td><input type="file" name="file" id="updateFile" onchange="change(this)"/><%--  <input type="button" onclick="addFile();" value="增加"/><input type="button" onclick="removeFile();" value="删除"/>--%></td>
+<td><input type="file" name="file" id="file" onchange="change(this)"/><%--  <input type="button" onclick="addFile();" value="增加"/><input type="button" onclick="removeFile();" value="删除"/>--%></td>
 </tr>
  
 </tbody>
@@ -243,12 +249,12 @@ function change(obj){
 <tr>
 <td style="text-align:right;">父文件夹</td>
 <td><input type="text" id="dparent" readonly="readonly"/>
-<input type="hidden" name="tbFileTree.id" id="dparentId"/></td>
+<input type="hidden" name="parentId" id="dparentId"/></td>
 </tr>
 
 <tr>
 <td style="text-align:right;">名称</td>
-<td><input type="text" name="bFileInfo.name"/></td>
+<td><input type="text" name="folderName"/></td>
 </tr>
 </tbody>
 
@@ -257,8 +263,8 @@ function change(obj){
 </div>
 <div style="width: 100%;background-color: #bbeedd;color: #add2da;font-size: 12px;">
 <div id="tree" style="overflow: scroll; height: 300px; width: 19%;float:left;background-color: #fff;color: #000;border: 0.1% solid #005AA7; margin: 0.5%;"">
-<%-- ${stringTree } --%>
-
+${stringTree }
+<%--
 <ul id="dhtmlgoodies_tree2" class="dhtmlgoodies_tree">
 	<li id="node0" noDrag="true" noSiblings="true" noDelete="true" noRename="true"><a href="#">Root node</a>
 	<ul>
@@ -286,7 +292,7 @@ function change(obj){
 	</ul>
 	</li>
 </ul>
-
+ --%>
 </div>
 
 <div id="view" style="width: 79%;float:right;background-color: #bbeedd;color: #000;border: 0.1% solid #005AA7; margin: 0.5%;">
