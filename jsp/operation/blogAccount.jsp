@@ -54,8 +54,7 @@ function docommit(url) {
 <%@ include file="../incl/g_bar.jsp" %>
 
 <div id="container">
-
-<div style="text-align: left;">
+<div>
 <c:url value="/ForumThread.do" var="promptCreateThread">
 	<c:param name="method">promptCreateThread</c:param>
 </c:url>

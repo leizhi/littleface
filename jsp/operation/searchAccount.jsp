@@ -48,33 +48,31 @@ color:#000;
 
 <div id="container">
 
-<div style="text-align:left;">
 
-	<table>
-	<caption>Search Account</caption>
-	<tbody>
-	<tr>
-		<td style="text-align: right;">年龄</td>
-		<td><input name="" value=""/></td>
-		<td style="text-align: right;">性别</td>
-		<td><input name="" value=""/></td>
-	</tr>
-	
-	<tr>
-		<td style="text-align: right;">地区</td>
-		<td><input name="" value=""/></td>
-		<td style="text-align: right;">名称</td>
-		<td><input name="" value=""/></td>
-	</tr>
-	
-	<tr>
-		<td colspan="4" style="text-align: center;">
-				<input type="submit" value="<fmt:message key="List"/>">
-		 </td>
-	</tr>
-	</tbody>
-	</table>
-</div>
+<table>
+<caption>Search Account</caption>
+<tbody>
+<tr>
+	<td style="text-align: right;">年龄</td>
+	<td><input name="" value=""/></td>
+	<td style="text-align: right;">性别</td>
+	<td><input name="" value=""/></td>
+</tr>
+
+<tr>
+	<td style="text-align: right;">地区</td>
+	<td><input name="" value=""/></td>
+	<td style="text-align: right;">名称</td>
+	<td><input name="" value=""/></td>
+</tr>
+
+<tr>
+	<td colspan="4" style="text-align: center;">
+			<input type="submit" value="<fmt:message key="List"/>">
+	 </td>
+</tr>
+</tbody>
+</table>
 
 <div>
 <c:forEach var="item" items="${accounts}" varStatus="status">

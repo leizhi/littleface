@@ -113,7 +113,7 @@ function edit(url){
 
 <div style="text-align:left;">
 	<table align="center">
-	<caption>CodeType</caption>
+	<caption>CodeTypeddd</caption>
 	
 	<tr>
 		<td>码表类型</td>

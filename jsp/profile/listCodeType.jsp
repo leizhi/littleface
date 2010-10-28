@@ -68,8 +68,6 @@ function edit(url){
 
 <div id="container">
 
-<div style="text-align:left;">
-
 	<table align="center">
 	<caption>CodeType</caption>
 			<tbody>
@@ -140,7 +138,6 @@ function edit(url){
 </tr>
 </tfoot>
 </table>
-</div>
 
 <jsp:include page="../incl/g_footer.jsp" />
 </div>
