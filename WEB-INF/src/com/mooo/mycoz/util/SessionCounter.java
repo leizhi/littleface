@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSessionListener;
 
 public class SessionCounter implements HttpSessionListener {
 
-	public static HashSet<String> m_real = new HashSet<String>();
+	public static HashSet<String> users = new HashSet<String>();
 	private static int activeSessions = 0;
 
 	public void sessionCreated(HttpSessionEvent se) {
@@ -17,7 +17,7 @@ public class SessionCounter implements HttpSessionListener {
 	public void sessionDestroyed(HttpSessionEvent se) {
 		if (activeSessions > 0)
 			activeSessions--;
-		m_real.remove(se.getSession().getId());
+		users.remove(se.getSession().getId());
 	}
 
 	public static int getActiveSessions() {
@@ -25,11 +25,16 @@ public class SessionCounter implements HttpSessionListener {
 	}
 
 	public static void put(String sessionId) {
-		m_real.add(sessionId);
+		users.add(sessionId);
 	}
 
 	public static int getRealCount() {
-		return m_real.size();
+		return users.size();
 	}
 
+	public static void remove(String sessionId) {
+		if (activeSessions > 0)
+			activeSessions--;
+		users.remove(sessionId);
+	}
 }

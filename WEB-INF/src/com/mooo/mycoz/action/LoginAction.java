@@ -156,6 +156,9 @@ public class LoginAction extends BaseSupport {
 				session.removeAttribute(USER_SESSION_KEY);
 				session.removeAttribute(request.getSession().getId());
 				session.invalidate();
+				
+				com.mooo.mycoz.util.SessionCounter.remove(request.getSession().getId());
+
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 		}
