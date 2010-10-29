@@ -20,12 +20,13 @@ public class SessionCounter implements HttpSessionListener {
 	private static int activeSessions = 0;
 
 	public void sessionCreated(HttpSessionEvent event) {
-		//HttpSession session = event.getSession();
-		//if (log.isDebugEnabled()) log.debug("sessionCreated datetime = " + (session.getLastAccessedTime()-session.getCreationTime()));
 		activeSessions++;
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
+		if (activeSessions > 0)
+			activeSessions--;
+		
 		HttpSession session = event.getSession();
 		String ip = (String) session.getAttribute("ip");
 		
@@ -48,12 +49,6 @@ public class SessionCounter implements HttpSessionListener {
 			e.printStackTrace();
 			if (log.isDebugEnabled()) log.debug("Exception: "+e.getMessage());
 		}
-
-		session.removeAttribute("UserSessionKey");
-		session.removeAttribute("ip");
-		
-		if (activeSessions > 0)
-			activeSessions--;
 	}
 	
 	public static int getCount(){

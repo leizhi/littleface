@@ -152,22 +152,8 @@ public class LoginAction extends BaseSupport {
 	public String processLogout(HttpServletRequest request,HttpServletResponse response) {
 		try {
 				HttpSession session = request.getSession(true);
-				
 				if (log.isDebugEnabled()) log.debug("online datatime = " + (session.getLastAccessedTime() - session.getCreationTime()) );
-				
-				AccessLog al = new AccessLog();
-				al.setIp(getClinetIp(request));
-				al.setStartdate(new Date(session.getCreationTime()));
-				dbProcess.retrieve(al);
-				
-				al.setEnddate(new Date(session.getLastAccessedTime()));
-				dbProcess.update(al);
-				
-				session.removeAttribute(USER_SESSION_KEY);
-				session.removeAttribute(IP);
-
 				session.invalidate();
-				
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 		}
