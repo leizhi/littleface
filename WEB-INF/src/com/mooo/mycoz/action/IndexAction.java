@@ -17,6 +17,7 @@ public class IndexAction  extends BaseSupport {
 			if (log.isDebugEnabled()) log.debug("promptIndexStateRun init: ");
 			HttpSession session = request.getSession(true);
 			Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
+			
 			boolean isAuthenticated = (null != userID && userID >0);
 			
 			if (log.isDebugEnabled()) log.debug("isAuthenticated OK: "+isAuthenticated);

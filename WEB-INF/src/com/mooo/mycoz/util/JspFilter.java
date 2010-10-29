@@ -45,7 +45,7 @@ public class JspFilter implements Filter {
 				boolean isJsp = m.find();
 
 				Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
-				boolean isAuthenticated = (null != userID);
+				boolean isAuthenticated = (null != userID && userID >0);
 
 				System.out.println("--------filter start-------------");
 				System.out.println("filter contextPath:" + contextPath);

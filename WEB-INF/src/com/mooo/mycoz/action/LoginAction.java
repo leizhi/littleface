@@ -16,7 +16,6 @@ import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
-import com.mooo.mycoz.util.SessionCounter;
 import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.Transaction;
 
@@ -71,6 +70,7 @@ public class LoginAction extends BaseSupport {
 				
 				HttpSession session = request.getSession(true);
 				session.setAttribute(USER_SESSION_KEY, user.getId());
+				session.setAttribute(IP, getClinetIp(request));
 				
 				AccessLog al = new AccessLog();
 				al.setId(IDGenerator.getNextID("AccessLog").intValue());
@@ -78,8 +78,6 @@ public class LoginAction extends BaseSupport {
 				al.setStartdate(new Date(session.getCreationTime()));
 				
 				dbProcess.add(al);
-				
-				SessionCounter.login();
 			}
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -166,9 +164,9 @@ public class LoginAction extends BaseSupport {
 				dbProcess.update(al);
 				
 				session.removeAttribute(USER_SESSION_KEY);
+				session.removeAttribute(IP);
+
 				session.invalidate();
-				
-				SessionCounter.logout();
 				
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
