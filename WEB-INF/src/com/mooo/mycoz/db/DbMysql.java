@@ -328,13 +328,24 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			result = stmt.executeQuery(doSql);
 
 			rsmd = result.getMetaData();
+			int type=0;
+			
 			while (result.next()) {
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
-					BeanUtil.bindProperty(entity,
-							StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
-							result.getString(i));
+					type = rsmd.getColumnType(i);
+					
+					if(type == Types.TIMESTAMP){
+						BeanUtil.bindProperty(entity,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getTimestamp(i));
+					}else {
+						BeanUtil.bindProperty(entity,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getString(i));
+					}
 				}
 			}
+			
 			// addCache(doSql, retrieveList);
 		} catch (Exception e) {
 			e.printStackTrace();

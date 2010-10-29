@@ -285,6 +285,8 @@ public class FileAction extends BaseSupport {
 		fileInfo.setId(new Integer(fileId));
 		try {
 			dbProcess.retrieve(fileInfo);
+			System.out.println("datatime ====== " + fileInfo.getDatetime());
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

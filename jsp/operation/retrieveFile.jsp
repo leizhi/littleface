@@ -20,7 +20,7 @@
 
 <tr>
 <td style="text-align:right;">上传日期</td>
-<td>${fileInfo.datetime}</td>
+<td><fmt:formatDate value="${fileInfo.datetime }" pattern="yyyy/MM/dd hh:mm:ss"/></td>
 </tr>
 
 <tr>

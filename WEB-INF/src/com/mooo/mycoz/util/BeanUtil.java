@@ -51,8 +51,7 @@ public class BeanUtil {
 		} else if (cl == Integer.class || cl == Float.class || cl == Long.class
 				|| cl == Double.class || cl == Byte.class
 				|| cl == Boolean.class || cl == Character.class) {
-			Method valueOf = cl.getMethod("valueOf",
-					new Class[] { String.class });
+			Method valueOf = cl.getMethod("valueOf",new Class[] { String.class });
 			Object valueObj = valueOf.invoke(cl, new Object[] { value });
 			setMethod.invoke(bean, new Object[] { valueObj });
 		}
