@@ -7,17 +7,17 @@
 		
 		You CAN specify the layout here 
 	-->
-    <appender name="xpcLog" class="org.apache.log4j.RollingFileAppender">
+    <appender name="dbLog" class="org.apache.log4j.RollingFileAppender">
             <param name="MaxFileSize" value="2000KB"/>
-            <param name="File" value="logs/xpc.log"/>
+            <param name="File" value="logs/db.log"/>
             <param name="Append" value="true"/>
             <layout class="org.apache.log4j.PatternLayout">
                     <param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%l) - %m\n"/>
             </layout>
     </appender>
     
-	<appender name="mycozLog" class="org.apache.log4j.FileAppender">
-		<param name="File" value="logs/mycozLog.log"/>
+	<appender name="actionLog" class="org.apache.log4j.FileAppender">
+		<param name="File" value="logs/action.log"/>
 		<param name="Append" value="true"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%l) - %m\n"/>
@@ -35,15 +35,15 @@
 	<!--
         The root configuration for all xpc errors.  Disable this category
         to remove ALL xpc logging information -->
-	<category name="com.manihot.xpc" additivity="false">
+	<category name="com.mooo.mycoz.db" additivity="false">
 		<priority value="debug"/>
-		<appender-ref ref="xpcLog"/>
+		<appender-ref ref="dbLog"/>
 	</category>
 	
     <!-- The root for struts -->
-    <category name="com.mooo.mycoz" additivity="false">
+    <category name="com.mooo.mycoz.action" additivity="false">
         <priority value="debug"/>
-        <appender-ref ref="mycozLog"/>
+        <appender-ref ref="actionLog"/>
     </category>
 
 	<!-- the one and only root category -->

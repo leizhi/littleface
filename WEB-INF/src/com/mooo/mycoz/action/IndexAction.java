@@ -11,17 +11,13 @@ public class IndexAction  extends BaseSupport {
 
 	private static Log log = LogFactory.getLog(IndexAction.class);
 
-	public String promptIndex(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String promptIndex(HttpServletRequest request,HttpServletResponse response) {
+
 		try {
 			if (log.isDebugEnabled()) log.debug("promptIndexStateRun init: ");
-			
 			HttpSession session = request.getSession(true);
-			com.mooo.mycoz.util.SessionCounter.put(request.getSession().getId());
-			session.setAttribute(request.getSession().getId(), "Guest");
-			
 			Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
-			boolean isAuthenticated = (null != userID);
+			boolean isAuthenticated = (null != userID && userID >0);
 			
 			if (log.isDebugEnabled()) log.debug("isAuthenticated OK: "+isAuthenticated);
 
@@ -34,6 +30,10 @@ public class IndexAction  extends BaseSupport {
 			if (log.isDebugEnabled())
 				log.debug("Exception Load error of: " + e.getMessage());
 		}
+		return "success";
+	}
+	
+	public String promptLogin(HttpServletRequest request,HttpServletResponse response) {
 		return "success";
 	}
 	

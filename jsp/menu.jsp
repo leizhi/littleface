@@ -36,7 +36,7 @@ li {
 <body>
 <div id="container">
 
-<span>online:<%=com.mooo.mycoz.util.SessionCounter.getRealCount()%></span>
+<span>online:<%=com.mooo.mycoz.util.SessionCounter.getCount()%></span>
 
 <c:url value="/Login.do" var="processLogout">
 	<c:param name="method">processLogout</c:param>

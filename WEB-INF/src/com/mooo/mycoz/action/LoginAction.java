@@ -16,6 +16,7 @@ import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.SessionCounter;
 import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.Transaction;
 
@@ -27,9 +28,8 @@ public class LoginAction extends BaseSupport {
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled())log.debug("promptLogin");
-			HttpSession session = request.getSession(true);
-			com.mooo.mycoz.util.SessionCounter.put(request.getSession().getId());
-			session.setAttribute(request.getSession().getId(), "Guest");
+			//HttpSession session = request.getSession(true);
+			//session.setAttribute(USER_SESSION_KEY, -1);
 
 			//Locale[] locales = java.text.NumberFormat.getAvailableLocales();
 			Locale[] locales = new Locale[2];
@@ -38,13 +38,6 @@ public class LoginAction extends BaseSupport {
 			request.setAttribute("locales", locales);
 
 			if (log.isDebugEnabled()) log.debug("IP:"+getClinetIp(request));
-
-			AccessLog al = new AccessLog();
-			al.setId(IDGenerator.getNextID("AccessLog").intValue());
-			al.setIp(getClinetIp(request));
-			al.setStartdate(new Date());
-			dbProcess.add(al);
-			
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 			return "promptLogin";
@@ -76,8 +69,17 @@ public class LoginAction extends BaseSupport {
 				if (log.isDebugEnabled())log.debug("else");
 				dbProcess.retrieve(user);
 				
-				HttpSession hs = request.getSession(true);
-				hs.setAttribute(USER_SESSION_KEY, user.getId());
+				HttpSession session = request.getSession(true);
+				session.setAttribute(USER_SESSION_KEY, user.getId());
+				
+				AccessLog al = new AccessLog();
+				al.setId(IDGenerator.getNextID("AccessLog").intValue());
+				al.setIp(getClinetIp(request));
+				al.setStartdate(new Date(session.getCreationTime()));
+				
+				dbProcess.add(al);
+				
+				SessionCounter.login();
 			}
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
@@ -149,16 +151,25 @@ public class LoginAction extends BaseSupport {
 		return "success";
 	}
 	
-	public String processLogout(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String processLogout(HttpServletRequest request,HttpServletResponse response) {
 		try {
 				HttpSession session = request.getSession(true);
+				
+				if (log.isDebugEnabled()) log.debug("online datatime = " + (session.getLastAccessedTime() - session.getCreationTime()) );
+				
+				AccessLog al = new AccessLog();
+				al.setIp(getClinetIp(request));
+				al.setStartdate(new Date(session.getCreationTime()));
+				dbProcess.retrieve(al);
+				
+				al.setEnddate(new Date(session.getLastAccessedTime()));
+				dbProcess.update(al);
+				
 				session.removeAttribute(USER_SESSION_KEY);
-				session.removeAttribute(request.getSession().getId());
 				session.invalidate();
 				
-				com.mooo.mycoz.util.SessionCounter.remove(request.getSession().getId());
-
+				SessionCounter.logout();
+				
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 		}
