@@ -16,6 +16,7 @@ import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.SessionCounter;
 import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.Transaction;
 
@@ -78,6 +79,8 @@ public class LoginAction extends BaseSupport {
 				al.setStartdate(new Date(session.getCreationTime()));
 				
 				dbProcess.add(al);
+				
+				SessionCounter.login();
 			}
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
