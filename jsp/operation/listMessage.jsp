@@ -56,8 +56,8 @@ ${item.user.name }
 </div>
 
 <div style="float: right;width: 80%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
-<c:out value="${item.subject }"/>
 <fmt:formatDate value="${item.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/>
+<c:out value="${item.subject }"/>
 <a href=""><fmt:message key="Reply"/></a>
 </div>
 
@@ -99,9 +99,14 @@ ${item.user.name }
 <c:url value="/ForumThread.do" var="createMessage">
 	<c:param name="method">createMessage</c:param>
 </c:url>
-<div style="width: 100%;margin-left: 20%;">
+
+<div style="float: left;width: 20%;text-align: right;">
+</div>
+
+<div style="float: right;width: 80%;text-align: left;">
 	<input type="submit" value="<fmt:message key="Deliver"/>" onclick="docommit('${createMessage}');return false;">
 </div>
+<div style="clear: both;"></div>
 
 <jsp:include page="../incl/g_footer.jsp" />
 

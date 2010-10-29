@@ -8,4 +8,3 @@
 <c:redirect url="/Index.do" />
 </body>
 </html>
-

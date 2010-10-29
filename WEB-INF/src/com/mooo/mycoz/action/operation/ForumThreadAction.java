@@ -17,6 +17,7 @@ import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
+import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.Transaction;
 
 public class ForumThreadAction extends BaseSupport{
@@ -30,11 +31,18 @@ public class ForumThreadAction extends BaseSupport{
 	}
 	
 	public String processCreateThread(HttpServletRequest request, HttpServletResponse response) {
-		try {			
+		Transaction tx = new Transaction();
+
+		try {
+			tx.start();
+
 			ForumThread forumThread = new ForumThread();
 			ParamUtil.bindData(request, forumThread,"forumThread");
-
-			forumThread.setId(IDGenerator.getNextID("ForumThread").intValue());
+			
+			StringUtils.noNull(forumThread.getSubject());
+			StringUtils.noNull(forumThread.getBody());
+			
+			forumThread.setId(IDGenerator.getNextID(tx.getConnection(),"ForumThread"));
 			Date now = new Date();
 			forumThread.setCreationDate(now);
 			forumThread.setModifiedDate(now);
@@ -46,13 +54,21 @@ public class ForumThreadAction extends BaseSupport{
 			String userId = hs.getAttribute(USER_SESSION_KEY).toString();
 			forumThread.setUserId(new Integer(userId));
 			forumThread.setReplyPrivateUserId(new Integer(userId));
-			dbProcess.add(forumThread);
+			dbProcess.add(tx.getConnection(),forumThread);
 
 			if (log.isDebugEnabled()) log.debug("userId="+userId);
-			
+			tx.commit();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+			tx.rollback();
+			return "promptCreateThread";
+		}catch (Exception e) {
+			e.printStackTrace();
+			tx.rollback();
+			return "promptCreateThread";
 		}
+		
 		return "listMessage";
 	}
 	
@@ -89,6 +105,8 @@ public class ForumThreadAction extends BaseSupport{
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 		return "success";
 	}
@@ -110,6 +128,9 @@ public class ForumThreadAction extends BaseSupport{
 			Message message = new Message();
 			ParamUtil.bindData(request, message,"message");
 			
+			StringUtils.noNull(message.getSubject());
+			StringUtils.noNull(message.getBody());
+
 			message.setId(IDGenerator.getNextID("Message").intValue());
 			message.setUserId(new Integer(userId));
 			message.setReplyPrivateUserId(new Integer(userId));
@@ -128,6 +149,9 @@ public class ForumThreadAction extends BaseSupport{
 			
 			tx.commit();
 		} catch (SQLException e) {
+			e.printStackTrace();
+			tx.rollback();
+		}catch (Exception e) {
 			e.printStackTrace();
 			tx.rollback();
 		} finally{
