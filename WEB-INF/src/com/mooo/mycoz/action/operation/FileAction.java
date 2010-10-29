@@ -310,7 +310,12 @@ public class FileAction extends BaseSupport {
 
 			FileTree fileTree = new FileTree();
 			fileTree.setId(IDGenerator.getNextID(tx.getConnection(), "FileTree"));
-			fileTree.setParentId(new Integer(parentId));
+			
+			if(parentId == null || parentId.equals(""))
+				fileTree.setParentId(0);
+			else
+				fileTree.setParentId(new Integer(parentId));
+			
 			fileTree.setChildId(folder.getId());
 
 			dbProcess.add(tx.getConnection(),fileTree);
@@ -393,16 +398,11 @@ public class FileAction extends BaseSupport {
 			
 			FileTree fileTree = new FileTree();
 			fileTree.setId(IDGenerator.getNextID(tx.getConnection(), "FileTree"));
+			if(parentId == null || parentId.equals(""))
+				fileTree.setParentId(0);
+			else
+				fileTree.setParentId(Integer.valueOf(parentId.trim()).intValue());
 			
-			if (log.isDebugEnabled())log.debug("OK!");
-
-			if (log.isDebugEnabled())log.debug("parentId Integer ====== " +  Integer.valueOf(parentId.trim()).intValue());
-
-			fileTree.setParentId(Integer.valueOf(parentId.trim()).intValue());
-			
-			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getId());
-			if (log.isDebugEnabled())log.debug("fileInfo.getId() ====== " + fileInfo.getId());
-
 			fileTree.setChildId(fileInfo.getId());
 			
 			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getId());
