@@ -53,6 +53,6 @@
 	</filter-mapping>
 
 	<welcome-file-list>
-		<welcome-file>jsp/index.html</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 </web-app>
