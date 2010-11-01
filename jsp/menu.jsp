@@ -60,10 +60,17 @@ li {
 	<c:param name="bar">1</c:param>
 	<c:param name="subbar">1</c:param>
 </c:url>
+
+<c:url value="/Account.do" var="forumAccount">
+	<c:param name="method">forum</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">2</c:param>
+</c:url>
 <ul>
 <li class="title"><fmt:message key="Consort"/></li>
 <li><a href="${searchAccount}" target="main"><fmt:message key="Search"/></a></li>
-<li><a href="${blogAccount}" target="main"><fmt:message key="Blog"/></a></li>
+<%-- <li><a href="${blogAccount}" target="main"><fmt:message key="Blog"/></a></li> --%>
+<li><a href="${forumAccount}" target="main"><fmt:message key="Forum"/></a></li>
 </ul>
 
 <c:url value="/My.do" var="generalMy">

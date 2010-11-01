@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ForumThread {
 	Integer id;
-	Integer forumId;
+	Integer typeId;
 	Integer userId;
 	String subject;
 	String body;
@@ -20,11 +20,11 @@ public class ForumThread {
 	public void setId(Integer id) {
 	 this.id = id;
 	}
-	public Integer getForumId() {
-	return forumId;
+	public Integer getTypeId() {
+	return typeId;
 	}
-	public void setForumId(Integer forumId) {
-	 this.forumId = forumId;
+	public void setTypeId(Integer typeId) {
+	 this.typeId = typeId;
 	}
 	public Integer getUserId() {
 	return userId;
@@ -81,6 +81,7 @@ public class ForumThread {
 	 this.replyPrivateUserId = replyPrivateUserId;
 	}
 	
+	// extended attribute
 
 	User user;
 	User replyPrivateUser;

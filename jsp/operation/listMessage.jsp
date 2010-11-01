@@ -33,7 +33,7 @@ ${forumThread.user.name }
 </div>
 
 <div style="float: right;width: 80%;background-color: #e3e9ff;height:auto !important; height:20px; min-height:20px;">
-${forumThread.subject }  <fmt:formatDate value="${forumThread.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/>
+ <fmt:formatDate value="${forumThread.creationDate }" pattern="yyyy/MM/dd hh:mm:ss"/> ${forumThread.subject }
 </div>
 <div style="clear: both;"></div>
 

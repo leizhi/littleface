@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.dbobj.mycozBranch.Forum;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
+import com.mooo.mycoz.dbobj.mycozBranch.ThreadType;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.ParamUtil;
 
@@ -92,5 +94,16 @@ public class AccountAction extends BaseSupport{
 			e.printStackTrace();
 		}
 		return "blog";
+	}
+	
+	public String forum(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Forum forum = new Forum();
+			List<?> forums = dbProcess.searchAndRetrieveList(forum);
+			request.setAttribute("forums", forums);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "success";
 	}
 }

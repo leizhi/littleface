@@ -7,7 +7,6 @@
 <link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
 <script type="text/javascript" src="jsp/js/util.js"></script>
-<script type="text/javascript" src="jsp/js/tw-sack.js" ></script>
 
 <style type="text/css">
 .box {
@@ -24,6 +23,8 @@
 
 .box ul {
 	width: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 .box li {
@@ -44,6 +45,12 @@
 	width: 80%;
 }
 
+.box ul .title {
+	text-align:left;
+	background-color:e3e9ff;
+	width: 100%;
+}
+
 .box ul .left {
 	text-align:center;
 	width: 20%;
@@ -57,48 +64,6 @@
 function docommit(url) {
 	document.forms[0].action=url;
 	document.forms[0].submit();
-}
-</script>
-
-<script type="text/javascript">
-var ajax = new sack();
-
-function whenLoading(){
-	var e = document.getElementById('replaceme'); 
-	e.innerHTML = "<p>Sending Data...</p>";
-}
-
-function whenLoaded(){
-	var e = document.getElementById('replaceme'); 
-	e.innerHTML = "<p>Data Sent...</p>";
-}
-
-function whenInteractive(){
-	var e = document.getElementById('replaceme'); 
-	e.innerHTML = "<p>getting data...</p>";
-}
-
-function whenCompleted(){
-	var e = document.getElementById('sackdata'); 
-	if (ajax.responseStatus){
-		var string = "<p>Status Code: " + ajax.responseStatus[0] + "</p><p>Status Message: " + ajax.responseStatus[1] + "</p><p>URLString Sent: " + ajax.URLString + "</p>";
-	} else {
-		var string = "<p>URLString Sent: " + ajax.URLString + "</p>";
-	}
-	e.innerHTML = string;
-}
-
-function doit(){
-	var form = document.getElementById('form');
-	ajax.setVar("myTextBox", form.mytext.value); // recomended method of setting data to be parsed.
-	ajax.requestFile = "sackdemo.php";
-	ajax.method = form.method.value;
-	ajax.element = 'replaceme';
-	ajax.onLoading = whenLoading;
-	ajax.onLoaded = whenLoaded; 
-	ajax.onInteractive = whenInteractive;
-	ajax.onCompletion = whenCompleted;
-	ajax.runAJAX();
 }
 </script>
 </head>
@@ -134,52 +99,50 @@ function doit(){
 	
 <div class="box">
 	<ul>
-		<li class="tl"><fmt:message key="General"/></li>
-		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
-		<li style="clear: both;"/>
+		<li class="title"><fmt:message key="General"/></li>
 				
 		<li class="left"><fmt:message key="Name" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${user.name }" /></li>
 		<li style="clear: both;"/>
 
 		<li class="left"><fmt:message key="Sex" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.sex.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Height" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.height }" />:<c:out value="${userInfo.heightUnit.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Weight" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.weight}" />:<c:out value="${userInfo.weightUnit.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Birthday" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.birthday }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Career" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.career.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Education" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.education.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Married" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.married.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="QQ" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.qq }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Email" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.email }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Secret" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${userInfo.secret }" /></li>
 		<li style="clear: both;"/>
 	</ul>
 </div>
@@ -187,32 +150,30 @@ function doit(){
 <div class="box">
 
 	<ul>
-		<li class="tl"><fmt:message key="Address"/></li>
-		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
-		<li style="clear: both;"/>
+		<li class="title"><fmt:message key="Address"/></li>
 				
 		<li class="left"><fmt:message key="Country" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${address.country.name }" /></li>
 		<li style="clear: both;"/>
 
 		<li class="left"><fmt:message key="City" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${address.city.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="PostalCode" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${address.postalCode }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Address" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${address.address }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Tel" /></li>
-		<li class="right"><input name="user.name" value="${user.name }"/></li>
+		<li class="right"><c:out value="${address.tel }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="MobileNo" /></li>
-		<li class="right"><c:out value="${user.name }" /></li>
+		<li class="right"><c:out value="${address.mobileNo }" /></li>
 		<li style="clear: both;"/>
 	</ul>
 </div>
@@ -222,9 +183,7 @@ function doit(){
 <div class="box">
 
 	<ul>
-		<li class="tl"><fmt:message key="Images"/></li>
-		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
-		<li style="clear: both;"/>
+		<li class="title"><fmt:message key="Images"/></li>
 				
 		<li>
 			<img width="80px" height="60px" src=""/>
@@ -243,9 +202,7 @@ function doit(){
 <div class="box">
 
 	<ul>
-		<li class="tl"><fmt:message key="Friend"/></li>
-		<li class="tr"><a href=""><fmt:message key="Edit"/></a></li>
-		<li style="clear: both;"/>
+		<li class="title"><fmt:message key="Friend"/></li>
 				
 		<li>abc@163.com</li>
 		<li>abc@163.com</li>
@@ -256,6 +213,13 @@ function doit(){
 </div>
 <div style="clear: both;"></div>
 
+<div style="width: 100;">
+<c:url value="/My.do" var="editMy">
+	<c:param name="method">edit</c:param>
+</c:url>
+
+<input type="submit" value="Edit" onclick="docommit('${editMy}');return false;"/>
+</div>
 <jsp:include page="../incl/g_footer.jsp" />
 </div>
 

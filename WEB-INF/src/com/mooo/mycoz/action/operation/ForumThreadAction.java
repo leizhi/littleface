@@ -1,7 +1,9 @@
 package com.mooo.mycoz.action.operation;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +27,11 @@ public class ForumThreadAction extends BaseSupport{
 
 	
 	public String promptCreateThread(HttpServletRequest request, HttpServletResponse response) {
+		String threadTypeId = request.getParameter("threadTypeId");
+
 		ForumThread forumThread = new ForumThread();
+		forumThread.setTypeId(new Integer(threadTypeId));
+		
 		request.setAttribute("forumThread", forumThread);
 		return "success";
 	}
@@ -110,6 +116,51 @@ public class ForumThreadAction extends BaseSupport{
 		}
 		return "success";
 	}
+
+	public String listThread(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String threadTypeId = request.getParameter("threadTypeId");
+			if (log.isDebugEnabled()) log.debug("threadTypeId="+threadTypeId);
+			request.setAttribute("threadTypeId", threadTypeId);
+			
+			ForumThread forumThread = new ForumThread();
+			forumThread.setTypeId(new Integer(threadTypeId));
+			
+			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread);
+			
+			List forumThreads = new ArrayList<ForumThread>();
+			User user = null;
+			Message message = new Message();
+
+			for (Iterator<?> it = forumThreadList.iterator(); it.hasNext();) {
+				forumThread = (ForumThread) it.next();
+				
+				user = new User();
+				user.setId(forumThread.getUserId());
+				dbProcess.retrieve(user);
+				forumThread.setUser(user);
+				
+				user = new User();
+				user.setId(forumThread.getReplyPrivateUserId());
+				dbProcess.retrieve(user);
+				forumThread.setReplyPrivateUser(user);
+				
+				message.setThreadId(forumThread.getId());
+				forumThread.setReply(dbProcess.count(message));
+				
+				forumThreads.add(forumThread);
+			}
+			
+			request.setAttribute("forumThreads", forumThreads);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "success";
+	}
+	
 	
 	public String createMessage(HttpServletRequest request, HttpServletResponse response) {
 		Transaction tx = new Transaction();

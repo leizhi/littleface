@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozShared
 -- ------------------------------------------------------
--- Server version	5.1.49-log
+-- Server version	5.1.51
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -66,13 +66,13 @@ INSERT INTO `AccountType` VALUES (1,1,'现金','现金帐目',2),(2,1,'银行存
 UNLOCK TABLES;
 
 --
--- Dumping data for table `BlogCategory`
+-- Dumping data for table `Career`
 --
 
-LOCK TABLES `BlogCategory` WRITE;
-/*!40000 ALTER TABLE `BlogCategory` DISABLE KEYS */;
-INSERT INTO `BlogCategory` VALUES (0,0,0,'',NULL),(1,0,1,'Music',NULL),(2,0,1,'Move','电影'),(3,1,2,'mp3',NULL),(4,1,2,'mp4',NULL),(5,2,2,'HongKong','香港武打'),(6,0,1,'USA',NULL),(7,6,2,'越狱',''),(8,3,3,'孙燕枝',''),(9,0,1,'技术联盟','论坛'),(10,9,2,'java',''),(11,9,2,'c/c++',''),(12,0,1,'股票','财经');
-/*!40000 ALTER TABLE `BlogCategory` ENABLE KEYS */;
+LOCK TABLES `Career` WRITE;
+/*!40000 ALTER TABLE `Career` DISABLE KEYS */;
+INSERT INTO `Career` VALUES (1,'医生'),(2,'教师'),(3,'企业家');
+/*!40000 ALTER TABLE `Career` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -81,7 +81,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `City` WRITE;
 /*!40000 ALTER TABLE `City` DISABLE KEYS */;
-INSERT INTO `City` VALUES (0,0,'NULL','NULL',NULL),(1,1,'CD','ChengDu','ChengDu'),(2,1,'SH','ShangHai','ShangHai'),(3,1,'CQ','ChongQing','ChongQing');
+INSERT INTO `City` VALUES (1,1,'CD','ChengDu','ChengDu'),(2,1,'SH','ShangHai','ShangHai'),(3,1,'CQ','ChongQing','ChongQing');
 /*!40000 ALTER TABLE `City` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `CodeType` WRITE;
 /*!40000 ALTER TABLE `CodeType` DISABLE KEYS */;
-INSERT INTO `CodeType` VALUES (1,'文件类型','Linear'),(2,'论坛类型','Linear');
+INSERT INTO `CodeType` VALUES (0,'NULL',NULL),(1,'文件类型','Linear'),(2,'论坛类型','Linear');
 /*!40000 ALTER TABLE `CodeType` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +101,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Country` WRITE;
 /*!40000 ALTER TABLE `Country` DISABLE KEYS */;
-INSERT INTO `Country` VALUES (0,'','',NULL),(1,'CN','CHINA','CHINA'),(2,'CA','CANADA','CANADA'),(3,'USA','USA','USA'),(4,'ID','INDONESIA','INDONESIA');
+INSERT INTO `Country` VALUES (1,'CN','CHINA','CHINA'),(2,'CA','CANADA','CANADA'),(3,'USA','USA','USA'),(4,'ID','INDONESIA','INDONESIA');
 /*!40000 ALTER TABLE `Country` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,12 +116,32 @@ INSERT INTO `Currency` VALUES (1,'USD',3,'US Dollar','$'),(2,'RMB',1,'Reminbi','
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `Education`
+--
+
+LOCK TABLES `Education` WRITE;
+/*!40000 ALTER TABLE `Education` DISABLE KEYS */;
+INSERT INTO `Education` VALUES (1,'文盲'),(2,'小学'),(3,'初中'),(4,'高中'),(5,'大专'),(6,'本科'),(7,'硕士'),(8,'研究生'),(9,'博士'),(10,'专家'),(11,'科学家');
+/*!40000 ALTER TABLE `Education` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `HeightUnit`
+--
+
+LOCK TABLES `HeightUnit` WRITE;
+/*!40000 ALTER TABLE `HeightUnit` DISABLE KEYS */;
+INSERT INTO `HeightUnit` VALUES (1,'cm');
+/*!40000 ALTER TABLE `HeightUnit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `Language`
 --
 
 LOCK TABLES `Language` WRITE;
 /*!40000 ALTER TABLE `Language` DISABLE KEYS */;
-INSERT INTO `Language` VALUES (0,'','',NULL),(1,'CN','Chinese','Chinese Language'),(2,'CA','English','Caina English'),(3,'USA','English','USA English'),(4,'ID','English','Indonesia Enilsh');
+INSERT INTO `Language` VALUES (1,'CN','Chinese','Chinese Language'),(2,'CA','English','Caina English'),(3,'USA','English','USA English'),(4,'ID','English','Indonesia Enilsh');
 /*!40000 ALTER TABLE `Language` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,8 +151,18 @@ UNLOCK TABLES;
 
 LOCK TABLES `LinearCode` WRITE;
 /*!40000 ALTER TABLE `LinearCode` DISABLE KEYS */;
-INSERT INTO `LinearCode` VALUES (3,1,'mp3'),(4,2,'军事'),(2,1,'压缩'),(1,1,'图片'),(7,2,'技术联盟'),(5,2,'文艺'),(6,2,'游戏');
+INSERT INTO `LinearCode` VALUES (3,1,'mp3'),(0,0,'NULL'),(4,2,'军事'),(2,1,'压缩'),(1,1,'图片'),(7,2,'技术联盟'),(5,2,'文艺');
 /*!40000 ALTER TABLE `LinearCode` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `Married`
+--
+
+LOCK TABLES `Married` WRITE;
+/*!40000 ALTER TABLE `Married` DISABLE KEYS */;
+INSERT INTO `Married` VALUES (1,'单身'),(2,'已婚'),(3,'离异');
+/*!40000 ALTER TABLE `Married` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -156,6 +186,16 @@ INSERT INTO `OperatorUser` VALUES (1,'zlei','7645b7c673f30a68',2,'dd','dd','dd',
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `Sex`
+--
+
+LOCK TABLES `Sex` WRITE;
+/*!40000 ALTER TABLE `Sex` DISABLE KEYS */;
+INSERT INTO `Sex` VALUES (1,'男'),(2,'女'),(3,'保密'),(4,'其他');
+/*!40000 ALTER TABLE `Sex` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `State`
 --
 
@@ -166,12 +206,13 @@ INSERT INTO `State` VALUES (0,'Root','Root','root state'),(1,'Common','common','
 UNLOCK TABLES;
 
 --
--- Dumping data for table `Tree`
+-- Dumping data for table `WeightUnit`
 --
 
-LOCK TABLES `Tree` WRITE;
-/*!40000 ALTER TABLE `Tree` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Tree` ENABLE KEYS */;
+LOCK TABLES `WeightUnit` WRITE;
+/*!40000 ALTER TABLE `WeightUnit` DISABLE KEYS */;
+INSERT INTO `WeightUnit` VALUES (1,'KG');
+/*!40000 ALTER TABLE `WeightUnit` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -183,4 +224,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-10-29 17:56:02
+-- Dump completed on 2010-10-31 20:18:59

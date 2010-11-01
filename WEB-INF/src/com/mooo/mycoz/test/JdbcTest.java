@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.dbobj.mycozBranch.Example;
 
 public class JdbcTest {
 

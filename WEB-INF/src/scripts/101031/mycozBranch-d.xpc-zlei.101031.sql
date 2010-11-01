@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.49-log
+-- Server version	5.1.51
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -43,13 +43,12 @@ DROP TABLE IF EXISTS `AddressBook`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `AddressBook` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `userId` int(11) NOT NULL DEFAULT '0',
-  `countryId` int(11) NOT NULL DEFAULT '0',
-  `languageId` int(11) NOT NULL DEFAULT '0',
-  `cityId` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) DEFAULT NULL,
+  `countryId` int(11) DEFAULT NULL,
+  `languageId` int(11) DEFAULT NULL,
+  `cityId` int(11) DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
   `postalCode` varchar(20) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
   `tel` varchar(60) DEFAULT NULL,
   `mobileNo` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -59,32 +58,12 @@ CREATE TABLE `AddressBook` (
   KEY `languageId` (`languageId`),
   KEY `address` (`address`),
   KEY `postalCode` (`postalCode`),
-  KEY `email` (`email`),
   KEY `tel` (`tel`),
   KEY `mobileNo` (`mobileNo`),
-  CONSTRAINT `AddressBook_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`ID`),
+  CONSTRAINT `AddressBook_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
   CONSTRAINT `AddressBook_ibfk_2` FOREIGN KEY (`countryId`) REFERENCES `mycozShared`.`Country` (`ID`),
   CONSTRAINT `AddressBook_ibfk_3` FOREIGN KEY (`languageId`) REFERENCES `mycozShared`.`Language` (`ID`),
   CONSTRAINT `AddressBook_ibfk_4` FOREIGN KEY (`cityId`) REFERENCES `mycozShared`.`City` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `Example`
---
-
-DROP TABLE IF EXISTS `Example`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Example` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(50) DEFAULT 'NULL',
-  `age` int(11) NOT NULL DEFAULT '0',
-  `school` varchar(50) DEFAULT 'NULL',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `Example_ibfk_1` (`age`),
-  KEY `Example_ibfk_2` (`school`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -117,9 +96,9 @@ DROP TABLE IF EXISTS `FileTree`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `FileTree` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `parentId` int(11) NOT NULL DEFAULT '0',
-  `childId` int(11) NOT NULL DEFAULT '0',
-  `levelId` int(11) NOT NULL DEFAULT '0',
+  `parentId` int(11) DEFAULT NULL,
+  `childId` int(11) DEFAULT NULL,
+  `levelId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_id` (`parentId`,`childId`),
   KEY `parentId` (`parentId`),
@@ -139,17 +118,9 @@ DROP TABLE IF EXISTS `Forum`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Forum` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `categoryId` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT 'NULL',
-  `modifiedDate` date DEFAULT NULL,
-  `creationDate` date DEFAULT NULL,
-  `description` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  KEY `categoryId` (`categoryId`),
-  KEY `modifiedDate` (`modifiedDate`),
-  KEY `creationDate` (`creationDate`),
-  CONSTRAINT `Forum_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `mycozShared`.`LinearCode` (`id`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -162,8 +133,8 @@ DROP TABLE IF EXISTS `ForumThread`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ForumThread` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `forumId` int(11) NOT NULL DEFAULT '0',
-  `userId` int(11) NOT NULL DEFAULT '0',
+  `typeId` int(11) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
   `subject` varchar(255) DEFAULT 'NULL',
   `body` text,
   `modifiedDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -173,14 +144,14 @@ CREATE TABLE `ForumThread` (
   `closed` char(1) NOT NULL DEFAULT 'N',
   `replyPrivateUserId` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `forumId` (`forumId`),
   KEY `userId` (`userId`),
   KEY `subject` (`subject`),
   KEY `modifiedDate` (`modifiedDate`),
   KEY `creationDate` (`creationDate`),
   KEY `ranking` (`ranking`),
   KEY `replyPrivateUserId` (`replyPrivateUserId`),
-  CONSTRAINT `ForumThread_ibfk_1` FOREIGN KEY (`forumId`) REFERENCES `Forum` (`id`),
+  KEY `typeId` (`typeId`),
+  CONSTRAINT `ForumThread_ibfk_1` FOREIGN KEY (`typeId`) REFERENCES `ThreadType` (`id`),
   CONSTRAINT `ForumThread_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
   CONSTRAINT `ForumThread_ibfk_3` FOREIGN KEY (`replyPrivateUserId`) REFERENCES `User` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -195,13 +166,13 @@ DROP TABLE IF EXISTS `JobAccounting`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `JobAccounting` (
   `ID` int(11) NOT NULL DEFAULT '0',
-  `JobNoteID` int(11) NOT NULL DEFAULT '0',
+  `JobNoteID` int(11) DEFAULT NULL,
   `ItemName` varchar(100) DEFAULT NULL,
   `ItemRate` decimal(25,4) DEFAULT NULL,
   `ItemUnit` varchar(10) DEFAULT NULL,
   `ItemQuantity` double DEFAULT '1',
-  `CurrencyID` int(11) NOT NULL DEFAULT '0',
-  `AccountID` int(11) NOT NULL DEFAULT '0',
+  `CurrencyID` int(11) DEFAULT NULL,
+  `AccountID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ItemName` (`ItemName`,`JobNoteID`,`AccountID`),
   KEY `JobNoteID` (`JobNoteID`),
@@ -222,13 +193,13 @@ DROP TABLE IF EXISTS `JobJournal`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `JobJournal` (
   `ID` int(11) NOT NULL DEFAULT '0',
-  `AccountID` int(11) NOT NULL DEFAULT '0',
-  `JobNoteID` int(11) NOT NULL DEFAULT '0',
+  `AccountID` int(11) DEFAULT NULL,
+  `JobNoteID` int(11) DEFAULT NULL,
   `DCType` enum('Credit','Debit') DEFAULT NULL,
   `Amount` decimal(25,4) DEFAULT NULL,
-  `OrgCurrencyID` int(11) NOT NULL DEFAULT '0',
+  `OrgCurrencyID` int(11) DEFAULT NULL,
   `OrgRate` double DEFAULT NULL,
-  `JobAccountingID` int(11) NOT NULL DEFAULT '0',
+  `JobAccountingID` int(11) DEFAULT NULL,
   `ExchangeRate` double DEFAULT '1',
   PRIMARY KEY (`ID`),
   KEY `AccountID` (`AccountID`),
@@ -252,9 +223,9 @@ DROP TABLE IF EXISTS `JobNote`;
 CREATE TABLE `JobNote` (
   `ID` int(11) NOT NULL DEFAULT '0',
   `NoteNo` varchar(60) DEFAULT 'NULL',
-  `NoteTypeID` int(11) NOT NULL DEFAULT '0',
-  `OperatorID` int(11) NOT NULL DEFAULT '0',
-  `ChargeToID` int(11) NOT NULL DEFAULT '0',
+  `NoteTypeID` int(11) DEFAULT NULL,
+  `OperatorID` int(11) DEFAULT NULL,
+  `ChargeToID` int(11) DEFAULT NULL,
   `IsPosted` enum('Y','N','O','A') DEFAULT NULL,
   `PostDate` date DEFAULT NULL,
   `PrintCount` smallint(6) DEFAULT '0',
@@ -268,7 +239,7 @@ CREATE TABLE `JobNote` (
   KEY `ChargeToID` (`ChargeToID`),
   CONSTRAINT `JobNote_ibfk_1` FOREIGN KEY (`NoteTypeID`) REFERENCES `mycozShared`.`NoteType` (`ID`),
   CONSTRAINT `JobNote_ibfk_2` FOREIGN KEY (`OperatorID`) REFERENCES `mycozShared`.`OperatorUser` (`ID`),
-  CONSTRAINT `JobNote_ibfk_3` FOREIGN KEY (`ChargeToID`) REFERENCES `User` (`ID`)
+  CONSTRAINT `JobNote_ibfk_3` FOREIGN KEY (`ChargeToID`) REFERENCES `User` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -281,8 +252,8 @@ DROP TABLE IF EXISTS `Message`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Message` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `threadId` int(11) NOT NULL DEFAULT '0',
-  `userId` int(11) NOT NULL DEFAULT '0',
+  `threadId` int(11) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
   `subject` varchar(255) DEFAULT 'NULL',
   `body` text,
   `modifiedDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -314,14 +285,14 @@ DROP TABLE IF EXISTS `Property`;
 CREATE TABLE `Property` (
   `id` int(11) NOT NULL DEFAULT '0',
   `reference` varchar(50) DEFAULT 'NULL',
-  `userId` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) DEFAULT NULL,
   `transaction` varchar(50) DEFAULT 'NULL',
-  `propertyStatus` int(11) NOT NULL DEFAULT '0',
-  `propertyType` int(11) NOT NULL DEFAULT '0',
+  `propertyStatus` int(11) DEFAULT NULL,
+  `propertyType` int(11) DEFAULT NULL,
   `offer` decimal(25,4) DEFAULT NULL,
-  `bedrooms` int(11) NOT NULL DEFAULT '0',
+  `bedrooms` int(11) DEFAULT NULL,
   `createdDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `bathroom` int(11) NOT NULL DEFAULT '0',
+  `bathroom` int(11) DEFAULT NULL,
   `validTo` varchar(50) DEFAULT 'NULL',
   `swimmingPool` varchar(50) DEFAULT 'NULL',
   `price` decimal(25,4) DEFAULT NULL,
@@ -345,30 +316,27 @@ CREATE TABLE `Property` (
   KEY `plotM2` (`plotM2`),
   KEY `terraceM2` (`terraceM2`),
   KEY `carPark` (`carPark`),
-  CONSTRAINT `Property_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`ID`),
+  CONSTRAINT `Property_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
   CONSTRAINT `Property_ibfk_2` FOREIGN KEY (`propertyStatus`) REFERENCES `mycozShared`.`LinearCode` (`id`),
   CONSTRAINT `Property_ibfk_3` FOREIGN KEY (`propertyType`) REFERENCES `mycozShared`.`LinearCode` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `TreeExample`
+-- Table structure for table `ThreadType`
 --
 
-DROP TABLE IF EXISTS `TreeExample`;
+DROP TABLE IF EXISTS `ThreadType`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TreeExample` (
+CREATE TABLE `ThreadType` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `treeId` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) DEFAULT 'NULL',
-  `age` int(11) NOT NULL DEFAULT '0',
-  `school` varchar(50) DEFAULT 'NULL',
+  `forumId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  KEY `TreeExample_ibfk_1` (`age`),
-  KEY `TreeExample_ibfk_2` (`school`),
-  KEY `TreeExample_ibfk_3` (`treeId`)
+  KEY `forumId` (`forumId`),
+  CONSTRAINT `ThreadType_ibfk_1` FOREIGN KEY (`forumId`) REFERENCES `Forum` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -411,8 +379,10 @@ CREATE TABLE `UserInfo` (
   `marriedId` int(11) DEFAULT NULL,
   `qq` varchar(50) DEFAULT NULL,
   `secret` char(1) DEFAULT 'N',
+  `email` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId` (`userId`),
+  UNIQUE KEY `email` (`email`),
   KEY `sexId` (`sexId`),
   KEY `height` (`height`),
   KEY `heightUnitId` (`heightUnitId`),
@@ -424,12 +394,12 @@ CREATE TABLE `UserInfo` (
   KEY `marriedId` (`marriedId`),
   KEY `qq` (`qq`),
   CONSTRAINT `UserInfo_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
-  CONSTRAINT `UserInfo_ibfk_2` FOREIGN KEY (`sexId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
-  CONSTRAINT `UserInfo_ibfk_3` FOREIGN KEY (`heightUnitId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
-  CONSTRAINT `UserInfo_ibfk_4` FOREIGN KEY (`weightUnitId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
-  CONSTRAINT `UserInfo_ibfk_5` FOREIGN KEY (`careerId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
-  CONSTRAINT `UserInfo_ibfk_6` FOREIGN KEY (`educationId`) REFERENCES `mycozShared`.`LinearCode` (`id`),
-  CONSTRAINT `UserInfo_ibfk_7` FOREIGN KEY (`marriedId`) REFERENCES `mycozShared`.`LinearCode` (`id`)
+  CONSTRAINT `UserInfo_ibfk_2` FOREIGN KEY (`sexId`) REFERENCES `mycozShared`.`Sex` (`id`),
+  CONSTRAINT `UserInfo_ibfk_3` FOREIGN KEY (`heightUnitId`) REFERENCES `mycozShared`.`HeightUnit` (`id`),
+  CONSTRAINT `UserInfo_ibfk_4` FOREIGN KEY (`weightUnitId`) REFERENCES `mycozShared`.`WeightUnit` (`id`),
+  CONSTRAINT `UserInfo_ibfk_5` FOREIGN KEY (`careerId`) REFERENCES `mycozShared`.`Career` (`id`),
+  CONSTRAINT `UserInfo_ibfk_6` FOREIGN KEY (`educationId`) REFERENCES `mycozShared`.`Education` (`id`),
+  CONSTRAINT `UserInfo_ibfk_7` FOREIGN KEY (`marriedId`) REFERENCES `mycozShared`.`Married` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -446,4 +416,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-10-29 17:56:02
+-- Dump completed on 2010-10-31 20:18:58

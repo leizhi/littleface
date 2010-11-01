@@ -21,6 +21,7 @@
 <div id="container">
 
 <input type="hidden" name="forumThread.id" value="${forumThread.id }"/>
+<input type="hidden" name="forumThread.typeId" value="${forumThread.typeId }"/>
 
 <table>
 <caption>Create Thread</caption>

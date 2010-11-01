@@ -104,32 +104,32 @@ public class BeanTools {
 			System.out.println(columnName+" Precision: "+ precision+" Scale: "+scale);
 
 			if(type == Types.VARCHAR || type == Types.LONGVARCHAR || type == Types.CHAR || type ==Types.LONGNVARCHAR){
-				buffer.append("\tString "+ columnName + ";\n");
+				buffer.append("\tprivate String "+ columnName + ";\n");
 				gsMethod.append(StringUtils.createMethod(columnName, "String"));
 			}else if (type==Types.NUMERIC){
 				if(scale ==0){
-					buffer.append("\tInteger "+ columnName + ";\n");
+					buffer.append("\tprivate Integer "+ columnName + ";\n");
 					gsMethod.append(StringUtils.createMethod(columnName, "Integer"));
 				} else{
-					buffer.append("\tDouble "+ columnName + ";\n");
+					buffer.append("\tprivate Double "+ columnName + ";\n");
 					gsMethod.append(StringUtils.createMethod(columnName, "Double"));
 				}
 			}else if (type == Types.INTEGER){
-				buffer.append("\tInteger "+ columnName + ";\n");
+				buffer.append("\tprivate Integer "+ columnName + ";\n");
 				gsMethod.append(StringUtils.createMethod(columnName, "Integer"));
 			}else if (type==Types.DECIMAL){
-				buffer.append("\tDouble "+ columnName + ";\n");
+				buffer.append("\tprivate Double "+ columnName + ";\n");
 				gsMethod.append(StringUtils.createMethod(columnName, "Double"));
 			}else if (type == Types.DATE){
-				buffer.append("\tDate "+ columnName + ";\n");
+				buffer.append("\tprivate Date "+ columnName + ";\n");
 				gsMethod.append(StringUtils.createMethod(columnName, "Date"));
 			}else if (type == Types.TIMESTAMP){
-				buffer.append("\tDate "+ columnName + ";\n");
+				buffer.append("\tprivate Date "+ columnName + ";\n");
 				gsMethod.append(StringUtils.createMethod(columnName, "Date"));
 				System.out.println("TIMESTAMP");
 
 			}else if (type == Types.DOUBLE){
-				buffer.append("\tDouble "+ columnName + ";\n");
+				buffer.append("\tprivate Double "+ columnName + ";\n");
 			}
 		}
 		
@@ -233,10 +233,17 @@ public class BeanTools {
 		//bd.build("mycozBranch","AccessLog");
 		//bd.build("mycozBranch","UserInfo");
 		//bd.build("mycozBranch","AddressBook");
-		bd.build("mycozBranch","FileTree");
+		//bd.build("mycozBranch","FileTree");
 
 		//bd.buildInsert("buffer_traffic");
 
+		//bd.build("mycozBranch","Forum");
+		//bd.build("mycozBranch","ThreadType");
+		//bd.build("mycozBranch","ForumThread");
+		//bd.build("mycozShared","WeightUnit");
+		//bd.build("mycozShared","Language");
+		//bd.build("mycozShared","Country");
+		bd.build("mycozShared","City");
 	}
 
 }

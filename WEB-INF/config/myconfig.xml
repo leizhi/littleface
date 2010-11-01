@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<struts>
+<littleface>
 
 	<package name="xpc" namespace="/xpc" extends="struts-default">
 
@@ -80,19 +80,22 @@
 			<result name="talk">/jsp/operation/talkAccount.jsp</result>
 			<result name="message">/jsp/operation/messageAccount.jsp</result>
 			<result name="blog">/jsp/operation/blogAccount.jsp</result>
+			<result name="forum">/jsp/operation/forumAccount.jsp</result>
 		</action>
 		
 		<action	name="My" default="search"
 			class="com.mooo.mycoz.action.profile.MyAction">
 			<result name="general">/jsp/profile/generalMy.jsp</result>
 			<result name="promptChangePassword">/jsp/profile/changePassword.jsp</result>
+			<result name="edit">/jsp/profile/editMy.jsp</result>
 		</action>
 		
 		<action	name="ForumThread" default="listMessage"
 			class="com.mooo.mycoz.action.operation.ForumThreadAction">
 			<result name="listMessage">/jsp/operation/listMessage.jsp</result>
+			<result name="listThread">/jsp/operation/listThread.jsp</result>
 			<result name="promptCreateThread">/jsp/operation/createThread.jsp</result>
 			<result name="promptCreateMessage">/jsp/operation/createMessage.jsp</result>
 		</action>
 	</package>
-</struts>
+</littleface>

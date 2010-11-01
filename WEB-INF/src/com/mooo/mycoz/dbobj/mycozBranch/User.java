@@ -5,11 +5,11 @@ package com.mooo.mycoz.dbobj.mycozBranch;
  */
 public class User {
 
-	Integer id;
-	String name;
-	String password;
-	String alias;
-	String active;
+	private Integer id;
+	private String name;
+	private String password;
+	private String alias;
+	private String active;
 	public Integer getId() {
 	return id;
 	}
@@ -40,5 +40,4 @@ public class User {
 	public void setActive(String active) {
 	 this.active = active;
 	}
-
 }
