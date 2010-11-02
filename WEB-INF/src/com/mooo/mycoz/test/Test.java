@@ -17,7 +17,7 @@ public class Test {
 		DbProcess dbProces = DbFactory.getInstance();
 		ThreadType sex = new ThreadType();
 		try {
-			List sexs = dbProces.searchAndRetrieveList(sex);
+			List sexs = dbProces.searchAndRetrieveList(sex,2,2);
 
 			for (Iterator<?> it = sexs.iterator(); it.hasNext();) {
 				sex = (ThreadType)it.next();

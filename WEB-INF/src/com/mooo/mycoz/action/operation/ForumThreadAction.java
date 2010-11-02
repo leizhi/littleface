@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.component.Page;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
@@ -126,7 +127,15 @@ public class ForumThreadAction extends BaseSupport{
 			ForumThread forumThread = new ForumThread();
 			forumThread.setTypeId(new Integer(threadTypeId));
 			
-			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread);
+			Page page = new Page();
+			page.buildComponent(request, dbProcess.count(forumThread));
+			
+			System.out.println("getOffset=>"+page.getOffset());
+			System.out.println("getPageSize=>"+page.getPageSize());
+
+			//List retrives = dbProcess.searchAndRetrieveList(forumThread,page.getOffset(),page.getPageSize());
+			
+			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread,page.getOffset(),page.getPageSize());
 			
 			List forumThreads = new ArrayList<ForumThread>();
 			User user = null;

@@ -17,7 +17,9 @@ function docommit(url) {
 <body>
 <fmt:bundle basename="MessageBundle">
 
-<c:url value="/File.do" var="listFile"/>
+<c:url value="/File.do" var="listFile">
+	<c:param name="method">list</c:param>
+</c:url>
 
 <c:url value="/File.do" var="promptUpload">
 	<c:param name="method">promptUpload</c:param>

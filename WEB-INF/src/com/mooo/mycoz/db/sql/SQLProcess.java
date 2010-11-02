@@ -26,7 +26,7 @@ public interface SQLProcess {
 
 	void setOrderBy(String field, String type);
 
-	void setRecord(int recordStart, int recordEnd);
+	void setRecord(Integer recordStart, Integer recordEnd);
 	
  	String addSQL(Object entity) throws SQLException;
  	

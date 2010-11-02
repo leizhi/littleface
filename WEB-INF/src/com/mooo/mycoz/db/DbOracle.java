@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +29,29 @@ public class DbOracle extends OracleSQL implements DbProcess{
 	@Override
 	public List<Object> searchAndRetrieveList(Object entity)
 			throws SQLException {
-		return searchAndRetrieveList(null, entity);
+		return searchAndRetrieveList(null, entity,null,null);
+	}
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord)
+			throws SQLException {
+		return searchAndRetrieveList(null, entity,offsetRecord,null);
+	}
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord,Integer maxRecords)
+			throws SQLException {
+		return searchAndRetrieveList(null, entity,offsetRecord,maxRecords);
 	}
 	@Override
 	public List<Object> searchAndRetrieveList(Connection connection,
 			Object entity) throws SQLException {
+		return searchAndRetrieveList(connection,entity,null,null);
+	}
+	@Override
+	public List<Object> searchAndRetrieveList(Connection connection,Object entity,Integer offsetRecord, Integer maxRecords) 
+			throws SQLException {
 		List<Object> retrieveList = null;
 
-		String doSql = searchSQL(entity);
-		// doSql += " LIMIT 10";
-		System.out.println("doSql:" + doSql);
+		String doSql = searchSQL(entity,offsetRecord,maxRecords);
 
 		if (log.isDebugEnabled())
 			log.debug("doSql:" + doSql);
@@ -65,15 +79,25 @@ public class DbOracle extends OracleSQL implements DbProcess{
 
 			rsmd = result.getMetaData();
 			Object bean;
+			int type=0;
 
 			while (result.next()) {
 
 				bean = entity.getClass().newInstance();
 
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
-					BeanUtil.bindProperty(bean,
-							StringUtils.prefixToUpper(rsmd.getColumnName(i)),
-							result.getString(i));
+					type = rsmd.getColumnType(i);
+					
+					if(type == Types.TIMESTAMP){
+						BeanUtil.bindProperty(bean,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getTimestamp(i));
+					}else {
+						BeanUtil.bindProperty(bean,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getString(i));	
+					}
+
 				}
 				retrieveList.add(bean);
 			}

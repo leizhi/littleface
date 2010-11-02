@@ -28,16 +28,29 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 	@Override
 	public List<Object> searchAndRetrieveList(Object entity)
 			throws SQLException {
-		return searchAndRetrieveList(null, entity);
+		return searchAndRetrieveList(null, entity,null,null);
+	}
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord)
+			throws SQLException {
+		return searchAndRetrieveList(null, entity,offsetRecord,null);
+	}
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord,Integer maxRecords)
+			throws SQLException {
+		return searchAndRetrieveList(null, entity,offsetRecord,maxRecords);
 	}
 	@Override
 	public List<Object> searchAndRetrieveList(Connection connection,
 			Object entity) throws SQLException {
+		return searchAndRetrieveList(connection,entity,null,null);
+	}
+	@Override
+	public List<Object> searchAndRetrieveList(Connection connection,Object entity,Integer offsetRecord, Integer maxRecords) 
+			throws SQLException {
 		List<Object> retrieveList = null;
 
-		String doSql = searchSQL(entity);
-		// doSql += " LIMIT 10";
-		System.out.println("doSql:" + doSql);
+		String doSql = searchSQL(entity,offsetRecord,maxRecords);
 
 		if (log.isDebugEnabled())
 			log.debug("doSql:" + doSql);
@@ -115,6 +128,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		}
 		return retrieveList;
 	}
+	
 	@Override
 	public Integer count(Object entity) throws SQLException {
 		return count(null,entity);

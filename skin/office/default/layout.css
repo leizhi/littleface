@@ -93,11 +93,11 @@ table {
 	margin: auto;
 }
 
-thead td,thead th {
+thead th {
 	background-color: #d3eaef;
 }
 
-caption,tfoot td,tfoot th {
+caption,tfoot td,tfoot th, thead td{
 	background-color: #c8d6ff;
 }
 

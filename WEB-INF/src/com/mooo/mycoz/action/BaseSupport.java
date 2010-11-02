@@ -2,7 +2,7 @@ package com.mooo.mycoz.action;
 
 import java.util.List;
 
-import com.mooo.mycoz.commons.Pager;
+import com.mooo.mycoz.component.Page;
 import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.DbProcess;
 
@@ -22,7 +22,7 @@ public class BaseSupport {
 	/*
 	 * configure general action
 	 */
-	public Pager pager;
+	public Page pager;
 	public List<?> generalItems;
 
 	/*

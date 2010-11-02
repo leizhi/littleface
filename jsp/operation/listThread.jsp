@@ -29,25 +29,13 @@ function docommit(url) {
 <body>
 <fmt:bundle basename="MessageBundle">
 
-<c:url value="/Account.do" var="listAccount"/>
 
-<c:url value="/Account.do" var="promptUpload">
-	<c:param name="method">promptUpload</c:param>
+<c:url value="/ForumThread.do" var="listThread">
+	<c:param name="method">listThread</c:param>
+	<c:param name="threadTypeId">${threadTypeId}</c:param>
 </c:url>
 
-<c:url value="/Account.do" var="processUpload">
-	<c:param name="method">processUpload</c:param>
-</c:url>
-
-<c:url value="/Account.do" var="processDelete">
-	<c:param name="method">processDelete</c:param>
-</c:url>
-
-<c:url value="/Account.do" var="processDownload">
-	<c:param name="method">processDownload</c:param>
-</c:url>
-
-<form method="post" action="${listAccount}">
+<form method="post" action="${listThread}">
 <%@ include file="../incl/g_top.jsp" %>
 <%@ include file="../incl/g_block.jsp" %>
 
@@ -63,15 +51,16 @@ function docommit(url) {
 	<c:param name="threadTypeId">${threadTypeId }</c:param>
 </c:url>
 
-<div style="width: 80%;margin: auto;">
-<div style="width: 60%;float: left;text-align: left;">Pages: 1 2 3 … 7 Next</div>
-<div ><a href="${promptCreateThread }">Post new topic</a></div>
-<div style="clear: both;"></div>
-</div>
-
 <table>
 
 <thead>
+<tr>
+<td colspan="5">
+<%@ include file="../incl/pageNavigation.jsp"%>
+</td>
+<td><a href="${promptCreateThread }">Post new topic</a></td>
+</tr>
+
 <tr>
 <th><fmt:message key="Topics"/></th>
 <th><fmt:message key="CreationDate"/></th>
@@ -103,7 +92,7 @@ function docommit(url) {
 <tfoot>
 <tr>
 <!-- 分页 -->
-<td colspan="6" style="width: 600px;">
+<td colspan="6" style="width: 600px;text-align: left;">
 <%@ include file="../incl/pageNavigation.jsp"%>
 </td>
 </tr>

@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.component.Page;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozBranch.FileTree;
 import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
@@ -45,7 +46,14 @@ public class FileAction extends BaseSupport {
 
 			DecimalFormat df = new DecimalFormat("###0.00");
 			FileInfo fileInfo = new FileInfo();
-			List retrives = dbProcess.searchAndRetrieveList(fileInfo);
+			
+			Page page = new Page();
+			page.buildComponent(request, dbProcess.count(fileInfo));
+			
+			System.out.println("getOffset=>"+page.getOffset());
+			System.out.println("getPageSize=>"+page.getPageSize());
+
+			List retrives = dbProcess.searchAndRetrieveList(fileInfo,page.getOffset(),page.getPageSize());
 			
 			List files = new ArrayList();
 			FileInfo fi;
@@ -62,6 +70,8 @@ public class FileAction extends BaseSupport {
 				if (!checkFile.exists()){ 
 					
 				}
+				//myMulti.setOffsetRecord(pagination.getOffset());
+				//myMulti.setMaxRecords(pagination.getCountPerPage());
 				
 				fileBit = checkFile.length();
 				fileK = fileBit / 1024;
@@ -133,6 +143,9 @@ public class FileAction extends BaseSupport {
 				files.add(fi);
 			}
 			*/
+
+			//request.setAttribute("page", page);
+
 			request.setAttribute("files", files);
 		} catch (Exception e) {
 			if (log.isDebugEnabled())

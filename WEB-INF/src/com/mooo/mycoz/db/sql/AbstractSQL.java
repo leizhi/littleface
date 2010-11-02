@@ -29,11 +29,13 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	public boolean byWhere;
 	public boolean byGroup;
 	public boolean byOrder;
+	public boolean byLimit;
 
 	public StringBuilder whereBy;
 	public StringBuilder groupBy;
 	public StringBuilder orderBy;
-	
+	public StringBuilder limitSql;
+
 	public boolean isSave;
 	public boolean isUpdate;
 	public boolean isSearch;
@@ -46,7 +48,7 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	public StringBuilder deleteSql;
 	public StringBuilder searchSql;
 	public StringBuilder countSql;
-	
+
 	public Map fields;
 	public Map columnValues;
 	
@@ -55,10 +57,12 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		byWhere = false;
 		byGroup = false;
 		byOrder = false;
-
+		byLimit = false;
+		
 		whereBy=new StringBuilder(" WHERE ");
 		groupBy=new StringBuilder(" GROUP BY ");
 		orderBy=new StringBuilder(" ORDER BY ");
+		limitSql=new StringBuilder(" LIMIT ");
 		
 		isSave = false;
 		isUpdate = false;
@@ -197,8 +201,9 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		// TODO Auto-generated method stub
 	}
 
-	public void setRecord(int recordStart, int recordEnd) {
-		// TODO Auto-generated method stub
+	public void setRecord(Integer recordStart, Integer recordEnd) {
+		limitSql.append(" LIMIT "+recordStart+","+recordEnd);
+		byLimit = true;
 	}
 
 	public void addGroupBy(String field) {
@@ -460,8 +465,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 
 		return updateSql.toString();
 	}
-
-	public String searchSQL(Object entity) {
+//////////////
+	public String searchSQL(Object entity,Integer offsetRecord, Integer maxRecords) {
 		if(entity != null)
 			entityFillField(entity);
 		else
@@ -571,11 +576,23 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			}
 		}
 		
+		if(offsetRecord!=null)
+			searchSql.append(" LIMIT "+offsetRecord);
+		if(maxRecords!=null)
+			searchSql.append(","+maxRecords);
+
 		if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
-		
+
 		return searchSql.toString();
 	}
-
+	/////////////////
+	public String searchSQL(Object entity) {
+		return searchSQL(entity,null,null);
+	}
+	public String searchSQL(Object entity,Integer recordStart) {
+		return searchSQL(entity,recordStart,null);
+	}
+	
 	public String countSQL(Object entity) {
 		
 		if(entity != null)
