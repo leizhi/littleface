@@ -1,4 +1,4 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.example;
 
 import javax.swing.*;
 import javax.swing.border.*;

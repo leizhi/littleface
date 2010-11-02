@@ -1,4 +1,4 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.example.security;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

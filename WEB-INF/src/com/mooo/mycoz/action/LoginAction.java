@@ -134,6 +134,7 @@ public class LoginAction extends BaseSupport {
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(IDGenerator.getNextID("UserInfo").intValue());
 			userInfo.setUserId(user.getId());
+			userInfo.setJoinTime(new Date());
 			dbProcess.add(tx.getConnection(),userInfo);
 			
 			AddressBook addressBook = new AddressBook();

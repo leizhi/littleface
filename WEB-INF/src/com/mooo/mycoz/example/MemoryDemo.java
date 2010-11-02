@@ -1,6 +1,9 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.example;
 
 import javax.swing.UIManager;
+
+import com.mooo.mycoz.tools.MainFrame;
+
 import java.awt.*;
 
 public class MemoryDemo {

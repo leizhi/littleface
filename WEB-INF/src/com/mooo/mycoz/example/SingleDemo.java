@@ -1,7 +1,7 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.example;
 
 
-public class Single {
+public class SingleDemo {
 
     
     String name;
@@ -13,19 +13,19 @@ public class Single {
 		this.name = name;
 	}
 	
-	private Single(){
+	private SingleDemo(){
     	name="Single";
     }
 
     private static Object initLock = new Object();
-    private static Single factory = null;
+    private static SingleDemo factory = null;
 	
-    public static Single getInstance() {
+    public static SingleDemo getInstance() {
 
         if (factory == null) {
             synchronized(initLock) {
                 if (factory == null) {
-                	factory = new Single();
+                	factory = new SingleDemo();
                 }
             }
         }

@@ -6,7 +6,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="skin/office/default/layout.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/presentation.css" type="text/css" rel="stylesheet"/>
+<link type="text/css" rel="stylesheet" href="skin/office/default/dhtmlgoodies_calendar.css?random=20100901" media="screen" />
 <script type="text/javascript" src="jsp/js/util.js"></script>
+<script type="text/javascript" src="jsp/js/dhtmlgoodies_calendar.js?random=20101018"></script>
 
 <style type="text/css">
 .box {
@@ -133,7 +135,9 @@ function docommit(url) {
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Birthday" /></li>
-		<li class="right"><input type="text" name="userInfo.birthday" id="birthday" value="${userInfo.birthday }"/></li>
+		<li class="right"><input type="text" name="userInfo.birthday" id="birthday" value="<fmt:formatDate value="${userInfo.birthday }" pattern="yyyy/MM/dd hh:mm:ss"/>"/>
+		<img src="jsp/images/miniDate.gif" border=0 alt="<fmt:message key="choosedate"/>" onclick="displayCalendar(document.forms[0].birthday,'yyyy/mm/dd hh:ii:00',this,true)">
+		</li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Career" /></li>

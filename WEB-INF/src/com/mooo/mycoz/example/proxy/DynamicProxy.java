@@ -1,4 +1,4 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.example.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

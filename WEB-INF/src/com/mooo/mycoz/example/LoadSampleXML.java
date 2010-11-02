@@ -1,4 +1,4 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.example;
 
 import java.util.*;
 import java.io.*;

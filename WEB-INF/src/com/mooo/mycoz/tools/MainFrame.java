@@ -1,8 +1,10 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.tools;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import com.mooo.mycoz.test.ProgressThread;
 
 public class MainFrame extends JFrame {
 	private JPanel contentPane;

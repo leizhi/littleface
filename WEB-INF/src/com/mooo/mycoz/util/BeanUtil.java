@@ -24,8 +24,7 @@ public class BeanUtil {
 	 * @throws IllegalAccessException
 	 * @throws ParseException
 	 */
-	public static void bindProperty(Object bean, String propertyName,
-			String value) throws NoSuchMethodException,
+	public static void bindProperty(Object bean, String propertyName,String value) throws NoSuchMethodException,
 			InvocationTargetException, IllegalAccessException, ParseException,
 			InstantiationException {
 
@@ -54,11 +53,13 @@ public class BeanUtil {
 			Method valueOf = cl.getMethod("valueOf",new Class[] { String.class });
 			Object valueObj = valueOf.invoke(cl, new Object[] { value });
 			setMethod.invoke(bean, new Object[] { valueObj });
+		} else if(cl == java.util.Date.class || cl == java.sql.Date.class){
+			Object bindDate = new Date(value);
+			setMethod.invoke(bean, new Object[] { bindDate });
 		}
 	}
 
-	public static void bindProperty(Object bean, String propertyName,
-			Date date) throws NoSuchMethodException,
+	public static void bindProperty(Object bean, String propertyName,Date date) throws NoSuchMethodException,
 			InvocationTargetException, IllegalAccessException, ParseException,
 			InstantiationException {
 
@@ -104,20 +105,20 @@ public class BeanUtil {
 	 * @throws ParseException
 	 * @throws InstantiationException
 	 */
-	public static void bindSubObject(Object bean, String objName,
-			String propertyName, String value)
+	public static void bindSubObject(Object bean, String objName,String propertyName, String value)
 			throws NoSuchMethodException, InvocationTargetException,
 			IllegalAccessException, ParseException, InstantiationException {
+		
 		String funName = StringUtils.getFunName(objName);
 		Method getMethod = bean.getClass().getMethod("get" + funName);
 		Class<?> cls = getMethod.getReturnType();
+		
 		Object obj = getMethod.invoke(bean);
 
 		// 判断参数为空,直接设置NULL值.
 		if (value.trim().equals("")) {
 			if (obj != null) {
-				Method setMethod = bean.getClass().getMethod("set" + funName,
-						new Class[] { cls });
+				Method setMethod = bean.getClass().getMethod("set" + funName,new Class[] { cls });
 				setMethod.invoke(bean, new Object[] { null });
 			}
 			return;
@@ -129,11 +130,21 @@ public class BeanUtil {
 		}
 
 		// 设置普通系统对象的属性
+		// 填充父对象
 		BeanUtil.bindProperty(obj, propertyName, value);
-		Method setMethod = bean.getClass().getMethod("set" + funName,
-				new Class[] { cls });
-		// 把对象填充
-		setMethod.invoke(bean, new Object[] { obj });
+		
+		if (cls == java.util.Date.class || cls == java.sql.Date.class) {
+			// 设置普通系统对象的属性
+			Date dateObj = new Date(value);
+			Method setMethod = bean.getClass().getMethod("set" + funName,new Class[] { cls });
+			// 把对象填充
+			setMethod.invoke(bean, new Object[] { dateObj });
+		} else{
+			Method setMethod = bean.getClass().getMethod("set" + funName,new Class[] { cls });
+			// 把对象填充
+			setMethod.invoke(bean, new Object[] { obj });
+		}
+		
 	}
 	
 	public static void noNull(Object obj) throws NullPointerException{

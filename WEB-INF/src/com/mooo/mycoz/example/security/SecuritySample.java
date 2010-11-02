@@ -1,4 +1,5 @@
-package com.mooo.mycoz.test;
+package com.mooo.mycoz.example.security;
+
 
 
 public class SecuritySample {

@@ -118,7 +118,7 @@ function docommit(url) {
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Birthday" /></li>
-		<li class="right"><c:out value="${userInfo.birthday }" /></li>
+		<li class="right"><fmt:formatDate value="${userInfo.birthday }" pattern="yyyy/MM/dd hh:mm:ss"/></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Career" /></li>

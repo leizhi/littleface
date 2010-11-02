@@ -27,7 +27,8 @@ public class UserInfo {
 	private String qq;
 	private String secret;
 	private String email;
-	
+	private Date joinTime;
+
 	public Integer getId() {
 		return id;
 	}
@@ -111,6 +112,12 @@ public class UserInfo {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public Date getJoinTime() {
+		return joinTime;
+	}
+	public void setJoinTime(Date joinTime) {
+		this.joinTime = joinTime;
 	}
 	
 	// extended attribute

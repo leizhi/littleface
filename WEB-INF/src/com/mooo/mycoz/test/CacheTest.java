@@ -1,6 +1,7 @@
 package com.mooo.mycoz.test;
 
 import com.mooo.mycoz.cache.CacheManager;
+import com.mooo.mycoz.example.SingleDemo;
 
 public class CacheTest {
 
@@ -119,7 +120,7 @@ class ReadRun implements Runnable {
 				// synchronized (Singleton.name) {
 				//Singleton.setName("start" + (count++));
 				System.out.println("get cache"+cm.get("tmp3", count));
-				System.out.println("get cache"+Single.getInstance().getName());
+				System.out.println("get cache"+SingleDemo.getInstance().getName());
 
 				if((count++)%100==0)
 					break;
@@ -147,7 +148,7 @@ class WriteRun implements Runnable {
 				// synchronized (Singleton.name) {
 				System.out.println("add  cache"+count);
 				cm.add("tmp3", count, "String"+count);
-				Single.getInstance().setName("ok"+count);
+				SingleDemo.getInstance().setName("ok"+count);
 				System.out.println("write  cache"+count);
 
 				if((count++)%100==0)

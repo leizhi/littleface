@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.49-log
+-- Server version	5.1.51
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -380,6 +380,7 @@ CREATE TABLE `UserInfo` (
   `qq` varchar(50) DEFAULT NULL,
   `secret` char(1) DEFAULT 'N',
   `email` varchar(50) DEFAULT NULL,
+  `joinTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId` (`userId`),
   UNIQUE KEY `email` (`email`),
@@ -393,6 +394,7 @@ CREATE TABLE `UserInfo` (
   KEY `educationId` (`educationId`),
   KEY `marriedId` (`marriedId`),
   KEY `qq` (`qq`),
+  KEY `joinTime` (`joinTime`),
   CONSTRAINT `UserInfo_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
   CONSTRAINT `UserInfo_ibfk_2` FOREIGN KEY (`sexId`) REFERENCES `mycozShared`.`Sex` (`id`),
   CONSTRAINT `UserInfo_ibfk_3` FOREIGN KEY (`heightUnitId`) REFERENCES `mycozShared`.`HeightUnit` (`id`),
@@ -416,4 +418,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-02  8:34:21
+-- Dump completed on 2010-11-02 11:31:40

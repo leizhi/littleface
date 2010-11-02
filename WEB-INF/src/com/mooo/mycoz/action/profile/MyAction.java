@@ -152,6 +152,9 @@ private static Log log = LogFactory.getLog(MyAction.class);
 			userInfo.setUserId(user.getId());
 			dbProcess.retrieve(userInfo);
 			ParamUtil.bindData(request, userInfo,"userInfo");
+			System.out.println("getBirthday="+userInfo.getBirthday());
+			System.out.println("getBirthday="+request.getParameter("userInfo.birthday"));
+
 			dbProcess.update(userInfo);
 			
 			AddressBook addressBook = new AddressBook();
