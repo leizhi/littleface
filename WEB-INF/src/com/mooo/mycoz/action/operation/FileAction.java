@@ -52,8 +52,8 @@ public class FileAction extends BaseSupport {
 			
 			System.out.println("getOffset=>"+page.getOffset());
 			System.out.println("getPageSize=>"+page.getPageSize());
-
-			List retrives = dbProcess.searchAndRetrieveList(fileInfo,page.getOffset(),page.getPageSize());
+			dbProcess.setRecord(page.getOffset(),page.getPageSize());
+			List retrives = dbProcess.searchAndRetrieveList(fileInfo);
 			
 			List files = new ArrayList();
 			FileInfo fi;

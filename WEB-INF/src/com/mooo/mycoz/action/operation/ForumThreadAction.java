@@ -133,9 +133,8 @@ public class ForumThreadAction extends BaseSupport{
 			System.out.println("getOffset=>"+page.getOffset());
 			System.out.println("getPageSize=>"+page.getPageSize());
 
-			//List retrives = dbProcess.searchAndRetrieveList(forumThread,page.getOffset(),page.getPageSize());
-			
-			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread,page.getOffset(),page.getPageSize());
+			dbProcess.setRecord(page.getOffset(),page.getPageSize());
+			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread);
 			
 			List forumThreads = new ArrayList<ForumThread>();
 			User user = null;

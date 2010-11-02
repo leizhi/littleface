@@ -29,12 +29,10 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	public boolean byWhere;
 	public boolean byGroup;
 	public boolean byOrder;
-	public boolean byLimit;
 
 	public StringBuilder whereBy;
 	public StringBuilder groupBy;
 	public StringBuilder orderBy;
-	public StringBuilder limitSql;
 
 	public boolean isSave;
 	public boolean isUpdate;
@@ -52,17 +50,23 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	public Map fields;
 	public Map columnValues;
 	
+	public Integer offsetRecord;
+	public Integer maxRecords;
+/*
+	public AbstractSQL(){
+		initialization();
+	}
+	*/
 	public void initialization(){
 		
 		byWhere = false;
-		byGroup = false;
-		byOrder = false;
-		byLimit = false;
+		//byGroup = false;
+		//byOrder = false;
+		//byLimit = false;
 		
-		whereBy=new StringBuilder(" WHERE ");
-		groupBy=new StringBuilder(" GROUP BY ");
-		orderBy=new StringBuilder(" ORDER BY ");
-		limitSql=new StringBuilder(" LIMIT ");
+		whereBy = new StringBuilder(" WHERE ");
+		//groupBy=new StringBuilder(" GROUP BY ");
+		//orderBy=new StringBuilder(" ORDER BY ");
 		
 		isSave = false;
 		isUpdate = false;
@@ -163,7 +167,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		}
 	}
 	public void setLike(String field, String value) {
-		// TODO Auto-generated method stub
 		((Field)fields.get(field)).setWhereByLike(true);
 		columnValues.put(field, value);
 	}
@@ -193,19 +196,25 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		// TODO Auto-generated method stub
 	}
 
-	public void setGroupBy(String field) {
-		((Field)fields.get(field)).setOrderBy(true);
+	@Override
+	public void setGroupBy(String groupSql) {
+		groupBy=new StringBuilder(" GROUP BY ");
+		groupBy.append(groupSql);
+		byGroup = true;		
 	}
 
-	public void setOrderBy(String field, String type) {
-		// TODO Auto-generated method stub
+	@Override
+	public void setOrderBy(String orderSql) {
+		orderBy=new StringBuilder(" ORDER BY ");
+		orderBy.append(orderSql);
+		byOrder = true;
 	}
-
-	public void setRecord(Integer recordStart, Integer recordEnd) {
-		limitSql.append(" LIMIT "+recordStart+","+recordEnd);
-		byLimit = true;
+	@Override
+	public void setRecord(Integer offsetRecord, Integer maxRecords) {
+		this.offsetRecord = offsetRecord;
+		this.maxRecords = maxRecords;
 	}
-
+/*
 	public void addGroupBy(String field) {
 		((Field)fields.get(field)).setGroupBy(true);
 	}
@@ -213,7 +222,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	public void addOrderBy(String field) {
 		((Field)fields.get(field)).setOrderBy(true);
 	}
-
+*/
+	
 	public String addSQL(Object entity) {
 		if(entity != null)
 			entityFillField(entity);
@@ -250,16 +260,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 				}else if(obj.getClass().isAssignableFrom(Double.class)){
 					saveValue.append(obj+",");
 				}
-				
-				/*
-				if (field.getType() == Types.DATE || field.getType()==Types.TIMESTAMP){
-					saveValue.append("date'"+value+"',");
-				} else if (field.getType() == Types.BIGINT) {
-					saveValue.append(value+",");
-				} else { 
-					saveValue.append("'"+value+"',");
-				}
-				*/
 			}
 			//if(log.isDebugEnabled())log.debug(field.getName()+"="+value);
 		}
@@ -465,8 +465,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 
 		return updateSql.toString();
 	}
-//////////////
-	public String searchSQL(Object entity,Integer offsetRecord, Integer maxRecords) {
+/////////////////
+	public String searchSQL(Object entity) {
 		if(entity != null)
 			entityFillField(entity);
 		else
@@ -584,13 +584,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
 
 		return searchSql.toString();
-	}
-	/////////////////
-	public String searchSQL(Object entity) {
-		return searchSQL(entity,null,null);
-	}
-	public String searchSQL(Object entity,Integer recordStart) {
-		return searchSQL(entity,recordStart,null);
 	}
 	
 	public String countSQL(Object entity) {

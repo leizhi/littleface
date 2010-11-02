@@ -168,6 +168,10 @@ public class ActionServlet extends HttpServlet {
 		} catch (NullPointerException e) {
 			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
 			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
+			e.printStackTrace();
+			getServletContext().getRequestDispatcher("/Index.do").forward(request,response);
 		} catch (RuntimeException e) {
 			if(log.isErrorEnabled()) log.error("RuntimeException:"+e.getMessage());
 			e.printStackTrace();

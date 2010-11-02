@@ -22,11 +22,11 @@ public interface SQLProcess {
 	
 	void setLessEqual(String field, String value);
 
-	void setGroupBy(String field);
+	void setGroupBy(String groupSql);
 
-	void setOrderBy(String field, String type);
+	void setOrderBy(String orderSql);
 
-	void setRecord(Integer recordStart, Integer recordEnd);
+	void setRecord(Integer offsetRecord, Integer maxRecords);
 	
  	String addSQL(Object entity) throws SQLException;
  	

@@ -7,13 +7,8 @@ import java.util.List;
 public interface DbProcess {
 	
 	List<Object> searchAndRetrieveList(Object entity) throws SQLException;
-	List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord, Integer maxRecords) throws SQLException;
-	List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord) throws SQLException;
-
 	List<Object> searchAndRetrieveList(Connection connection,Object entity) 
 		throws SQLException;
-	List<Object> searchAndRetrieveList(Connection connection,Object entity,Integer offsetRecord, Integer maxRecords) 
-	throws SQLException;
 	
 	Integer count(Object entity) throws SQLException;
 	Integer count(Connection connection,Object entity) throws SQLException;
@@ -29,5 +24,6 @@ public interface DbProcess {
 
 	void retrieve(Object entity) throws SQLException;
 	void retrieve(Connection connection,Object entity) throws SQLException;
-
+	
+	void setRecord(Integer offsetRecord, Integer maxRecords);
 }

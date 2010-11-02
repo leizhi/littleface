@@ -26,31 +26,11 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public List<Object> searchAndRetrieveList(Object entity)
-			throws SQLException {
-		return searchAndRetrieveList(null, entity,null,null);
-	}
-	@Override
-	public List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord)
-			throws SQLException {
-		return searchAndRetrieveList(null, entity,offsetRecord,null);
-	}
-	@Override
-	public List<Object> searchAndRetrieveList(Object entity,Integer offsetRecord,Integer maxRecords)
-			throws SQLException {
-		return searchAndRetrieveList(null, entity,offsetRecord,maxRecords);
-	}
-	@Override
-	public List<Object> searchAndRetrieveList(Connection connection,
-			Object entity) throws SQLException {
-		return searchAndRetrieveList(connection,entity,null,null);
-	}
-	@Override
-	public List<Object> searchAndRetrieveList(Connection connection,Object entity,Integer offsetRecord, Integer maxRecords) 
+	public List<Object> searchAndRetrieveList(Connection connection,Object entity)
 			throws SQLException {
 		List<Object> retrieveList = null;
 
-		String doSql = searchSQL(entity,offsetRecord,maxRecords);
+		String doSql = searchSQL(entity);
 
 		if (log.isDebugEnabled())
 			log.debug("doSql:" + doSql);
@@ -128,12 +108,15 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		}
 		return retrieveList;
 	}
-	
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity)
+			throws SQLException {
+		return searchAndRetrieveList(null,entity);
+	}
 	@Override
 	public Integer count(Object entity) throws SQLException {
 		return count(null,entity);
 	}
-
 	@Override
 	public Integer count(Connection connection,Object entity) throws SQLException {
 		String doSql = countSQL(entity);
@@ -315,7 +298,11 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 
 		String doSql = searchSQL(entity);
 		
-		 doSql += " LIMIT 1";
+		int ls = doSql.indexOf("LIMIT");
+		if(ls>0)
+			doSql = doSql.substring(0,doSql.indexOf("LIMIT"));
+		
+		doSql += " LIMIT 1";
 
 		System.out.println("doSql:" + doSql);
 
@@ -387,4 +374,5 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			}
 		}
 	}
+
 }
