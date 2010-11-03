@@ -60,8 +60,9 @@ function docommit(url) {
 </div>
 
 <c:forEach var="item" items="${forums}" varStatus="status">
-
+<%-- 
 <c:if test="${!empty item.threadTypes && fun:length(item.threadTypes) >0 }">
+--%>
 <table>
 
 <thead>
@@ -98,7 +99,9 @@ function docommit(url) {
 </tr>
 </tfoot>
 </table>
+<%-- 
 </c:if>
+--%>
 </c:forEach>
 
 <jsp:include page="../incl/g_footer.jsp" />

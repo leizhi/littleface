@@ -75,6 +75,10 @@ color:#000;
 </table>
 
 <div>
+<div style="width: 100%;background-color: #e3e9ff;color:#000;margin:1px;text-align: left;">
+<%@ include file="../incl/pageNavigation.jsp"%>
+</div>
+
 <c:forEach var="item" items="${accounts}" varStatus="status">
 <div style="float: left;width: 24.5%;text-align: left;font-size: 12px;border: 1px solid #ffffff;background-color: #edf0f9;">
 
@@ -113,6 +117,10 @@ color:#000;
 </c:forEach>
 </div>
 <div style="clear: both;"></div>
+
+<div style="width: 100%;background-color: #e3e9ff;color:#000;margin:1px;text-align: left;">
+<%@ include file="../incl/pageNavigation.jsp"%>
+</div>
 
 <jsp:include page="../incl/g_footer.jsp" />
 </div>

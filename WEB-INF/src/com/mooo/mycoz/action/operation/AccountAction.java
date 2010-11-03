@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.component.Page;
+import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.dbobj.mycozBranch.Forum;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
@@ -22,7 +24,12 @@ public class AccountAction extends BaseSupport{
 		List<?> accounts = new ArrayList<Object>();
 		try {
 			User user = new User();
-			accounts = dbProcess.searchAndRetrieveList(user);
+			Page page = new Page();
+			page.setPageSize(8);
+			page.buildComponent(request, dbProcess.count(user));
+			dbProcess.refresh(user);
+			dbProcess.setRecord(page.getOffset(),page.getPageSize());
+			accounts = dbProcess.searchAndRetrieveList(user,DbProcess.OPEN_QUERY);
 			request.setAttribute("accounts", accounts);
 		} catch (SQLException e) {
 			e.printStackTrace();
