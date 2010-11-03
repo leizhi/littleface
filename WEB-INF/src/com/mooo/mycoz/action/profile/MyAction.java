@@ -40,16 +40,19 @@ private static Log log = LogFactory.getLog(MyAction.class);
 			
 			User user = new User();
 			user.setId(new Integer(userId));
+
 			dbProcess.retrieve(user);
 			request.setAttribute("user", user);
 			
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserId(user.getId());
+
 			dbProcess.retrieve(userInfo);
 			request.setAttribute("userInfo", userInfo);
 
 			AddressBook addressBook = new AddressBook();
 			addressBook.setUserId(user.getId());
+
 			dbProcess.retrieve(addressBook);
 			request.setAttribute("address", addressBook);
 			
@@ -65,9 +68,11 @@ private static Log log = LogFactory.getLog(MyAction.class);
 			List careers = dbProcess.searchAndRetrieveList(new Career());
 			request.setAttribute("careers", careers);
 			
+
 			List educations = dbProcess.searchAndRetrieveList(new Education());
 			request.setAttribute("educations", educations);
 			
+
 			List marrieds = dbProcess.searchAndRetrieveList(new Married());
 			request.setAttribute("marrieds", marrieds);
 			
@@ -75,13 +80,13 @@ private static Log log = LogFactory.getLog(MyAction.class);
 			secrets.add("Y");
 			secrets.add("N");
 			request.setAttribute("secrets", secrets);
-			
+
 			List countrys = dbProcess.searchAndRetrieveList(new Country());
 			request.setAttribute("countrys", countrys);
-			
+
 			List languages = dbProcess.searchAndRetrieveList(new Language());
 			request.setAttribute("languages", languages);
-			
+
 			List citys = dbProcess.searchAndRetrieveList(new City());
 			request.setAttribute("citys", citys);
 			
@@ -120,10 +125,11 @@ private static Log log = LogFactory.getLog(MyAction.class);
 			User user = new User();
 			user.setId(new Integer(userId));
 			user.setPassword(StringUtils.hash(oldPassword));
-			
+
 			if(dbProcess.count(user) > 0){
 				if(newPassword.equals(doublePassword)){
 					user.setPassword(StringUtils.hash(newPassword));
+
 					dbProcess.update(user);
 				}
 			}
@@ -144,12 +150,15 @@ private static Log log = LogFactory.getLog(MyAction.class);
 		try {
 			User user = new User();
 			user.setId(new Integer(userId));
+
 			dbProcess.retrieve(user);
 			ParamUtil.bindData(request, user,"user");
+
 			dbProcess.update(user);
 
 			UserInfo userInfo = new UserInfo();
 			userInfo.setUserId(user.getId());
+
 			dbProcess.retrieve(userInfo);
 			ParamUtil.bindData(request, userInfo,"userInfo");
 			System.out.println("getBirthday="+userInfo.getBirthday());
@@ -159,8 +168,10 @@ private static Log log = LogFactory.getLog(MyAction.class);
 			
 			AddressBook addressBook = new AddressBook();
 			addressBook.setUserId(user.getId());
+
 			dbProcess.retrieve(addressBook);
 			ParamUtil.bindData(request, addressBook,"address");
+
 			dbProcess.update(addressBook);
 
 		} catch (Exception e) {

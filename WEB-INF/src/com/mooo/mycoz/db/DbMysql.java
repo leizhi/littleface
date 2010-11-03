@@ -26,14 +26,18 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public List<Object> searchAndRetrieveList(Connection connection,Object entity)
+	public List<Object>  searchAndRetrieveList(Connection connection,Object entity,boolean noQuery)
 			throws SQLException {
+		
+		if (noQuery) {
+			refresh(entity);
+			entityFillField(entity);
+		}
+		
 		List<Object> retrieveList = null;
-
 		String doSql = searchSQL(entity);
-
-		if (log.isDebugEnabled())
-			log.debug("doSql:" + doSql);
+		
+		System.out.println("doSql:" + doSql);
 
 		Connection myConn = null;
 		boolean isClose = true;
@@ -108,17 +112,30 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		}
 		return retrieveList;
 	}
+	
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity,boolean noQuery)
+			throws SQLException {
+		return searchAndRetrieveList(null,entity,noQuery);
+	}
+	
 	@Override
 	public List<Object> searchAndRetrieveList(Object entity)
 			throws SQLException {
-		return searchAndRetrieveList(null,entity);
+		return searchAndRetrieveList(null,entity,true);
 	}
+	
 	@Override
-	public Integer count(Object entity) throws SQLException {
-		return count(null,entity);
+	public List<Object> searchAndRetrieveList(Connection connection,
+			Object entity) throws SQLException {
+		return searchAndRetrieveList(connection,entity,true);
 	}
+	
 	@Override
 	public Integer count(Connection connection,Object entity) throws SQLException {
+		
+		refresh(entity);
+		
 		String doSql = countSQL(entity);
 		
 		if(log.isDebugEnabled())log.debug("doSql="+doSql);
@@ -147,7 +164,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
+	
 			try {
 					result.close();
 			} catch (SQLException e) {
@@ -169,12 +186,10 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		}
 		return total;
 	}
-	
 	@Override
-	public void add(Object entity) throws SQLException {
-		add(null,entity);
+	public Integer count(Object entity) throws SQLException {
+		return count(null,entity);
 	}
-	
 	@Override
 	public void add(Connection connection,Object entity) throws SQLException {
 		Connection myConn = null;
@@ -194,7 +209,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			stmt = myConn.createStatement();
 			stmt.execute(doSql);
 		}finally {
-
+	
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -209,14 +224,15 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			}
 		}
 	}
+	@Override
+	public void add(Object entity) throws SQLException {
+		add(null,entity);
+	}
 	
 	@Override
-	public void delete(Object entity) throws SQLException {
-		delete(null,entity);
-	}
-
-	@Override
 	public void delete(Connection connection,Object entity) throws SQLException {
+		refresh(entity);
+		
 		Connection myConn = null;
 		boolean isClose = true;
 		
@@ -234,7 +250,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			stmt = myConn.createStatement();
 			stmt.execute(doSql);
 		}finally {
-
+	
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -250,13 +266,15 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		}
 		
 	}
-	
 	@Override
-	public void update(Object entity) throws SQLException {
-		update(null,entity);
+	public void delete(Object entity) throws SQLException {
+		delete(null,entity);
 	}
+
 	@Override
 	public void update(Connection connection,Object entity) throws SQLException {
+		refresh(entity);
+		
 		Connection myConn = null;
 		boolean isClose = true;
 		
@@ -274,7 +292,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			stmt = myConn.createStatement();
 			stmt.execute(doSql);
 		}finally {
-
+	
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -290,12 +308,14 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		}		
 	}
 	@Override
-	public void retrieve(Object entity) throws SQLException {
-		retrieve(null,entity);
+	public void update(Object entity) throws SQLException {
+		update(null,entity);
 	}
 	@Override
 	public void retrieve(Connection connection,Object entity) throws SQLException {
-
+	
+		refresh(entity);
+		
 		String doSql = searchSQL(entity);
 		
 		int ls = doSql.indexOf("LIMIT");
@@ -303,19 +323,19 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			doSql = doSql.substring(0,doSql.indexOf("LIMIT"));
 		
 		doSql += " LIMIT 1";
-
+	
 		System.out.println("doSql:" + doSql);
-
+	
 		if (log.isDebugEnabled())
 			log.debug("doSql:" + doSql);
-
+	
 		Connection myConn = null;
 		boolean isClose = true;
-
+	
 		Statement stmt = null;
 		ResultSetMetaData rsmd = null;
 		ResultSet result = null;
-
+	
 		try {
 			if(connection != null){
 				myConn = connection;
@@ -324,10 +344,10 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 				myConn = DbConnectionManager.getConnection();
 				isClose = true;
 			}
-
+	
 			stmt = myConn.createStatement();
 			result = stmt.executeQuery(doSql);
-
+	
 			rsmd = result.getMetaData();
 			int type=0;
 			
@@ -351,21 +371,21 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
+	
 			try {
 				if (result != null)
 					result.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
+	
 			try {
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
+	
 			try {
 				if(isClose)
 					myConn.close();
@@ -373,6 +393,10 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 				e.printStackTrace();
 			}
 		}
+	}
+	@Override
+	public void retrieve(Object entity) throws SQLException {
+		retrieve(null,entity);
 	}
 
 }

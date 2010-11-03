@@ -23,7 +23,7 @@ public class LinearCodeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("list");
 			CodeType tt = new CodeType();
 			tt.setCategory("Linear");
-			
+
 			List<?> linearTypes = dbProcess.searchAndRetrieveList(tt);
 			request.setAttribute("linearTypes", linearTypes);
 			
@@ -59,6 +59,7 @@ public class LinearCodeAction extends BaseSupport{
 			CodeType codeType = new CodeType();
 			ParamUtil.bindData(request, codeType, "CodeType");
 			StringUtils.noNull(codeType.getName());
+
 			dbProcess.add(codeType);
 			
 		} catch (Exception e) {
@@ -87,6 +88,7 @@ public class LinearCodeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("processUpload");
 			CodeType bean = new CodeType();
 			ParamUtil.bindData(request, bean, "CodeType");
+
 			dbProcess.update(bean);
 			
 		} catch (Exception e) {

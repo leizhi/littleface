@@ -33,7 +33,7 @@ public class CodeTypeAction extends BaseSupport{
 
 			CodeType codeType = new CodeType();
 			ParamUtil.bindData(request, codeType, "query");
-			
+
 			List<?> codeTypes = dbProcess.searchAndRetrieveList(codeType);
 			request.setAttribute("codeTypes", codeTypes);
 			
@@ -75,6 +75,7 @@ public class CodeTypeAction extends BaseSupport{
 			CodeType codeType = new CodeType();
 			ParamUtil.bindData(request, codeType, "codeType");
 			StringUtils.noNull(codeType.getName());
+
 			dbProcess.add(codeType);
 			
 		} catch (Exception e) {
@@ -103,6 +104,7 @@ public class CodeTypeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("processUpload");
 			CodeType bean = new CodeType();
 			ParamUtil.bindData(request, bean, "CodeType");
+
 			dbProcess.update(bean);
 			
 		} catch (Exception e) {
@@ -122,6 +124,7 @@ public class CodeTypeAction extends BaseSupport{
 				if (log.isDebugEnabled()) log.debug("choose="+choose[i]);
 				CodeType bean = new CodeType();
 				bean.setId( new Integer(choose[i]));
+
 				dbProcess.delete(bean);
 			}
 		} catch (Exception e) {
@@ -139,6 +142,7 @@ public class CodeTypeAction extends BaseSupport{
 
 			CodeType codeType = new CodeType();
 			ParamUtil.bindData(request, codeType, "codeType");
+
 			dbProcess.retrieve(codeType);
 			
 			request.setAttribute("codeType", codeType);
@@ -147,6 +151,7 @@ public class CodeTypeAction extends BaseSupport{
 				
 				LinearCode lc = new LinearCode();
 				lc.setTypeId(codeType.getId());
+
 				request.setAttribute("codes",dbProcess.searchAndRetrieveList(lc));
 				
 			} else {
@@ -171,7 +176,7 @@ public class CodeTypeAction extends BaseSupport{
 			LinearCode linearCode = new LinearCode();
 			ParamUtil.bindData(request, linearCode, "LinearCode");
 			linearCode.setId(IDGenerator.getNextID("mycozShared.LinearCode").intValue());
-			
+
 			dbProcess.add(linearCode);
 			
 		}catch (SQLException e) {
@@ -198,6 +203,7 @@ public class CodeTypeAction extends BaseSupport{
 			if(request.getParameter("LinearCode.name")==null || "".equals(request.getParameter("LinearCode.name"))){
 				return "listCode";
 			}
+
 			dbProcess.update(bean);
 			
 			
@@ -219,6 +225,7 @@ public class CodeTypeAction extends BaseSupport{
 				if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
 				LinearCode bean = new LinearCode();
 				bean.setId( new Integer(ids[i]));
+
 				dbProcess.delete(bean);
 			}
 		

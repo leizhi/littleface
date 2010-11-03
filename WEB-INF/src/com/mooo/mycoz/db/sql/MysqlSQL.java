@@ -18,15 +18,16 @@ public class MysqlSQL extends AbstractSQL {
 	 * 
 	 */
 	private static final long serialVersionUID = 8659111122527763888L;
+
+	@Override
+	public void setRecord(Integer offsetRecord, Integer maxRecords) {
+			setLimitBy(new StringBuilder(" LIMIT "+offsetRecord+","+maxRecords));
+			setByLimit(true);
+	}
 	
 	public void entityFillField(Object entity) {
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
-			
-			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
-			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName(),null));
-			
-			initialization();
 			
 			String method;
 			String field;
@@ -43,7 +44,7 @@ public class MysqlSQL extends AbstractSQL {
 					
 					if(obj !=null) {
 						field = method.substring(method.indexOf("get")+3);
-						columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(field,null));
+						columnType = DbUtil.type(null,this.getCatalog(),this.getTable(),StringUtils.upperToPrefix(field,null));
 						
 						if(obj.getClass().isAssignableFrom(Integer.class))
 							setField(StringUtils.upperToPrefix(field,null), (Integer)obj);

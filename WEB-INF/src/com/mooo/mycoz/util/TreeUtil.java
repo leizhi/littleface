@@ -325,6 +325,7 @@ public class TreeUtil {
 				ft = (FileTree) it.next();
 				FileInfo fi = new FileInfo();
 				fi.setId(ft.getChildId());
+				
 				dbProcess.retrieve(fi);
 
 				if (log.isDebugEnabled()) log.debug("ft id =======" + ft.getId());

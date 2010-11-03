@@ -22,7 +22,7 @@ public class TreeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("list");
 			CodeType tt = new CodeType();
 			tt.setCategory("Tree");
-			
+
 			List<?> treeTypes = dbProcess.searchAndRetrieveList(tt);
 			request.setAttribute("treeTypes", treeTypes);
 			
@@ -92,6 +92,7 @@ public class TreeAction extends BaseSupport{
 			if (log.isDebugEnabled()) log.debug("processUpload");
 			CodeType bean = new CodeType();
 			ParamUtil.bindData(request, bean, "CodeType");
+
 			dbProcess.update(bean);
 			
 		} catch (Exception e) {

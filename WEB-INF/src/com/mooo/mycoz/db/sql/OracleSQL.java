@@ -17,14 +17,11 @@ public class OracleSQL extends AbstractSQL{
 	 * 
 	 */
 	private static final long serialVersionUID = -3500897378220229889L;
+	
 	public void entityFillField(Object entity) {
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
-			
-			setCatalog(StringUtils.getCatalog(entity.getClass(),1));
-			setTable(StringUtils.upperToPrefix(entity.getClass().getSimpleName(),"_"));
-			
-			initialization();
+			//refresh(entity,"_");
 			
 			String method;
 			String field;
@@ -41,7 +38,7 @@ public class OracleSQL extends AbstractSQL{
 					
 					if(obj !=null) {
 						field = method.substring(method.indexOf("get")+3);
-						columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(field,"_"));
+						columnType = DbUtil.type(null,this.getCatalog(),this.getTable(),StringUtils.upperToPrefix(field,"_"));
 						
 						if(obj.getClass().isAssignableFrom(Integer.class))
 							setField(StringUtils.upperToPrefix(field,"_"), (Integer)obj);
@@ -73,9 +70,10 @@ public class OracleSQL extends AbstractSQL{
 			e.printStackTrace();
 		}
 	}
-	
-	public void setRecord(int recordStart, int recordEnd){
-		searchSql.append("rownum <="+recordEnd);
-		searchSql.append("rownum >="+recordStart);
+		
+	@Override
+	public void setRecord(Integer offsetRecord, Integer maxRecords) {
+			setLimitBy(new StringBuilder(" rownum >="+offsetRecord+" AND rownum <="+maxRecords+offsetRecord));
+			setByLimit(true);
 	}
 }

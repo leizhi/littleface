@@ -55,12 +55,7 @@ public class LoginAction extends BaseSupport {
 			StringUtils.noNull(user.getPassword());
 
 			user.setPassword(StringUtils.hash(user.getPassword()));
-
-			if (log.isDebugEnabled())log.debug("name= " + user.getName());
-			if (log.isDebugEnabled())log.debug("password= " + user.getPassword());
-			if (log.isDebugEnabled())log.debug("count= " + dbProcess.count(user));
-			if (log.isDebugEnabled())log.debug("okkkkkkkkkkkkkkkkkkkkkkkkkk");
-
+			
 			if (dbProcess.count(user) < 1) {
 				if (log.isDebugEnabled())log.debug("<1");
 
@@ -135,11 +130,13 @@ public class LoginAction extends BaseSupport {
 			userInfo.setId(IDGenerator.getNextID("UserInfo").intValue());
 			userInfo.setUserId(user.getId());
 			userInfo.setJoinTime(new Date());
+			
 			dbProcess.add(tx.getConnection(),userInfo);
 			
 			AddressBook addressBook = new AddressBook();
 			addressBook.setId(IDGenerator.getNextID("AddressBook").intValue());
 			addressBook.setUserId(user.getId());
+			
 			dbProcess.add(tx.getConnection(),addressBook);
 
 			tx.commit();

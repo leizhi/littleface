@@ -48,6 +48,7 @@ public class FileAction extends BaseSupport {
 			FileInfo fileInfo = new FileInfo();
 			
 			Page page = new Page();
+			
 			page.buildComponent(request, dbProcess.count(fileInfo));
 			
 			System.out.println("getOffset=>"+page.getOffset());
@@ -164,6 +165,7 @@ public class FileAction extends BaseSupport {
 			LinearCode lc = new LinearCode();
 			lc.setTypeId(1);
 			LinearCode bean;
+			
 			List cts = dbProcess.searchAndRetrieveList(lc);
 
 			for(Iterator it = cts.iterator(); it.hasNext();){
@@ -235,7 +237,7 @@ public class FileAction extends BaseSupport {
 				fi.setFilepath(value);
 				i++;
 			}
-
+			
 			dbProcess.add(fi);
 
 			FileUtil.copy(new File(tmpPath + value),new File(uploadPath + value), true);
@@ -268,6 +270,7 @@ public class FileAction extends BaseSupport {
 				if (log.isDebugEnabled()) log.debug("ids="+ids[i]);
 				FileInfo bean = new FileInfo();
 				bean.setId( new Integer(ids[i]));
+				
 				dbProcess.retrieve(bean);
 				
 		    	File file = new File(uploadPath+bean.getFilepath());
@@ -298,8 +301,6 @@ public class FileAction extends BaseSupport {
 		fileInfo.setId(new Integer(fileId));
 		try {
 			dbProcess.retrieve(fileInfo);
-			System.out.println("datatime ====== " + fileInfo.getDatetime());
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -321,7 +322,8 @@ public class FileAction extends BaseSupport {
 		   folder.setId(IDGenerator.getNextID(tx.getConnection(), "FileInfo"));
 		   folder.setName(request.getParameter("folderName"));
 		   folder.setFolder("Y");
-			dbProcess.add(tx.getConnection(),folder);
+		   
+		   dbProcess.add(tx.getConnection(),folder);
 
 			FileTree fileTree = new FileTree();
 			fileTree.setId(IDGenerator.getNextID(tx.getConnection(), "FileTree"));
@@ -332,7 +334,6 @@ public class FileAction extends BaseSupport {
 				fileTree.setParentId(new Integer(parentId));
 			
 			fileTree.setChildId(folder.getId());
-
 			dbProcess.add(tx.getConnection(),fileTree);
 
 			tx.commit();
@@ -408,7 +409,6 @@ public class FileAction extends BaseSupport {
 				fileInfo.setFilepath(value);
 				i++;
 			}
-			
 			dbProcess.add(tx.getConnection(), fileInfo);
 			
 			FileTree fileTree = new FileTree();
@@ -425,7 +425,6 @@ public class FileAction extends BaseSupport {
 			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getChildId());
 			if (log.isDebugEnabled())log.debug("parentId ====== " + fileTree.getLevelId());
 
-			
 			dbProcess.add(tx.getConnection(), fileTree);
 
 			FileUtil.copy(new File(tmpPath + value), new File(uploadPath	+ value), true);

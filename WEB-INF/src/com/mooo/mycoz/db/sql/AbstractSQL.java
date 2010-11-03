@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.db.Field;
 import com.mooo.mycoz.util.DbUtil;
+import com.mooo.mycoz.util.StringUtils;
 
 public abstract class AbstractSQL implements SQLProcess, Serializable{
 	
@@ -23,50 +24,100 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	 */
 	private static final long serialVersionUID = 5695615314838758248L;
 	
-	public String catalog;
-	public String table;
+	private String catalog;
+	private String table;
+
+	private boolean byWhere;
+	private boolean byGroup;
+	private boolean byOrder;
+	private boolean byLimit;
+
+	private StringBuilder whereBy;
+	private StringBuilder groupBy;
+	private StringBuilder orderBy;
+	private StringBuilder limitBy;
+
+	private boolean isSave;
+	private boolean isUpdate;
+	private boolean isSearch;
+
+	private StringBuilder saveKey;
+	private StringBuilder saveValue;
+	private StringBuilder saveSql;
 	
-	public boolean byWhere;
-	public boolean byGroup;
-	public boolean byOrder;
+	private StringBuilder updateSql;
+	private StringBuilder deleteSql;
+	private StringBuilder searchSql;
+	private StringBuilder countSql;
 
-	public StringBuilder whereBy;
-	public StringBuilder groupBy;
-	public StringBuilder orderBy;
-
-	public boolean isSave;
-	public boolean isUpdate;
-	public boolean isSearch;
-
-	public StringBuilder saveKey;
-	public StringBuilder saveValue;
-	public StringBuilder saveSql;
+	private Map<String, Field> fields;
+	private Map<String, Object> columnValues;
 	
-	public StringBuilder updateSql;
-	public StringBuilder deleteSql;
-	public StringBuilder searchSql;
-	public StringBuilder countSql;
-
-	public Map fields;
-	public Map columnValues;
-	
-	public Integer offsetRecord;
-	public Integer maxRecords;
-/*
-	public AbstractSQL(){
-		initialization();
+	//////////////////////////////
+	public String getCatalog() {
+		return catalog;
 	}
-	*/
-	public void initialization(){
+
+	public void setCatalog(String catalog) {
+		this.catalog = catalog;
+	}
+
+	public String getTable() {
+		return table;
+	}
+
+	public void setTable(String table) {
+		this.table = table;
+	}
+	
+	public boolean isByLimit() {
+		return byLimit;
+	}
+
+	public void setByLimit(boolean byLimit) {
+		this.byLimit = byLimit;
+	}
+
+	public StringBuilder getLimitBy() {
+		return limitBy;
+	}
+
+	public void setLimitBy(StringBuilder limitBy) {
+		this.limitBy = limitBy;
+	}
+
+	public Map<String, Object> getColumnValues() {
+		return columnValues;
+	}
+
+	public void setColumnValues(Map<String, Object> columnValues) {
+		this.columnValues = columnValues;
+	}
+	
+	///////////////////////////
+	public void refresh(Object entity){
+		refresh(entity,null);
+	}
+	
+	public void refresh(Object entity,String prefix){
+		refresh(StringUtils.getCatalog(entity.getClass(),1),
+				StringUtils.upperToPrefix(entity.getClass().getSimpleName(),prefix));
+		entityFillField(entity);
+	}
+
+	public void refresh(String catalog,String table){
+		
+		this.catalog = catalog;
+		this.table = table;
 		
 		byWhere = false;
-		//byGroup = false;
-		//byOrder = false;
-		//byLimit = false;
-		
+		byGroup = false;
+		byOrder = false;
+		byLimit = false;
+
 		whereBy = new StringBuilder(" WHERE ");
-		//groupBy=new StringBuilder(" GROUP BY ");
-		//orderBy=new StringBuilder(" ORDER BY ");
+		groupBy = new StringBuilder(" GROUP BY ");
+		orderBy = new StringBuilder(" ORDER BY ");
 		
 		isSave = false;
 		isUpdate = false;
@@ -76,46 +127,26 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		saveValue = new StringBuilder(") VALUES(");
 
 		saveSql = new StringBuilder("INSERT INTO ");
-		
+
 		updateSql = new StringBuilder("UPDATE ");
 		deleteSql = new StringBuilder("DELETE FROM ");
 		searchSql = new StringBuilder("SELECT * FROM ");
-		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM ");	
-		
-		if(catalog != null){
-			saveSql.append(catalog+".");
-			updateSql.append(catalog+".");
-			deleteSql.append(catalog+".");
-			searchSql.append(catalog+".");
-			countSql.append(catalog+".");
-		}
-		
-		if(table != null){
-			saveSql.append(table);
-			updateSql.append(table+" SET ");
-			deleteSql.append(table);
-			searchSql.append(table);
-			countSql.append(table);
-		}
-		
-		fields= new HashMap();
-		columnValues = new HashMap();
-	}
-	
-	public String getCatalog() {
-		return catalog;
-	}
-	
-	public void setCatalog(String catalog) {
-		this.catalog = catalog;
-	}
-	
-	public String getTable() {
-		return table;
-	}
-	
-	public void setTable(String table) {
-		this.table = table;
+		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM ");
+
+		saveSql.append(catalog + ".");
+		updateSql.append(catalog + ".");
+		deleteSql.append(catalog + ".");
+		searchSql.append(catalog + ".");
+		countSql.append(catalog + ".");
+
+		saveSql.append(table);
+		updateSql.append(table + " SET ");
+		deleteSql.append(table);
+		searchSql.append(table);
+		countSql.append(table);
+
+		fields = new HashMap<String, Field>();
+		columnValues = new HashMap<String, Object>();
 	}
 	
 	///////////////////////////////
@@ -127,7 +158,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			fields.put(field, new Field(field,Types.VARCHAR));
 			columnValues.put(field, value);
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
@@ -139,7 +169,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			fields.put(field, new Field(field,Types.INTEGER));
 			columnValues.put(field, value);
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
@@ -151,84 +180,59 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			fields.put(field, new Field(field,Types.DOUBLE));
 			columnValues.put(field, value);
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
-	public void setField(String field, Date value,int columnType) {
+	public void setField(String field, Date value,Integer columnType) {
 		try {
 			if (field == null || value == null)
-				new Exception("set value is null");
+				throw new Exception("set value is null");
 
 			fields.put(field, new Field(field,columnType));
 			columnValues.put(field, value);
+			
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
-	public void setLike(String field, String value) {
-		((Field)fields.get(field)).setWhereByLike(true);
-		columnValues.put(field, value);
+	
+	public void setLike(String field) {
+		Field likeField = (Field)fields.get(field);
+		likeField.setWhereByLike(true);
+		likeField.setWhereByEqual(false);
+		likeField.setWhereByGreaterEqual(false);
+		likeField.setWhereByLessEqual(false);
 	}
 	
-	//public void setLike(String field) {
-	//	((Field)fields.get(field)).setWhereByLike(true);
-	//}
-	
 	public void setGreaterEqual(String field) {
-		((Field)fields.get(field)).setWhereByGreaterEqual(true);
+		Field geField = (Field)fields.get(field);
+		geField.setWhereByLike(false);
+		geField.setWhereByEqual(false);
+		geField.setWhereByGreaterEqual(true);
+		geField.setWhereByLessEqual(false);
 	}
 	
 	public void setLessEqual(String field) {
-		((Field)fields.get(field)).setWhereByEqual(true);
+		Field leField = (Field)fields.get(field);
+		leField.setWhereByLike(false);
+		leField.setWhereByEqual(false);
+		leField.setWhereByGreaterEqual(false);
+		leField.setWhereByLessEqual(true);
 	}
 	
-	public void setGreaterEqual(String field, String value) {
-		Field f = new Field(field);
-		f.setWhereByGreaterEqual(true);
-		f.setWhereByEqual(false);
-		
-		fields.put(field, f);
-		columnValues.put(field, value);
-	}
-
-	public void setLessEqual(String field, String value) {
-		// TODO Auto-generated method stub
-	}
-
 	@Override
-	public void setGroupBy(String groupSql) {
-		groupBy=new StringBuilder(" GROUP BY ");
-		groupBy.append(groupSql);
-		byGroup = true;		
+	public void addGroupBy(String groupField) {
+		groupBy.append(groupField+",");
+		byGroup = true;
 	}
-
+	
 	@Override
-	public void setOrderBy(String orderSql) {
-		orderBy=new StringBuilder(" ORDER BY ");
-		orderBy.append(orderSql);
+	public void addOrderBy(String orderField) {
+		orderBy.append(orderField+",");
 		byOrder = true;
 	}
-	@Override
-	public void setRecord(Integer offsetRecord, Integer maxRecords) {
-		this.offsetRecord = offsetRecord;
-		this.maxRecords = maxRecords;
-	}
-/*
-	public void addGroupBy(String field) {
-		((Field)fields.get(field)).setGroupBy(true);
-	}
-
-	public void addOrderBy(String field) {
-		((Field)fields.get(field)).setOrderBy(true);
-	}
-*/
 	
 	public String addSQL(Object entity) {
-		if(entity != null)
-			entityFillField(entity);
-		else
-			entityFillField(this);
+		refresh(entity);
 		
 		if(fields == null || columnValues == null)
 			return null;
@@ -279,10 +283,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	}
 
 	public String deleteSQL(Object entity) {
-		if(entity != null)
-			entityFillField(entity);
-		else
-			entityFillField(this);
+		if(fields == null || columnValues == null)
+			return null;
 		
 		Field field;
 		String key;
@@ -350,10 +352,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	}
 
 	public String updateSQL(Object entity) {
-		if(entity != null)
-			entityFillField(entity);
-		else
-			entityFillField(this);
+		if(fields == null || columnValues == null)
+			return null;
 		
 		Field field;
 		String key;
@@ -465,12 +465,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 
 		return updateSql.toString();
 	}
-/////////////////
+//////////////search too
 	public String searchSQL(Object entity) {
-		if(entity != null)
-			entityFillField(entity);
-		else
-			entityFillField(this);
 		
 		if(fields == null || columnValues == null)
 			return null;
@@ -485,6 +481,13 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			
 			Object obj = columnValues.get(key);
 			
+			System.out.println("Object->" + obj);
+
+			System.out.println("isWhereByEqual->" + field.isWhereByEqual());
+			System.out.println("isWhereByGreaterEqual->" + field.isWhereByGreaterEqual());
+			System.out.println("isWhereByLessEqual->" + field.isWhereByLessEqual());
+			System.out.println("isWhereByLike->" + field.isWhereByLike());
+
 			if(field.isWhereByEqual()) {
 				byWhere = true;
 				
@@ -539,14 +542,22 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 				}
 			}
 
-			if(field.isGroupBy()) {
-				byGroup = true;
-				groupBy.append(field.getName()+",");
-			}
-			
-			if(field.isOrderBy()) {
-				byOrder = true;
-				orderBy.append(field.getName()+",");
+			if(field.isWhereByLike()) {
+				byWhere = true;
+
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					if(field.getType()==Types.TIMESTAMP){
+						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+					} else {
+						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+					}
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" LIKE '%"+obj +"%' AND ");
+				}
 			}
 		}
 		
@@ -574,24 +585,16 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			if(byOrder) {
 				searchSql.append(orderBy);
 			}
+			
+			if(byLimit)
+				searchSql.append(limitBy);
 		}
 		
-		if(offsetRecord!=null)
-			searchSql.append(" LIMIT "+offsetRecord);
-		if(maxRecords!=null)
-			searchSql.append(","+maxRecords);
-
 		if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
 
 		return searchSql.toString();
 	}
-	
 	public String countSQL(Object entity) {
-		
-		if(entity != null)
-			entityFillField(entity);
-		else
-			entityFillField(this);
 		
 		if(fields == null || columnValues == null)
 			return null;

@@ -364,4 +364,17 @@ public class DbOracle extends OracleSQL implements DbProcess{
 			}
 		}
 	}
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity, boolean noQuery)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<Object> searchAndRetrieveList(Connection connection,
+			Object entity, boolean noQuery) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

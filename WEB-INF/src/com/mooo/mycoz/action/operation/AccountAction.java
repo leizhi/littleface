@@ -12,7 +12,6 @@ import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozBranch.Forum;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
-import com.mooo.mycoz.dbobj.mycozBranch.ThreadType;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.ParamUtil;
 
@@ -22,7 +21,8 @@ public class AccountAction extends BaseSupport{
 		
 		List<?> accounts = new ArrayList<Object>();
 		try {
-			accounts = dbProcess.searchAndRetrieveList(new User());
+			User user = new User();
+			accounts = dbProcess.searchAndRetrieveList(user);
 			request.setAttribute("accounts", accounts);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -74,15 +74,19 @@ public class AccountAction extends BaseSupport{
 				
 				user = new User();
 				user.setId(forumThread.getUserId());
+				
 				dbProcess.retrieve(user);
+				
 				forumThread.setUser(user);
 				
 				user = new User();
 				user.setId(forumThread.getReplyPrivateUserId());
+				
 				dbProcess.retrieve(user);
 				forumThread.setReplyPrivateUser(user);
 				
 				message.setThreadId(forumThread.getId());
+				
 				forumThread.setReply(dbProcess.count(message));
 				
 				forumThreads.add(forumThread);

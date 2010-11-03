@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.component.Page;
+import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
@@ -61,6 +62,7 @@ public class ForumThreadAction extends BaseSupport{
 			String userId = hs.getAttribute(USER_SESSION_KEY).toString();
 			forumThread.setUserId(new Integer(userId));
 			forumThread.setReplyPrivateUserId(new Integer(userId));
+
 			dbProcess.add(tx.getConnection(),forumThread);
 
 			if (log.isDebugEnabled()) log.debug("userId="+userId);
@@ -91,10 +93,12 @@ public class ForumThreadAction extends BaseSupport{
 			
 			ForumThread forumThread = new ForumThread();
 			forumThread.setId(new Integer(threadId) );
+
 			dbProcess.retrieve(forumThread);
 			
 			User user = new User();
 			user.setId(forumThread.getUserId());
+
 			dbProcess.retrieve(user);
 			forumThread.setUser(user);
 			
@@ -106,7 +110,7 @@ public class ForumThreadAction extends BaseSupport{
 			} else {
 				message.setThreadId(0);
 			}
-			
+
 			List<?> messages = dbProcess.searchAndRetrieveList(message);
 			request.setAttribute("messages", messages);
 			
@@ -128,13 +132,11 @@ public class ForumThreadAction extends BaseSupport{
 			forumThread.setTypeId(new Integer(threadTypeId));
 			
 			Page page = new Page();
-			page.buildComponent(request, dbProcess.count(forumThread));
-			
-			System.out.println("getOffset=>"+page.getOffset());
-			System.out.println("getPageSize=>"+page.getPageSize());
 
+			page.buildComponent(request, dbProcess.count(forumThread));
+			dbProcess.refresh(forumThread);
 			dbProcess.setRecord(page.getOffset(),page.getPageSize());
-			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread);
+			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread,DbProcess.OPEN_QUERY);
 			
 			List forumThreads = new ArrayList<ForumThread>();
 			User user = null;
@@ -145,11 +147,13 @@ public class ForumThreadAction extends BaseSupport{
 				
 				user = new User();
 				user.setId(forumThread.getUserId());
+
 				dbProcess.retrieve(user);
 				forumThread.setUser(user);
 				
 				user = new User();
 				user.setId(forumThread.getReplyPrivateUserId());
+
 				dbProcess.retrieve(user);
 				forumThread.setReplyPrivateUser(user);
 				
@@ -197,13 +201,14 @@ public class ForumThreadAction extends BaseSupport{
 			message.setCreationDate(now);
 			message.setModifiedDate(now);
 			message.setThreadId(new Integer(threadId));
+
 			dbProcess.add(tx.getConnection(),message);
 			
 			ForumThread forumThread = new ForumThread();
 			forumThread.setId(new Integer(threadId));
 			forumThread.setReplyPrivateUserId(new Integer(userId));
 			forumThread.setModifiedDate(new Date());
-			
+
 			dbProcess.update(tx.getConnection(),forumThread);
 			
 			tx.commit();

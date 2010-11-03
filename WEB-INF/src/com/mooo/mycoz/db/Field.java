@@ -18,9 +18,6 @@ public class Field {
 	boolean isDelete;
 	boolean isRetrieve;
 
-	boolean groupBy;
-	boolean orderBy;
-
 	public Field (String name){
 		this.type = 0;
 		this.name = name;
@@ -37,8 +34,6 @@ public class Field {
 		this.isUpdate = true;
 		this.isDelete = true;
 		this.isRetrieve = true;
-		this.groupBy = false;
-		this.orderBy = false;
 	}
 	
 	public Field (String name,int type){
@@ -57,8 +52,6 @@ public class Field {
 		this.isUpdate = true;
 		this.isDelete = true;
 		this.isRetrieve = true;
-		this.groupBy = false;
-		this.orderBy = false;
 	}
 	public Field (int type,String name,int length,
 			boolean isNull,boolean isPrimaryKey,boolean isForeignKey,boolean isKey,
@@ -81,10 +74,6 @@ public class Field {
 		this.isUpdate = isUpdate;
 		this.isDelete = isDelete;
 		this.isRetrieve = isRetrieve;
-
-		this.groupBy = groupBy;
-		this.orderBy = orderBy;
-
 	}
 
 	public int getType() {
@@ -205,22 +194,6 @@ public class Field {
 
 	public void setRetrieve(boolean isRetrieve) {
 		this.isRetrieve = isRetrieve;
-	}
-
-	public boolean isGroupBy() {
-		return groupBy;
-	}
-
-	public void setGroupBy(boolean groupBy) {
-		this.groupBy = groupBy;
-	}
-
-	public boolean isOrderBy() {
-		return orderBy;
-	}
-
-	public void setOrderBy(boolean orderBy) {
-		this.orderBy = orderBy;
 	}
 
 }
