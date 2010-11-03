@@ -186,8 +186,8 @@ public class ActionServlet extends HttpServlet {
 			e.printStackTrace();
 		}finally{
 			//getServletContext().getRequestDispatcher("/jsp/error.jsp").forward(request,response);
-			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			response.setHeader("Location",request.getContextPath()+"/Index.do");
+			//response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			//response.setHeader("Location",request.getContextPath()+"/Login.do");
 		}
 	}
 
