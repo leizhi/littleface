@@ -37,6 +37,8 @@ public class AccountAction extends BaseSupport{
 			accounts = dbProcess.searchAndRetrieveList(user,DbProcess.OPEN_QUERY);
 			
 			request.setAttribute("accounts", accounts);
+			request.setAttribute("user", user);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
