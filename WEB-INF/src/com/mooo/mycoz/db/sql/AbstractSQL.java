@@ -196,27 +196,33 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	}
 	
 	public void setLike(String field) {
-		Field likeField = (Field)fields.get(field);
-		likeField.setWhereByLike(true);
-		likeField.setWhereByEqual(false);
-		likeField.setWhereByGreaterEqual(false);
-		likeField.setWhereByLessEqual(false);
+		if (fields.containsKey(field)) {
+			Field likeField = (Field) fields.get(field);
+			likeField.setWhereByLike(true);
+			likeField.setWhereByEqual(false);
+			likeField.setWhereByGreaterEqual(false);
+			likeField.setWhereByLessEqual(false);
+		}
 	}
 	
 	public void setGreaterEqual(String field) {
-		Field geField = (Field)fields.get(field);
-		geField.setWhereByLike(false);
-		geField.setWhereByEqual(false);
-		geField.setWhereByGreaterEqual(true);
-		geField.setWhereByLessEqual(false);
+		if (fields.containsKey(field)) {
+			Field geField = (Field) fields.get(field);
+			geField.setWhereByLike(false);
+			geField.setWhereByEqual(false);
+			geField.setWhereByGreaterEqual(true);
+			geField.setWhereByLessEqual(false);
+		}
 	}
 	
 	public void setLessEqual(String field) {
-		Field leField = (Field)fields.get(field);
-		leField.setWhereByLike(false);
-		leField.setWhereByEqual(false);
-		leField.setWhereByGreaterEqual(false);
-		leField.setWhereByLessEqual(true);
+		if (fields.containsKey(field)) {
+			Field leField = (Field) fields.get(field);
+			leField.setWhereByLike(false);
+			leField.setWhereByEqual(false);
+			leField.setWhereByGreaterEqual(false);
+			leField.setWhereByLessEqual(true);
+		}
 	}
 	
 	@Override
@@ -471,6 +477,10 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		if(fields == null || columnValues == null)
 			return null;
 		
+		whereBy = new StringBuilder(" WHERE ");
+		groupBy = new StringBuilder(" GROUP BY ");
+		orderBy = new StringBuilder(" ORDER BY ");
+		
 		Field field;
 		String key;
 		
@@ -481,13 +491,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			
 			Object obj = columnValues.get(key);
 			
-			System.out.println("Object->" + obj);
-
-			System.out.println("isWhereByEqual->" + field.isWhereByEqual());
-			System.out.println("isWhereByGreaterEqual->" + field.isWhereByGreaterEqual());
-			System.out.println("isWhereByLessEqual->" + field.isWhereByLessEqual());
-			System.out.println("isWhereByLike->" + field.isWhereByLike());
-
 			if(field.isWhereByEqual()) {
 				byWhere = true;
 				
@@ -595,19 +598,30 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		return searchSql.toString();
 	}
 	public String countSQL(Object entity) {
-		
 		if(fields == null || columnValues == null)
 			return null;
+		
+		whereBy = new StringBuilder(" WHERE ");
+		groupBy = new StringBuilder(" GROUP BY ");
+		orderBy = new StringBuilder(" ORDER BY ");
 		
 		Field field;
 		String key;
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
+		
 			key = (String) it.next();
 			field = (Field) fields.get(key);
 			
 			Object obj = columnValues.get(key);
-						
+			
+			System.out.println("Object->" + obj);
+
+			System.out.println("isWhereByEqual->" + field.isWhereByEqual());
+			System.out.println("isWhereByGreaterEqual->" + field.isWhereByGreaterEqual());
+			System.out.println("isWhereByLessEqual->" + field.isWhereByLessEqual());
+			System.out.println("isWhereByLike->" + field.isWhereByLike());
+
 			if(field.isWhereByEqual()) {
 				byWhere = true;
 				
@@ -661,14 +675,38 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 					whereBy.append(field.getName()+" <= '"+obj +"' AND ");
 				}
 			}
-	
-			if(log.isDebugEnabled())log.debug("whereBy="+whereBy);
+
+			if(field.isWhereByLike()) {
+				byWhere = true;
+
+				if(obj.getClass().isAssignableFrom(Integer.class)){
+					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+				}else if(obj.getClass().isAssignableFrom(Date.class)){
+					if(field.getType()==Types.TIMESTAMP){
+						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+					} else {
+						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+					}
+				}else if(obj.getClass().isAssignableFrom(Double.class)){
+					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+				} else {
+					whereBy.append(field.getName()+" LIKE '%"+obj +"%' AND ");
+				}
+			}
 		}
 		
 		if(byWhere)
 			whereBy.delete(whereBy.lastIndexOf("AND"),whereBy.lastIndexOf("AND")+3);
 		
+		if(byGroup)
+			groupBy.deleteCharAt(groupBy.lastIndexOf(","));
+		
+		if(byOrder)
+			orderBy.deleteCharAt(orderBy.lastIndexOf(","));
+		
 		if(isSearch){
+			if(countSql.lastIndexOf(",") > 0)
+				countSql.deleteCharAt(countSql.lastIndexOf(","));
 			
 			if(byWhere) {
 				countSql.append(whereBy);
@@ -681,10 +719,11 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			if(byOrder) {
 				countSql.append(orderBy);
 			}
+			
 		}
 		
 		if(log.isDebugEnabled())log.debug("countSql="+countSql);
-		
+
 		return countSql.toString();
 	}
 }

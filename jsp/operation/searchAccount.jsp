@@ -53,8 +53,8 @@ color:#000;
 <caption>Search Account</caption>
 <tbody>
 <tr>
-	<td style="text-align: right;">年龄</td>
-	<td><input name="" value=""/></td>
+	<td style="text-align: right;">名称</td>
+	<td><input name="user.name" value="${user.name }"/></td>
 	<td style="text-align: right;">性别</td>
 	<td><input name="" value=""/></td>
 </tr>
@@ -62,7 +62,7 @@ color:#000;
 <tr>
 	<td style="text-align: right;">地区</td>
 	<td><input name="" value=""/></td>
-	<td style="text-align: right;">名称</td>
+	<td style="text-align: right;">年龄</td>
 	<td><input name="" value=""/></td>
 </tr>
 

@@ -31,13 +31,12 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		
 		if (noQuery) {
 			refresh(entity);
-			entityFillField(entity);
 		}
 		
 		List<Object> retrieveList = null;
 		String doSql = searchSQL(entity);
 		
-		System.out.println("doSql:" + doSql);
+		System.out.println("searchSQL:" + doSql);
 
 		Connection myConn = null;
 		boolean isClose = true;
@@ -132,12 +131,15 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 	}
 	
 	@Override
-	public Integer count(Connection connection,Object entity) throws SQLException {
+	public Integer count(Connection connection,Object entity,boolean noQuery) throws SQLException {
 		
-		refresh(entity);
+		if (noQuery) {
+			refresh(entity);
+		}
 		
 		String doSql = countSQL(entity);
-		
+		System.out.println("countSql:" + doSql);
+
 		if(log.isDebugEnabled())log.debug("doSql="+doSql);
 		Connection myConn = null;
 		boolean isClose = true;
@@ -186,9 +188,14 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		}
 		return total;
 	}
-	@Override
+	public Integer count(Object entity,boolean noQuery) throws SQLException {
+		return count(null,entity,noQuery);
+	}
 	public Integer count(Object entity) throws SQLException {
-		return count(null,entity);
+		return count(null,entity,true);
+	}
+	public Integer count(Connection connection,Object entity) throws SQLException {
+		return count(connection,entity,true);
 	}
 	@Override
 	public void add(Connection connection,Object entity) throws SQLException {

@@ -376,5 +376,16 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public Integer count(Object entity, boolean noQuery) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Integer count(Connection connection, Object entity, boolean noQuery)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

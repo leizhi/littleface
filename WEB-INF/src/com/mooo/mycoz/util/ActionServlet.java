@@ -18,6 +18,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 
 import com.mooo.mycoz.cache.CacheManager;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ActionServlet extends HttpServlet {
@@ -171,7 +172,9 @@ public class ActionServlet extends HttpServlet {
 		} catch (NoSuchMethodException e) {
 			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
 			e.printStackTrace();
-			getServletContext().getRequestDispatcher("/Index.do").forward(request,response);
+		} catch (InvocationTargetException e) {
+			if(log.isErrorEnabled()) log.error("InvocationTargetException:"+e.getMessage());
+			e.printStackTrace();
 		} catch (RuntimeException e) {
 			if(log.isErrorEnabled()) log.error("RuntimeException:"+e.getMessage());
 			e.printStackTrace();
@@ -182,7 +185,9 @@ public class ActionServlet extends HttpServlet {
 			if(log.isErrorEnabled()) log.error("Throwable:"+e.getMessage());
 			e.printStackTrace();
 		}finally{
-				//getServletContext().getRequestDispatcher("/jsp/error.jsp").forward(request,response);
+			//getServletContext().getRequestDispatcher("/jsp/error.jsp").forward(request,response);
+			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			response.setHeader("Location",request.getContextPath()+"/Index.do");
 		}
 	}
 

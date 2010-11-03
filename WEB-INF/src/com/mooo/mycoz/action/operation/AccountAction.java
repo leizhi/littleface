@@ -24,12 +24,18 @@ public class AccountAction extends BaseSupport{
 		List<?> accounts = new ArrayList<Object>();
 		try {
 			User user = new User();
+			ParamUtil.bindData(request, user,"user");
+
 			Page page = new Page();
 			page.setPageSize(8);
-			page.buildComponent(request, dbProcess.count(user));
+			
 			dbProcess.refresh(user);
+			dbProcess.setLike("Name");
+			
+			page.buildComponent(request, dbProcess.count(user,DbProcess.OPEN_QUERY));
 			dbProcess.setRecord(page.getOffset(),page.getPageSize());
 			accounts = dbProcess.searchAndRetrieveList(user,DbProcess.OPEN_QUERY);
+			
 			request.setAttribute("accounts", accounts);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -41,7 +47,6 @@ public class AccountAction extends BaseSupport{
 	public String talk(HttpServletRequest request, HttpServletResponse response) {
 		User account = new User();
 		ParamUtil.bindData(request, account);
-
 		//account.setId(new Integer(request.getParameter("id")));
 
 		try {

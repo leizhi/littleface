@@ -21,6 +21,9 @@ public class MysqlSQL extends AbstractSQL {
 
 	@Override
 	public void setRecord(Integer offsetRecord, Integer maxRecords) {
+			if(offsetRecord < 0)
+				offsetRecord = 0;
+			
 			setLimitBy(new StringBuilder(" LIMIT "+offsetRecord+","+maxRecords));
 			setByLimit(true);
 	}

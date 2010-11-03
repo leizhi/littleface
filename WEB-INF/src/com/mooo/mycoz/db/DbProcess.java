@@ -18,8 +18,11 @@ public interface DbProcess {
 	throws SQLException;
 	
 	Integer count(Object entity) throws SQLException;
-	Integer count(Connection connection,Object entity) throws SQLException;
+	Integer count(Object entity,boolean noQuery) throws SQLException;
 
+	Integer count(Connection connection,Object entity) throws SQLException;
+	Integer count(Connection connection,Object entity,boolean noQuery) throws SQLException;
+	
 	void add(Object entity) throws SQLException;
 	void add(Connection connection,Object entity) throws SQLException;
 

@@ -72,6 +72,10 @@ public class Page {
 		ParamUtil.bindData(request, this, "page");
 
 		// handling pagination
+		if(totalRows < 1){
+			return;
+		}
+		
 		this.totalRows = totalRows;
 		
 		totalPages = totalRows / pageSize;
