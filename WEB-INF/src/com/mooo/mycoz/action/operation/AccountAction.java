@@ -30,7 +30,7 @@ public class AccountAction extends BaseSupport{
 			page.setPageSize(8);
 			
 			dbProcess.refresh(user);
-			dbProcess.setLike("Name");
+			dbProcess.setLike("name");
 			
 			page.buildComponent(request, dbProcess.count(user,DbProcess.OPEN_QUERY));
 			dbProcess.setRecord(page.getOffset(),page.getPageSize());

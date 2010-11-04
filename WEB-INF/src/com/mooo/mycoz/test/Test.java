@@ -9,6 +9,7 @@ import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.db.sql.MysqlSQL;
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
+import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 
 public class Test {
 
@@ -18,8 +19,9 @@ public class Test {
 		DbProcess dbProces = DbFactory.getInstance();
 //		ThreadType sex = new ThreadType();
 		try {
-			AccessLog al = new AccessLog();
-			//al.setIp("127.0");
+			UserInfo al = new UserInfo();
+			al.setHeightUnitId(56);
+			al.setId(3);
 /*
 			dbProces.refresh(al);
 			dbProces.entityFillField(al);
@@ -38,9 +40,14 @@ public class Test {
 			dbProces.setLike("Id");
 			dbProces.setLike("Ip");
 */
-			//dbProces.setLessEqual("Id");
 			dbProces.refresh(al);
+			dbProces.setLessEqual("id");
+			dbProces.setExtent("joinTime", new Date(), new Date());
+			dbProces.setExtent("id", 1, 10);
+
 			dbProces.setRecord(0, 5);
+			System.out.println("size->" + dbProces.count(al,DbProcess.OPEN_QUERY));
+
 			List sexs = dbProces.searchAndRetrieveList(al,DbProcess.OPEN_QUERY);
 			System.out.println("size->" + sexs.size());
 

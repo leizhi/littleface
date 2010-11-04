@@ -2,6 +2,7 @@ package com.mooo.mycoz.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 public interface DbProcess {
@@ -43,6 +44,10 @@ public interface DbProcess {
 	void setGreaterEqual(String field);
 	void setLessEqual(String field);
 	
+	void setExtent(String field,Date start,Date end);
+	void setExtent(String field,Integer start,Integer end);
+	void setExtent(String field,String start,String end);
+
 	void addGroupBy(String field);
 	void addOrderBy(String field);
 }

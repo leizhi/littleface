@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mooo.mycoz.db.ExtentField;
 import com.mooo.mycoz.db.Field;
 import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.StringUtils;
@@ -53,6 +54,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	private Map<String, Field> fields;
 	private Map<String, Object> columnValues;
 	
+	private Map<String, ExtentField<?>> extentValues;
+
 	//////////////////////////////
 	public String getCatalog() {
 		return catalog;
@@ -121,7 +124,7 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		
 		isSave = false;
 		isUpdate = false;
-		isSearch = true;
+		isSearch = true; // default search
 
 		saveKey = new StringBuilder("(");
 		saveValue = new StringBuilder(") VALUES(");
@@ -147,6 +150,36 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 
 		fields = new HashMap<String, Field>();
 		columnValues = new HashMap<String, Object>();
+		
+		extentValues = new HashMap<String, ExtentField<?>>();
+	}
+	
+	public void refreshSQL(){
+		whereBy = new StringBuilder(" WHERE ");
+		groupBy = new StringBuilder(" GROUP BY ");
+		orderBy = new StringBuilder(" ORDER BY ");
+		
+		saveKey = new StringBuilder("(");
+		saveValue = new StringBuilder(") VALUES(");
+
+		saveSql = new StringBuilder("INSERT INTO ");
+
+		updateSql = new StringBuilder("UPDATE ");
+		deleteSql = new StringBuilder("DELETE FROM ");
+		searchSql = new StringBuilder("SELECT * FROM ");
+		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM ");
+
+		saveSql.append(catalog + ".");
+		updateSql.append(catalog + ".");
+		deleteSql.append(catalog + ".");
+		searchSql.append(catalog + ".");
+		countSql.append(catalog + ".");
+
+		saveSql.append(table);
+		updateSql.append(table + " SET ");
+		deleteSql.append(table);
+		searchSql.append(table);
+		countSql.append(table);
 	}
 	
 	///////////////////////////////
@@ -224,6 +257,48 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			leField.setWhereByLessEqual(true);
 		}
 	}
+
+	public void setExtent(String field,Date start,Date end) {
+		if (extentValues != null) {
+			extentValues.put(field, new ExtentField<Date>(start,end));
+			
+			if (fields.containsKey(field)) {
+				Field leField = (Field) fields.get(field);
+				leField.setWhereByLike(false);
+				leField.setWhereByEqual(false);
+				leField.setWhereByGreaterEqual(false);
+				leField.setWhereByLessEqual(false);
+			}
+		}
+	}
+	
+	public void setExtent(String field,Integer start,Integer end) {
+		if (extentValues != null) {
+			extentValues.put(field, new ExtentField<Integer>(start,end));
+			
+			if (fields.containsKey(field)) {
+				Field leField = (Field) fields.get(field);
+				leField.setWhereByLike(false);
+				leField.setWhereByEqual(false);
+				leField.setWhereByGreaterEqual(false);
+				leField.setWhereByLessEqual(false);
+			}
+		}
+	}
+	
+	public void setExtent(String field,String start,String end) {
+		if (extentValues != null) {
+			extentValues.put(field, new ExtentField<String>(start,end));
+			
+			if (fields.containsKey(field)) {
+				Field leField = (Field) fields.get(field);
+				leField.setWhereByLike(false);
+				leField.setWhereByEqual(false);
+				leField.setWhereByGreaterEqual(false);
+				leField.setWhereByLessEqual(false);
+			}
+		}
+	}
 	
 	@Override
 	public void addGroupBy(String groupField) {
@@ -250,7 +325,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			key = (String) it.next();
 			field = (Field) fields.get(key);
 			
-			//value = (String) columnValues.get(key);
 			Object obj = columnValues.get(key);
 
 			if(field.isSave()) {
@@ -363,7 +437,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		
 		Field field;
 		String key;
-		whereBy=new StringBuilder(" WHERE ");
 		
 		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
 			key = (String) it.next();
@@ -467,263 +540,318 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		}
 
 		if(log.isDebugEnabled())log.debug("updateSql="+updateSql);
-		System.out.println("updateSql="+updateSql);
 
 		return updateSql.toString();
 	}
-//////////////search too
-	public String searchSQL(Object entity) {
+//////////////search default mysql
+	public String searchSQL(Object entity,String prefix) {
 		
 		if(fields == null || columnValues == null)
 			return null;
 		
-		whereBy = new StringBuilder(" WHERE ");
-		groupBy = new StringBuilder(" GROUP BY ");
-		orderBy = new StringBuilder(" ORDER BY ");
-		
-		Field field;
-		String key;
-		
-		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
-		
-			key = (String) it.next();
-			field = (Field) fields.get(key);
+		try {	
+			Field field;
+			String key;
+	
+			Object obj;
+			int columnType = 0;
 			
-			Object obj = columnValues.get(key);
-			
-			if(field.isWhereByEqual()) {
+			for(String eKey: extentValues.keySet()){
 				byWhere = true;
+
+				System.out.println("eKey="+eKey);
 				
+				ExtentField<?> extentField = extentValues.get(eKey);
+				obj = extentField.getStart();
+
+				columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(eKey,prefix));
+
 				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" = "+obj +" AND ");
+					whereBy.append(eKey+" >= "+extentField.getStart() +" AND ");
+					whereBy.append(eKey+" <= "+extentField.getEnd() +" AND ");
 				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+					if(columnType==Types.TIMESTAMP){
+						whereBy.append(eKey+" >= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(extentField.getStart()) +"' AND ");
+						whereBy.append(eKey+" <= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(extentField.getEnd()) +"' AND ");
 					} else {
-						whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						whereBy.append(eKey+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(extentField.getStart()) +"' AND ");
+						whereBy.append(eKey+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(extentField.getEnd()) +"' AND ");
 					}
 				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" = "+obj +" AND ");
+					whereBy.append(eKey+" >= "+extentField.getStart() +" AND ");
+					whereBy.append(eKey+" <= "+extentField.getEnd() +" AND ");
 				} else {
-					whereBy.append(field.getName()+" = '"+obj +"' AND ");
+					whereBy.append(eKey+" >= '"+extentField.getStart() +"' AND ");
+					whereBy.append(eKey+" <= '"+extentField.getEnd() +"' AND ");
 				}
 			}
 			
-			if(field.isWhereByGreaterEqual()) {
-				byWhere = true;
+			for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
+			
+				key = (String) it.next();
+				field = (Field) fields.get(key);
 				
-				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" >= "+obj +" AND ");
-				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+				obj = columnValues.get(key);
+				
+				if(field.isWhereByEqual()) {
+					byWhere = true;
+					
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" = "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" = "+obj +" AND ");
 					} else {
-						whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						whereBy.append(field.getName()+" = '"+obj +"' AND ");
 					}
-				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" >= "+obj +" AND ");
-				} else {
-					whereBy.append(field.getName()+" >= '"+obj +"' AND ");
+				}
+				
+				if(field.isWhereByGreaterEqual()) {
+					byWhere = true;
+					
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" >= "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" >= "+obj +" AND ");
+					} else {
+						whereBy.append(field.getName()+" >= '"+obj +"' AND ");
+					}
+				}
+	
+				if(field.isWhereByLessEqual()) {
+					byWhere = true;
+	
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" <= "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" <= "+obj +" AND ");
+					} else {
+						whereBy.append(field.getName()+" <= '"+obj +"' AND ");
+					}
+				}
+	
+				if(field.isWhereByLike()) {
+					byWhere = true;
+	
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+					} else {
+						whereBy.append(field.getName()+" LIKE '%"+obj +"%' AND ");
+					}
 				}
 			}
-
-			if(field.isWhereByLessEqual()) {
-				byWhere = true;
-
-				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" <= "+obj +" AND ");
-				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
-					} else {
-						whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
-					}
-				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" <= "+obj +" AND ");
-				} else {
-					whereBy.append(field.getName()+" <= '"+obj +"' AND ");
+			
+			if(byWhere)
+				whereBy.delete(whereBy.lastIndexOf("AND"),whereBy.lastIndexOf("AND")+3);
+			
+			if(byGroup)
+				groupBy.deleteCharAt(groupBy.lastIndexOf(","));
+			
+			if(byOrder)
+				orderBy.deleteCharAt(orderBy.lastIndexOf(","));
+			
+			if(isSearch){
+				if(searchSql.lastIndexOf(",") > 0)
+					searchSql.deleteCharAt(searchSql.lastIndexOf(","));
+				
+				if(byWhere) {
+					searchSql.append(whereBy);
 				}
-			}
-
-			if(field.isWhereByLike()) {
-				byWhere = true;
-
-				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
-				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
-					} else {
-						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
-					}
-				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
-				} else {
-					whereBy.append(field.getName()+" LIKE '%"+obj +"%' AND ");
+				
+				if(byGroup) {
+					searchSql.append(groupBy);
 				}
+				
+				if(byOrder) {
+					searchSql.append(orderBy);
+				}
+				
+				if(byLimit)
+					searchSql.append(limitBy);
 			}
+			
+			if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
+	
+			return searchSql.toString();
+		} finally {
+			refreshSQL();
 		}
-		
-		if(byWhere)
-			whereBy.delete(whereBy.lastIndexOf("AND"),whereBy.lastIndexOf("AND")+3);
-		
-		if(byGroup)
-			groupBy.deleteCharAt(groupBy.lastIndexOf(","));
-		
-		if(byOrder)
-			orderBy.deleteCharAt(orderBy.lastIndexOf(","));
-		
-		if(isSearch){
-			if(searchSql.lastIndexOf(",") > 0)
-				searchSql.deleteCharAt(searchSql.lastIndexOf(","));
-			
-			if(byWhere) {
-				searchSql.append(whereBy);
-			}
-			
-			if(byGroup) {
-				searchSql.append(groupBy);
-			}
-			
-			if(byOrder) {
-				searchSql.append(orderBy);
-			}
-			
-			if(byLimit)
-				searchSql.append(limitBy);
-		}
-		
-		if(log.isDebugEnabled())log.debug("searchSql="+searchSql);
-
-		return searchSql.toString();
 	}
-	public String countSQL(Object entity) {
+	
+	public String countSQL(Object entity,String prefix) {
+		
 		if(fields == null || columnValues == null)
 			return null;
 		
-		whereBy = new StringBuilder(" WHERE ");
-		groupBy = new StringBuilder(" GROUP BY ");
-		orderBy = new StringBuilder(" ORDER BY ");
-		
-		Field field;
-		String key;
-		
-		for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
-		
-			key = (String) it.next();
-			field = (Field) fields.get(key);
+		try {
+			Field field;
+			String key;
 			
-			Object obj = columnValues.get(key);
+			Object obj;
+			int columnType = 0;
 			
-			System.out.println("Object->" + obj);
-
-			System.out.println("isWhereByEqual->" + field.isWhereByEqual());
-			System.out.println("isWhereByGreaterEqual->" + field.isWhereByGreaterEqual());
-			System.out.println("isWhereByLessEqual->" + field.isWhereByLessEqual());
-			System.out.println("isWhereByLike->" + field.isWhereByLike());
-
-			if(field.isWhereByEqual()) {
+			for(String eKey: extentValues.keySet()){
 				byWhere = true;
+
+				System.out.println("eKey="+eKey);
 				
+				ExtentField<?> extentField = extentValues.get(eKey);
+				obj = extentField.getStart();
+
+				columnType = DbUtil.type(null,getCatalog(),getTable(),StringUtils.upperToPrefix(eKey,prefix));
+
 				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" = "+obj +" AND ");
+					whereBy.append(eKey+" >= "+extentField.getStart() +" AND ");
+					whereBy.append(eKey+" <= "+extentField.getEnd() +" AND ");
 				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+					if(columnType==Types.TIMESTAMP){
+						whereBy.append(eKey+" >= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(extentField.getStart()) +"' AND ");
+						whereBy.append(eKey+" <= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(extentField.getEnd()) +"' AND ");
 					} else {
-						whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						whereBy.append(eKey+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(extentField.getStart()) +"' AND ");
+						whereBy.append(eKey+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(extentField.getEnd()) +"' AND ");
 					}
 				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" = "+obj +" AND ");
+					whereBy.append(eKey+" >= "+extentField.getStart() +" AND ");
+					whereBy.append(eKey+" <= "+extentField.getEnd() +" AND ");
 				} else {
-					whereBy.append(field.getName()+" = '"+obj +"' AND ");
+					whereBy.append(eKey+" >= '"+extentField.getStart() +"' AND ");
+					whereBy.append(eKey+" <= '"+extentField.getEnd() +"' AND ");
 				}
 			}
 			
-			if(field.isWhereByGreaterEqual()) {
-				byWhere = true;
+			for (Iterator<?> it = fields.keySet().iterator(); it.hasNext();) {
+			
+				key = (String) it.next();
+				field = (Field) fields.get(key);
 				
-				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" >= "+obj +" AND ");
-				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+				obj = columnValues.get(key);
+				
+				if(field.isWhereByEqual()) {
+					byWhere = true;
+					
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" = "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" = date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" = "+obj +" AND ");
 					} else {
-						whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						whereBy.append(field.getName()+" = '"+obj +"' AND ");
 					}
-				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" >= "+obj +" AND ");
-				} else {
-					whereBy.append(field.getName()+" >= '"+obj +"' AND ");
+				}
+				
+				if(field.isWhereByGreaterEqual()) {
+					byWhere = true;
+					
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" >= "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" >= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" >= "+obj +" AND ");
+					} else {
+						whereBy.append(field.getName()+" >= '"+obj +"' AND ");
+					}
+				}
+	
+				if(field.isWhereByLessEqual()) {
+					byWhere = true;
+	
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" <= "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" <= "+obj +" AND ");
+					} else {
+						whereBy.append(field.getName()+" <= '"+obj +"' AND ");
+					}
+				}
+	
+				if(field.isWhereByLike()) {
+					byWhere = true;
+	
+					if(obj.getClass().isAssignableFrom(Integer.class)){
+						whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+					}else if(obj.getClass().isAssignableFrom(Date.class)){
+						if(field.getType()==Types.TIMESTAMP){
+							whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
+						} else {
+							whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
+						}
+					}else if(obj.getClass().isAssignableFrom(Double.class)){
+						whereBy.append(field.getName()+" LIKE "+obj +" AND ");
+					} else {
+						whereBy.append(field.getName()+" LIKE '%"+obj +"%' AND ");
+					}
 				}
 			}
-
-			if(field.isWhereByLessEqual()) {
-				byWhere = true;
-
-				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" <= "+obj +" AND ");
-				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
-					} else {
-						whereBy.append(field.getName()+" <= date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
-					}
-				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" <= "+obj +" AND ");
-				} else {
-					whereBy.append(field.getName()+" <= '"+obj +"' AND ");
+			
+			if(byWhere)
+				whereBy.delete(whereBy.lastIndexOf("AND"),whereBy.lastIndexOf("AND")+3);
+					
+			if(isSearch){
+				if(countSql.lastIndexOf(",") > 0)
+					countSql.deleteCharAt(countSql.lastIndexOf(","));
+				
+				if(byWhere) {
+					countSql.append(whereBy);
 				}
-			}
-
-			if(field.isWhereByLike()) {
-				byWhere = true;
-
-				if(obj.getClass().isAssignableFrom(Integer.class)){
-					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
-				}else if(obj.getClass().isAssignableFrom(Date.class)){
-					if(field.getType()==Types.TIMESTAMP){
-						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"' AND ");
-					} else {
-						whereBy.append(field.getName()+" LIKE date'"+new SimpleDateFormat("yyyy-MM-dd").format(((Date)obj)) +"' AND ");
-					}
-				}else if(obj.getClass().isAssignableFrom(Double.class)){
-					whereBy.append(field.getName()+" LIKE "+obj +" AND ");
-				} else {
-					whereBy.append(field.getName()+" LIKE '%"+obj +"%' AND ");
+				
+				if(byGroup) {
+					countSql.append(groupBy);
 				}
+				
+				if(byOrder) {
+					countSql.append(orderBy);
+				}
+	
+				if(byLimit)
+					countSql.append(limitBy);
 			}
+			
+			if(log.isDebugEnabled())log.debug("countSql="+countSql);
+			return countSql.toString();
+		} finally {
+			refreshSQL();
 		}
-		
-		if(byWhere)
-			whereBy.delete(whereBy.lastIndexOf("AND"),whereBy.lastIndexOf("AND")+3);
-		
-		if(byGroup)
-			groupBy.deleteCharAt(groupBy.lastIndexOf(","));
-		
-		if(byOrder)
-			orderBy.deleteCharAt(orderBy.lastIndexOf(","));
-		
-		if(isSearch){
-			if(countSql.lastIndexOf(",") > 0)
-				countSql.deleteCharAt(countSql.lastIndexOf(","));
-			
-			if(byWhere) {
-				countSql.append(whereBy);
-			}
-			
-			if(byGroup) {
-				countSql.append(groupBy);
-			}
-			
-			if(byOrder) {
-				countSql.append(orderBy);
-			}
-			
-		}
-		
-		if(log.isDebugEnabled())log.debug("countSql="+countSql);
-
-		return countSql.toString();
 	}
 }

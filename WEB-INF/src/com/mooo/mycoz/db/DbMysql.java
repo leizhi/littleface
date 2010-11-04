@@ -9,16 +9,12 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.MysqlSQL;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 public class DbMysql extends MysqlSQL implements DbProcess{
-	private static Log log = LogFactory.getLog(DbMysql.class);
 
 	/**
 	 * 
@@ -140,7 +136,6 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		String doSql = countSQL(entity);
 		System.out.println("countSql:" + doSql);
 
-		if(log.isDebugEnabled())log.debug("doSql="+doSql);
 		Connection myConn = null;
 		boolean isClose = true;
 		
@@ -332,9 +327,6 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		doSql += " LIMIT 1";
 	
 		System.out.println("doSql:" + doSql);
-	
-		if (log.isDebugEnabled())
-			log.debug("doSql:" + doSql);
 	
 		Connection myConn = null;
 		boolean isClose = true;

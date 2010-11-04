@@ -18,10 +18,17 @@ public class OracleSQL extends AbstractSQL{
 	 */
 	private static final long serialVersionUID = -3500897378220229889L;
 	
+	public String searchSQL(Object entity) {
+		return searchSQL(entity,"_");
+	}
+	
+	public String countSQL(Object entity) {
+		return countSQL(entity,"_");
+	}
+	
 	public void entityFillField(Object entity) {
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
-			//refresh(entity,"_");
 			
 			String method;
 			String field;

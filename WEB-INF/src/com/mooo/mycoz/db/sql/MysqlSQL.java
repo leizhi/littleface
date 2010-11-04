@@ -28,6 +28,14 @@ public class MysqlSQL extends AbstractSQL {
 			setByLimit(true);
 	}
 	
+	public String searchSQL(Object entity) {
+		return searchSQL(entity,null);
+	}
+	
+	public String countSQL(Object entity) {
+		return countSQL(entity,null);
+	}
+	
 	public void entityFillField(Object entity) {
 		try {
 			List<String> methods = ReflectUtil.getMethodNames(entity.getClass());
@@ -47,6 +55,8 @@ public class MysqlSQL extends AbstractSQL {
 					
 					if(obj !=null) {
 						field = method.substring(method.indexOf("get")+3);
+						field = StringUtils.toLowerFirst(field); // getMethod name reduction to field 
+						
 						columnType = DbUtil.type(null,this.getCatalog(),this.getTable(),StringUtils.upperToPrefix(field,null));
 						
 						if(obj.getClass().isAssignableFrom(Integer.class))
