@@ -37,7 +37,7 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 	}
 	
 
-	public List searchAndRetrieveList() {
+	public List searchAndRetrieveList() throws SQLException{
 		List<Object> retrieveList = null;
 		String doSql = searchSQL();
 		Statement stmt = null;

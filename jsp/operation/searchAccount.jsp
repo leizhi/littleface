@@ -54,9 +54,19 @@ color:#000;
 <tbody>
 <tr>
 	<td style="text-align: right;">名称</td>
-	<td><input name="user.name" value="${user.name }"/></td>
+	<td><input name="query_name" value="${query_name }"/></td>
 	<td style="text-align: right;">性别</td>
-	<td><input name="" value=""/></td>
+	<td>
+		<select name="query_sexId">
+		<option value="">--All-</option>
+			<c:forEach var="items" items="${sexs}" varStatus="s">
+				<option value="${items.id}"
+				<c:if test="${!empty query_sexId and items.id==query_sexId }">
+					selected="selected"
+				</c:if> >${items.name}</option>
+			--</c:forEach>
+		</select>
+	</td>
 </tr>
 
 <tr>

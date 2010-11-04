@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mooo.mycoz.util.StringUtils;
+
 public class DbMultiBulildSQL implements MultiSQLProcess {
 
 	public String catalog;
@@ -83,7 +85,9 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 	}
 
 	public void setField(String field, String value) {
-		whereKey.add(field + "='" + value + "'");
+		if (!StringUtils.isNull(value)) {
+			whereKey.add(field + "='" + value + "'");
+		}
 	}
 
 	public void setField(String field, int value) {
@@ -91,7 +95,9 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 	}
 
 	public void setLike(String alias, String field, String value) {
-		whereKey.add(alias + "." + field + " LIKE '%" + value + "%'");
+		if (!StringUtils.isNull(value)) {
+			whereKey.add(alias + "." + field + " LIKE '%" + value + "%'");
+		}
 	}
 
 	public void setGreaterEqual(String alias, String field, String value) {

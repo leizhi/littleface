@@ -817,4 +817,10 @@ public class StringUtils {
 			throw new NullPointerException("cant no null");
 		}
 	}
+	public static boolean isNull(String str) {
+		if(str == null || str.equals("")){
+			return true;
+		}
+		return false;
+	}
 }
