@@ -51,17 +51,17 @@ public class AccountAction extends BaseSupport{
 			mdb.addTable(User.class, "user");
 			mdb.addTable(UserInfo.class, "userInfo");
 			mdb.addTable(AddressBook.class, "addressBook");
-			mdb.addTable(UserImage.class, "userImage");
+			//mdb.addTable(UserImage.class, "userImage");
 
 			mdb.setForeignKey("userInfo", "userId", "user", "id");
 			mdb.setForeignKey("addressBook", "userId", "user", "id");
-			mdb.setForeignKey("userImage", "userId", "user", "id");
+			//mdb.setForeignKey("userImage", "userId", "user", "id");
 
 			//mdb.setField("ct.id", "1");
 			mdb.setLike("user","name",request.getParameter("query_name"));
 			mdb.setLike("userInfo","sexId",request.getParameter("query_sexId"));
 
-			mdb.setGroupBy("user", "id");
+			//mdb.setGroupBy("user", "id");
 			
 			mdb.setRetrieveField("user", "*");
 			//mdb.setRetrieveField("userInfo", "*");
