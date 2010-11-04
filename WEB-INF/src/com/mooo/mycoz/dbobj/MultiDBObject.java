@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbMultiBulildSQL;
 import com.mooo.mycoz.db.sql.MultiSQLProcess;
 import com.mooo.mycoz.util.BeanUtil;
+import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
@@ -50,9 +52,9 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 			}
 			
 			stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(doSql);
+			ResultSet result = stmt.executeQuery(doSql);
 			
-			rsmd = rs.getMetaData();
+			rsmd = result.getMetaData();
 			Map re;
 
 			String key;
@@ -61,7 +63,7 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 			Object bean;
 			String catalog,table,column;
 
-			while (rs.next()) {
+			while (result.next()) {
 				re = new HashMap();
 				
 				for (Iterator<?> it = objs.keySet().iterator(); it.hasNext();) {
@@ -74,10 +76,18 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 						table = rsmd.getTableName(i);
 						
 						value = tables.get(key);
+						column = rsmd.getColumnName(i);
+
+						int type = DbUtil.type(null,catalog,table,StringUtils.upperToPrefix(column,null));
 						
 						if(value.equals(catalog+"."+table)){
-							column = rsmd.getColumnName(i).toLowerCase();
-							BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(column),rs.getString(i));
+							//column = rsmd.getColumnName(i).toLowerCase();
+							//BeanUtil.bindProperty(bean, StringUtils.prefixToUpper(column),result.getString(i));
+							if(type == Types.TIMESTAMP){
+								BeanUtil.bindProperty(bean,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							}else {
+								BeanUtil.bindProperty(bean,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));	
+							}
 						}
 					}
 					re.put(key, bean);
