@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.51
+-- Server version	5.1.49-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -359,6 +359,24 @@ CREATE TABLE `User` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `UserImage`
+--
+
+DROP TABLE IF EXISTS `UserImage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `UserImage` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `userId` int(11) DEFAULT NULL,
+  `filepath` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`),
+  KEY `filepath` (`filepath`),
+  CONSTRAINT `UserImage_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `UserInfo`
 --
 
@@ -418,4 +436,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-02 11:31:40
+-- Dump completed on 2010-11-04 15:24:04
