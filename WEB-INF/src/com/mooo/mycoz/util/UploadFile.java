@@ -91,17 +91,17 @@ public class UploadFile {
             updFileArr = new ArrayList<String>();
             int rtnPos = 0;
             byte[] buffs = new byte[BUFSIZE * 8];
-            // &#65533;取得ContentType
+            // 取得ContentType
             String contentType = request.getContentType();
             int index = contentType.indexOf("boundary=");
             String boundary = "--" + contentType.substring(index + 9);
             String endBoundary = boundary + "--";
-            // &#65533;从request对象中取得流。
+            // 从request对象中取得流。
             ServletInputStream sis = request.getInputStream();
             // 读取1行
             while ((rtnPos = sis.readLine(buffs, 0, buffs.length)) != -1) {
                 String strBuff = new String(buffs, 0, rtnPos);
-                // 读取1行数据&#65533;n&#65533;&#65533;
+                // 读取1行数据
                 if (strBuff.startsWith(boundary)) {
                     if (name != null && name.trim().length() > 0) {
                         if (fileFlag) {
@@ -130,20 +130,15 @@ public class UploadFile {
                     rtnPos = sis.readLine(buffs, 0, buffs.length);
                     if (rtnPos != -1) {
                         strBuff = new String(buffs, 0, rtnPos);
-                        if (strBuff.toLowerCase().startsWith(
-                                "content-disposition: form-data; ")) {
-                            int nIndex = strBuff.toLowerCase().indexOf(
-                                    "name=\"");
-                            int nLastIndex = strBuff.toLowerCase().indexOf(
-                                    "\"", nIndex + 6);
+                        if (strBuff.toLowerCase().startsWith("content-disposition: form-data; ")) {
+                            int nIndex = strBuff.toLowerCase().indexOf("name=\"");
+                            int nLastIndex = strBuff.toLowerCase().indexOf("\"", nIndex + 6);
                             name = strBuff.substring(nIndex + 6, nLastIndex);
                         }
-                        int fIndex = strBuff.toLowerCase().indexOf(
-                                "filename=\"");
+                        int fIndex = strBuff.toLowerCase().indexOf("filename=\"");
                         if (fIndex != -1) {
                             fileFlag = true;
-                            int fLastIndex = strBuff.toLowerCase().indexOf(
-                                    "\"", fIndex + 10);
+                            int fLastIndex = strBuff.toLowerCase().indexOf("\"", fIndex + 10);
                             fName = strBuff.substring(fIndex + 10, fLastIndex);
                             fName = getFileName(fName);
                             if (fName == null || fName.trim().length() == 0) {
@@ -181,12 +176,12 @@ public class UploadFile {
                 } else {
                     if (fileFlag) {
                         if (baos == null && bos == null) {
-				fName = fName.trim();
-				fName = fName.replace("'",".");
-	 		    	fileList.add(fName);
-                            tmpFile = new File(uploadPath + fName);
-                            baos = new FileOutputStream(tmpFile);
-                            bos = new BufferedOutputStream(baos);
+							fName = fName.trim();
+							fName = fName.replace("'", ".");
+							fileList.add(fName);
+							tmpFile = new File(uploadPath + fName);
+							baos = new FileOutputStream(tmpFile);
+							bos = new BufferedOutputStream(baos);
                         }
                         bos.write(buffs, 0, rtnPos);
                         baos.flush();
@@ -227,15 +222,15 @@ public class UploadFile {
         return value;
     }
     public String[] getParameters(String name){
-        if ( name == null || name.trim().length() == 0 )
-            return null;
-        if ( paramHt.get(name) == null )
-            return null;
-        ArrayList<String> al = (ArrayList<String>)paramHt.get(name);
-        String[] strArr = new String[al.size()];
-        for ( int i=0;i<al.size();i++ )
-            strArr[i] = (String)al.get(i);
-        return strArr;
+		if (name == null || name.trim().length() == 0)
+			return null;
+		if (paramHt.get(name) == null)
+			return null;
+		ArrayList<String> al = (ArrayList<String>) paramHt.get(name);
+		String[] strArr = new String[al.size()];
+		for (int i = 0; i < al.size(); i++)
+			strArr[i] = (String) al.get(i);
+		return strArr;
     }
     
     public int getUpdFileSize(){
@@ -267,5 +262,8 @@ public class UploadFile {
     }
     public Iterator<String> getFileIterator(){
     	return fileList.iterator();
+    }
+    public List<String> getFileList(){
+    	return fileList;
     }
 }

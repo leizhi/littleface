@@ -122,7 +122,7 @@ public class UserInfo {
 	
 	// extended attribute
 
-	private User user;
+	//private User user;
 	private Sex sex;
 	private HeightUnit heightUnit;
 	private WeightUnit weightUnit;
@@ -130,20 +130,20 @@ public class UserInfo {
 	private Education education;
 	private Married married;
 
-	public User getUser() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		user = new User();
-		user.setId(getUserId());
-		try {
-			dbProcess.retrieve(user);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
+//	public User getUser() {
+//		DbProcess dbProcess = DbFactory.getInstance();
+//		user = new User();
+//		user.setId(getUserId());
+//		try {
+//			dbProcess.retrieve(user);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return user;
+//	}
+//	public void setUser(User user) {
+//		this.user = user;
+//	}
 	public Sex getSex() {
 		DbProcess dbProcess = DbFactory.getInstance();
 		try {

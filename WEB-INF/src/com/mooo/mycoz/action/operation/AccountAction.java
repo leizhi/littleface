@@ -20,7 +20,8 @@ import com.mooo.mycoz.util.ParamUtil;
 public class AccountAction extends BaseSupport{
 	
 	public String search(HttpServletRequest request, HttpServletResponse response) {
-		
+		request.setAttribute("uploadPath", request.getContextPath()+"/"+ "upload/");
+
 		List<?> accounts = new ArrayList<Object>();
 		try {
 			User user = new User();

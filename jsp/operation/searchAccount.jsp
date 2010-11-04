@@ -87,18 +87,22 @@ color:#000;
 </div>
 
 <div style="width: 100%;margin-left:1px;">
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
-<span><img width="80px" height="60px" src=""/></span>
+<c:forEach var="iu" items="${item.userImages}" varStatus="su">
+	<c:if test="${su.index < 3}">
+		<img width="80px" height="60px" src="${uploadPath}${iu.filepath }"/>
+	</c:if>
+</c:forEach>
 </div>
 
 <div style="width: 100%;margin-left:1px;">
 <ul style="width: 100%;margin-left:0px;">
-<li>性别:男</li>
-<li>年龄:29</li>
-<li>生日:xxxxxxxx29</li>
-<li>地址:下xxxxxxxxxxxxxxxxxx</li>
-<li>爱好:下xxxxxxxxxxxxxxxxxx </li>
+<li>性别:<c:out value="${item.userInfo.sex.name }"/></li>
+<li>年龄:</li>
+<li>生日:<fmt:formatDate value="${item.userInfo.birthday }" pattern="yyyy/MM/dd"/></li>
+<li>国家:<c:out value="${item.addressBook.country.name }"/></li>
+<li>城市:<c:out value="${item.addressBook.city.name }"/></li>
+<li>地址:<c:out value="${item.addressBook.address }"/></li>
+<li>爱好:</li>
 
 <c:url value="/Account.do" var="talk">
 	<c:param name="method">talk</c:param>

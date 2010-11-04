@@ -1,5 +1,12 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import com.mooo.mycoz.db.DbFactory;
+import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.dbobj.mycozShared.Country;
+
 /**
 
  */
@@ -40,4 +47,51 @@ public class User {
 	public void setActive(String active) {
 	 this.active = active;
 	}
+	
+	private List userImages;
+	private UserInfo userInfo;
+	private AddressBook addressBook;
+	public List getUserImages() {
+		DbProcess dbProcess = DbFactory.getInstance();
+		UserImage userImage = new UserImage();
+		userImage.setUserId(getId());
+		try {
+			userImages = dbProcess.searchAndRetrieveList(userImage);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userImages;
+	}
+	public void setUserImages(List userImages) {
+		this.userImages = userImages;
+	}
+	public UserInfo getUserInfo() {
+		DbProcess dbProcess = DbFactory.getInstance();
+		userInfo = new UserInfo();
+		userInfo.setUserId(getId());
+		try {
+			dbProcess.retrieve(userInfo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return userInfo;
+	}
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
+	public AddressBook getAddressBook() {
+		DbProcess dbProcess = DbFactory.getInstance();
+		addressBook = new AddressBook();
+		addressBook.setUserId(getId());
+		try {
+			dbProcess.retrieve(addressBook);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return addressBook;
+	}
+	public void setAddressBook(AddressBook addressBook) {
+		this.addressBook = addressBook;
+	}
+
 }

@@ -186,15 +186,9 @@ function docommit(url) {
 		<li class="title"><fmt:message key="Images"/></li>
 				
 		<li>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
-			<img width="80px" height="60px" src=""/>
+			<c:forEach var="item" items="${userImages}" varStatus="status">
+				<img width="80px" height="60px" src="${uploadPath}${item.filepath }"/>
+			</c:forEach>
 		</li>
 	</ul>
 </div>

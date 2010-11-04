@@ -234,7 +234,7 @@ public class BeanTools {
 		//bd.build("mycozBranch","UserInfo");
 		//bd.build("mycozBranch","AddressBook");
 		//bd.build("mycozBranch","FileTree");
-
+		bd.build("mycozBranch","UserImage");
 		//bd.buildInsert("buffer_traffic");
 
 		//bd.build("mycozBranch","Forum");
@@ -243,7 +243,7 @@ public class BeanTools {
 		//bd.build("mycozShared","WeightUnit");
 		//bd.build("mycozShared","Language");
 		//bd.build("mycozShared","Country");
-		bd.build("mycozShared","City");
+		//bd.build("mycozShared","City");
 	}
 
 }
