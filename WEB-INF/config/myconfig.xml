@@ -88,6 +88,7 @@
 			<result name="general">/jsp/profile/generalMy.jsp</result>
 			<result name="promptChangePassword">/jsp/profile/changePassword.jsp</result>
 			<result name="edit">/jsp/profile/editMy.jsp</result>
+			<result name="promptUploadImages">/jsp/profile/uploadImages.jsp</result>
 		</action>
 		
 		<action	name="ForumThread" default="listMessage"
