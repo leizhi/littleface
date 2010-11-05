@@ -37,9 +37,5 @@ public interface MultiSQLProcess {
  	
  	void setRecord(int offset, int rowcount);
  	
- 	void setOffset(int offset);
- 	
- 	void setRowcount(int rowcount);
- 	
  	int count();
 }

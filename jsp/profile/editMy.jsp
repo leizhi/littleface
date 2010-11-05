@@ -275,7 +275,7 @@ function docommit(url) {
 		</c:url>
 		<li><input type="button" value="upload" onclick="openLookup('${uploadImages}');"/></li>
 		<li>
-			<c:forEach var="item" items="${userImages}" varStatus="status">
+			<c:forEach var="item" items="${user.userImages}" varStatus="status">
 				<img width="80px" height="60px" src="${uploadPath}${item.filepath }"/>
 			</c:forEach>
 		</li>

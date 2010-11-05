@@ -94,7 +94,7 @@ public class ArapTag extends TagSupport {
 			ms.setRetrieveField("jn", "NoteNo");
 			ms.setRetrieveField("jn", "Date");
 
-			ms.setRowcount(10000);
+			ms.setRecord(0, 10000);
 
 			//String sql = ms.S();
 			//System.out.println("buildSQL=" + sql);

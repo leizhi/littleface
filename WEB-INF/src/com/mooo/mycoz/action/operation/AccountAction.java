@@ -20,7 +20,15 @@ import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserImage;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
+import com.mooo.mycoz.dbobj.mycozShared.Career;
+import com.mooo.mycoz.dbobj.mycozShared.City;
+import com.mooo.mycoz.dbobj.mycozShared.Country;
+import com.mooo.mycoz.dbobj.mycozShared.Education;
+import com.mooo.mycoz.dbobj.mycozShared.HeightUnit;
+import com.mooo.mycoz.dbobj.mycozShared.Language;
+import com.mooo.mycoz.dbobj.mycozShared.Married;
 import com.mooo.mycoz.dbobj.mycozShared.Sex;
+import com.mooo.mycoz.dbobj.mycozShared.WeightUnit;
 import com.mooo.mycoz.util.ParamUtil;
 
 public class AccountAction extends BaseSupport{
@@ -28,7 +36,7 @@ public class AccountAction extends BaseSupport{
 	public String search(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("uploadPath", request.getContextPath()+"/"+ "upload/");
 
-		List<User> accounts = new ArrayList<User>();
+		//List<User> accounts = new ArrayList<User>();
 		try {
 			request.setAttribute("query_name", request.getParameter("query_name"));
 			
@@ -36,25 +44,25 @@ public class AccountAction extends BaseSupport{
 			request.setAttribute("sexs", sexs);
 			request.setAttribute("query_sexId", request.getParameter("query_sexId"));
 
-/*			
-			dbProcess.refresh(user);
-			dbProcess.setLike("name");
-			
-			page.buildComponent(request, dbProcess.count(user,DbProcess.OPEN_QUERY));
-			dbProcess.setRecord(page.getOffset(),page.getPageSize());
-			accounts = dbProcess.searchAndRetrieveList(user,DbProcess.OPEN_QUERY);
-			
-			request.setAttribute("accounts", accounts);
-			request.setAttribute("user", user);
-*/
 			MultiDBObject mdb = new MultiDBObject();
 			mdb.addTable(User.class, "user");
 			mdb.addTable(UserInfo.class, "userInfo");
+			mdb.addTable(Sex.class, "sex");
+
 			mdb.addTable(AddressBook.class, "addressBook");
+			mdb.addTable(Language.class, "language");
+			mdb.addTable(Country.class, "country");
+			mdb.addTable(City.class, "city");
+
 			//mdb.addTable(UserImage.class, "userImage");
 
 			mdb.setForeignKey("userInfo", "userId", "user", "id");
+			mdb.setForeignKey("userInfo", "sexId", "sex", "id");
 			mdb.setForeignKey("addressBook", "userId", "user", "id");
+			mdb.setForeignKey("addressBook", "countryId", "country", "id");
+			mdb.setForeignKey("addressBook", "languageId", "language", "id");
+			mdb.setForeignKey("addressBook", "cityId", "city", "id");
+
 			//mdb.setForeignKey("userImage", "userId", "user", "id");
 
 			//mdb.setField("ct.id", "1");
@@ -64,29 +72,39 @@ public class AccountAction extends BaseSupport{
 			//mdb.setGroupBy("user", "id");
 			
 			mdb.setRetrieveField("user", "*");
-			//mdb.setRetrieveField("userInfo", "*");
-			//mdb.setRetrieveField("addressBook", "*");
+			mdb.setRetrieveField("country", "*");
+			mdb.setRetrieveField("language", "*");
+			mdb.setRetrieveField("city", "*");
+			mdb.setRetrieveField("userInfo", "*");
+			mdb.setRetrieveField("sex", "*");
+			mdb.setRetrieveField("addressBook", "*");
+
 			//mdb.setRetrieveField("userImage", "*");
 			Page page = new Page();
 			page.setPageSize(8);
-			mdb.setRecord(page.getOffset(),page.getPageSize());
-			page.buildComponent(request, mdb.count());
-
-			List<Map> examples = mdb.searchAndRetrieveList();
-
-			User bean;
-
-			for(Map map:examples){
-				System.out.println("search cccccccccc");
-
-				bean = (User)map.get("user");
-				//UserInfo userInfo = (UserInfo)map.get("userInfo");
-				accounts.add(bean);
-				
-				System.out.println("user name"+bean.getName());
-			}
 			
+			page.buildComponent(request, mdb.count());
+			
+			mdb.setRecord(page.getOffset(),page.getPageSize());
+
+			System.out.println("search cccccccccc");
+			System.out.println("count SQL->"+mdb.buildCountSQL());
+			List<Map> accounts = mdb.searchAndRetrieveList();
+
+//			User bean;
 			request.setAttribute("accounts", accounts);
+
+//			for(Map map:examples){
+//				System.out.println("search cccccccccc");
+//
+//				bean = (User)map.get("user");
+//				//UserInfo userInfo = (UserInfo)map.get("userInfo");
+//				accounts.add(bean);
+//				
+//				System.out.println("user name"+bean.getName());
+//			}
+//			
+//			request.setAttribute("accounts", accounts);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

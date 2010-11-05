@@ -1,16 +1,6 @@
 package com.mooo.mycoz.dbobj.mycozBranch;
 
-import java.sql.SQLException;
 import java.util.Date;
-
-import com.mooo.mycoz.db.DbFactory;
-import com.mooo.mycoz.db.DbProcess;
-import com.mooo.mycoz.dbobj.mycozShared.Career;
-import com.mooo.mycoz.dbobj.mycozShared.Education;
-import com.mooo.mycoz.dbobj.mycozShared.HeightUnit;
-import com.mooo.mycoz.dbobj.mycozShared.Married;
-import com.mooo.mycoz.dbobj.mycozShared.Sex;
-import com.mooo.mycoz.dbobj.mycozShared.WeightUnit;
 
 public class UserInfo {
 	private Integer id;
@@ -118,120 +108,6 @@ public class UserInfo {
 	}
 	public void setJoinTime(Date joinTime) {
 		this.joinTime = joinTime;
-	}
-	
-	// extended attribute
-
-	//private User user;
-	private Sex sex;
-	private HeightUnit heightUnit;
-	private WeightUnit weightUnit;
-	private Career career;
-	private Education education;
-	private Married married;
-
-//	public User getUser() {
-//		DbProcess dbProcess = DbFactory.getInstance();
-//		user = new User();
-//		user.setId(getUserId());
-//		try {
-//			dbProcess.retrieve(user);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return user;
-//	}
-//	public void setUser(User user) {
-//		this.user = user;
-//	}
-	public Sex getSex() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		try {
-			sex = new Sex();
-			sex.setId(getSexId());
-			
-			System.out.println("sexId="+getSexId());
-			System.out.println("sexId="+sex.getId());
-
-			dbProcess.retrieve(sex);
-			System.out.println("sexId="+sex.getId());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sex;
-	}
-	public void setSex(Sex sex) {
-		this.sex = sex;
-	}
-	public HeightUnit getHeightUnit() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		heightUnit = new HeightUnit();
-		heightUnit.setId(getHeightUnitId());
-		try {
-			dbProcess.retrieve(heightUnit);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return heightUnit;
-	}
-	public void setHeightUnit(HeightUnit heightUnit) {
-		this.heightUnit = heightUnit;
-	}
-	public WeightUnit getWeightUnit() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		weightUnit = new WeightUnit();
-		weightUnit.setId(getWeightUnitId());
-		try {
-			dbProcess.retrieve(weightUnit);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return weightUnit;
-	}
-	public void setWeightUnit(WeightUnit weightUnit) {
-		this.weightUnit = weightUnit;
-	}
-	public Career getCareer() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		career = new Career();
-		career.setId(getCareerId());
-		try {
-			dbProcess.retrieve(career);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return career;
-	}
-	public void setCareer(Career career) {
-		this.career = career;
-	}
-	public Education getEducation() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		education = new Education();
-		education.setId(getEducationId());
-		try {
-			dbProcess.retrieve(education);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return education;
-	}
-	public void setEducation(Education education) {
-		this.education = education;
-	}
-	public Married getMarried() {
-		DbProcess dbProcess = DbFactory.getInstance();
-		married = new Married();
-		married.setId(getMarriedId());
-		try {
-			dbProcess.retrieve(married);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return married;
-	}
-	public void setMarried(Married married) {
-		this.married = married;
 	}
 	
 }

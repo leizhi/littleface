@@ -13,6 +13,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.component.Page;
+import com.mooo.mycoz.dbobj.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozBranch.FileTree;
@@ -51,29 +53,67 @@ private static Log log = LogFactory.getLog(MyAction.class);
 			HttpSession hs = request.getSession(true);
 			String userId = hs.getAttribute(USER_SESSION_KEY).toString();
 			
-			User user = new User();
-			user.setId(new Integer(userId));
-
-			dbProcess.retrieve(user);
-			request.setAttribute("user", user);
+			MultiDBObject mdb = new MultiDBObject();
+			mdb.addTable(User.class, "user");
+			mdb.addTable(UserInfo.class, "userInfo");
+			mdb.addTable(Sex.class, "sex");
+			mdb.addTable(WeightUnit.class, "weightUnit");
+			mdb.addTable(HeightUnit.class, "heightUnit");
+			mdb.addTable(Career.class, "career");
+			mdb.addTable(Education.class, "education");
+			mdb.addTable(Married.class, "married");
 			
-			UserInfo userInfo = new UserInfo();
-			userInfo.setUserId(user.getId());
+			mdb.addTable(AddressBook.class, "addressBook");
+			mdb.addTable(Language.class, "language");
+			mdb.addTable(Country.class, "country");
+			mdb.addTable(City.class, "city");
 
-			dbProcess.retrieve(userInfo);
-			request.setAttribute("userInfo", userInfo);
-
-			UserImage userImage = new UserImage();
-			userImage.setUserId(user.getId());
-			List userImages = 	dbProcess.searchAndRetrieveList(userImage);
-			request.setAttribute("userImages", userImages);
-
-			AddressBook addressBook = new AddressBook();
-			addressBook.setUserId(user.getId());
-
-			dbProcess.retrieve(addressBook);
-			request.setAttribute("address", addressBook);
+			mdb.setForeignKey("userInfo", "userId", "user", "id");
+			mdb.setForeignKey("userInfo", "sexId", "sex", "id");
 			
+			mdb.setForeignKey("userInfo", "weightUnitId", "weightUnit", "id");
+			mdb.setForeignKey("userInfo", "heightUnitId", "heightUnit", "id");
+			mdb.setForeignKey("userInfo", "careerId", "career", "id");
+			mdb.setForeignKey("userInfo", "educationId", "education", "id");
+			mdb.setForeignKey("userInfo", "marriedId", "married", "id");
+			
+			mdb.setForeignKey("addressBook", "userId", "user", "id");
+			mdb.setForeignKey("addressBook", "countryId", "country", "id");
+			mdb.setForeignKey("addressBook", "languageId", "language", "id");
+			mdb.setForeignKey("addressBook", "cityId", "city", "id");
+
+			mdb.setField("user.id",userId);
+
+			//mdb.setGroupBy("user", "id");
+			
+			mdb.setRetrieveField("user", "*");
+			mdb.setRetrieveField("country", "*");
+			mdb.setRetrieveField("language", "*");
+			mdb.setRetrieveField("city", "*");
+			mdb.setRetrieveField("userInfo", "*");
+			mdb.setRetrieveField("sex", "*");
+			mdb.setRetrieveField("addressBook", "*");
+			mdb.setRetrieveField("weightUnit", "*");
+			mdb.setRetrieveField("heightUnit", "*");
+			mdb.setRetrieveField("career", "*");
+			mdb.setRetrieveField("education", "*");
+			mdb.setRetrieveField("married", "*");
+			
+			System.out.println("count SQL->"+mdb.buildCountSQL());
+			List<Map> accounts = mdb.searchAndRetrieveList();
+			request.setAttribute("accounts", accounts);
+			
+			for (Map map : accounts) {
+				User user = (User) map.get("user");
+				UserInfo userInfo = (UserInfo)map.get("userInfo");
+				AddressBook address = (AddressBook)map.get("addressBook");
+
+				request.setAttribute("user", user);
+				request.setAttribute("userInfo", userInfo);
+				request.setAttribute("address", address);
+			}
+			
+			////////////////////////////////
 			List sexs = dbProcess.searchAndRetrieveList(new Sex());
 			request.setAttribute("sexs", sexs);
 

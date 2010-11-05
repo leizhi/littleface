@@ -1,12 +1,20 @@
 package com.mooo.mycoz.db.sql;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mooo.mycoz.db.pool.DbConnectionManager;
+import com.mooo.mycoz.util.BeanUtil;
+import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 public class DbMultiBulildSQL implements MultiSQLProcess {
@@ -17,8 +25,8 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 	public List<String> retrieveFields;
 	public List<String> groupBy;
 	public List<String> orderBy;
-	public int offset;
-	public int rowcount;
+	public int offsetRecord;
+	public int maxRecords;
 	
 	public Map<String,Class<?>> objs;
 	
@@ -40,8 +48,8 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		retrieveFields = new ArrayList<String>();
 		groupBy = new ArrayList<String>();
 		orderBy = new ArrayList<String>();
-		offset = 0;
-		rowcount = 0;
+		offsetRecord = 0;
+		maxRecords = 0;
 	}
 	
 	public void clear() {
@@ -51,8 +59,8 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		retrieveFields.clear();
 		groupBy.clear();
 		orderBy.clear();
-		offset = 0;
-		rowcount = 0;
+		offsetRecord = 0;
+		maxRecords = 0;
 	}
 	public void addTable(Class<?> clazz, String alias) {
 		
@@ -187,11 +195,11 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 			sql = sql.substring(0, sql.lastIndexOf(","));
 		}
 
-		if (offset != 0 && rowcount != 0) {
-			sql += " LIMIT " + offset + "," + rowcount;
+		if (offsetRecord != 0 && maxRecords != 0) {
+			sql += " LIMIT " + offsetRecord + "," + maxRecords;
 
-		} else if (rowcount != 0) {
-			sql += " LIMIT " + rowcount;
+		} else if (maxRecords != 0) {
+			sql += " LIMIT " + maxRecords;
 
 		}
 
@@ -209,21 +217,48 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		return sql;
 	}
 
-	public void setRecord(int offset, int rowcount) {
-		this.offset = offset;
-		this.rowcount = rowcount;
-	}
-
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-
-	public void setRowcount(int rowcount) {
-		this.rowcount = rowcount;
+	public void setRecord(int offsetRecord, int maxRecords) {
+		this.offsetRecord = offsetRecord;
+		this.maxRecords = maxRecords;
 	}
 
 	public int count() {
-		return 0;
+		String doSql = buildCountSQL();
+		Statement stmt = null;
+		boolean closeCon = false;
+		int total=0;
+		try {
+			if(connection == null){
+				connection = DbConnectionManager.getConnection();
+				closeCon=true;
+			}
+			
+			stmt = connection.createStatement();
+			ResultSet result = stmt.executeQuery(doSql);
+			
+			while (result.next()) {
+				total = result.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if (connection != null && closeCon)
+					connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+		return total;
 	}
 	
 	public String getDbName(Class<?> clazz){

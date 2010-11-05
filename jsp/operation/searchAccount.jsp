@@ -93,11 +93,11 @@ color:#000;
 <div style="float: left;width: 24.5%;text-align: left;font-size: 12px;border: 1px solid #ffffff;background-color: #edf0f9;">
 
 <div style="width: 100%;height:13px;background-color: #e3e9ff;color:#000;margin:1px;">
-<span>姓名:${item.name} &nbsp;</span>
+<span>姓名:${item.user.name} &nbsp;</span>
 </div>
 
 <div style="width: 100%;margin-left:1px;">
-<c:forEach var="iu" items="${item.userImages}" varStatus="su">
+<c:forEach var="iu" items="${item.user.userImages}" varStatus="su">
 	<c:if test="${su.index < 3}">
 		<img width="80px" height="60px" src="${uploadPath}${iu.filepath }"/>
 	</c:if>
@@ -106,11 +106,11 @@ color:#000;
 
 <div style="width: 100%;margin-left:1px;">
 <ul style="width: 100%;margin-left:0px;">
-<li>性别:<c:out value="${item.userInfo.sex.name }"/></li>
+<li>性别:<c:out value="${item.sex.name }"/></li>
 <li>年龄:</li>
 <li>生日:<fmt:formatDate value="${item.userInfo.birthday }" pattern="yyyy/MM/dd"/></li>
-<li>国家:<c:out value="${item.addressBook.country.name }"/></li>
-<li>城市:<c:out value="${item.addressBook.city.name }"/></li>
+<li>国家:<c:out value="${item.country.name }"/></li>
+<li>城市:<c:out value="${item.city.name }"/></li>
 <li>地址:<c:out value="${item.addressBook.address }"/></li>
 <li>爱好:</li>
 

@@ -96,53 +96,54 @@ function docommit(url) {
 <%@ include file="../incl/g_bar.jsp" %>
 
 <div id="container">
+<c:forEach var="item" items="${accounts}" varStatus="status">
 	
 <div class="box">
 	<ul>
 		<li class="title"><fmt:message key="General"/></li>
 				
 		<li class="left"><fmt:message key="Name" /></li>
-		<li class="right"><c:out value="${user.name }" /></li>
+		<li class="right"><c:out value="${item.user.name }" /></li>
 		<li style="clear: both;"/>
 
 		<li class="left"><fmt:message key="Sex" /></li>
-		<li class="right"><c:out value="${userInfo.sex.name }" /></li>
+		<li class="right"><c:out value="${item.sex.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Height" /></li>
-		<li class="right"><c:out value="${userInfo.height }" />:<c:out value="${userInfo.heightUnit.name }" /></li>
+		<li class="right"><c:out value="${item.userInfo.height }" />:<c:out value="${item.heightUnit.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Weight" /></li>
-		<li class="right"><c:out value="${userInfo.weight}" />:<c:out value="${userInfo.weightUnit.name }" /></li>
+		<li class="right"><c:out value="${item.userInfo.weight}" />:<c:out value="${item.weightUnit.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Birthday" /></li>
-		<li class="right"><fmt:formatDate value="${userInfo.birthday }" pattern="yyyy/MM/dd hh:mm:ss"/></li>
+		<li class="right"><fmt:formatDate value="${item.userInfo.birthday }" pattern="yyyy/MM/dd hh:mm:ss"/></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Career" /></li>
-		<li class="right"><c:out value="${userInfo.career.name }" /></li>
+		<li class="right"><c:out value="${item.career.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Education" /></li>
-		<li class="right"><c:out value="${userInfo.education.name }" /></li>
+		<li class="right"><c:out value="${item.education.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Married" /></li>
-		<li class="right"><c:out value="${userInfo.married.name }" /></li>
+		<li class="right"><c:out value="${item.married.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="QQ" /></li>
-		<li class="right"><c:out value="${userInfo.qq }" /></li>
+		<li class="right"><c:out value="${item.userInfo.qq }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Email" /></li>
-		<li class="right"><c:out value="${userInfo.email }" /></li>
+		<li class="right"><c:out value="${item.userInfo.email }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Secret" /></li>
-		<li class="right"><c:out value="${userInfo.secret }" /></li>
+		<li class="right"><c:out value="${item.userInfo.secret }" /></li>
 		<li style="clear: both;"/>
 	</ul>
 </div>
@@ -153,27 +154,27 @@ function docommit(url) {
 		<li class="title"><fmt:message key="Address"/></li>
 				
 		<li class="left"><fmt:message key="Country" /></li>
-		<li class="right"><c:out value="${address.country.name }" /></li>
+		<li class="right"><c:out value="${item.country.name }" /></li>
 		<li style="clear: both;"/>
 
 		<li class="left"><fmt:message key="City" /></li>
-		<li class="right"><c:out value="${address.city.name }" /></li>
+		<li class="right"><c:out value="${item.city.name }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="PostalCode" /></li>
-		<li class="right"><c:out value="${address.postalCode }" /></li>
+		<li class="right"><c:out value="${item.addressBook.postalCode }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Address" /></li>
-		<li class="right"><c:out value="${address.address }" /></li>
+		<li class="right"><c:out value="${item.addressBook.address }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="Tel" /></li>
-		<li class="right"><c:out value="${address.tel }" /></li>
+		<li class="right"><c:out value="${item.addressBook.tel }" /></li>
 		<li style="clear: both;"/>
 		
 		<li class="left"><fmt:message key="MobileNo" /></li>
-		<li class="right"><c:out value="${address.mobileNo }" /></li>
+		<li class="right"><c:out value="${item.addressBook.mobileNo }" /></li>
 		<li style="clear: both;"/>
 	</ul>
 </div>
@@ -186,8 +187,8 @@ function docommit(url) {
 		<li class="title"><fmt:message key="Images"/></li>
 				
 		<li>
-			<c:forEach var="item" items="${userImages}" varStatus="status">
-				<img width="80px" height="60px" src="${uploadPath}${item.filepath }"/>
+			<c:forEach var="iu" items="${item.user.userImages}" varStatus="status">
+				<img width="80px" height="60px" src="${uploadPath}${iu.filepath }"/>
 			</c:forEach>
 		</li>
 	</ul>
@@ -214,6 +215,8 @@ function docommit(url) {
 
 <input type="submit" value="Edit" onclick="docommit('${editMy}');return false;"/>
 </div>
+</c:forEach>
+
 <jsp:include page="../incl/g_footer.jsp" />
 </div>
 
