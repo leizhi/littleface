@@ -1,7 +1,6 @@
 package com.mooo.mycoz.action.operation;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -12,19 +11,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import oracle.jdbc.dbaccess.DBStatement;
-
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.component.Page;
-import com.mooo.mycoz.db.DbMy;
-import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.dbobj.MultiDBObject;
+import com.mooo.mycoz.db.sql.DbMultiBulildSQL;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.Forum;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
@@ -32,16 +26,11 @@ import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserImage;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
-import com.mooo.mycoz.dbobj.mycozShared.Career;
 import com.mooo.mycoz.dbobj.mycozShared.City;
 import com.mooo.mycoz.dbobj.mycozShared.Country;
-import com.mooo.mycoz.dbobj.mycozShared.Education;
-import com.mooo.mycoz.dbobj.mycozShared.HeightUnit;
 import com.mooo.mycoz.dbobj.mycozShared.Language;
-import com.mooo.mycoz.dbobj.mycozShared.Married;
 import com.mooo.mycoz.dbobj.mycozShared.Sex;
-import com.mooo.mycoz.dbobj.mycozShared.WeightUnit;
-import com.mooo.mycoz.util.DbUtil;
+import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.StringUtils;
 
@@ -49,40 +38,18 @@ public class AccountAction extends BaseSupport{
 	
 	public String search(HttpServletRequest request, HttpServletResponse response) {
 		long startTime = System.currentTimeMillis();
-
-		request.setAttribute("uploadPath", request.getContextPath()+"/"+ "upload/");
-		/*
-		Map params = new HashMap();
-		ParamUtil.bindData(request, params);
-	
-		Map user = new HashMap();
-		//user.put("id", "10");
-		//user.put("name", "admin");
 		
-		params.put("user", user);
-		
-		request.setAttribute("params", params);
-
-		DbMy dm = new DbMy();
+		Connection myConn = null;
+		Statement stmt = null;
 		try {
-			List accounts = dm.searchAndRetrieveList(null, null, "User", user);
-			
-			System.out.println("accounts->" + accounts.size());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		
-		//List<User> accounts = new ArrayList<User>();
-		try {
+			request.setAttribute("uploadPath", request.getContextPath()+"/"+ "upload/");
 			request.setAttribute("query_name", request.getParameter("query_name"));
 			
-			List sexs = dbProcess.searchAndRetrieveList(new Sex());
+			List<?> sexs = dbProcess.searchAndRetrieveList(new Sex());
 			request.setAttribute("sexs", sexs);
 			request.setAttribute("query_sexId", request.getParameter("query_sexId"));
 
-			MultiDBObject mdb = new MultiDBObject();
+			DbMultiBulildSQL mdb = new DbMultiBulildSQL();
 			mdb.addTable(User.class, "user");
 			mdb.addTable(UserInfo.class, "userInfo");
 			mdb.addTable(Sex.class, "sex");
@@ -127,165 +94,133 @@ public class AccountAction extends BaseSupport{
 
 			System.out.println("count SQL->"+mdb.buildCountSQL());
 			System.out.println("searchSQL SQL->"+mdb.searchSQL());
+					
+			List<Object> accounts = new ArrayList<Object>();
+			String doSql = mdb.searchSQL();
 			
-			//List<Map> accounts = mdb.searchAndRetrieveList();
-			List<Map> accounts = mdb.searchAndRetrieveList();
 
-			request.setAttribute("accounts", accounts);
+				myConn = DbConnectionManager.getConnection();
+				stmt = myConn.createStatement();
+				
+				ResultSet result = stmt.executeQuery(doSql);
+				ResultSetMetaData rsmd = result.getMetaData();
+	
+				String table;
+				
+				while (result.next()) {
+					Map<String, Object> allRow = new HashMap<String, Object>();
+					
+					User user = new User();
+					Country country = new Country();
+					Language language = new Language();
+					City city = new City();
+					UserInfo userInfo = new UserInfo();
+					Sex sex = new Sex();
+					AddressBook addressBook = new AddressBook();
+					
+					for (int i=1; i < rsmd.getColumnCount()+1; i++) {
+						table = rsmd.getTableName(i);
+						int type = rsmd.getColumnType(i);
 
-//			List<Object> retrieveList = null;
-//			String doSql = mdb.searchSQL();
-//			
-//			Connection myConn = null;
-//			boolean isClose = true;
-//			
-//			Statement stmt = null;
-//			ResultSet result = null;
-//			ResultSetMetaData rsmd = null;
-//
-//			try {
-//				retrieveList = new ArrayList<Object>();
-//				
-//				myConn = DbConnectionManager.getConnection();
-//				
-//				stmt = myConn.createStatement();
-//				result = stmt.executeQuery(doSql);
-//				
-//				rsmd = result.getMetaData();
-//				Map re;
-//	
-//				String catalog,table,column;
-//	
-//				while (result.next()) {
-//					re = new HashMap();
-//					
-//					Map user = new HashMap();
-//					Map country = new HashMap();
-//					Map language = new HashMap();
-//					Map city = new HashMap();
-//					Map userInfo = new HashMap();
-//					Map sex = new HashMap();
-//					Map addressBook = new HashMap();
-//					
-//					for (int i=1; i < rsmd.getColumnCount()+1; i++) {
-//						catalog = rsmd.getCatalogName(i);
-//						table = rsmd.getTableName(i);
-//						column = rsmd.getColumnName(i);
-//						int type = rsmd.getColumnType(i);
-//						//int type = DbUtil.type(null,catalog,table,StringUtils.upperToPrefix(column,null));
-//
-//						if (table.equals(User.class.getSimpleName())) {
-//							if (type == Types.TIMESTAMP) {
-//								user.put(column, result.getTimestamp(i));
-//							} else {
-//								user.put(column, result.getString(i));
-//							}
-//						}
-//	
-//						if(table.equals(Country.class.getSimpleName())){
-//							if (type == Types.TIMESTAMP) {
-//								country.put(column, result.getTimestamp(i));
-//							} else {
-//								country.put(column, result.getString(i));
-//							}
-//						}
-//						
-//						if(table.equals(Language.class.getSimpleName())){
-//							if (type == Types.TIMESTAMP) {
-//								language.put(column, result.getTimestamp(i));
-//							} else {
-//								language.put(column, result.getString(i));
-//							}
-//						}
-//						
-//						if(table.equals(City.class.getSimpleName())){
-//							if (type == Types.TIMESTAMP) {
-//								city.put(column, result.getTimestamp(i));
-//							} else {
-//								city.put(column, result.getString(i));
-//							}
-//						}
-//						
-//						if(table.equals(UserInfo.class.getSimpleName())){
-//							if (type == Types.TIMESTAMP) {
-//								userInfo.put(column, result.getTimestamp(i));
-//							} else {
-//								userInfo.put(column, result.getString(i));
-//							}
-//						}
-//						
-//						if(table.equals(Sex.class.getSimpleName())){
-//							if (type == Types.TIMESTAMP) {
-//								sex.put(column, result.getTimestamp(i));
-//							} else {
-//								sex.put(column, result.getString(i));
-//							}
-//						}
-//						
-//						if(table.equals(AddressBook.class.getSimpleName())){
-//							if (type == Types.TIMESTAMP) {
-//								addressBook.put(column, result.getTimestamp(i));
-//							} else {
-//								addressBook.put(column, result.getString(i));
-//							}
-//						}
-//					}
-//
-//					UserImage userImage = new UserImage();
-//					userImage.setUserId(result.getInt("user.Id"));
-//					List imges = dbProcess.searchAndRetrieveList(userImage);
-//					user.put("userImages",imges);
-//					re.put("user", user);
-//					
-//					re.put("country", country);
-//					re.put("language", language);
-//					re.put("city", city);
-//					re.put("userInfo", userInfo);
-//					re.put("sex", sex);
-//					re.put("addressBook", addressBook);
-//					
-//					retrieveList.add(re);
-//				}
-//				
-//				request.setAttribute("accounts", retrieveList);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			} finally {
-//
-//				try {
-//					if (result != null)
-//						result.close();
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//
-//				try {
-//					if (stmt != null)
-//						stmt.close();
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//
-//				try {
-//					if(isClose)
-//						myConn.close();
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//
-//			}
-//			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-//		
-//		long finishTime = System.currentTimeMillis();
-//		long hours = (finishTime - startTime) / 1000 / 60 / 60;
-//		long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
-//		long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
-//		
-//		System.out.println(finishTime - startTime);
-//		System.out.println("search account expends:   " + hours + ":" + minutes + ":" + seconds);
+						if (table.equals(User.class.getSimpleName())) {
+							if (type == Types.TIMESTAMP) {
+								BeanUtil.bindProperty(user,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							} else {
+								BeanUtil.bindProperty(user,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));
+							}
+						}
+
+						if(table.equals(Country.class.getSimpleName())){
+							if (type == Types.TIMESTAMP) {
+								BeanUtil.bindProperty(country,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							} else {
+								BeanUtil.bindProperty(country,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));
+							}
+						}
+						
+						if(table.equals(Language.class.getSimpleName())){
+							if (type == Types.TIMESTAMP) {
+								BeanUtil.bindProperty(language,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							} else {
+								BeanUtil.bindProperty(language,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));
+							}
+						}
+						
+						if(table.equals(City.class.getSimpleName())){
+							if (type == Types.TIMESTAMP) {
+								BeanUtil.bindProperty(city,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							} else {
+								BeanUtil.bindProperty(city,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));
+							}
+						}
+						
+						if(table.equals(UserInfo.class.getSimpleName())){
+							if (type == Types.TIMESTAMP) {
+								BeanUtil.bindProperty(userInfo,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							} else {
+								BeanUtil.bindProperty(userInfo,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));
+							}
+						}
+						
+						if(table.equals(Sex.class.getSimpleName())){
+							if (type == Types.TIMESTAMP) {
+								BeanUtil.bindProperty(sex,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							} else {
+								BeanUtil.bindProperty(sex,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));
+							}
+						}
+						
+						if(table.equals(AddressBook.class.getSimpleName())){
+							if (type == Types.TIMESTAMP) {
+								BeanUtil.bindProperty(addressBook,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getTimestamp(i));
+							} else {
+								BeanUtil.bindProperty(addressBook,StringUtils.prefixToUpper(rsmd.getColumnName(i),null),result.getString(i));
+							}
+						}
+					}
+
+					UserImage userImage = new UserImage();
+					userImage.setUserId(result.getInt("user.Id"));
+					List<?> imges = dbProcess.searchAndRetrieveList(userImage);
+					user.setUserImages(imges);
+					allRow.put("user", user);
+					
+					allRow.put("country", country);
+					allRow.put("language", language);
+					allRow.put("city", city);
+					allRow.put("userInfo", userInfo);
+					allRow.put("sex", sex);
+					allRow.put("addressBook", addressBook);
+					
+					accounts.add(allRow);
+				}
+				
+				request.setAttribute("accounts", accounts);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				try {
+					myConn.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		long finishTime = System.currentTimeMillis();
+		long hours = (finishTime - startTime) / 1000 / 60 / 60;
+		long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
+		long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
+		
+		System.out.println(finishTime - startTime);
+		System.out.println("search account expends:   " + hours + ":" + minutes + ":" + seconds);
 		return "success";
 	}
 	
@@ -297,7 +232,6 @@ public class AccountAction extends BaseSupport{
 		try {
 			dbProcess.retrieve(account);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -312,17 +246,11 @@ public class AccountAction extends BaseSupport{
 	
 	public String blog(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			/*LinearCode linearCode = new LinearCode();
-			linearCode.setTypeId(2);
-			
-			forums = dbProcess.searchAndRetrieveList(linearCode);
-			request.setAttribute("forums", forums);
-			*/
 			ForumThread forumThread = new ForumThread();
 			
 			List<?> forumThreadList = dbProcess.searchAndRetrieveList(forumThread);
 			
-			List forumThreads = new ArrayList<ForumThread>();
+			List<ForumThread> forumThreads = new ArrayList<ForumThread>();
 			User user = null;
 			Message message = new Message();
 

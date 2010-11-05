@@ -97,7 +97,6 @@ function docommit(url) {
 
 <div id="container">
 <c:forEach var="item" items="${accounts}" varStatus="status">
-	
 <div class="box">
 	<ul>
 		<li class="title"><fmt:message key="General"/></li>

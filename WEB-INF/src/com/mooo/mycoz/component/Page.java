@@ -21,7 +21,7 @@ public class Page {
 	
 	public Page() {
 		totalRows = 0;
-		pageSize = 25;
+		pageSize = 24;
 		currentPage = 0;
 		totalPages = 0;
 		offset = 1;

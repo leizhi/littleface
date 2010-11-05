@@ -13,8 +13,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import oracle.jdbc.dbaccess.DBStatement;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -40,7 +38,7 @@ public class FileAction extends BaseSupport {
 			long fileBit = 0;
 			double fileK = 0.0;
 			double fileM = 0.0;
-			String uploadPath = request.getRealPath("/")+"upload/";
+			String uploadPath = request.getSession().getServletContext().getRealPath("/")+"upload/";
 			
 			String value = null;
 
@@ -54,76 +52,15 @@ public class FileAction extends BaseSupport {
 			System.out.println("getOffset=>"+page.getOffset());
 			System.out.println("getPageSize=>"+page.getPageSize());
 			dbProcess.setRecord(page.getOffset(),page.getPageSize());
-			List retrives = dbProcess.searchAndRetrieveList(fileInfo);
+			List<?> retrives = dbProcess.searchAndRetrieveList(fileInfo);
 			
-			List files = new ArrayList();
-			FileInfo fi;
+			List<FileInfo> files = new ArrayList<FileInfo>();
 			File checkFile;
-			
-			for (Iterator it = retrives.iterator(); it.hasNext();) {
-				fi = (FileInfo)it.next();
-				
+			for (FileInfo fi:files) {
 				value = fi.getFilepath();
-
 				checkFile = new File(uploadPath + value);
-				if (log.isDebugEnabled()) log.debug("checkFile = "+(checkFile.exists()));
 
 				if (!checkFile.exists()){ 
-					
-				}
-				//myMulti.setOffsetRecord(pagination.getOffset());
-				//myMulti.setMaxRecords(pagination.getCountPerPage());
-				
-				fileBit = checkFile.length();
-				fileK = fileBit / 1024;
-				fileM = fileK / 1024;
-				fi.setSize(df.format(fileM) + "M");
-				
-				files.add(fi);
-			}
-/*
-			MultiDBObject mdb = new MultiDBObject();
-			mdb.addTable(CodeType.class, "ct");
-			mdb.addTable(LinearCode.class, "lc");
-			mdb.addTable(FileInfo.class, "fi");
-
-			mdb.setForeignKey("ct", "id", "lc", "typeid");
-			mdb.setForeignKey("fi", "typeId", "lc", "id");
-			mdb.setField("ct.id", "1");
-			
-			mdb.setRetrieveField("fi", "id");
-			mdb.setRetrieveField("fi", "name");
-			mdb.setRetrieveField("fi", "datetime");
-			mdb.setRetrieveField("fi", "filePath");
-			mdb.setRetrieveField("fi", "id");
-			mdb.setRetrieveField("lc", "name");
-
-			value = request.getParameter("Key");
-			
-			if (value != null && !value.equals("")) {
-				mdb.setField("ct.id", "1");
-			}
-
-			List retrives = mdb.searchAndRetrieveList();
-			
-			List files = new ArrayList();
-			FileInfo fi;
-			File checkFile;
-			
-			for (Iterator it = retrives.iterator(); it.hasNext();) {
-				Map map = (Map)it.next();
-				//CodeType ct = (CodeType)map.get("ct");
-				LinearCode lc = (LinearCode)map.get("lc");
-				fi = (FileInfo)map.get("fi");
-				fi.setTypename(lc.getName());
-
-				value = fi.getFilepath();
-
-				checkFile = new File(uploadPath + value);
-				if (log.isDebugEnabled()) log.debug("checkFile = "+(checkFile.exists()));
-
-				if (!checkFile.exists()){ 
-					
 //					Blob fileBlob = rs.getBlob("fi.file");
 //					InputStream in = fileBlob.getBinaryStream();
 //					FileOutputStream out = new FileOutputStream(checkFile);
@@ -134,19 +71,13 @@ public class FileAction extends BaseSupport {
 //				     }
 //				     out.close();      
 //				     in.close();
-				     
 				}
 				fileBit = checkFile.length();
 				fileK = fileBit / 1024;
 				fileM = fileK / 1024;
 				fi.setSize(df.format(fileM) + "M");
-				
 				files.add(fi);
 			}
-			*/
-
-			//request.setAttribute("page", page);
-
 			request.setAttribute("files", files);
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
@@ -190,8 +121,8 @@ public class FileAction extends BaseSupport {
 			String value = "";
 			String uploadDirectory = "upload/";
 			String tmpDirectory = "tmp/";
-			String uploadPath = request.getRealPath("/") + uploadDirectory;
-			String tmpPath = request.getRealPath("/") + tmpDirectory;
+			String uploadPath = request.getSession().getServletContext().getRealPath("/")+ uploadDirectory;
+			String tmpPath = request.getSession().getServletContext().getRealPath("/") + tmpDirectory;
 
 			if (log.isDebugEnabled())
 				log.debug("uploadPath=" + uploadPath);
@@ -262,7 +193,7 @@ public class FileAction extends BaseSupport {
 		try {
 			if (log.isDebugEnabled()) log.debug("processDeleteCode");
 	    	String uploadDirectory = "upload/";
-	    	String uploadPath = request.getRealPath("/")+uploadDirectory;
+	    	String uploadPath = request.getSession().getServletContext().getRealPath("/")+uploadDirectory;
 	    	
 			String[] ids =  request.getParameterValues("id");
 			
@@ -355,8 +286,8 @@ public class FileAction extends BaseSupport {
 		String value = "";
 		String uploadDirectory = "upload/";
 		String tmpDirectory = "tmp/";
-		String uploadPath = request.getRealPath("/") + uploadDirectory;
-		String tmpPath = request.getRealPath("/") + tmpDirectory;
+		String uploadPath = request.getSession().getServletContext().getRealPath("/") + uploadDirectory;
+		String tmpPath = request.getSession().getServletContext().getRealPath("/") + tmpDirectory;
 
 		if (log.isDebugEnabled())
 			log.debug("uploadPath=" + uploadPath);
