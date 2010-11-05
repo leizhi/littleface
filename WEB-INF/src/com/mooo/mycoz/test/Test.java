@@ -1,63 +1,65 @@
 package com.mooo.mycoz.test;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import oracle.jdbc.dbaccess.DBStatement;
 
 import com.mooo.mycoz.db.DbFactory;
+import com.mooo.mycoz.db.DbMy;
 import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.db.sql.MySQL;
 import com.mooo.mycoz.db.sql.MysqlSQL;
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
+import com.mooo.mycoz.util.IDGenerator;
 
 public class Test {
 
 	public static void main(String[] args) {
-		//long maxLong = 9223372036854775807L;
-		//int maxInt = 2147483647;
-		DbProcess dbProces = DbFactory.getInstance();
-//		ThreadType sex = new ThreadType();
+		long maxLong = 9223372036854775807L;
+		int maxInt = 2147483647;
 		try {
-			UserInfo al = new UserInfo();
-			al.setHeightUnitId(56);
-			al.setId(3);
-/*
-			dbProces.refresh(al);
-			dbProces.entityFillField(al);
+			long startTime = System.currentTimeMillis();
+
+			DbProcess dbProcess = DbFactory.getInstance();
+			for(int i=0;i<100;i++){
+				AccessLog al = new AccessLog();
+				al.setId(IDGenerator.getNextID("AccessLog").intValue());
+				al.setIp(i+".ip");
+				al.setStartdate(new Date());
+				dbProcess.add(al);
+			}
 			
-			dbProces.addGroupBy("id,ip");
-			dbProces.addOrderBy("id,ip");
-			dbProces.setLike("Ip");
+			long finishTime = System.currentTimeMillis();
+			long hours = (finishTime - startTime) / 1000 / 60 / 60;
+			long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
+			long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
 			
-			List sexs = dbProces.searchAndRetrieveList(al);
-			System.out.println("size->" + sexs.size());
+			System.out.println(finishTime - startTime);
+			System.out.println("dbProcess save 100 expends:   " + hours + ":" + minutes + ":" + seconds);
+			
+			startTime = System.currentTimeMillis();
+			
+			DbMy dbMy = new DbMy();
 
-			al.setId(11);
-			dbProces.refresh(al);
-			dbProces.entityFillField(al);
-			dbProces.setGreaterEqual("Id");
-			dbProces.setLike("Id");
-			dbProces.setLike("Ip");
-*/
-			dbProces.refresh(al);
-			dbProces.setLessEqual("id");
-			dbProces.setExtent("joinTime", new Date(), new Date());
-			dbProces.setExtent("id", 1, 10);
-
-			dbProces.setRecord(0, 5);
-			System.out.println("size->" + dbProces.count(al,DbProcess.OPEN_QUERY));
-
-			List sexs = dbProces.searchAndRetrieveList(al,DbProcess.OPEN_QUERY);
-			System.out.println("size->" + sexs.size());
-
-//			dbProces.setRecord(2, 1);
-//			List sexs = dbProces.searchAndRetrieveList(sex);
-//
-//			for (Iterator<?> it = sexs.iterator(); it.hasNext();) {
-//				sex = (ThreadType)it.next();
-//			System.out.println(sex.getId()+"->" + sex.getName()+"->"+sex.getExtension().getTopics());
-//			}
+			for(int i=0;i<100;i++){
+				Map accessLog = new HashMap();
+				accessLog.put("id", IDGenerator.getNextID("AccessLog").intValue());
+				accessLog.put("ip", i+".ip");
+				accessLog.put("startdate", new Date());
+				dbMy.save(null, null, "AccessLog", accessLog);
+			}
+			
+			finishTime = System.currentTimeMillis();
+			hours = (finishTime - startTime) / 1000 / 60 / 60;
+			minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
+			seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
+			
+			System.out.println(finishTime - startTime);
+			System.out.println("MySQL save 100 expends:   " + hours + ":" + minutes + ":" + seconds);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

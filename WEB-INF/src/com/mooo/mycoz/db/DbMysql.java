@@ -199,6 +199,8 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		
 		Statement stmt = null;
 		String doSql = addSQL(entity);
+		System.out.println("addSQL:" + doSql);
+
 		try{
 			if(connection != null){
 				myConn = connection;

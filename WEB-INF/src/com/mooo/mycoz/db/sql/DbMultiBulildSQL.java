@@ -20,6 +20,7 @@ import com.mooo.mycoz.util.StringUtils;
 public class DbMultiBulildSQL implements MultiSQLProcess {
 
 	public String catalog;
+	public Map<String,Class> objs;
 	public Map<String,String> tables;
 	public List<String> whereKey;
 	public List<String> retrieveFields;
@@ -28,21 +29,10 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 	public int offsetRecord;
 	public int maxRecords;
 	
-	public Map<String,Class<?>> objs;
 	
-	public Connection connection;
-
-	public Connection getConnection() {
-		return connection;
-	}
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-
 	public DbMultiBulildSQL() {
 		catalog = null;
-		objs = new HashMap<String, Class<?>>();
+		objs = new HashMap<String,Class>();
 		tables = new HashMap<String,String>();
 		whereKey = new ArrayList<String>();
 		retrieveFields = new ArrayList<String>();
@@ -63,7 +53,6 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		maxRecords = 0;
 	}
 	public void addTable(Class<?> clazz, String alias) {
-		
 		objs.put(alias, clazz);
 		
 		if (catalog != null)
@@ -148,6 +137,7 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		String key;
 		String value;
 		String sql = "";
+		
 		if (retrieveFields != null && !retrieveFields.isEmpty()) {
 			sql += "SELECT ";
 			for (Iterator<String> it = retrieveFields.iterator(); it.hasNext();) {
@@ -223,18 +213,34 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 	}
 
 	public int count() {
+		return count(null);
+	}
+	
+	public int count(Connection connection) {
+		long startTime = System.currentTimeMillis();
+
+		
 		String doSql = buildCountSQL();
+		
+		Connection myConn = null;
+		boolean isClose = true;
+		
 		Statement stmt = null;
-		boolean closeCon = false;
+		ResultSet result = null;
+
 		int total=0;
+
 		try {
-			if(connection == null){
-				connection = DbConnectionManager.getConnection();
-				closeCon=true;
+			if(connection != null){
+				myConn = connection;
+				isClose = false;
+			} else {
+				myConn = DbConnectionManager.getConnection();
+				isClose = true;
 			}
 			
-			stmt = connection.createStatement();
-			ResultSet result = stmt.executeQuery(doSql);
+			stmt = myConn.createStatement();
+			result = stmt.executeQuery(doSql);
 			
 			while (result.next()) {
 				total = result.getInt(1);
@@ -243,21 +249,36 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 			e.printStackTrace();
 		} finally {
 
+
+			try {
+				if (result != null)
+					result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
 			try {
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
-				if (connection != null && closeCon)
-					connection.close();
+				if(isClose)
+					myConn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
 		}
+		long finishTime = System.currentTimeMillis();
+		long hours = (finishTime - startTime) / 1000 / 60 / 60;
+		long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
+		long seconds = (finishTime - startTime) / 1000 - hours * 60 * 60 - minutes * 60;
+		
+		System.out.println(finishTime - startTime);
+		System.out.println("count expends:   " + hours + ":" + minutes + ":" + seconds);
 		return total;
 	}
 	

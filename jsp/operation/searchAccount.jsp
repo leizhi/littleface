@@ -48,7 +48,6 @@ color:#000;
 
 <div id="container">
 
-
 <table>
 <caption>Search Account</caption>
 <tbody>
@@ -91,7 +90,6 @@ color:#000;
 
 <c:forEach var="item" items="${accounts}" varStatus="status">
 <div style="float: left;width: 24.5%;text-align: left;font-size: 12px;border: 1px solid #ffffff;background-color: #edf0f9;">
-
 <div style="width: 100%;height:13px;background-color: #e3e9ff;color:#000;margin:1px;">
 <span>姓名:${item.user.name} &nbsp;</span>
 </div>

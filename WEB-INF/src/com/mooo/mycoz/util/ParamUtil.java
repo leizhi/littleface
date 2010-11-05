@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.ParseException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -82,6 +83,56 @@ public class ParamUtil {
 		}
 	}
 
+	public static void bindData(HttpServletRequest request, Map beans) {
+		bindData(request, beans, null, null);
+	}
+	
+	public static void bindData(HttpServletRequest request, Map beans,
+			List<?> excludes, String prefix) {
+		
+		Enumeration<?> enums = request.getParameterNames();
+		
+		for (; enums.hasMoreElements();) {
+				String name = (String) enums.nextElement();
+				String value = request.getParameter(name);
+
+				if (value == null) {
+					continue;
+				}
+
+				if (excludes != null && excludes.contains(value)) {
+					continue;
+				}
+
+				if (prefix != null) {
+					if (name.indexOf(prefix + ".") != 0) {
+						continue;
+					}
+					name = name.replaceFirst(prefix + ".", "");
+				}
+
+				value = value.trim();
+				System.out.println("ParamUtil:"+name + "->" + value);
+
+				if (name.indexOf(".") > -1) {
+					int start = name.indexOf(".");
+					String objName = name.substring(0, start);
+					String propertyName = name.substring(start + 1, name.length());
+					
+					Map subMap = (Map) beans.get(objName);
+					if(subMap != null){
+						subMap.put(propertyName, value);
+					} else {
+						subMap = new HashMap();
+						subMap.put(propertyName, value);
+						
+						beans.put(objName, subMap);
+					}
+				} else {
+					beans.put(name, value);
+				}
+		} // end for
+	}
 	/**
 	 * 动态从request.getParameter里绑定javaBean属性值.
 	 * 
