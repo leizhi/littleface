@@ -66,6 +66,8 @@ public class AccountAction extends BaseSupport{
 			mdb.setRetrieveField("sex", "name");
 			mdb.setRetrieveField("addressBook", "address");
 			
+			mdb.setOrderBy("user","id");
+			
 			Page page = new Page();
 			page.buildComponent(request, mdb.count());
 			mdb.setRecord(page.getOffset(),page.getPageSize());
