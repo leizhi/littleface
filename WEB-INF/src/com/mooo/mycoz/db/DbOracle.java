@@ -9,9 +9,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.OracleSQL;
 import com.mooo.mycoz.util.BeanUtil;
@@ -19,28 +16,27 @@ import com.mooo.mycoz.util.StringUtils;
 
 public class DbOracle extends OracleSQL implements DbProcess{
 
-	private static Log log = LogFactory.getLog(DbOracle.class);
-
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1456166371448060515L;
+	private static final long serialVersionUID = 1L;
+
 	@Override
-	public List<Object> searchAndRetrieveList(Connection connection,Object entity)
+	public List<Object>  searchAndRetrieveList(Connection connection,Object entity,boolean noQuery)
 			throws SQLException {
+		
+		if (noQuery) {
+			refresh(entity);
+		}
+		
 		List<Object> retrieveList = null;
-
 		String doSql = searchSQL(entity);
-
-		if (log.isDebugEnabled())
-			log.debug("doSql:" + doSql);
+		
+		System.out.println("searchSQL:" + doSql);
 
 		Connection myConn = null;
 		boolean isClose = true;
-
 		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		ResultSet result = null;
 
 		try {
 			retrieveList = new ArrayList<Object>();
@@ -54,9 +50,9 @@ public class DbOracle extends OracleSQL implements DbProcess{
 			}
 
 			stmt = myConn.createStatement();
-			result = stmt.executeQuery(doSql);
+			ResultSet result = stmt.executeQuery(doSql);
 
-			rsmd = result.getMetaData();
+			ResultSetMetaData rsmd = result.getMetaData();
 			Object bean;
 			int type=0;
 
@@ -86,14 +82,6 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		} finally {
 
 			try {
-				if (result != null)
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				if (stmt != null)
 					stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -108,26 +96,39 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		}
 		return retrieveList;
 	}
+	
+	@Override
+	public List<Object> searchAndRetrieveList(Object entity,boolean noQuery)
+			throws SQLException {
+		return searchAndRetrieveList(null,entity,noQuery);
+	}
+	
 	@Override
 	public List<Object> searchAndRetrieveList(Object entity)
 			throws SQLException {
-		return searchAndRetrieveList(null,entity);
+		return searchAndRetrieveList(null,entity,true);
 	}
+	
 	@Override
-	public Integer count(Object entity) throws SQLException {
-		return count(null,entity);
+	public List<Object> searchAndRetrieveList(Connection connection,
+			Object entity) throws SQLException {
+		return searchAndRetrieveList(connection,entity,true);
 	}
-
+	
 	@Override
-	public Integer count(Connection connection,Object entity) throws SQLException {
-		String doSql = countSQL(entity);
+	public Integer count(Connection connection,Object entity,boolean noQuery) throws SQLException {
 		
-		if(log.isDebugEnabled())log.debug("doSql="+doSql);
+		if (noQuery) {
+			refresh(entity);
+		}
+		
+		String doSql = countSQL(entity);
+		System.out.println("countSql:" + doSql);
+
 		Connection myConn = null;
 		boolean isClose = true;
 		
 		Statement stmt = null;
-		ResultSet result = null;
 		int total=0;
 		
 		try {
@@ -140,7 +141,7 @@ public class DbOracle extends OracleSQL implements DbProcess{
 			}
 			
 			stmt = myConn.createStatement();
-			result = stmt.executeQuery(doSql);
+			ResultSet result = stmt.executeQuery(doSql);
 			
 			if(result.next())
 				total = result.getInt(1);
@@ -148,13 +149,6 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
-			try {
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -170,12 +164,15 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		}
 		return total;
 	}
-	
-	@Override
-	public void add(Object entity) throws SQLException {
-		add(null,entity);
+	public Integer count(Object entity,boolean noQuery) throws SQLException {
+		return count(null,entity,noQuery);
 	}
-	
+	public Integer count(Object entity) throws SQLException {
+		return count(null,entity,true);
+	}
+	public Integer count(Connection connection,Object entity) throws SQLException {
+		return count(connection,entity,true);
+	}
 	@Override
 	public void add(Connection connection,Object entity) throws SQLException {
 		Connection myConn = null;
@@ -183,6 +180,8 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		
 		Statement stmt = null;
 		String doSql = addSQL(entity);
+		System.out.println("addSQL:" + doSql);
+
 		try{
 			if(connection != null){
 				myConn = connection;
@@ -195,7 +194,7 @@ public class DbOracle extends OracleSQL implements DbProcess{
 			stmt = myConn.createStatement();
 			stmt.execute(doSql);
 		}finally {
-
+	
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -210,14 +209,15 @@ public class DbOracle extends OracleSQL implements DbProcess{
 			}
 		}
 	}
+	@Override
+	public void add(Object entity) throws SQLException {
+		add(null,entity);
+	}
 	
 	@Override
-	public void delete(Object entity) throws SQLException {
-		delete(null,entity);
-	}
-
-	@Override
 	public void delete(Connection connection,Object entity) throws SQLException {
+		refresh(entity);
+		
 		Connection myConn = null;
 		boolean isClose = true;
 		
@@ -235,7 +235,7 @@ public class DbOracle extends OracleSQL implements DbProcess{
 			stmt = myConn.createStatement();
 			stmt.execute(doSql);
 		}finally {
-
+	
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -251,13 +251,15 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		}
 		
 	}
-	
 	@Override
-	public void update(Object entity) throws SQLException {
-		update(null,entity);
+	public void delete(Object entity) throws SQLException {
+		delete(null,entity);
 	}
+
 	@Override
 	public void update(Connection connection,Object entity) throws SQLException {
+		refresh(entity);
+		
 		Connection myConn = null;
 		boolean isClose = true;
 		
@@ -275,7 +277,7 @@ public class DbOracle extends OracleSQL implements DbProcess{
 			stmt = myConn.createStatement();
 			stmt.execute(doSql);
 		}finally {
-
+	
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -291,26 +293,29 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		}		
 	}
 	@Override
-	public void retrieve(Object entity) throws SQLException {
-		retrieve(null,entity);
+	public void update(Object entity) throws SQLException {
+		update(null,entity);
 	}
 	@Override
 	public void retrieve(Connection connection,Object entity) throws SQLException {
-
+	
+		refresh(entity);
+		
 		String doSql = searchSQL(entity);
-		 doSql += " AND rownum = 1";
+		
+		int ls = doSql.indexOf("LIMIT");
+		if(ls>0)
+			doSql = doSql.substring(0,doSql.indexOf("LIMIT"));
+		
+		doSql += " LIMIT 1";
+	
 		System.out.println("doSql:" + doSql);
-
-		if (log.isDebugEnabled())
-			log.debug("doSql:" + doSql);
-
+	
 		Connection myConn = null;
 		boolean isClose = true;
-
+	
 		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		ResultSet result = null;
-
+	
 		try {
 			if(connection != null){
 				myConn = connection;
@@ -319,43 +324,41 @@ public class DbOracle extends OracleSQL implements DbProcess{
 				myConn = DbConnectionManager.getConnection();
 				isClose = true;
 			}
-
+	
 			stmt = myConn.createStatement();
-			result = stmt.executeQuery(doSql);
-
-			rsmd = result.getMetaData();
-			//Object bean;
-
+			ResultSet result = stmt.executeQuery(doSql);
+	
+			ResultSetMetaData rsmd = result.getMetaData();
+			int type=0;
+			
 			while (result.next()) {
-
-				//bean = entity.getClass().newInstance();
-
 				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
-					BeanUtil.bindProperty(entity,
-							StringUtils.prefixToUpper(rsmd.getColumnName(i)),
-							result.getString(i));
+					type = rsmd.getColumnType(i);
+					
+					if(type == Types.TIMESTAMP){
+						BeanUtil.bindProperty(entity,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getTimestamp(i));
+					}else {
+						BeanUtil.bindProperty(entity,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+								result.getString(i));
+					}
 				}
-				//retrieveList.add(bean);
 			}
+			
 			// addCache(doSql, retrieveList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
-			try {
-				if (result != null)
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
+	
 			try {
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
+	
 			try {
 				if(isClose)
 					myConn.close();
@@ -365,27 +368,8 @@ public class DbOracle extends OracleSQL implements DbProcess{
 		}
 	}
 	@Override
-	public List<Object> searchAndRetrieveList(Object entity, boolean noQuery)
-			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public List<Object> searchAndRetrieveList(Connection connection,
-			Object entity, boolean noQuery) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public Integer count(Object entity, boolean noQuery) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public Integer count(Connection connection, Object entity, boolean noQuery)
-			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	public void retrieve(Object entity) throws SQLException {
+		retrieve(null,entity);
 	}
 
 }

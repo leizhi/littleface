@@ -20,14 +20,13 @@ public class JdbcTest {
 			long startTime = System.currentTimeMillis();
 
 			connection = DbConnectionManager.getConnection();
-			
 			stmt = connection.createStatement();
 			
 			//ex.setTable("Example");
-			result = stmt.executeQuery("SELECT * FROM ");
+			result = stmt.executeQuery("SELECT * FROM User u,UserInfo ui WHERE ui.userId=u.id LIMIT 4");
 			
 			while(result.next()){
-				System.out.println("id="+result.getString("id")+" name="+result.getString("name"));
+				System.out.println("id="+result.getString("u.id")+" name="+result.getString("u.name"));
 			}
 			
 			long finishTime = System.currentTimeMillis();
@@ -50,20 +49,18 @@ public class JdbcTest {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			/*
-			try {
-				if (result != null) {
-					result.close();
-					result = null;
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			*/
+			
+//			try {
+//				if (result != null) {
+//					result.close();
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+			
 			try {
 				if (stmt != null){
 					stmt.close();
-					stmt = null;
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -83,7 +80,7 @@ public class JdbcTest {
 
 			System.out.println("result:"+result.isClosed());
 			System.out.println("stmt:"+stmt.isClosed());
-			System.out.println("connection:"+connection.isClosed());
+			System.out.println("connection:"+connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

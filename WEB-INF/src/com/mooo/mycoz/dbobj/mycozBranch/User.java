@@ -49,14 +49,14 @@ public class User {
 	
 	private List userImages;
 	public List getUserImages() {
-		/*DbProcess dbProcess = DbFactory.getInstance();
+		DbProcess dbProcess = DbFactory.getInstance();
 		UserImage userImage = new UserImage();
 		userImage.setUserId(getId());
 		try {
 			userImages = dbProcess.searchAndRetrieveList(userImage);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}*/
+		}
 		return userImages;
 	}
 	public void setUserImages(List userImages) {

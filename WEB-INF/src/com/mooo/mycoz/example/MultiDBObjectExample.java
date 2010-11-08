@@ -45,15 +45,15 @@ public class MultiDBObjectExample {
 			mdb.setRecord(page.getOffset(),page.getPageSize());
 			//page.buildComponent(request, mdb.count());
 			
-			List<Map> examples = mdb.searchAndRetrieveList();
+			List<Object> examples = mdb.searchAndRetrieveList();
 			User bean;
 
-			for(Map map:examples){
-				bean = (User)map.get("user");
+			for(Object map:examples){
+//				bean = (User)((List<Object>) map).get("user");
 				//UserInfo userInfo = (UserInfo)map.get("userInfo");
 				//accounts.add(bean);
 				
-				System.out.println("user name"+bean.getName());
+//				System.out.println("user name"+bean.getName());
 
 				//System.out.println("user name"+user.getName()+" user ="+userInfo.getBirthday());
 			}

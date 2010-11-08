@@ -105,10 +105,6 @@ public class DbUtil {
 		Connection myConn = null;
 		boolean isClose = true;
 		
-		Statement stmt = null;
-		ResultSet result = null;
-		//ResultSetMetaData rsmd = null;
-
 		try {
 			if(connection != null){
 				myConn = connection;
@@ -118,19 +114,9 @@ public class DbUtil {
 				isClose = true;
 			}
 
-			//result = myConn.getMetaData().getColumns(null, schem, "FileInfo","name");
-			result = myConn.getMetaData().getColumns(catalog, null, table,column);
-			//rsmd = result.getMetaData();
-			//String columnName="";
-
-			while (result.next()) {
-				/*
-				for (int i = 0; i < rsmd.getColumnCount(); i++) {
-					columnName = rsmd.getColumnName(i + 1).toLowerCase();
-					System.out.println(columnName + "="+result.getString(columnName));
-				}*/
-				//System.out.println(result.getInt(5));
-
+			ResultSet result = myConn.getMetaData().getColumns(catalog, null, table,column);
+			
+			if(result.first()){
 				return result.getInt(5);
 			}
 			
@@ -138,20 +124,6 @@ public class DbUtil {
 			e.printStackTrace();
 		} finally {
 
-			try {
-				if (result != null)
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
 			try {
 				if(isClose)
 					myConn.close();

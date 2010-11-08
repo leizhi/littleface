@@ -16,6 +16,9 @@ public class Test {
 		try {
 			long startTime = System.currentTimeMillis();
 
+			DbMetaData dmd = DbMetaData.getInstance();
+			dmd.type(null, null, null, null);
+			/*
 			DbProcess dbProcess = DbFactory.getInstance();
 			for(int i=0;i<100;i++){
 				AccessLog al = new AccessLog();
@@ -24,7 +27,7 @@ public class Test {
 				al.setStartdate(new Date());
 				dbProcess.add(al);
 			}
-			
+			*/
 			long finishTime = System.currentTimeMillis();
 			long hours = (finishTime - startTime) / 1000 / 60 / 60;
 			long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;

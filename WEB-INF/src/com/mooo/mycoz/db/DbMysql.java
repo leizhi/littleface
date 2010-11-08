@@ -36,10 +36,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 
 		Connection myConn = null;
 		boolean isClose = true;
-
 		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		ResultSet result = null;
 
 		try {
 			retrieveList = new ArrayList<Object>();
@@ -53,9 +50,9 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			}
 
 			stmt = myConn.createStatement();
-			result = stmt.executeQuery(doSql);
+			ResultSet result = stmt.executeQuery(doSql);
 
-			rsmd = result.getMetaData();
+			ResultSetMetaData rsmd = result.getMetaData();
 			Object bean;
 			int type=0;
 
@@ -85,14 +82,6 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		} finally {
 
 			try {
-				if (result != null)
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				if (stmt != null)
 					stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -140,7 +129,6 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		boolean isClose = true;
 		
 		Statement stmt = null;
-		ResultSet result = null;
 		int total=0;
 		
 		try {
@@ -153,7 +141,7 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			}
 			
 			stmt = myConn.createStatement();
-			result = stmt.executeQuery(doSql);
+			ResultSet result = stmt.executeQuery(doSql);
 			
 			if(result.next())
 				total = result.getInt(1);
@@ -161,13 +149,6 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-	
-			try {
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
 			try {
 					stmt.close();
 			} catch (SQLException e) {
@@ -334,8 +315,6 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		boolean isClose = true;
 	
 		Statement stmt = null;
-		ResultSetMetaData rsmd = null;
-		ResultSet result = null;
 	
 		try {
 			if(connection != null){
@@ -347,9 +326,9 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 			}
 	
 			stmt = myConn.createStatement();
-			result = stmt.executeQuery(doSql);
+			ResultSet result = stmt.executeQuery(doSql);
 	
-			rsmd = result.getMetaData();
+			ResultSetMetaData rsmd = result.getMetaData();
 			int type=0;
 			
 			while (result.next()) {
@@ -372,13 +351,6 @@ public class DbMysql extends MysqlSQL implements DbProcess{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-	
-			try {
-				if (result != null)
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 	
 			try {
 				if (stmt != null)

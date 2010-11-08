@@ -219,14 +219,11 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 	public int count(Connection connection) {
 		long startTime = System.currentTimeMillis();
 
-		
 		String doSql = buildCountSQL();
 		
 		Connection myConn = null;
-		boolean isClose = true;
-		
 		Statement stmt = null;
-		ResultSet result = null;
+		boolean isClose = true;
 
 		int total=0;
 
@@ -240,7 +237,7 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 			}
 			
 			stmt = myConn.createStatement();
-			result = stmt.executeQuery(doSql);
+			ResultSet result = stmt.executeQuery(doSql);
 			
 			while (result.next()) {
 				total = result.getInt(1);
@@ -248,14 +245,6 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
-
-			try {
-				if (result != null)
-					result.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 
 			try {
 				if (stmt != null)
