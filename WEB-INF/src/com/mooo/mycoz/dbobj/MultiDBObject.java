@@ -56,33 +56,34 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 			ResultSetMetaData rsmd = result.getMetaData();
 
 			String key;
-			String value;
 			String catalog,table,column;
 			
 			while (result.next()) {
-				Map allRow = new HashMap();
+				Map<String, Object> allRow = new HashMap<String, Object>();
+				
 				for (Entry<String, String> entry : tables.entrySet()) {
-					value = entry.getValue();
-
-					Map bean = new HashMap();
-					for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
-						catalog = rsmd.getCatalogName(i);
-						table = rsmd.getTableName(i);
-						column = rsmd.getColumnName(i);
-
-						int type = DbUtil.type(myConn, catalog, table,StringUtils.upperToPrefix(column, null));
-
-						if (value.equals(catalog + "." + table)) {
-							if (type == Types.TIMESTAMP) {
-								bean.put(column, result.getTimestamp(i));
-							} else {
-								bean.put(column, result.getString(i));
-							}
-						}
-					}// for column
-					allRow.put(entry.getKey(), bean);
+					key = entry.getKey();
+					allRow.put(key, new HashMap<String, Object>());
 				}// for bean
 				
+				for (int i = 1; i < rsmd.getColumnCount() + 1; i++) {
+					catalog = rsmd.getCatalogName(i);
+					table = rsmd.getTableName(i);
+					column = rsmd.getColumnName(i);
+
+					int type = DbUtil.type(myConn, catalog, table,StringUtils.upperToPrefix(column, null));
+
+					if(allRow.containsKey(StringUtils.toLowerFirst(table))){
+						Map bean = (Map)allRow.get(StringUtils.toLowerFirst(table));
+						
+						if(type == Types.TIMESTAMP){
+							bean.put(rsmd.getColumnName(i), result.getTimestamp(i));
+						}else {
+							bean.put(rsmd.getColumnName(i), result.getString(i));
+						}
+					}
+					
+				}// for column
 				retrieveList.add(allRow);
 			}
 		} catch (Exception e) {
