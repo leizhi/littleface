@@ -16,8 +16,6 @@ public class Test {
 		try {
 			long startTime = System.currentTimeMillis();
 
-			DbMetaData dmd = DbMetaData.getInstance();
-			dmd.type(null, null, null, null);
 			/*
 			DbProcess dbProcess = DbFactory.getInstance();
 			for(int i=0;i<100;i++){
