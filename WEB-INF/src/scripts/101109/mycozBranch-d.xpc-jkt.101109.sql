@@ -35,6 +35,25 @@ CREATE TABLE `AccessLog` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `AccountCategory`
+--
+
+DROP TABLE IF EXISTS `AccountCategory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AccountCategory` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `code` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `code` (`code`),
+  KEY `name` (`name`),
+  KEY `description` (`description`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `AddressBook`
 --
 
@@ -436,4 +455,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-08 15:55:20
+-- Dump completed on 2010-11-09 13:08:34

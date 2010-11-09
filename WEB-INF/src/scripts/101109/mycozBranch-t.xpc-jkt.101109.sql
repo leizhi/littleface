@@ -21,8 +21,17 @@
 
 LOCK TABLES `AccessLog` WRITE;
 /*!40000 ALTER TABLE `AccessLog` DISABLE KEYS */;
-INSERT INTO `AccessLog` VALUES (1,'110.185.57.190','2010-11-08 15:34:07','2010-11-08 15:34:07'),(2,'222.212.72.188','2010-11-08 15:34:07','2010-11-08 15:34:07'),(3,'222.212.72.188','2010-11-08 15:34:07','2010-11-08 15:34:07');
 /*!40000 ALTER TABLE `AccessLog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `AccountCategory`
+--
+
+LOCK TABLES `AccountCategory` WRITE;
+/*!40000 ALTER TABLE `AccountCategory` DISABLE KEYS */;
+INSERT INTO `AccountCategory` VALUES (1,'Asset','资产',NULL),(2,'Liability','负债',NULL),(3,'Equity','权益',NULL),(4,'Revenue','收入',NULL),(5,'Expense','费用',NULL);
+/*!40000 ALTER TABLE `AccountCategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -170,4 +179,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-08 15:55:20
+-- Dump completed on 2010-11-09 13:08:34
