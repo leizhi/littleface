@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.49-log
+-- Server version	5.1.51
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,13 +25,12 @@ LOCK TABLES `AccessLog` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `AccountCategory`
+-- Dumping data for table `Accounting`
 --
 
-LOCK TABLES `AccountCategory` WRITE;
-/*!40000 ALTER TABLE `AccountCategory` DISABLE KEYS */;
-INSERT INTO `AccountCategory` VALUES (1,'Asset','资产',NULL),(2,'Liability','负债',NULL),(3,'Equity','权益',NULL),(4,'Revenue','收入',NULL),(5,'Expense','费用',NULL);
-/*!40000 ALTER TABLE `AccountCategory` ENABLE KEYS */;
+LOCK TABLES `Accounting` WRITE;
+/*!40000 ALTER TABLE `Accounting` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Accounting` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -179,4 +178,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-09 13:08:34
+-- Dump completed on 2010-11-09 17:43:38

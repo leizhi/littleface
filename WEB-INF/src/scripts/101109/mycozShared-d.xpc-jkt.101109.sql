@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozShared
 -- ------------------------------------------------------
--- Server version	5.1.49-log
+-- Server version	5.1.51
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,31 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `Account`
---
-
-DROP TABLE IF EXISTS `Account`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Account` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `Code` varchar(20) NOT NULL DEFAULT '',
-  `GroupID` int(11) DEFAULT NULL,
-  `ExtensionID` int(11) DEFAULT NULL,
-  `CurrencyID` int(11) DEFAULT NULL,
-  `Description` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Code` (`Code`),
-  KEY `GroupID` (`GroupID`),
-  KEY `ExtensionID` (`ExtensionID`),
-  KEY `CurrencyID` (`CurrencyID`),
-  CONSTRAINT `Account_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `AccountGroup` (`ID`),
-  CONSTRAINT `Account_ibfk_2` FOREIGN KEY (`ExtensionID`) REFERENCES `AccountExtension` (`ID`),
-  CONSTRAINT `Account_ibfk_3` FOREIGN KEY (`CurrencyID`) REFERENCES `Currency` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `AccountCategory`
 --
 
@@ -48,46 +23,36 @@ DROP TABLE IF EXISTS `AccountCategory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `AccountCategory` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `Code` varchar(20) DEFAULT NULL,
-  `Description` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Code` (`Code`)
+  `id` int(11) NOT NULL DEFAULT '0',
+  `elementId` int(11) NOT NULL DEFAULT '0',
+  `categoryName` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `categoryCode` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `elementId` (`elementId`),
+  KEY `description` (`description`),
+  KEY `categoryName` (`categoryName`),
+  KEY `categoryCode` (`categoryCode`),
+  CONSTRAINT `AccountCategory_ibfk_1` FOREIGN KEY (`elementId`) REFERENCES `AccountElement` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `AccountExtension`
+-- Table structure for table `AccountElement`
 --
 
-DROP TABLE IF EXISTS `AccountExtension`;
+DROP TABLE IF EXISTS `AccountElement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `AccountExtension` (
-  `ID` int(6) NOT NULL DEFAULT '0',
-  `Code` varchar(20) DEFAULT NULL,
-  `Description` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Code` (`Code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `AccountGroup`
---
-
-DROP TABLE IF EXISTS `AccountGroup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `AccountGroup` (
-  `ID` int(6) NOT NULL DEFAULT '0',
-  `TypeID` int(11) DEFAULT NULL,
-  `Code` varchar(20) NOT NULL DEFAULT 'NULL',
-  `Description` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Code` (`Code`),
-  KEY `TypeID` (`TypeID`),
-  CONSTRAINT `AccountGroup_ibfk_1` FOREIGN KEY (`TypeID`) REFERENCES `AccountType` (`ID`)
+CREATE TABLE `AccountElement` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `elementName` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `elementCode` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `description` (`description`),
+  KEY `elementName` (`elementName`),
+  KEY `elementCode` (`elementCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -99,17 +64,17 @@ DROP TABLE IF EXISTS `AccountType`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `AccountType` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `CategoryID` int(11) DEFAULT NULL,
-  `Code` varchar(20) NOT NULL DEFAULT 'NULL',
-  `Description` varchar(50) DEFAULT NULL,
-  `NoteTypeID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Code` (`Code`),
-  KEY `CategoryID` (`CategoryID`),
-  KEY `NoteTypeID` (`NoteTypeID`),
-  CONSTRAINT `AccountType_ibfk_1` FOREIGN KEY (`CategoryID`) REFERENCES `AccountCategory` (`ID`),
-  CONSTRAINT `AccountType_ibfk_2` FOREIGN KEY (`NoteTypeID`) REFERENCES `NoteType` (`ID`)
+  `id` int(11) NOT NULL DEFAULT '0',
+  `categoryId` int(11) DEFAULT NULL,
+  `typeCode` varchar(100) DEFAULT NULL,
+  `typeName` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `categoryId` (`categoryId`),
+  KEY `typeCode` (`typeCode`),
+  KEY `typeName` (`typeName`),
+  KEY `description` (`description`),
+  CONSTRAINT `AccountType_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `AccountCategory` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -278,52 +243,6 @@ CREATE TABLE `Married` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `NoteType`
---
-
-DROP TABLE IF EXISTS `NoteType`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `NoteType` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `Code` varchar(20) DEFAULT 'NULL',
-  `Category` enum('Debit','Credit') DEFAULT NULL,
-  `Description` varchar(50) DEFAULT NULL,
-  `Name` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `Code` (`Code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `OperatorUser`
---
-
-DROP TABLE IF EXISTS `OperatorUser`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `OperatorUser` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `UserName` varchar(50) DEFAULT NULL,
-  `Password` varchar(50) DEFAULT NULL,
-  `CountryID` int(11) DEFAULT NULL,
-  `City` varchar(50) DEFAULT NULL,
-  `Address` varchar(200) DEFAULT NULL,
-  `Email` varchar(50) DEFAULT NULL,
-  `Tel` varchar(60) DEFAULT NULL,
-  `Zip` varchar(20) DEFAULT NULL,
-  `States` smallint(6) NOT NULL DEFAULT '7',
-  `LanguageID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `UserName` (`UserName`),
-  KEY `CountryID` (`CountryID`),
-  KEY `LanguageID` (`LanguageID`),
-  CONSTRAINT `OperatorUser_ibfk_1` FOREIGN KEY (`CountryID`) REFERENCES `Country` (`id`),
-  CONSTRAINT `OperatorUser_ibfk_2` FOREIGN KEY (`LanguageID`) REFERENCES `Language` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `Sex`
 --
 
@@ -334,22 +253,6 @@ CREATE TABLE `Sex` (
   `id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(50) NOT NULL DEFAULT 'NULL',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `State`
---
-
-DROP TABLE IF EXISTS `State`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `State` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `Code` varchar(20) NOT NULL DEFAULT 'NULL',
-  `Name` varchar(50) NOT NULL DEFAULT 'NULL',
-  `Description` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -380,4 +283,4 @@ CREATE TABLE `WeightUnit` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-09 13:08:34
+-- Dump completed on 2010-11-09 17:43:38

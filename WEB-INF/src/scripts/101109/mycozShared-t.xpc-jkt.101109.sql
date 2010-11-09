@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozShared
 -- ------------------------------------------------------
--- Server version	5.1.49-log
+-- Server version	5.1.51
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,39 +16,23 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `Account`
---
-
-LOCK TABLES `Account` WRITE;
-/*!40000 ALTER TABLE `Account` DISABLE KEYS */;
-/*!40000 ALTER TABLE `Account` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `AccountCategory`
 --
 
 LOCK TABLES `AccountCategory` WRITE;
 /*!40000 ALTER TABLE `AccountCategory` DISABLE KEYS */;
+INSERT INTO `AccountCategory` VALUES (1,1,'Current Assets','流动资产','1'),(2,1,'Fixed Assets','固定资产','2'),(3,2,'Current Liabilities','流动负债','3'),(4,2,'Other Liabilities','其他负债','4'),(5,3,'Capital','资本','5'),(6,4,'Sales','销售收入','6'),(7,4,'Other Sales','其他销售收入','7'),(8,5,'Operational & Other Expenses','其他费用','8'),(9,5,'Costs of Sales','销售成本','9');
 /*!40000 ALTER TABLE `AccountCategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `AccountExtension`
+-- Dumping data for table `AccountElement`
 --
 
-LOCK TABLES `AccountExtension` WRITE;
-/*!40000 ALTER TABLE `AccountExtension` DISABLE KEYS */;
-/*!40000 ALTER TABLE `AccountExtension` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `AccountGroup`
---
-
-LOCK TABLES `AccountGroup` WRITE;
-/*!40000 ALTER TABLE `AccountGroup` DISABLE KEYS */;
-/*!40000 ALTER TABLE `AccountGroup` ENABLE KEYS */;
+LOCK TABLES `AccountElement` WRITE;
+/*!40000 ALTER TABLE `AccountElement` DISABLE KEYS */;
+INSERT INTO `AccountElement` VALUES (1,'Asset','资产','1'),(2,'Liability','负债','2'),(3,'Equity','权益','3'),(4,'Revenue','收入','4'),(5,'Expense','费用','5');
+/*!40000 ALTER TABLE `AccountElement` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -57,6 +41,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `AccountType` WRITE;
 /*!40000 ALTER TABLE `AccountType` DISABLE KEYS */;
+INSERT INTO `AccountType` VALUES (1,1,'1','Cash','Cash Accounts'),(2,1,'2','Prepaid Expense','Prepaid Expense Accounts'),(3,1,'3','Bank','Bank Accounts'),(4,1,'4','Account Receivable','Account Receivable Accounts'),(5,1,'5','Other Receivable','Other Receivable');
 /*!40000 ALTER TABLE `AccountType` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,25 +146,6 @@ INSERT INTO `Married` VALUES (1,'单身'),(2,'已婚'),(3,'离异');
 UNLOCK TABLES;
 
 --
--- Dumping data for table `NoteType`
---
-
-LOCK TABLES `NoteType` WRITE;
-/*!40000 ALTER TABLE `NoteType` DISABLE KEYS */;
-INSERT INTO `NoteType` VALUES (1,'IV','Debit','Invoice','发票'),(2,'RC','Debit','Receipt','收据'),(3,'TS','Debit','Transfer','转帐'),(4,'CN','Credit','Credit Note','贷方票据'),(5,'DN','Debit','Debit Note','借方票据'),(6,'NN','','','无');
-/*!40000 ALTER TABLE `NoteType` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `OperatorUser`
---
-
-LOCK TABLES `OperatorUser` WRITE;
-/*!40000 ALTER TABLE `OperatorUser` DISABLE KEYS */;
-/*!40000 ALTER TABLE `OperatorUser` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `Sex`
 --
 
@@ -187,16 +153,6 @@ LOCK TABLES `Sex` WRITE;
 /*!40000 ALTER TABLE `Sex` DISABLE KEYS */;
 INSERT INTO `Sex` VALUES (1,'男'),(2,'女'),(3,'保密'),(4,'其他');
 /*!40000 ALTER TABLE `Sex` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `State`
---
-
-LOCK TABLES `State` WRITE;
-/*!40000 ALTER TABLE `State` DISABLE KEYS */;
-INSERT INTO `State` VALUES (0,'Root','Root','root state'),(1,'Common','common','common state');
-/*!40000 ALTER TABLE `State` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -218,4 +174,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-09 13:08:34
+-- Dump completed on 2010-11-09 17:43:38

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.49-log
+-- Server version	5.1.51
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -35,21 +35,24 @@ CREATE TABLE `AccessLog` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `AccountCategory`
+-- Table structure for table `Accounting`
 --
 
-DROP TABLE IF EXISTS `AccountCategory`;
+DROP TABLE IF EXISTS `Accounting`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `AccountCategory` (
+CREATE TABLE `Accounting` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `code` varchar(100) DEFAULT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `description` varchar(100) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `bankCode` varchar(100) DEFAULT NULL,
+  `bankName` varchar(100) DEFAULT NULL,
+  `bankNumber` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `code` (`code`),
-  KEY `name` (`name`),
-  KEY `description` (`description`)
+  KEY `userId` (`userId`),
+  KEY `bankCode` (`bankCode`),
+  KEY `bankName` (`bankName`),
+  KEY `bankNumber` (`bankNumber`),
+  CONSTRAINT `Accounting_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -455,4 +458,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-09 13:08:34
+-- Dump completed on 2010-11-09 17:43:38
