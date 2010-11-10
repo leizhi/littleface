@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.51
+-- Server version	5.1.49-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -458,4 +458,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-09 17:43:38
+-- Dump completed on 2010-11-10 16:03:18

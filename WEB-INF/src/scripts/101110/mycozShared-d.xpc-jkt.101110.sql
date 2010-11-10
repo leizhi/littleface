@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozShared
 -- ------------------------------------------------------
--- Server version	5.1.51
+-- Server version	5.1.49-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,33 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `Account`
+--
+
+DROP TABLE IF EXISTS `Account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Account` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `code` varchar(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `currencyId` int(11) DEFAULT NULL,
+  `groupId` int(11) DEFAULT NULL,
+  `extensionId` int(11) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `code` (`code`),
+  KEY `name` (`name`),
+  KEY `currencyId` (`currencyId`),
+  KEY `groupId` (`groupId`),
+  KEY `extensionId` (`extensionId`),
+  KEY `description` (`description`),
+  CONSTRAINT `Account_ibfk_1` FOREIGN KEY (`currencyId`) REFERENCES `Currency` (`ID`),
+  CONSTRAINT `Account_ibfk_2` FOREIGN KEY (`groupId`) REFERENCES `AccountGroup` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `AccountCategory`
@@ -53,6 +80,28 @@ CREATE TABLE `AccountElement` (
   KEY `description` (`description`),
   KEY `elementName` (`elementName`),
   KEY `elementCode` (`elementCode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `AccountGroup`
+--
+
+DROP TABLE IF EXISTS `AccountGroup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AccountGroup` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `typeId` int(11) DEFAULT NULL,
+  `groupCode` varchar(100) DEFAULT NULL,
+  `groupName` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `typeId` (`typeId`),
+  KEY `groupCode` (`groupCode`),
+  KEY `groupName` (`groupName`),
+  KEY `description` (`description`),
+  CONSTRAINT `AccountGroup_ibfk_1` FOREIGN KEY (`typeId`) REFERENCES `AccountType` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -153,15 +202,15 @@ DROP TABLE IF EXISTS `Currency`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Currency` (
-  `ID` int(11) NOT NULL DEFAULT '0',
-  `ISOCode` varchar(20) DEFAULT NULL,
-  `CountryID` int(11) DEFAULT NULL,
-  `Name` varchar(50) DEFAULT NULL,
-  `Symbol` varchar(5) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `ISOCode` (`ISOCode`),
-  KEY `CountryID` (`CountryID`),
-  CONSTRAINT `Currency_ibfk_1` FOREIGN KEY (`CountryID`) REFERENCES `Country` (`id`)
+  `id` int(11) NOT NULL DEFAULT '0',
+  `codeISO` varchar(20) DEFAULT NULL,
+  `countryId` int(11) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `symbol` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `codeISO` (`codeISO`),
+  KEY `countryId` (`countryId`),
+  CONSTRAINT `Currency_ibfk_1` FOREIGN KEY (`countryId`) REFERENCES `Country` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -243,6 +292,25 @@ CREATE TABLE `Married` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `NoteType`
+--
+
+DROP TABLE IF EXISTS `NoteType`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `NoteType` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `typeKey` varchar(20) NOT NULL DEFAULT '',
+  `name` varchar(50) DEFAULT NULL,
+  `prefix` varchar(5) DEFAULT '',
+  `description` text,
+  `Category` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `typeKey` (`typeKey`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `Sex`
 --
 
@@ -283,4 +351,4 @@ CREATE TABLE `WeightUnit` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-09 17:43:38
+-- Dump completed on 2010-11-10 16:03:19

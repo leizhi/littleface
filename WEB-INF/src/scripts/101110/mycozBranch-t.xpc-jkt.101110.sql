@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.51, for redhat-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.49, for unknown-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: mycozBranch
 -- ------------------------------------------------------
--- Server version	5.1.51
+-- Server version	5.1.49-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,6 +21,7 @@
 
 LOCK TABLES `AccessLog` WRITE;
 /*!40000 ALTER TABLE `AccessLog` DISABLE KEYS */;
+INSERT INTO `AccessLog` VALUES (1,'222.212.70.123','2010-11-10 15:45:15','2010-11-10 15:53:41'),(2,'222.212.70.123','2010-11-10 15:55:46','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `AccessLog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +70,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Forum` WRITE;
 /*!40000 ALTER TABLE `Forum` DISABLE KEYS */;
-INSERT INTO `Forum` VALUES (3,'公告'),(0,'其他'),(4,'开发人员'),(2,'社区'),(1,'问题');
+INSERT INTO `Forum` VALUES (5,'XPC System'),(3,'公告'),(0,'其他'),(4,'开发人员'),(2,'社区'),(1,'问题');
 /*!40000 ALTER TABLE `Forum` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,7 +80,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `ForumThread` WRITE;
 /*!40000 ALTER TABLE `ForumThread` DISABLE KEYS */;
-INSERT INTO `ForumThread` VALUES (1,3,1,'ddddddd','dddddddddd','2010-10-08 19:05:53','2010-10-03 00:00:00','N',0,'N',2),(2,3,1,'技术交流','技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流','2010-10-08 19:02:50','2010-10-03 00:00:00','N',0,'N',8),(3,3,1,'dasjkt','thanks come here','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,'N',1),(4,3,1,'公告','有大家的支持就是维护和完善的动力. 尽量做到最完善的最友好的论坛.','2010-10-27 17:52:38','2010-10-03 00:00:00','N',0,'N',8),(5,3,11,'LFS 6.7 already launched','LFS 6.7 already launched.\r\nYou can see it on www.distrowatch.com.\r\nDocuments on PDF, HTML and .tar.bz\r\nStill try to take this as my big project.','2010-10-04 00:00:00','2010-10-04 00:00:00','N',0,'N',11),(6,3,2,'源代码下载','git clone git://github.com/leizhi/littleface.git','2010-10-15 08:59:33','2010-10-15 08:41:33','N',0,'N',2),(7,3,2,'LInux 内核调整','vi /etc/sysctl.conf','2010-10-18 08:43:15','2010-10-18 08:35:10','N',0,'N',2),(8,3,3,'呼叫师傅','师傅我在这里跟你说话你会看到吗？','2010-10-29 09:24:05','2010-10-29 09:19:04','N',0,'N',8),(9,3,3,'我也来找茬，O(∩_∩)O',NULL,'2010-10-29 14:21:38','2010-10-29 09:45:31','N',0,'N',8),(10,1,8,'地震可以欲知','美国最新报道 地震可以提前半个月探测','2010-10-31 17:30:49','2010-10-31 17:30:15','N',0,'N',8),(11,4,8,'论坛积分算法','用户等级采取公式:\r\nSn = a0 * (2^n) 条件:(n>=0)\r\nSn为总积分,a0为常数,n为等级.\r\nn=0时 S0=a0\r\nn=1时 S1=a0*2\r\nn=2时 s2=a0*2*2','2010-11-01 20:40:59','2010-11-01 20:40:59','N',0,'N',8);
+INSERT INTO `ForumThread` VALUES (1,3,1,'ddddddd','dddddddddd','2010-10-08 19:05:53','2010-10-03 00:00:00','N',0,'N',2),(2,3,1,'技术交流','技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流技术交流','2010-10-08 19:02:50','2010-10-03 00:00:00','N',0,'N',8),(3,3,1,'dasjkt','thanks come here','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,'N',1),(4,3,1,'公告','有大家的支持就是维护和完善的动力. 尽量做到最完善的最友好的论坛.','2010-10-27 17:52:38','2010-10-03 00:00:00','N',0,'N',8),(5,3,11,'LFS 6.7 already launched','LFS 6.7 already launched.\r\nYou can see it on www.distrowatch.com.\r\nDocuments on PDF, HTML and .tar.bz\r\nStill try to take this as my big project.','2010-10-04 00:00:00','2010-10-04 00:00:00','N',0,'N',11),(6,3,2,'源代码下载','git clone git://github.com/leizhi/littleface.git','2010-10-15 08:59:33','2010-10-15 08:41:33','N',0,'N',2),(7,3,2,'LInux 内核调整','vi /etc/sysctl.conf','2010-10-18 08:43:15','2010-10-18 08:35:10','N',0,'N',2),(8,3,3,'呼叫师傅','师傅我在这里跟你说话你会看到吗？','2010-10-29 09:24:05','2010-10-29 09:19:04','N',0,'N',8),(9,3,3,'我也来找茬，O(∩_∩)O',NULL,'2010-10-29 14:21:38','2010-10-29 09:45:31','N',0,'N',8),(10,1,8,'地震可以欲知','美国最新报道 地震可以提前半个月探测','2010-10-31 17:30:49','2010-10-31 17:30:15','N',0,'N',8),(11,4,8,'论坛积分算法','用户等级采取公式:\r\nSn = a0 * (2^n) 条件:(n>=0)\r\nSn为总积分,a0为常数,n为等级.\r\nn=0时 S0=a0\r\nn=1时 S1=a0*2\r\nn=2时 s2=a0*2*2','2010-11-01 20:40:59','2010-11-01 20:40:59','N',0,'N',8),(12,6,8,'Problem','1.Xpc system in use now for refund function ?\r\n2.job refund, how to handle financial. accounts receivable credit and  account Payable debit ?\r\n3.Account Title detail Whether it is necessary for Customer/Parter ?','2010-11-10 15:52:26','2010-11-10 15:52:26','N',0,'N',8);
 /*!40000 ALTER TABLE `ForumThread` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,7 +136,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `ThreadType` WRITE;
 /*!40000 ALTER TABLE `ThreadType` DISABLE KEYS */;
-INSERT INTO `ThreadType` VALUES (1,'新闻',2),(2,'帮助',2),(3,'捉虫(Bug)',4),(4,'需求策划',4),(5,'市场推广',4);
+INSERT INTO `ThreadType` VALUES (1,'新闻',2),(2,'帮助',2),(3,'捉虫(Bug)',4),(4,'需求策划',4),(5,'市场推广',4),(6,'Financial',5);
 /*!40000 ALTER TABLE `ThreadType` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,4 +179,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-09 17:43:38
+-- Dump completed on 2010-11-10 16:03:18
