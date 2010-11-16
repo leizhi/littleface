@@ -161,24 +161,6 @@ CREATE TABLE `City` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `CodeType`
---
-
-DROP TABLE IF EXISTS `CodeType`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `CodeType` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(50) DEFAULT 'NULL',
-  `category` enum('Linear','Tree') DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`,`category`),
-  KEY `name` (`name`),
-  KEY `category` (`category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `Country`
 --
 
@@ -259,25 +241,6 @@ CREATE TABLE `Language` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `LinearCode`
---
-
-DROP TABLE IF EXISTS `LinearCode`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `LinearCode` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `typeId` int(11) DEFAULT NULL,
-  `name` varchar(50) DEFAULT 'NULL',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`,`typeId`),
-  KEY `typeId` (`typeId`),
-  KEY `name` (`name`),
-  CONSTRAINT `LinearCode_ibfk_1` FOREIGN KEY (`typeId`) REFERENCES `CodeType` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `Married`
 --
 
@@ -351,4 +314,4 @@ CREATE TABLE `WeightUnit` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-16 13:54:57
+-- Dump completed on 2010-11-16 14:03:32

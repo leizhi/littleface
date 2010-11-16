@@ -86,16 +86,6 @@ INSERT INTO `City` VALUES (1,1,'CD','ChengDu','ChengDu'),(2,1,'SH','ShangHai','S
 UNLOCK TABLES;
 
 --
--- Dumping data for table `CodeType`
---
-
-LOCK TABLES `CodeType` WRITE;
-/*!40000 ALTER TABLE `CodeType` DISABLE KEYS */;
-INSERT INTO `CodeType` VALUES (0,'NULL',NULL),(1,'文件类型','Linear'),(2,'论坛类型','Linear');
-/*!40000 ALTER TABLE `CodeType` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `Country`
 --
 
@@ -143,16 +133,6 @@ LOCK TABLES `Language` WRITE;
 /*!40000 ALTER TABLE `Language` DISABLE KEYS */;
 INSERT INTO `Language` VALUES (1,'CN','Chinese','Chinese Language'),(2,'CA','English','Caina English'),(3,'USA','English','USA English'),(4,'ID','English','Indonesia Enilsh');
 /*!40000 ALTER TABLE `Language` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `LinearCode`
---
-
-LOCK TABLES `LinearCode` WRITE;
-/*!40000 ALTER TABLE `LinearCode` DISABLE KEYS */;
-INSERT INTO `LinearCode` VALUES (3,1,'mp3'),(0,0,'NULL'),(4,2,'军事'),(2,1,'压缩'),(1,1,'图片'),(7,2,'技术联盟'),(5,2,'文艺');
-/*!40000 ALTER TABLE `LinearCode` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -204,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-16 13:54:57
+-- Dump completed on 2010-11-16 14:03:32
