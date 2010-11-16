@@ -28,7 +28,6 @@ Locale.setDefault(locale);
 <title><fmt:message key="Login"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
-<link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
 <script type="text/javascript" src="jsp/js/util.js"></script>
 </head>
 

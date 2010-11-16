@@ -8,7 +8,6 @@
 <title><fmt:message key="Menu"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
-<link rel="stylesheet" type="text/css" href="skin/office/default/presentation.css" />
 <style type="text/css">
 ul {
 	padding: 0;
@@ -38,40 +37,66 @@ li {
 
 <span>online:<%=com.mooo.mycoz.util.SessionCounter.getCount()%></span>
 
-<c:url value="/Login.do" var="processLogout">
-	<c:param name="method">processLogout</c:param>
+<!-- Setup -->
+<c:if test="${!empty Setup && Setup==true}">
+
+<c:url value="/Accounting.do" var="accounting">
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">2</c:param>
+</c:url>
+
+<ul>
+<li class="title"><fmt:message key="Setup"/></li>
+<li><a href="${accounting}" target="main"><fmt:message key="Account"/></a></li>
+</ul>
+
+</c:if>
+
+<!-- File -->
+<c:if test="${!empty File && File==true}">
+
+<c:url value="/File.do" var="treeFile">
+	<c:param name="bar">0</c:param>
+	<c:param name="subbar">0</c:param>
 </c:url>
 
 <ul>
 <li class="title"><fmt:message key="File"/></li>
-<%-- <li><a href="<c:url value="/File.do?method=list&bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li> --%>
-<li><a href="<c:url value="/File.do?bar=0&subbar=0"/>" target="main"><fmt:message key="File"/></a></li>
-<li><a href="<c:url value="/CodeType.do?bar=0&subbar=1"/>" target="main"><fmt:message key="CodeType"/></a></li>
+<li><a href="${treeFile}" target="main"><fmt:message key="File"/></a></li>
 </ul>
+</c:if>
 
-<c:url value="/Account.do" var="searchAccount">
+<!-- Activity -->
+<c:if test="${!empty Activity && Activity==true}">
+
+<c:url value="/Activity.do" var="searchAccount">
 	<c:param name="method">search</c:param>
 	<c:param name="bar">1</c:param>
 	<c:param name="subbar">0</c:param>
 </c:url>
 
-<c:url value="/Account.do" var="blogAccount">
+<c:url value="/Activity.do" var="blogAccount">
 	<c:param name="method">blog</c:param>
 	<c:param name="bar">1</c:param>
 	<c:param name="subbar">1</c:param>
 </c:url>
 
-<c:url value="/Account.do" var="forumAccount">
+<c:url value="/Activity.do" var="forumAccount">
 	<c:param name="method">forum</c:param>
 	<c:param name="bar">1</c:param>
 	<c:param name="subbar">2</c:param>
 </c:url>
+
 <ul>
-<li class="title"><fmt:message key="Consort"/></li>
+<li class="title"><fmt:message key="Activity"/></li>
 <li><a href="${searchAccount}" target="main"><fmt:message key="Search"/></a></li>
 <%-- <li><a href="${blogAccount}" target="main"><fmt:message key="Blog"/></a></li> --%>
 <li><a href="${forumAccount}" target="main"><fmt:message key="Forum"/></a></li>
 </ul>
+</c:if>
+
+<!-- Profile -->
+<c:if test="${!empty Profile && Profile==true}">
 
 <c:url value="/My.do" var="generalMy">
 	<c:param name="method">general</c:param>
@@ -84,12 +109,19 @@ li {
 	<c:param name="bar">2</c:param>
 	<c:param name="subbar">1</c:param>
 </c:url>
+
+<c:url value="/Login.do" var="processLogout">
+	<c:param name="method">processLogout</c:param>
+</c:url>
+
 <ul>
-<li class="title"><fmt:message key="Account"/></li>
+<li class="title"><fmt:message key="Profile"/></li>
 <li><a href="${generalMy}" target="main"><fmt:message key="General"/></a></li>
 <li><a href="${promptChangePassword}" target="main"><fmt:message key="Password"/></a></li>
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
+</c:if>
+
 </div>
 
 </body>

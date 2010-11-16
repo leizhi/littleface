@@ -2,13 +2,8 @@ package com.mooo.mycoz.action.operation;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,10 +12,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
-import com.mooo.mycoz.component.Page;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozBranch.FileTree;
-import com.mooo.mycoz.dbobj.mycozShared.LinearCode;
 import com.mooo.mycoz.util.FileUtil;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.StringUtils;
@@ -30,88 +23,6 @@ import com.mooo.mycoz.util.UploadFile;
 
 public class FileAction extends BaseSupport {
 	private static Log log = LogFactory.getLog(FileAction.class);
-
-	public String list(HttpServletRequest request, HttpServletResponse response) {
-		try {
-			if (log.isDebugEnabled()) log.debug("list");
-
-			long fileBit = 0;
-			double fileK = 0.0;
-			double fileM = 0.0;
-			String uploadPath = request.getSession().getServletContext().getRealPath("/")+"upload/";
-			
-			String value = null;
-
-			DecimalFormat df = new DecimalFormat("###0.00");
-			FileInfo fileInfo = new FileInfo();
-			
-			Page page = new Page();
-			
-			page.buildComponent(request, dbProcess.count(fileInfo));
-			
-			System.out.println("getOffset=>"+page.getOffset());
-			System.out.println("getPageSize=>"+page.getPageSize());
-			dbProcess.setRecord(page.getOffset(),page.getPageSize());
-			List<?> retrives = dbProcess.searchAndRetrieveList(fileInfo);
-			
-			List<FileInfo> files = new ArrayList<FileInfo>();
-			File checkFile;
-			for (FileInfo fi:files) {
-				value = fi.getFilepath();
-				checkFile = new File(uploadPath + value);
-
-				if (!checkFile.exists()){ 
-//					Blob fileBlob = rs.getBlob("fi.file");
-//					InputStream in = fileBlob.getBinaryStream();
-//					FileOutputStream out = new FileOutputStream(checkFile);
-//					int len=(int)fileBlob.length();
-//				     byte[] buffer=new byte[len];  // 建立缓冲区
-//				     while((len=in.read(buffer)) != -1){
-//				    	 out.write(buffer,0,len);
-//				     }
-//				     out.close();      
-//				     in.close();
-				}
-				fileBit = checkFile.length();
-				fileK = fileBit / 1024;
-				fileM = fileK / 1024;
-				fi.setSize(df.format(fileM) + "M");
-				files.add(fi);
-			}
-			request.setAttribute("files", files);
-		} catch (Exception e) {
-			if (log.isDebugEnabled())
-				log.debug("Exception Load error of: " + e.getMessage());
-		}
-		return "success";
-	}
-
-	public String promptUpload(HttpServletRequest request,
-			HttpServletResponse response) {
-		try {
-			if (log.isDebugEnabled()) log.debug("promptUpload");
-
-			Map fileTypes = new HashMap();
-			
-			LinearCode lc = new LinearCode();
-			lc.setTypeId(1);
-			LinearCode bean;
-			
-			List cts = dbProcess.searchAndRetrieveList(lc);
-
-			for(Iterator it = cts.iterator(); it.hasNext();){
-				bean = (LinearCode)it.next();
-				fileTypes.put(bean.getId(), bean.getName());
-			}
-			
-			request.setAttribute("fileTypes", fileTypes );
-
-		} catch (Exception e) {
-			if (log.isDebugEnabled())
-				log.debug("Exception Load error of: " + e.getMessage());
-		}
-		return "success";
-	}
 
 	public String processUpload(HttpServletRequest request,
 			HttpServletResponse response) {

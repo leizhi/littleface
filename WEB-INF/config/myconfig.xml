@@ -28,9 +28,9 @@
 			<result name="processLogout">/Login.do</result>
 		</action>
 				
-		<action name="Menu" default="show"
-			class="com.mooo.mycoz.action.MenuAction">
-			<result name="show">/jsp/menu.jsp</result>
+		<action name="Main" default="menu"
+			class="com.mooo.mycoz.action.MainAction">
+			<result name="menu">/jsp/menu.jsp</result>
 		</action>
 		
 		<action name="File" default="tree"
@@ -42,45 +42,33 @@
 			<result name="retrieve">/jsp/operation/retrieveFile.jsp</result>
 		</action>
 		
-		<action name="CodeType" default="list"
-			class="com.mooo.mycoz.action.profile.CodeTypeAction">
-			<result name="list">/jsp/profile/listCodeType.jsp</result>
-			<result name="promptAdd">/jsp/profile/addCodeType.jsp</result>
-			<result name="promptUpdate">/jsp/profile/editCodeType.jsp</result>
-			<result name="listCode">/jsp/profile/listCode.jsp</result>
-		</action>
-				
-		<action name="Tree" default="list"
-			class="com.mooo.mycoz.action.profile.TreeAction">
-			<result name="list">/jsp/profile/listTree.jsp</result>
-			<result name="promptAdd">/jsp/profile/addTree.jsp</result>
-			<result name="processAdd">/Tree.do</result>
-			<result name="promptUpdate">/jsp/profile/editTree.jsp</result>
-			<result name="processUpdate">/Tree.do</result>
-			<result name="processDelete">/Tree.do</result>
+		<!-- Operation -->
+		<action	name="Operation" default="menu"
+			class="com.mooo.mycoz.action.operation.OperationAction">
+			<result name="menu">/jsp/operation/defPage.jsp</result>
 		</action>
 		
-		<action name="LinearCode" default="list"
-			class="com.mooo.mycoz.action.profile.LinearCodeAction">
-			<result name="list">/jsp/profile/listLinearCode.jsp</result>
-			<result name="promptAdd">/jsp/profile/addLinearCode.jsp</result>
-			<result name="processAdd">/LinearCode.do</result>
-			<result name="promptUpdate">/jsp/profile/editLinearCode.jsp</result>
-			<result name="processUpdate">/LinearCode.do</result>
-			<result name="processDelete">/LinearCode.do</result>
-			<result name="processAddCode">/LinearCode.do</result>
-			<result name="processUpdateCode">/jsp/profile/editLinearCode.jsp</result>
-			<result name="processDeleteCode">/LinearCode.do</result>
-			<result name="listCode">/LinearCode.do</result>
+		<action	name="Activity" default="search"
+			class="com.mooo.mycoz.action.operation.activity.ActivityAction">
+			<result name="search">/jsp/operation/activity/searchAccount.jsp</result>
+			<result name="talk">/jsp/operation/talkActivity.jsp</result>
+			<result name="message">/jsp/operation/messageActivity.jsp</result>
+			<result name="blog">/jsp/operation/blogActivity.jsp</result>
+			<result name="forum">/jsp/operation/forumActivity.jsp</result>
 		</action>
 		
-		<action	name="Account" default="search"
-			class="com.mooo.mycoz.action.operation.AccountAction">
-			<result name="search">/jsp/operation/searchAccount.jsp</result>
-			<result name="talk">/jsp/operation/talkAccount.jsp</result>
-			<result name="message">/jsp/operation/messageAccount.jsp</result>
-			<result name="blog">/jsp/operation/blogAccount.jsp</result>
-			<result name="forum">/jsp/operation/forumAccount.jsp</result>
+		<action	name="ForumThread" default="listMessage"
+			class="com.mooo.mycoz.action.operation.activity.ForumThreadAction">
+			<result name="listMessage">/jsp/operation/listMessage.jsp</result>
+			<result name="listThread">/jsp/operation/listThread.jsp</result>
+			<result name="promptCreateThread">/jsp/operation/createThread.jsp</result>
+			<result name="promptCreateMessage">/jsp/operation/createMessage.jsp</result>
+		</action>
+		
+		<!-- Profile -->
+		<action	name="Profile" default="menu"
+			class="com.mooo.mycoz.action.profile.ProfileAction">
+			<result name="menu">/jsp/profile/defPage.jsp</result>
 		</action>
 		
 		<action	name="My" default="search"
@@ -91,13 +79,41 @@
 			<result name="promptUploadImages">/jsp/profile/uploadImages.jsp</result>
 			<result name="processUploadImages">/jsp/profile/successUploadImages.jsp</result>
 		</action>
+
+		<!-- Setup -->
+		<action	name="Setup" default="menu"
+			class="com.mooo.mycoz.action.setup.SetupAction">
+			<result name="menu">/jsp/setup/defPage.jsp</result>
+		</action>
+
+		<action	name="Accounting" default="menu"
+			class="com.mooo.mycoz.action.setup.account.AccountingAction">
+			<result name="menu">/jsp/setup/account/defPage.jsp</result>
+		</action>
+				
+		<action	name="AccountElement" default="list"
+			class="com.mooo.mycoz.action.setup.account.AccountElementAction">
+			<result name="list">/jsp/setup/account/listAccountElement.jsp</result>
+		</action>
 		
-		<action	name="ForumThread" default="listMessage"
-			class="com.mooo.mycoz.action.operation.ForumThreadAction">
-			<result name="listMessage">/jsp/operation/listMessage.jsp</result>
-			<result name="listThread">/jsp/operation/listThread.jsp</result>
-			<result name="promptCreateThread">/jsp/operation/createThread.jsp</result>
-			<result name="promptCreateMessage">/jsp/operation/createMessage.jsp</result>
+		<action	name="AccountCategory" default="list"
+			class="com.mooo.mycoz.action.setup.account.AccountCategoryAction">
+			<result name="list">/jsp/setup/account/listAccountCategory.jsp</result>
+		</action>
+		
+		<action	name="AccountType" default="list"
+			class="com.mooo.mycoz.action.setup.account.AccountTypeAction">
+			<result name="list">/jsp/setup/account/listAccountType.jsp</result>
+		</action>
+		
+		<action	name="AccountGroup" default="list"
+			class="com.mooo.mycoz.action.setup.account.AccountGroupAction">
+			<result name="list">/jsp/setup/account/listAccountGroup.jsp</result>
+		</action>
+		
+		<action	name="Account" default="list"
+			class="com.mooo.mycoz.action.setup.account.AccountAction">
+			<result name="list">/jsp/setup/account/listAccount.jsp</result>
 		</action>
 	</package>
 </littleface>

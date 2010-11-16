@@ -10,7 +10,6 @@
 <title><fmt:message key="UploadFile"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link type="text/css" rel="stylesheet" href="skin/office/default/layout.css" />
-<link type="text/css" rel="stylesheet" href="skin/office/default/presentation.css" />
 <link type="text/css" rel="stylesheet" href="skin/office/default/dhtmlgoodies_calendar.css?random=20100901" media="screen" />
 <script type="text/javascript" src="jsp/js/util.js"></script>
 <script type="text/javascript" src="jsp/js/dhtmlgoodies_calendar.js?random=20101018"></script>

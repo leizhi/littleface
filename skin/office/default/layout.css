@@ -2,26 +2,22 @@ html,body,#container {
 	padding: 0px;
 	border: 0px solid #000000;
 	margin: auto;
-
 	width: 100%;
 	height: 100%;
-	
 	font-family: Trebuchet MS, Lucida Sans Unicode, Arial, sans-serif;
 	font-size: 12px;
 	color: #000000;
-	
 	text-align: center;
 	background-color: #ffffff;
 }
 
-#footer {
-	/*position:absolute;*/
+#footer { /*position:absolute;*/
 	width: 100%;
 	height: 25px;
 	text-align: center;
 	border: solid black;
 	border-width: 1px 0 0 0;
-/*	color: #000000;
+	/*	color: #000000;
 	border: solid black;
 	border-width: 1px 0 0 0;
 	margin-bottom: 0px;
@@ -29,8 +25,8 @@ html,body,#container {
 	clear: both;*/
 }
 
-img{
-	border:0px;
+img {
+	border: 0px;
 }
 
 a:link {
@@ -63,15 +59,15 @@ span {
 
 .line {
 	width: 80%;
-	height: 2px;
-	//background-color: Blue;
+	height: 2px; //
+	background-color: Blue;
 	margin-top: 10px;
 }
 
 .display {
 	display: table;
-	overflow: hidden;
-	//position: relative;
+	overflow: hidden; //
+	position: relative;
 	width: 100%;
 	height: 100%;
 	color: #005AA7;
@@ -87,9 +83,7 @@ table,tr td,tr th {
 	nowrap;
 }
 
-table {
-	/*width: 597px;*/
-	/*min-width: 597px;*/
+table { /*width: 597px;*/ /*min-width: 597px;*/
 	margin: auto;
 }
 
@@ -97,7 +91,7 @@ thead th {
 	background-color: #d3eaef;
 }
 
-caption,tfoot td,tfoot th, thead td{
+caption,tfoot td,tfoot th,thead td {
 	background-color: #c8d6ff;
 }
 
@@ -114,10 +108,10 @@ caption {
 tfoot td {
 	text-align: center;
 }
+
 tfoot tr td {
 	width: 800px;
 }
-
 /*
 caption,tfoot {
 	display: none;

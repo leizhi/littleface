@@ -4,7 +4,6 @@
 <html>
 <head>
 <title>Nick</title>
-<link rel="stylesheet" type="text/css" href="../etc/styles/default.css" />
 <script type="text/javascript" src="../etc/js/util.js"></script>
 
 <script type="text/javascript"  language="javascript" charset="utf-8">

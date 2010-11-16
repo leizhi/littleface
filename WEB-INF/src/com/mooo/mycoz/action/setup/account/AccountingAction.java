@@ -1,4 +1,4 @@
-package com.mooo.mycoz.action.profile;
+package com.mooo.mycoz.action.setup.account;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,18 +12,23 @@ import org.apache.commons.logging.LogFactory;
 import com.mooo.mycoz.action.BaseSupport;
 
 
-public class ProfileAction extends BaseSupport {
 
-private static Log log = LogFactory.getLog(ProfileAction.class);
+public class AccountingAction extends BaseSupport {
+
+private static Log log = LogFactory.getLog(AccountingAction.class);
 
 	public String menu(HttpServletRequest request, HttpServletResponse response) {
-		if (log.isDebugEnabled()) log.debug("index ");
+
+		if (log.isDebugEnabled())log.debug("SetupAction list");
 		
 		Map<String, String> gbar = new HashMap<String, String>();
-		gbar.put("My","");
-		gbar.put("Logout","");
-
+		gbar.put("AccountElement","");
+		gbar.put("AccountCategory","");
+		gbar.put("AccountType","");
+		gbar.put("AccountGroup","");
+		gbar.put("Account","");
 		request.setAttribute("gbar", gbar);
+
 		return "success";
 	}
 }
