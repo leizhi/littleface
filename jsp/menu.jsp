@@ -45,16 +45,23 @@ li {
 	<c:param name="subbar">2</c:param>
 </c:url>
 
+<c:url value="/Accounting.do" var="security">
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">2</c:param>
+</c:url>
+
 <ul>
 <li class="title"><fmt:message key="Setup"/></li>
+<!-- Accounting -->
+<c:if test="${!empty Accounting && Accounting==true}">
 <li><a href="${accounting}" target="main"><fmt:message key="Account"/></a></li>
-</ul>
-
+</c:if>
 <!-- Administrator -->
 <c:if test="${!empty Security && Security==true}">
-Security
+<li><a href="${security}" target="main"><fmt:message key="Security"/></a></li>
 </c:if>
 
+</ul>
 </c:if>
 
 <!-- File -->
@@ -67,7 +74,9 @@ Security
 
 <ul>
 <li class="title"><fmt:message key="File"/></li>
+
 <li><a href="${treeFile}" target="main"><fmt:message key="File"/></a></li>
+
 </ul>
 </c:if>
 
@@ -94,9 +103,15 @@ Security
 
 <ul>
 <li class="title"><fmt:message key="Activity"/></li>
+<!-- Search -->
+<c:if test="${!empty Search && Search==true}">
 <li><a href="${searchAccount}" target="main"><fmt:message key="Search"/></a></li>
-<%-- <li><a href="${blogAccount}" target="main"><fmt:message key="Blog"/></a></li> --%>
+</c:if>
+<!-- Administrator -->
+<c:if test="${!empty Forum && Forum==true}">
 <li><a href="${forumAccount}" target="main"><fmt:message key="Forum"/></a></li>
+</c:if>
+
 </ul>
 </c:if>
 
@@ -121,8 +136,13 @@ Security
 
 <ul>
 <li class="title"><fmt:message key="Profile"/></li>
+<!-- Administrator -->
+<c:if test="${!empty General && General==true}">
 <li><a href="${generalMy}" target="main"><fmt:message key="General"/></a></li>
+</c:if>
+
 <li><a href="${promptChangePassword}" target="main"><fmt:message key="Password"/></a></li>
+
 <li><a href="${processLogout}" target="_top"><fmt:message key="Logout"></fmt:message></a></li>
 </ul>
 </c:if>

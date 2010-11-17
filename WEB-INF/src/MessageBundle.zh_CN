@@ -121,3 +121,4 @@ AccountType=会计科目
 AccountGroup=会计帐户工作组
 Account=会计帐户
 Activity=活动
+Security=安全
