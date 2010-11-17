@@ -71,6 +71,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Action` WRITE;
 /*!40000 ALTER TABLE `Action` DISABLE KEYS */;
+INSERT INTO `Action` VALUES (1,'Login','Login'),(2,'Operation','Operation'),(3,'My','My'),(4,'AccountCategory','AccountCategory'),(5,'File','File'),(6,'Account','Account'),(7,'Profile','Profile'),(8,'Setup','Setup'),(9,'Accounting','Accounting'),(10,'AccountGroup','AccountGroup'),(11,'Main','Main'),(12,'Index','Index'),(13,'Activity','Activity'),(14,'ForumThread','ForumThread'),(15,'AccountElement','AccountElement'),(16,'AccountType','AccountType');
 /*!40000 ALTER TABLE `Action` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,6 +81,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `AuthGroup` WRITE;
 /*!40000 ALTER TABLE `AuthGroup` DISABLE KEYS */;
+INSERT INTO `AuthGroup` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),(13,1,13),(14,1,14),(15,1,15),(16,1,16),(17,1,17),(18,1,18),(19,1,19),(20,1,20),(21,1,21),(22,1,22),(23,1,23),(24,1,24),(25,1,25),(26,1,26),(27,1,27),(28,1,28),(29,1,29),(30,1,30),(31,1,31),(32,1,32),(33,1,33),(34,1,34),(35,1,35),(36,1,36);
 /*!40000 ALTER TABLE `AuthGroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,6 +190,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Method` WRITE;
 /*!40000 ALTER TABLE `Method` DISABLE KEYS */;
+INSERT INTO `Method` VALUES (1,1,'processRegister','processRegister','Y'),(2,1,'processLogin','processLogin','Y'),(3,1,'promptRegister','promptRegister','Y'),(4,1,'processLogout','processLogout','Y'),(5,1,'promptLogin','promptLogin','Y'),(6,2,'menu','menu','Y'),(7,3,'general','general','Y'),(8,3,'promptChangePassword','promptChangePassword','Y'),(9,3,'promptUploadImages','promptUploadImages','Y'),(10,3,'edit','edit','Y'),(11,3,'processUploadImages','processUploadImages','Y'),(12,4,'list','list','Y'),(13,5,'tree','tree','Y'),(14,5,'promptUpload','promptUpload','Y'),(15,5,'download','download','Y'),(16,5,'retrieve','retrieve','Y'),(17,5,'list','list','Y'),(18,6,'list','list','Y'),(19,7,'menu','menu','Y'),(20,8,'menu','menu','Y'),(21,9,'menu','menu','Y'),(22,10,'list','list','Y'),(23,11,'menu','menu','Y'),(24,12,'promptLogin','promptLogin','Y'),(25,12,'promptIndex','promptIndex','Y'),(26,13,'forum','forum','Y'),(27,13,'search','search','Y'),(28,13,'message','message','Y'),(29,13,'blog','blog','Y'),(30,13,'talk','talk','Y'),(31,14,'listThread','listThread','Y'),(32,14,'promptCreateThread','promptCreateThread','Y'),(33,14,'promptCreateMessage','promptCreateMessage','Y'),(34,14,'listMessage','listMessage','Y'),(35,15,'list','list','Y'),(36,16,'list','list','Y');
 /*!40000 ALTER TABLE `Method` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,6 +220,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `UserGroup` WRITE;
 /*!40000 ALTER TABLE `UserGroup` DISABLE KEYS */;
+INSERT INTO `UserGroup` VALUES (1,'admin',NULL);
 /*!40000 ALTER TABLE `UserGroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,4 +252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-17 10:40:56
+-- Dump completed on 2010-11-17 16:44:55
