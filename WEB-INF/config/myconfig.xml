@@ -35,10 +35,12 @@
 		
 		<action name="File" default="tree"
 			class="com.mooo.mycoz.action.operation.FileAction">
-			<result name="list">/jsp/operation/listFile.jsp</result>
-			<result name="promptUpload">/jsp/operation/uploadFile.jsp</result>
 			<result name="download">/jsp/operation/downloadFile.jsp</result>
+			<result name="upload">/jsp/operation/downloadFile.jsp</result>
 			<result name="tree">/jsp/operation/treeFile.jsp</result>
+			<result name="mkdir"></result>
+			<result name="processUpload"></result>
+			<result name="processDelete"></result>
 			<result name="retrieve">/jsp/operation/retrieveFile.jsp</result>
 		</action>
 		
@@ -76,6 +78,7 @@
 			<result name="general">/jsp/profile/generalMy.jsp</result>
 			<result name="promptChangePassword">/jsp/profile/changePassword.jsp</result>
 			<result name="edit">/jsp/profile/editMy.jsp</result>
+			<result name="update"></result>
 			<result name="promptUploadImages">/jsp/profile/uploadImages.jsp</result>
 			<result name="processUploadImages">/jsp/profile/successUploadImages.jsp</result>
 		</action>
