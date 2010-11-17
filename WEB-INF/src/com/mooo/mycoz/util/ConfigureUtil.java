@@ -14,6 +14,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 import com.mooo.mycoz.cache.Cache;
 import com.mooo.mycoz.cache.CacheManager;
@@ -80,6 +82,17 @@ public class ConfigureUtil {
 			flush();
 
 			SAXReader saxReader = new SAXReader();
+			saxReader.setEntityResolver(
+					new EntityResolver() {
+						public InputSource resolveEntity(String publicId,String systemId) {
+							if (publicId.equals("-//Apache Software Foundation//DTD Struts Configuration 2.0//EN")) {
+								InputStream in = getClass().getResourceAsStream("/struts-2.0.dtd");
+								return new InputSource(in);
+							}
+							return null;
+						}
+					});
+			
 			Document doc = saxReader.read(cacheStream);
 			Element root = doc.getRootElement();
 
@@ -134,6 +147,17 @@ public class ConfigureUtil {
 			flush();
 
 			SAXReader saxReader = new SAXReader();
+			saxReader.setEntityResolver(
+					new EntityResolver() {
+						public InputSource resolveEntity(String publicId,String systemId) {
+							if (publicId.equals("-//Apache Software Foundation//DTD Struts Configuration 2.0//EN")) {
+								InputStream in = getClass().getResourceAsStream("/struts-2.0.dtd");
+								return new InputSource(in);
+							}
+							return null;
+						}
+					});
+			
 			Document doc = saxReader.read(mvcStream);
 			Element root = doc.getRootElement();
 

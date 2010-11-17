@@ -1,304 +1,350 @@
 package com.mooo.mycoz.util;
 
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.mooo.mycoz.db.DbFactory;
+import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.dbobj.MultiDBObject;
+import com.mooo.mycoz.dbobj.mycozBranch.GroupMember;
+import com.mooo.mycoz.dbobj.mycozBranch.RoleMember;
+import com.mooo.mycoz.dbobj.mycozBranch.User;
+import com.mooo.mycoz.dbobj.mycozShared.Action;
+import com.mooo.mycoz.dbobj.mycozShared.AuthGroup;
+import com.mooo.mycoz.dbobj.mycozShared.AuthRole;
+import com.mooo.mycoz.dbobj.mycozShared.Method;
+import com.mooo.mycoz.dbobj.mycozShared.UserGroup;
+import com.mooo.mycoz.dbobj.mycozShared.UserRole;
 
 public class AuthUtil {
 
-	//private static Log log = LogFactory.getLog(AuthUtil.class);
+	private static Log log = LogFactory.getLog(AuthUtil.class);
 
-	InputStream in = null;
-/*
-	public AuthUtil() {
-		in = getClass().getResourceAsStream("/xpc.xml");
-		parseXML();
-		parseDatabase();
-		refreshController();
+	private static Object initLock = new Object();
+	private static AuthUtil factory = null;
+	
+	public static AuthUtil getInstance() {
+
+		if (factory == null) {
+			synchronized (initLock) {
+				if (factory == null) {
+					factory = new AuthUtil();
+				}
+			}
+		}
+		return factory;
 	}
 
-	public void refreshController() {
+	private AuthUtil() {
+		parseXML();
+		parseDatabase();
+		refresh();
+	}
+
+	private Map<String, ActionNode> xmlMap;
+	private Map<String, ActionNode> dababaseMap;
+	
+	public Map<String, ActionNode> getXmlMap() {
+		return xmlMap;
+	}
+
+	public void setXmlMap(Map<String, ActionNode> xmlMap) {
+		this.xmlMap = xmlMap;
+	}
+
+	public Map<String, ActionNode> getDababaseMap() {
+		return dababaseMap;
+	}
+
+	public void setDababaseMap(Map<String, ActionNode> dababaseMap) {
+		this.dababaseMap = dababaseMap;
+	}
+
+	public void parseXML() {
+		xmlMap = ConfigureUtil.getInstance().getActionMap();
+	}
+	
+	public void parseDatabase() {
+		Transaction tx = new Transaction();
 		try {
-			clearController();
-			addController();
+			tx.start();
+			
+			dababaseMap = new HashMap<String, ActionNode>();
+			
+			DbProcess dbProcess = DbFactory.getInstance();
+			
+			Action action = new Action();
+			List<?> actions = dbProcess.searchAndRetrieveList(tx.getConnection(),action);
+			
+			for(Object a:actions){
+				ActionNode actionNode = new ActionNode();
+
+				action = (Action) a;
+				
+				actionNode.setName(action.getName());
+				
+				Method method = new Method();
+				method.setActionId(action.getId());
+				
+				List<?> methods = dbProcess.searchAndRetrieveList(tx.getConnection(),method);
+				
+				for(Object m:methods){
+					method = (Method) m;
+					actionNode.addResult(method.getMethodName(), "");
+				}
+				
+				dababaseMap.put(actionNode.getName(), actionNode);
+			}
+			
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-
+			tx.rollback();
+		} finally{
+			tx.end();
+		}
+	}
+	
+	public void refresh() {
+		try {
+			clearAction();
+			addAction();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	public void clearController() {
+	public void clearAction() {
 		Transaction tx = new Transaction();
 
 		try {
 			tx.start();
 			
-			DBSession session = DBSession.getInstance();
-			session.setConnection(tx.getConnection());
+			DbProcess dbProcess = DbFactory.getInstance();
 			
-			String action = "";
-			String method = "";
+			Action action = new Action();
+			List<?> actions = dbProcess.searchAndRetrieveList(tx.getConnection(),action);
+			
+			List<String> xmlMethods;
+			List<String> dataMethods;
 
-			List<String> xmlActions;
-			List<String> dataActions;
-
-			query = session.createQuery("FROM Controller");
-			Iterator<?> iterator = query.list().iterator();
+			Iterator<?> iterator = actions.iterator();
 			
 			while (iterator.hasNext()) {
-				Controller co = (Controller) iterator.next();
-				action = co.getName();
+				action = (Action) iterator.next();
+				String actionName = action.getName();
 
-				if (controllerXmlMap.containsKey(action)) {
-					query = session
-							.createQuery("FROM Action where controllerID=:controllerID");
-					query.setParameter("controllerID", co.getId());
+				Method method = new Method();
+				method.setActionId(action.getId());
+				
+				List<?> methods = dbProcess.searchAndRetrieveList(tx.getConnection(),method);
+				
+				if (xmlMap.containsKey(actionName)) {
+					
+					// database Methods
+					dataMethods = new ArrayList<String>();
 
-					dataActions = new ArrayList<String>();
-					for (Iterator<?> it = query.list().iterator(); it.hasNext();) {
-						Action ac = (Action) it.next();
-						method = ac.getName();
-						dataActions.add(method);
+					for(Object obj:methods){
+						method = (Method) obj;
+						dataMethods.add(method.getMethodName());
+					}
+					
+					// XML file Methods		
+					xmlMethods = new ArrayList<String>();
+					Hashtable<String, String> results = xmlMap.get(actionName).getResults();
+					
+					for(Entry<String, String> entry:results.entrySet()){
+						xmlMethods.add(entry.getKey());
 					}
 
-					xmlActions = (List<String>) controllerXmlMap.get(action);
+					for(String methodName:dataMethods){
+						
+						if (!xmlMethods.contains(methodName)) {
+							Method methodBean = new Method();
+							methodBean.setMethodName(methodName);
+							dbProcess.retrieve(tx.getConnection(), methodBean);
+							
+							AuthGroup authGroup = new AuthGroup();
+							authGroup.setMethodId(methodBean.getId());
+							dbProcess.delete(tx.getConnection(), authGroup);
+							
+							AuthRole authRole = new AuthRole();
+							authRole.setMethodId(methodBean.getId());
+							dbProcess.delete(tx.getConnection(), authRole);
 
-					for (Iterator<String> it = dataActions.iterator(); it
-							.hasNext();) {
-						method = it.next();
-
-						if (!xmlActions.contains(method)) {
-							query = session
-									.createQuery("FROM Action where name=:name");
-							query.setParameter("name", method);
-
-							Action ac = (Action) query.list().iterator().next();
-
-							session
-									.createQuery(
-											"delete AuthGroup where actionId=:actionId")
-									.setInteger("actionId", ac.getId())
-									.executeUpdate();
-
-							session.createQuery(
-									"delete AuthRole where actionID=:actionID")
-									.setInteger("actionID", ac.getId())
-									.executeUpdate();
-
-							session.createQuery(
-									"delete Action where name=:name")
-									.setString("name", action).executeUpdate();
-
+							dbProcess.delete(tx.getConnection(), methodBean);
 						}
 					}
 				} else {
 
-					session
-							.createQuery(
-									"delete AuthGroup where controllerID=:controllerID")
-							.setInteger("controllerID", co.getId())
-							.executeUpdate();
+					for(Object obj:methods){
+						method = (Method) obj;
+						
+						AuthGroup authGroup = new AuthGroup();
+						authGroup.setMethodId(method.getId());
+						dbProcess.delete(tx.getConnection(), authGroup);
+						
+						AuthRole authRole = new AuthRole();
+						authRole.setMethodId(method.getId());
+						dbProcess.delete(tx.getConnection(), authRole);
 
-					session.createQuery(
-							"delete AuthRole where controllerID=:controllerID")
-							.setInteger("controllerID", co.getId())
-							.executeUpdate();
-
-					session.createQuery(
-							"delete Action where controllerID=:controllerID")
-							.setInteger("controllerID", co.getId())
-							.executeUpdate();
-
-					session.createQuery("delete Controller where id=:id")
-							.setInteger("id", co.getId()).executeUpdate();
+						dbProcess.delete(tx.getConnection(), method);
+					}
+					dbProcess.delete(tx.getConnection(), action);
 				}
-
 			}
-
 			tx.commit();
-
 		} catch (Exception e) {
-			if (log.isErrorEnabled())
-				log.error("Exception:" + e.getMessage());
+			if (log.isErrorEnabled()) log.error("Exception:" + e.getMessage());
 			e.printStackTrace();
 			tx.rollback();
-
+		} finally {
+			tx.end();
 		}
 	}
 
-	public void addController() {
+	public void addAction() {
 		Transaction tx = new Transaction();
 		try {
+			tx.start();
+			DbProcess dbProcess = DbFactory.getInstance();
 
-			String action = "";
-			String method = "";
+			String actionName;
+			String methodName;
 
-			List<String> xmlActions;
-			List<String> dataActions;
+			for(Entry<String, ActionNode> entry:xmlMap.entrySet()){
+				actionName = entry.getKey();
+				
+				if (dababaseMap.containsKey(actionName)) {
+					
+					Action action = new Action();
+					action.setName(actionName);
+					dbProcess.retrieve(tx.getConnection(), action);
+					
+					Method method = new Method();
+					method.setActionId(action.getId());
+					
+					List<?> methods = dbProcess.searchAndRetrieveList(tx.getConnection(),method);
+					List<String> dataMethods = new ArrayList<String>();
 
-			Iterator<?> iterator = controllerXmlMap.keySet().iterator();
-			while (iterator.hasNext()) {
-				action = iterator.next().toString();
+					for(Object obj:methods){
+						method = (Method)obj;
+						methodName = method.getMethodName();
+						dataMethods.add(methodName);
+					}
+					
+					Hashtable<String, String> results = xmlMap.get(actionName).getResults();
+					
+					for(Entry<String, String> e:results.entrySet()){
+						methodName = e.getKey();
 
-				xmlActions = (List<String>) controllerXmlMap.get(action);
-
-				if (controllerDababaseMap.containsKey(action)) {
-
-					query = session.createQuery(
-							"FROM Controller where name=:name").setString(
-							"name", action);
-
-					Controller co = (Controller) query.list().iterator().next();
-
-					dataActions = (List<String>) controllerDababaseMap
-							.get(action);
-
-					for (Iterator<String> it = xmlActions.iterator(); it
-							.hasNext();) {
-						method = it.next();
-						if (!dataActions.contains(method)) {
-							Action ac = new Action();
-							ac.setControllerID(co.getId());
-							ac.setName(method);
-
-							session.save(ac);
-
+						if(!dataMethods.contains(methodName)){
+							method = new Method();
+							method.setId(IDGenerator.getNextID(tx.getConnection(), "mycozShared.Method"));
+							method.setActionId(action.getId());
+							method.setMethodName(methodName);
+							method.setDescription(methodName);
+							
+							dbProcess.add(tx.getConnection(), method);
 						}
 					}
-
+					
 				} else {
-					Controller co = new Controller();
-					co.setName(action);
-					co.setDescription("");
-					session.save(co);
+					Action action = new Action();
+					action.setId(IDGenerator.getNextID(tx.getConnection(), "mycozShared.Action"));
+					action.setName(actionName);
+					action.setDescription(actionName);
+					dbProcess.add(tx.getConnection(), action);
+					
+					Hashtable<String, String> results = xmlMap.get(actionName).getResults();
+					
+					for(Entry<String, String> e:results.entrySet()){
+						methodName = e.getKey();
 
-					for (Iterator<String> it = xmlActions.iterator(); it
-							.hasNext();) {
-						method = it.next();
-						Action ac = new Action();
-						ac.setControllerID(co.getId());
-						ac.setName(method);
+						Method method = new Method();
+						method.setId(IDGenerator.getNextID(tx.getConnection(), "mycozShared.Method"));
+						method.setActionId(action.getId());
+						method.setMethodName(methodName);
+						method.setDescription(methodName);
 
-						session.save(ac);
+						dbProcess.add(tx.getConnection(), method);
 					}
 				}
 			}
-
 			tx.commit();
-
 		} catch (Exception e) {
 			if (log.isErrorEnabled())
 				log.error("Exception:" + e.getMessage());
 			e.printStackTrace();
 			tx.rollback();
-
+		} finally{
+			tx.end();
 		}
 	}
-
-	private Map<String, List<String>> controllerXmlMap;
-
-	public void parseXML() {
+	
+	public Boolean checkAuth(Integer userId,String action,String method) {
 		try {
 
-			SAXReader saxReader = new SAXReader();
+			if (userId == 1)
+				return true;
+
+			MultiDBObject mdobject = new MultiDBObject();
+			mdobject.addTable(User.class, "user");
+			mdobject.addTable(UserGroup.class, "userGroup");
+			mdobject.addTable(GroupMember.class, "groupMember");
+			mdobject.addTable(Action.class, "action");
+			mdobject.addTable(Method.class, "method");
+			mdobject.addTable(AuthGroup.class, "authGroup");
+
+			mdobject.setForeignKey("user", "id", "groupMember", "userId");
+			mdobject.setForeignKey("userGroup", "id", "groupMember", "groupId");
+			mdobject.setForeignKey("authGroup", "groupId", "userGroup", "id");
+			mdobject.setForeignKey("authGroup", "methodId", "method", "id");
+
+			mdobject.setField("user", "id", userId);
+			mdobject.setField("action", "name", action);
+			mdobject.setField("method", "methodName", method);
+
+			if(mdobject.count() >0)
+				return true;
 			
-			saxReader.setEntityResolver(
-					new EntityResolver() {
-						public InputSource resolveEntity(String publicId,String systemId) {
-							if (publicId.equals("-//Apache Software Foundation//DTD Struts Configuration 2.0//EN")) {
-								InputStream in = getClass().getResourceAsStream("/struts-2.0.dtd");
-								return new InputSource(in);
-							}
-							return null;
-						}
-					});
+			mdobject = new MultiDBObject();
+			mdobject.addTable(User.class, "user");
+			mdobject.addTable(UserRole.class, "userRole");
+			mdobject.addTable(RoleMember.class, "roleMember");
+			mdobject.addTable(Action.class, "action");
+			mdobject.addTable(Method.class, "method");
+			mdobject.addTable(AuthRole.class, "authRole");
+
+			mdobject.setForeignKey("user", "id", "roleMember", "userId");
+			mdobject.setForeignKey("userRole", "id", "roleMember", "roleId");
+			mdobject.setForeignKey("authRole", "roleId", "userRole", "id");
+			mdobject.setForeignKey("authRole", "methodId", "method", "id");
+
+			mdobject.setField("user", "id", userId);
+			mdobject.setField("action", "name", action);
+			mdobject.setField("method", "methodName", method);
 			
-			Document doc = saxReader.read(in);
-			Element root = doc.getRootElement();
-
-			// parse action methods
-
-			controllerXmlMap = new HashMap<String, List<String>>();
-			String action = null;
-			// String clzName = null;
-			List<String> methods = null;
-
-			Iterator<?> itrAction = root.selectNodes("package/action")
-					.iterator();
-
-			Element actionNode;
-			Element methodNode;
-
-			while (itrAction.hasNext()) {
-				actionNode = (Element) itrAction.next();
-
-				action = actionNode.attributeValue("name");
-
-				// System.out.println("----------"+action+"----------");
-				methods = new ArrayList<String>();
-
-				for (Iterator<?> itrResult = actionNode.selectNodes("result")
-						.iterator(); itrResult.hasNext();) {
-					methodNode = (Element) itrResult.next();
-
-					String forwardName = methodNode.attributeValue("name");
-					// String forwardType = methodNode.attributeValue("type");
-					// System.out.println("forwardName="+forwardName);
-
-					methods.add(forwardName);
-
-				}
-				controllerXmlMap.put(action, methods);
-
-			}
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Map<String, List<String>> controllerDababaseMap;
-
-	public void parseDatabase() {
-		Transaction tx = null;
-		try {
-
-			controllerDababaseMap = new HashMap<String, List<String>>();
-			List<String> dataActions;
-			String action = null;
-			String method = null;
-
-			query = session.createQuery("FROM Controller");
-			Iterator<?> iterator = query.list().iterator();
-
-			while (iterator.hasNext()) {
-				Controller co = (Controller) iterator.next();
-				action = co.getName();
-
-				query = session
-						.createQuery("FROM Action where controllerID=:controllerID");
-				query.setParameter("controllerID", co.getId());
-
-				dataActions = new ArrayList<String>();
-				for (Iterator<?> it = query.list().iterator(); it.hasNext();) {
-					Action ac = (Action) it.next();
-					method = ac.getName();
-					dataActions.add(method);
-				}
-
-				controllerDababaseMap.put(action, dataActions);
-
-			}
-
-			tx.commit();
-
+			if(mdobject.count() >0)
+				return true;
+			else
+				return false;
+			
 		} catch (Exception e) {
-			e.printStackTrace();
-			tx.rollback();
-
+			e.fillInStackTrace();
 		}
+		return true; // default return
 	}
-
+	
+/*
 	public void print() {
 		try {
 			Iterator<?> iterator;
@@ -307,12 +353,12 @@ public class AuthUtil {
 
 			System.out.println(".............XML...........");
 
-			iterator = controllerXmlMap.keySet().iterator();
+			iterator = xmlMap.keySet().iterator();
 			while (iterator.hasNext()) {
 				key = iterator.next().toString();
 				System.out.println("............." + key + "...........");
 
-				actions = (List<String>) controllerXmlMap.get(key);
+				actions = (List<String>) xmlMap.get(key);
 				for (Iterator<String> it = actions.iterator(); it.hasNext();) {
 					System.out.println(it.next());
 					// it.next();
@@ -321,12 +367,12 @@ public class AuthUtil {
 
 			System.out.println(".............Databases...........");
 
-			iterator = controllerDababaseMap.keySet().iterator();
+			iterator = dababaseMap.keySet().iterator();
 			while (iterator.hasNext()) {
 				key = iterator.next().toString();
 				System.out.println("............." + key + "...........");
 
-				actions = (List<String>) controllerXmlMap.get(key);
+				actions = (List<String>) xmlMap.get(key);
 				for (Iterator<String> it = actions.iterator(); it.hasNext();) {
 					System.out.println(it.next());
 					// it.next();
@@ -337,6 +383,64 @@ public class AuthUtil {
 			e.printStackTrace();
 		}
 	}
-*/
+	
+	public void printDatabase() {
+		try {
+			Iterator<?> iterator;
+			String key;
+			ActionNode action;
+
+			System.out.println(".............XML...........");
+
+			iterator = dababaseMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				key = iterator.next().toString();
+				System.out.println("............." + key + "...........");
+
+				action = (ActionNode) dababaseMap.get(key);
+				System.out.println("name=" + action.getName() + " class="+ action.getCls());
+				Hashtable<String, String> results = action.getResults();
+				Iterator<?> resultIterator = results.keySet().iterator();
+				while (resultIterator.hasNext()) {
+					key = resultIterator.next().toString();
+					System.out.println("result key=" + key + " value="+ results.get(key));
+					if(log.isDebugEnabled()) log.debug("result key=" + key + " value="+ results.get(key));
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void printConf() {
+		try {
+			Iterator<?> iterator;
+			String key;
+			ActionNode action;
+
+			System.out.println(".............XML...........");
+
+			iterator = xmlMap.keySet().iterator();
+			while (iterator.hasNext()) {
+				key = iterator.next().toString();
+				System.out.println("............." + key + "...........");
+
+				action = (ActionNode) xmlMap.get(key);
+				System.out.println("name=" + action.getName() + " class="+ action.getCls());
+				Hashtable<String, String> results = action.getResults();
+				Iterator<?> resultIterator = results.keySet().iterator();
+				while (resultIterator.hasNext()) {
+					key = resultIterator.next().toString();
+					System.out.println("result key=" + key + " value="+ results.get(key));
+					if(log.isDebugEnabled()) log.debug("result key=" + key + " value="+ results.get(key));
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	*/
 }
 

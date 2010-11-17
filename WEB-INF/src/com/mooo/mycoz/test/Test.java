@@ -6,6 +6,7 @@ import java.util.Date;
 import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
+import com.mooo.mycoz.util.AuthUtil;
 import com.mooo.mycoz.util.IDGenerator;
 
 public class Test {
@@ -26,6 +27,7 @@ public class Test {
 				dbProcess.add(al);
 			}
 			*/
+			
 			long finishTime = System.currentTimeMillis();
 			long hours = (finishTime - startTime) / 1000 / 60 / 60;
 			long minutes = (finishTime - startTime) / 1000 / 60 - hours * 60;
@@ -36,6 +38,9 @@ public class Test {
 			
 			startTime = System.currentTimeMillis();
 			
+			AuthUtil au = AuthUtil.getInstance();
+			//au.conf();
+			//au.printConf();
 			
 			finishTime = System.currentTimeMillis();
 			hours = (finishTime - startTime) / 1000 / 60 / 60;

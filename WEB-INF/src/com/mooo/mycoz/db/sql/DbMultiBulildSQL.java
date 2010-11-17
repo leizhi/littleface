@@ -81,6 +81,16 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 		whereKey.add(name + "." + field + "=" + fName + "." + fField);
 	}
 
+	public void setField(String alias,String field, String value) {
+		if (!StringUtils.isNull(value)) {
+			whereKey.add(alias+"."+field + "='" + value + "'");
+		}
+	}
+	
+	public void setField(String alias,String field, int value) {
+			whereKey.add(alias+"."+field + "=" + value);
+	}
+	
 	public void setField(String field, String value) {
 		if (!StringUtils.isNull(value)) {
 			whereKey.add(field + "='" + value + "'");

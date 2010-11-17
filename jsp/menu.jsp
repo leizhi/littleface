@@ -51,8 +51,8 @@ li {
 </ul>
 
 <!-- Administrator -->
-<c:if test="${!empty Admin && Admin==true}">
-
+<c:if test="${!empty Security && Security==true}">
+Security
 </c:if>
 
 </c:if>

@@ -234,7 +234,13 @@ public class BeanTools {
 		//bd.build("mycozBranch","UserInfo");
 		//bd.build("mycozBranch","AddressBook");
 		//bd.build("mycozBranch","FileTree");
-		bd.build("mycozBranch","UserImage");
+		//bd.build("mycozBranch","AuthGroup");
+		//bd.build("mycozBranch","FileTree");
+		//bd.build("mycozBranch","GroupMember");
+		//bd.build("mycozBranch","RoleMember");
+
+		
+//		bd.build("mycozBranch","UserImage");
 		//bd.buildInsert("buffer_traffic");
 
 		//bd.build("mycozBranch","Forum");
@@ -244,6 +250,12 @@ public class BeanTools {
 		//bd.build("mycozShared","Language");
 		//bd.build("mycozShared","Country");
 		//bd.build("mycozShared","City");
+		//bd.build("mycozShared","Action");
+		//bd.build("mycozShared","Method");
+		//bd.build("mycozShared","AuthRole");
+		//bd.build("mycozShared","AuthGroup");
+		//bd.build("mycozShared","UserGroup");
+		bd.build("mycozShared","UserRole");	
 	}
 
 }

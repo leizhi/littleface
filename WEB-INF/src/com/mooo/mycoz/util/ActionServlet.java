@@ -37,7 +37,8 @@ public class ActionServlet extends HttpServlet {
 	private static String resultMethod ="";
 	
 	protected ConfigureUtil conf;
-	
+	protected AuthUtil auth;
+
 	private static Map<String, ActionNode> actionMap;
 	private static CacheManager cacheManager;
 	
@@ -70,6 +71,11 @@ public class ActionServlet extends HttpServlet {
 		// get mvc configure
 		actionMap = conf.getActionMap();
 		cacheManager = CacheManager.getInstance();
+		
+		//auth configure
+		auth = AuthUtil.getInstance();
+		//auth.printConf();
+		//auth.printDatabase();
 	}
 
 	public void addCache(String key, Object object){
@@ -94,8 +100,8 @@ public class ActionServlet extends HttpServlet {
 
 			//check sample action
 			HttpSession session = request.getSession(true);
-			Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
-			boolean isAuthenticated = (null != userID);
+			Integer userId = (Integer) session.getAttribute(USER_SESSION_KEY);
+			boolean isAuthenticated = (null != userId);
 			
 			if (!isAuthenticated) {
 				if(!execPath.equals("Login") || !execPath.equals("Index"))
@@ -104,10 +110,17 @@ public class ActionServlet extends HttpServlet {
 			
 			//if (execPath == null)
 			//	execPath = request.getParameter("action");
-			if(log.isDebugEnabled())log.debug("execPath:" + execPath);
-
 			execMethod = request.getParameter("method");
+			if(log.isDebugEnabled())log.debug("execPath:" + execPath);
+			if(log.isDebugEnabled())log.debug("execMethod:" + execMethod);
 
+			// check advanced permissions
+			if(isAuthenticated){
+				if(!auth.checkAuth(userId, execPath, execMethod)){
+					execPath="Login";
+				}
+			}
+			
 			ActionNode actionNode = null;
 			Hashtable<String, String> results;
 			// set controller,execState for execPath
@@ -122,6 +135,7 @@ public class ActionServlet extends HttpServlet {
 			if(log.isDebugEnabled())log.debug("========exec start=======");
 			if(log.isDebugEnabled())log.debug("execAction="+execAction);
 			if(log.isDebugEnabled())log.debug("execMethod="+execMethod);
+
 			
 			// exec Controller request aciton
 			Object obj = getCache(execAction);

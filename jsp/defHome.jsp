@@ -120,9 +120,7 @@ function parseURL(url) {
 </div>
 
 <div id="gbar" style="width: 100%;height: 20px;text-align: left;background-color: #edf0f9;color: #add2da;font-size: 12px;">
-	<span><a><fmt:message key="main.WelcomeTo" /></a>|</span>
-	<span><a><fmt:message key="main.WelcomeTo" /></a>|</span>
-	<span><a><fmt:message key="Refresh" /></a>|</span>
+	<span><fmt:message key="main.WelcomeTo" /></span>
 </div>
 
 <div id="wrapper">

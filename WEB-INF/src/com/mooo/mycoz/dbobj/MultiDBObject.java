@@ -121,7 +121,8 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 
 		List<Object> retrieveList = null;
 		String doSql = searchSQL();
-		
+		System.out.println("searchSQL->" + doSql);
+
 		Connection myConn = null;
 		Statement stmt = null;
 		boolean isClose = true;

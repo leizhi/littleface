@@ -28,7 +28,8 @@ public class MainAction extends BaseSupport {
 			request.setAttribute("File", true);
 			request.setAttribute("Activity", true);
 			request.setAttribute("Profile", true);
-
+			
+			request.setAttribute("Security", true);
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 		}

@@ -11,9 +11,9 @@ import com.mooo.mycoz.db.pool.DbConnectionManager;
 public class Transaction {
 	private static Log log = LogFactory.getLog(Transaction.class);
 
-	Connection connection;
-	boolean abortTransaction;
-	boolean supportsTransactions;
+	private Connection connection;
+	//private boolean abortTransaction;
+	private boolean supportsTransactions;
 
 	public void start() {
 		try {
