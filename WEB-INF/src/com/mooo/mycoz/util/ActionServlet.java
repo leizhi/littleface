@@ -116,7 +116,7 @@ public class ActionServlet extends HttpServlet {
 
 			// check advanced permissions
 			if(isAuthenticated){
-				if(!auth.checkAuth(userId, execPath, execMethod)){
+				if(!auth.checkAuth(userId, execPath, execMethod) && (!execPath.equals("Login") || !execPath.equals("Index")) ){
 					execPath="Login";
 				}
 			}

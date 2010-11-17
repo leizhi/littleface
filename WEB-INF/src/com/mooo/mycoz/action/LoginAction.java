@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
+import com.mooo.mycoz.dbobj.mycozBranch.GroupMember;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
@@ -138,6 +139,12 @@ public class LoginAction extends BaseSupport {
 			addressBook.setUserId(user.getId());
 			
 			dbProcess.add(tx.getConnection(),addressBook);
+
+			GroupMember groupMember = new GroupMember();
+			groupMember.setId(IDGenerator.getNextID("GroupMember").intValue());
+			groupMember.setGroupId(1);
+			groupMember.setUserId(user.getId());
+			dbProcess.add(tx.getConnection(),groupMember);
 
 			tx.commit();
 	} catch (Exception e) {
