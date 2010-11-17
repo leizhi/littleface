@@ -50,6 +50,11 @@ li {
 <li><a href="${accounting}" target="main"><fmt:message key="Account"/></a></li>
 </ul>
 
+<!-- Administrator -->
+<c:if test="${!empty Admin && Admin==true}">
+
+</c:if>
+
 </c:if>
 
 <!-- File -->
