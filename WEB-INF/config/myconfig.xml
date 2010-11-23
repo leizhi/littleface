@@ -64,7 +64,8 @@
 			<result name="listMessage">/jsp/operation/listMessage.jsp</result>
 			<result name="listThread">/jsp/operation/listThread.jsp</result>
 			<result name="promptCreateThread">/jsp/operation/createThread.jsp</result>
-			<result name="promptCreateMessage">/jsp/operation/createMessage.jsp</result>
+			<result name="processCreateThread"></result>
+			<result name="createMessage"></result>
 		</action>
 		
 		<!-- Profile -->
