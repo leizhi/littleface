@@ -2,6 +2,8 @@
 #v$logfile v$datafile and v$controlfile data
 #dictionary views belonging to SYS to run this program
 
+#!/bin/sh
+
 export EXP_BACK_DIR = e:\oradb\expbackups
 export SCRIPT_FILE = e:\back\expbackup.bat
 export LOG_FILE= e:\back\expbackup.log
