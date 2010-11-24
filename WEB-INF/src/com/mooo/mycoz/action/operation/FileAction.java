@@ -1,12 +1,14 @@
 package com.mooo.mycoz.action.operation;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,7 +16,6 @@ import org.apache.commons.logging.LogFactory;
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozBranch.FileTree;
-import com.mooo.mycoz.util.FileUtil;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.StringUtils;
 import com.mooo.mycoz.util.Transaction;
@@ -24,82 +25,7 @@ import com.mooo.mycoz.util.UploadFile;
 public class FileAction extends BaseSupport {
 	private static Log log = LogFactory.getLog(FileAction.class);
 
-	public String processUpload(HttpServletRequest request,
-			HttpServletResponse response) {
-		try {
-			if (log.isDebugEnabled()) log.debug("processUpload");
-
-			String value = "";
-			String uploadDirectory = "upload/";
-			String tmpDirectory = "tmp/";
-			String uploadPath = request.getSession().getServletContext().getRealPath("/")+ uploadDirectory;
-			String tmpPath = request.getSession().getServletContext().getRealPath("/") + tmpDirectory;
-
-			if (log.isDebugEnabled())
-				log.debug("uploadPath=" + uploadPath);
-
-			File tmpFile = new File(tmpPath);
-			File uploadFile = new File(uploadPath);
-
-			if (!tmpFile.exists()) {
-				tmpFile.mkdirs();
-			}
-
-			if (!uploadFile.exists()) {
-				uploadFile.mkdirs();
-			}
-
-			UploadFile uf = new UploadFile();
-			uf.setRequest(request);
-			uf.setUploadPath(tmpPath);
-			uf.process();
-
-			value = uf.getParameter("name").trim();
-
-			if (log.isDebugEnabled())
-				log.debug("name:" + value);
-
-			if (value == null || value.equals(""))
-				throw new Exception("Input Name NULL");
-
-			// Finally, delete the forum itself and all permissions and
-			// properties
-			// associated with it.
-			FileInfo fi = new FileInfo();
-			fi.setId(new Integer(IDGenerator.getNextID("FileInfo").intValue()));
-			fi.setName(uf.getParameter("name").trim());
-			// fi.setDatetime(new Date(uf.getParameter("date").trim()));
-			fi.setDatetime(new Date());
-
-			Iterator<?> fileList = uf.getFileIterator();
-			int i = 0;
-
-			while (fileList.hasNext()) {
-				value = (String) fileList.next();
-				fi.setFilepath(value);
-				i++;
-			}
-			
-			dbProcess.add(fi);
-
-			FileUtil.copy(new File(tmpPath + value),new File(uploadPath + value), true);
-
-			// User perms
-			// pstmt = con.prepareStatement(DELETE_FORUM_USER_PERMS);
-			// pstmt.setInt(1,forum.getID());
-			// pstmt.execute();
-			// pstmt.close();
-
-			System.out.print("upload succeed");
-		} catch (Exception e) {
-			if (log.isDebugEnabled())
-				log.debug("Exception Load error of: " + e.getMessage());
-			return "promptUpload";
-		}
-		return "list";
-	}
-
-	public String processDelete(HttpServletRequest request,
+	public String delete(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
 			if (log.isDebugEnabled()) log.debug("processDeleteCode");
@@ -132,7 +58,7 @@ public class FileAction extends BaseSupport {
 
 	public String download(HttpServletRequest request,HttpServletResponse response) {
 		request.setAttribute("fileName", request.getParameter("fileName"));
-		return "download";
+		return "success";
 	}
 
 	public String retrieve(HttpServletRequest request,HttpServletResponse response) {
@@ -149,7 +75,7 @@ public class FileAction extends BaseSupport {
 		}
 		request.setAttribute("fileInfo", fileInfo);
 
-		return "retrieve";
+		return "success";
 	}
 	
 	public String mkdir(HttpServletRequest request,HttpServletResponse response) {
@@ -187,41 +113,43 @@ public class FileAction extends BaseSupport {
 			tx.end();
 		}
 
-		return "tree";
+		return "success";
 	}
 	
-	public String upload(HttpServletRequest request, HttpServletResponse response) {
-		if (log.isDebugEnabled())
-			log.debug("processUpload");
+	public String ajaxUpload(HttpServletRequest request, HttpServletResponse response) {
+		if (log.isDebugEnabled()) log.debug("processUpload");
 
 		String value = "";
 		String uploadDirectory = "upload/";
-		String tmpDirectory = "tmp/";
+		//String tmpDirectory = "tmp/";
 		String uploadPath = request.getSession().getServletContext().getRealPath("/") + uploadDirectory;
-		String tmpPath = request.getSession().getServletContext().getRealPath("/") + tmpDirectory;
+		//String tmpPath = request.getSession().getServletContext().getRealPath("/") + tmpDirectory;
 
-		if (log.isDebugEnabled())
-			log.debug("uploadPath=" + uploadPath);
+		if (log.isDebugEnabled()) log.debug("uploadPath=" + uploadPath);
 
-		File tmpFile = new File(tmpPath);
+		//File tmpFile = new File(tmpPath);
 		File uploadFile = new File(uploadPath);
 
-		if (!tmpFile.exists()) {
-			tmpFile.mkdirs();
-		}
+		//if (!tmpFile.exists()) {
+		//	tmpFile.mkdirs();
+		//}
 
 		if (!uploadFile.exists()) {
 			uploadFile.mkdirs();
 		}
 
+		HttpSession session = request.getSession();
+		session.setAttribute("totalSize",request.getContentLength());
+		
 		UploadFile uf = new UploadFile();
 		uf.setRequest(request);
-		uf.setUploadPath(tmpPath);
+		uf.setUploadPath(uploadPath);
 		uf.process();
 
+		session.removeAttribute("totalSize");
+
 		value = uf.getParameter("name").trim();
-		if (log.isDebugEnabled())
-			log.debug("name:" + value);
+		if (log.isDebugEnabled()) log.debug("name:" + value);
 
 		StringUtils.noNull(value);
 
@@ -269,7 +197,7 @@ public class FileAction extends BaseSupport {
 
 			dbProcess.add(tx.getConnection(), fileTree);
 
-			FileUtil.copy(new File(tmpPath + value), new File(uploadPath	+ value), true);
+			//FileUtil.copy(new File(tmpPath + value), new File(uploadPath	+ value), true);
 
 			tx.commit();
 
@@ -279,22 +207,67 @@ public class FileAction extends BaseSupport {
 		} catch (Exception e) {
 			if (log.isDebugEnabled()) log.debug("Exception Load error of: " + e.getMessage());
 			tx.rollback();
-
 		} finally {
 			tx.end();
 		}
 
-		System.out.print("upload succeed");
+		System.out.println("upload succeed");
 
 		return "tree";
 	}
 	
 	public String tree(HttpServletRequest request,HttpServletResponse response) {
+		System.out.println("tree start");
+
 		TreeUtil fileTreeNode = new TreeUtil();
 		String stringTree = fileTreeNode.buildTree();
 		//System.out.println("treeString ====== " + stringTree);
 		request.setAttribute("stringTree", stringTree);
+		
+		System.out.println("tree succeed");
 
+		return "success";
+	}
+	
+	public String callXML(HttpServletRequest request,HttpServletResponse response) {
+		try {
+			Object obj;
+			String fileName = request.getParameter("fileName");
+			File tmpfile = new File(request.getSession().getServletContext().getRealPath("/")+"upload/"+fileName);
+			System.out.println("tmpName->"+request.getSession().getServletContext().getRealPath("/")+"upload/"+fileName);
+
+			PrintWriter out = response.getWriter();
+			
+			Long bytesRead = -1L;
+			Integer totalSize = 0;
+
+			HttpSession session = request.getSession();
+			
+			System.out.println("File Object ====== " + session.getAttribute("totalSize"));
+
+			if( (obj = session.getAttribute("totalSize")) != null){
+				totalSize = (Integer)obj;
+			}
+			
+			bytesRead = tmpfile.length();
+
+			System.out.println("File Call size ====== " + bytesRead);
+			System.out.println("File Call totalSize ====== " + totalSize);
+
+			response.reset();
+
+			response.setContentType("text/xml");
+			response.setHeader("Cache-Control", "no-cache");
+
+			out.print("<response>");
+			out.print("<bytesRead>" + bytesRead + "</bytesRead>");
+			out.print("<totalSize>" + totalSize + "</totalSize>");
+			out.print("</response>");
+
+			response.flushBuffer();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return "success";
 	}
 }

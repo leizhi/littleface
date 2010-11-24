@@ -35,6 +35,8 @@ Alf Magne Kalleland
 <link href="skin/office/default/drag-drop-folder-tree.css" type="text/css" rel="stylesheet"/>
 <link href="skin/office/default/context-menu.css" type="text/css" rel="stylesheet"/>
 <link type="text/css" rel="stylesheet" href="skin/office/default/dhtmlgoodies_calendar.css?random=20100901" media="screen" />
+<script type="text/javascript" src="jsp/js/mootools.js"></script>
+<script type="text/javascript" src="jsp/js/tw-sack.js"></script>
 <script type="text/javascript" src="jsp/js/util.js"></script>
 <script type="text/javascript" src="jsp/js/dhtmlgoodies_calendar.js?random=20101018"></script>
 
@@ -84,24 +86,57 @@ tfoot tr td {
 }
 </style>
 
+<style type="text/css">
+<!--
+/*body {
+	font: 11px Lucida Grande, Verdana, Arial, Helvetica, sans serif;
+}
+*/
+#progressBar {
+	padding-top: 5px;
+}
+
+#progressBarBox {
+	width: 250px;
+	height: 20px;
+	border: 1px inset;
+	background: #eee;
+}
+
+#progressBarBoxContent {
+	width: 0;
+	height: 20px;
+	border-right: 1px solid #444;
+	background: #9ACB34;
+}
+-->
+</style>
+
 <c:url value="/File.do" var="ajaxRetrieve">
 	<c:param name="method">retrieve</c:param>
 </c:url>
 
 <c:url value="/File.do" var="ajaxUpload">
-	<c:param name="method">upload</c:param>
+	<c:param name="method">ajaxUpload</c:param>
 </c:url>
 
 <c:url value="/File.do" var="ajaxMkdir">
 	<c:param name="method">mkdir</c:param>
 </c:url>
 
+<c:url value="/File.do" var="callXML">
+	<c:param name="method">callXML</c:param>
+</c:url>
+
 <script type="text/javascript">
+//--------------------------------
+//Save functions
+//--------------------------------
 var ajax = new sack();
 
 //Use something like this if you want to save data by Ajax.
-function retrieve(id) {
-	//alert(id);
+function ajaxRetrieve(id){
+	//alert("ajaxRetrieve"+id);
 	ajax.setVar("fileId", id); // recomended method of setting data to be parsed.
 	ajax.requestFile = "${ajaxRetrieve}";
 	ajax.onCompletion = whenCompleted;
@@ -181,6 +216,46 @@ function change(obj){
          alert("Not IE or Firefox (userAgent=" + navigator.userAgent + ")");
 	}
 }
+
+//--------------------------------
+//
+//--------------------------------
+function refreshProgress() {
+	ajax.setVar("fileName", $('fileName').value); // recomended method of setting data to be parsed.
+	ajax.requestFile = "${callXML}";
+	ajax.onCompletion = function() { callXML(); } ;
+	ajax.runAJAX();
+}
+
+function callXML(){
+	var xmlDoc = ajax.responseXML;
+   var bytesRead = xmlDoc.getElementsByTagName("bytesRead")[0].firstChild.nodeValue;
+   var totalSize = xmlDoc.getElementsByTagName("totalSize")[0].firstChild.nodeValue;
+
+	//alert("check ="+!(bytesRead > totalSize));
+	   
+     if (!(Number(bytesRead) > Number(totalSize))) {
+        $('uploadbutton').disabled = true;
+        var progressPercent = Math.ceil((bytesRead / totalSize) * 100);
+        $('progressBarText').innerHTML = 'upload in progress: ' + progressPercent + '%';
+        $('progressBarBoxContent').style.width = parseInt(progressPercent * 2.5) + 'px';
+        
+        window.setTimeout('refreshProgress()', 100);
+    }else {
+        $('uploadbutton').disabled = false;
+    }
+     return true;
+}
+
+function startProgress() {
+    document.getElementById('progressBar').style.display = 'block';
+    document.getElementById('progressBarText').innerHTML = 'upload in progress: 0%';
+    document.getElementById('uploadbutton').disabled = true;
+
+    // wait a little while to make sure the upload has started ..
+    window.setTimeout("refreshProgress()", 100);
+    return true;
+}
 </script>
 
 </head>
@@ -194,14 +269,14 @@ function change(obj){
 </div>
 
 <div id="upload" style="width: 100%;background-color: #fff;color: #add2da;font-size: 12px;display:none;">
-<form id="upit" method="post"  action="${ajaxUpload}" enctype="multipart/form-data">
+<form id="upit" method="post"  action="${ajaxUpload}" enctype="multipart/form-data" onsubmit="startProgress();">
 <table>
 <caption>上传文件</caption>
 
 <tbody id="fileData">
 <tr>
 <td colspan="2" style="text-align:center;">
-	<input type="submit" value="确认">
+	<input type="submit" value="确认" id="uploadbutton">
 </td>
 </tr>
 
@@ -231,6 +306,16 @@ function change(obj){
 </tbody>
 
 </table>
+
+<div id="progressBar" style="display: none;">
+	<div id="theMeter">
+		<div id="progressBarText"></div>
+
+		<div id="progressBarBox">
+			<div id="progressBarBoxContent"></div>
+		</div>
+	</div>
+</div>
 </form>
 </div>
 

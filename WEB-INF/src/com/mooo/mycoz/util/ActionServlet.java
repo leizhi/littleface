@@ -31,24 +31,22 @@ public class ActionServlet extends HttpServlet {
 	
 	public static final String USER_SESSION_KEY = "UserSessionKey";
 	
-	private static String execAction = "";
-	private static String execResult = "";
-	private static String execMethod = "";
-	private static String resultMethod ="";
-	
-	protected ConfigureUtil conf;
-	protected AuthUtil auth;
+	private static ConfigureUtil conf;
+	private static AuthUtil auth;
 
 	private static Map<String, ActionNode> actionMap;
 	private static CacheManager cacheManager;
 	
 	public void destroy() {
-	  
+		cacheManager = null;
+		actionMap = null;
+		auth = null;
+		conf = null;
 	}
 	
 	public void init() throws ServletException {
 		
-		super.init();
+		//super.init();
 		
 		// get web app real directory   
 		String prefix = getServletContext().getRealPath("/");
@@ -86,12 +84,17 @@ public class ActionServlet extends HttpServlet {
 		return cacheManager.get("action", key);
 	}
 	
-	protected void service(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void service(HttpServletRequest request,HttpServletResponse response)
+				throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=UTF-8");
 		
 		try {
+			String execAction = "";
+			String execResult = "";
+			String execMethod = "";
+			String resultMethod ="";
+			
 			String accessPath = request.getServletPath();
 			
 			if(log.isDebugEnabled())log.debug("accessPath:" + accessPath);
@@ -160,17 +163,20 @@ public class ActionServlet extends HttpServlet {
 			if(log.isDebugEnabled())log.debug("========exec end=======");
 			
 			if(resultMethod != null){
-				// not success then exec return method and fowward jsp
+				// not success then exec return method and fowward jsp		
 				if(!resultMethod.equals("success")) {
 					
 					execMethod=resultMethod;
 					method = cls.getMethod(execMethod, paraTypes);
 					resultMethod = (String) method.invoke(obj, paraValues);
-					
-					if(!resultMethod.equals("success"))
-						execResult = results.get(resultMethod);
-					else
+
+					System.out.println("execMethod->"+execMethod);
+					System.out.println("resultMethod->"+resultMethod);
+
+					if(resultMethod.equals("success"))
 						execResult = results.get(execMethod);
+					else
+						execResult = results.get(resultMethod);
 				}
 				
 				if(StringUtils.checkString(execResult, "\\.jsp")){// is jsp
@@ -178,7 +184,9 @@ public class ActionServlet extends HttpServlet {
 				} else if(StringUtils.checkString(execResult, "\\.do")){// is action
 					response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 					response.setHeader("Location",request.getContextPath()+execResult);
-				}
+				} //else { // other response XML outputStrimpt
+					
+				//}
 			}
 		} catch (NullPointerException e) {
 			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());

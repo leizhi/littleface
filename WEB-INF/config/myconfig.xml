@@ -35,13 +35,13 @@
 		
 		<action name="File" default="tree"
 			class="com.mooo.mycoz.action.operation.FileAction">
-			<result name="download">/jsp/operation/downloadFile.jsp</result>
-			<result name="upload">/jsp/operation/downloadFile.jsp</result>
-			<result name="tree">/jsp/operation/treeFile.jsp</result>
+			<result name="ajaxUpload"></result>
 			<result name="mkdir"></result>
-			<result name="processUpload"></result>
-			<result name="processDelete"></result>
+			<result name="delete"></result>
+			<result name="callXML"></result>
+			<result name="tree">/jsp/operation/treeFile.jsp</result>
 			<result name="retrieve">/jsp/operation/retrieveFile.jsp</result>
+			<result name="download">/jsp/operation/downloadFile.jsp</result>
 		</action>
 		
 		<!-- Operation -->

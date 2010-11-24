@@ -148,7 +148,7 @@ public class UploadFile {
                                 sis.readLine(buffs, 0, buffs.length);
                                 continue;
                             }else{
-                                fName = getFileNameByTime(fName);
+                                //fName = getFileNameByTime(fName);
                                 sis.readLine(buffs, 0, buffs.length);
                                 sis.readLine(buffs, 0, buffs.length);
                             }

@@ -383,7 +383,7 @@ public class TreeUtil {
 					+fileInfo.getName()+"</a>\n");
 			treeString.append("<ul>\n");
 		} else {
-			treeString.append("<li id=\"node"+fileInfo.getId()+"\""+" noChildren=\"true\" isFolder=\"false\"><a href=\"#\" onclick=\"retrieve("+fileInfo.getId()+");\">"
+			treeString.append("<li id=\"node"+fileInfo.getId()+"\""+" noChildren=\"true\" isFolder=\"false\"><a href=\"#\" onclick=\"ajaxRetrieve("+fileInfo.getId()+");\">"
 					+fileInfo.getName()+"</a></li>\n");
 		}
 		
