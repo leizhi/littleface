@@ -32,7 +32,6 @@ import com.mooo.mycoz.dbobj.mycozShared.Married;
 import com.mooo.mycoz.dbobj.mycozShared.Sex;
 import com.mooo.mycoz.dbobj.mycozShared.WeightUnit;
 import com.mooo.mycoz.util.BeanUtil;
-import com.mooo.mycoz.util.FileUtil;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.StringUtils;
@@ -405,24 +404,16 @@ private static Log log = LogFactory.getLog(MyAction.class);
 	public String processUploadImages(HttpServletRequest request,HttpServletResponse response) {
 
 		String uploadDirectory = "upload/";
-		String tmpDirectory = "tmp/";
 		String uploadPath = request.getSession().getServletContext().getRealPath("/") + uploadDirectory;
-		String tmpPath = request.getSession().getServletContext().getRealPath("/") + tmpDirectory;
 		
-		File tmpFile = new File(tmpPath);
 		File uploadFile = new File(uploadPath);
-
-		if (!tmpFile.exists()) {
-			tmpFile.mkdirs();
-		}
-
 		if (!uploadFile.exists()) {
 			uploadFile.mkdirs();
 		}
 
 		UploadFile uf = new UploadFile();
 		uf.setRequest(request);
-		uf.setUploadPath(tmpPath);
+		uf.setUploadPath(uploadPath);
 		uf.process();
 
 		HttpSession hs = request.getSession(true);
@@ -443,8 +434,6 @@ private static Log log = LogFactory.getLog(MyAction.class);
 				userImage.setUserId(new Integer(userId));
 				userImage.setFilepath(filePath);
 				dbProcess.add(tx.getConnection(), userImage);
-				
-				FileUtil.copy(new File(tmpPath + filePath), new File(uploadPath	+ filePath), true);
 			}
 
 			tx.commit();
