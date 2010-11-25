@@ -45,7 +45,7 @@ li {
 	<c:param name="subbar">2</c:param>
 </c:url>
 
-<c:url value="/Accounting.do" var="security">
+<c:url value="/User.do" var="security">
 	<c:param name="bar">1</c:param>
 	<c:param name="subbar">2</c:param>
 </c:url>

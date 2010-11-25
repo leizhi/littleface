@@ -119,5 +119,26 @@
 			class="com.mooo.mycoz.action.setup.account.AccountAction">
 			<result name="list">/jsp/setup/account/listAccount.jsp</result>
 		</action>
+		
+		<!-- Administrator -->
+		<action	name="User" default="listUser"
+			class="com.mooo.mycoz.action.admin.UserAction">
+			<result name="listUser">/jsp/admin/listUser.jsp</result>
+		</action>
+		
+		<action	name="UserGroup" default="listUserGroup"
+			class="com.mooo.mycoz.action.admin.UserGroupAction">
+			<result name="listUserGroup">/jsp/admin/listUserGroup.jsp</result>
+		</action>
+		
+		<action	name="GroupMember" default="listGroupMember"
+			class="com.mooo.mycoz.action.admin.GroupMemberAction">
+			<result name="listGroupMember">/jsp/admin/listGroupMember.jsp</result>
+		</action>
+		
+		<action	name="AuthGroup" default="listAuthGroup"
+			class="com.mooo.mycoz.action.admin.AuthGroupAction">
+			<result name="listAuthGroup">/jsp/admin/listAuthGroup.jsp</result>
+		</action>
 	</package>
 </littleface>
