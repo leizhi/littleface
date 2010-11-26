@@ -372,6 +372,41 @@ CREATE TABLE `NoteType` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `ProductCatalog`
+--
+
+DROP TABLE IF EXISTS `ProductCatalog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProductCatalog` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(20) DEFAULT 'NULL',
+  `description` varchar(100) DEFAULT 'NULL',
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ProductType`
+--
+
+DROP TABLE IF EXISTS `ProductType`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProductType` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `productCatalogId` int(11) DEFAULT NULL,
+  `name` varchar(20) DEFAULT 'NULL',
+  `description` varchar(100) DEFAULT 'NULL',
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`),
+  KEY `ProductType_ibfk_1` (`productCatalogId`),
+  CONSTRAINT `ProductType_ibfk_1` FOREIGN KEY (`productCatalogId`) REFERENCES `ProductCatalog` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `Sex`
 --
 
@@ -446,4 +481,4 @@ CREATE TABLE `WeightUnit` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-25 12:48:45
+-- Dump completed on 2010-11-26 11:12:08

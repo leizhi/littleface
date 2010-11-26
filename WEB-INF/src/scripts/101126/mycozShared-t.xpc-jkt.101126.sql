@@ -205,6 +205,24 @@ INSERT INTO `NoteType` VALUES (1,'Invoice','Invoice','','Invoice','ACTR'),(2,'De
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `ProductCatalog`
+--
+
+LOCK TABLES `ProductCatalog` WRITE;
+/*!40000 ALTER TABLE `ProductCatalog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ProductCatalog` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `ProductType`
+--
+
+LOCK TABLES `ProductType` WRITE;
+/*!40000 ALTER TABLE `ProductType` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ProductType` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `Sex`
 --
 
@@ -252,4 +270,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-25 12:48:45
+-- Dump completed on 2010-11-26 11:12:08

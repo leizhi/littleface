@@ -178,6 +178,80 @@ CREATE TABLE `GroupMember` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `JobAccounting`
+--
+
+DROP TABLE IF EXISTS `JobAccounting`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `JobAccounting` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `jobNoteId` int(11) DEFAULT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `unit` varchar(10) DEFAULT NULL,
+  `quantity` double DEFAULT '1',
+  `amount` decimal(20,4) DEFAULT '0.0000',
+  PRIMARY KEY (`id`),
+  KEY `jobNoteId` (`jobNoteId`),
+  KEY `productId` (`productId`),
+  KEY `unit` (`unit`),
+  KEY `quantity` (`quantity`),
+  KEY `amount` (`amount`),
+  CONSTRAINT `JobAccounting_ibfk_1` FOREIGN KEY (`jobNoteId`) REFERENCES `JobNote` (`id`),
+  CONSTRAINT `JobAccounting_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `JobJournal`
+--
+
+DROP TABLE IF EXISTS `JobJournal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `JobJournal` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `accountId` int(11) DEFAULT NULL,
+  `typeDC` enum('Credit','Debit') DEFAULT NULL,
+  `amount` decimal(20,4) DEFAULT '0.0000',
+  `jobAccountingId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `accountId` (`accountId`),
+  KEY `jobAccountingId` (`jobAccountingId`),
+  CONSTRAINT `JobJournal_ibfk_1` FOREIGN KEY (`accountId`) REFERENCES `mycozShared`.`Account` (`id`),
+  CONSTRAINT `JobJournal_ibfk_2` FOREIGN KEY (`jobAccountingId`) REFERENCES `JobAccounting` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `JobNote`
+--
+
+DROP TABLE IF EXISTS `JobNote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `JobNote` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `number` varchar(50) DEFAULT 'NULL',
+  `orderId` int(11) DEFAULT NULL,
+  `chargeTo` varchar(50) DEFAULT 'NULL',
+  `chargeBy` varchar(50) DEFAULT 'NULL',
+  `noteDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `amount` decimal(20,4) DEFAULT '0.0000',
+  `printCount` int(11) DEFAULT '0',
+  `description` varchar(50) DEFAULT 'NULL',
+  PRIMARY KEY (`id`),
+  KEY `number` (`number`),
+  KEY `orderId` (`orderId`),
+  KEY `chargeTo` (`chargeTo`),
+  KEY `chargeBy` (`chargeBy`),
+  KEY `noteDate` (`noteDate`),
+  KEY `amount` (`amount`),
+  CONSTRAINT `JobNote_ibfk_1` FOREIGN KEY (`orderId`) REFERENCES `Orders` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `Message`
 --
 
@@ -206,6 +280,161 @@ CREATE TABLE `Message` (
   CONSTRAINT `Message_ibfk_1` FOREIGN KEY (`threadId`) REFERENCES `ForumThread` (`id`),
   CONSTRAINT `Message_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `User` (`id`),
   CONSTRAINT `Message_ibfk_3` FOREIGN KEY (`replyPrivateUserId`) REFERENCES `User` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `NoteDetail`
+--
+
+DROP TABLE IF EXISTS `NoteDetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `NoteDetail` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `orderId` int(11) DEFAULT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `unit` varchar(10) DEFAULT NULL,
+  `quantity` double DEFAULT '1',
+  `amount` decimal(20,4) DEFAULT '0.0000',
+  PRIMARY KEY (`id`),
+  KEY `orderId` (`orderId`),
+  KEY `productId` (`productId`),
+  KEY `unit` (`unit`),
+  KEY `quantity` (`quantity`),
+  KEY `amount` (`amount`),
+  CONSTRAINT `NoteDetail_ibfk_1` FOREIGN KEY (`orderId`) REFERENCES `Orders` (`id`),
+  CONSTRAINT `NoteDetail_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OrderDetail`
+--
+
+DROP TABLE IF EXISTS `OrderDetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OrderDetail` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `orderId` int(11) DEFAULT NULL,
+  `requestNo` int(11) DEFAULT '1',
+  `isConfirmed` char(1) DEFAULT 'N',
+  `commitDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `commitTo` enum('IsCart','PostOrder','PostPayment','PostDelivery','PostInvalid','PostRefund','IsOrder','WaitPayment','IsPayment','IsDelivery','IsEnd','IsClose','IsInvalid','IsRefund') DEFAULT 'IsCart',
+  `operator` varchar(50) DEFAULT 'NULL',
+  PRIMARY KEY (`id`),
+  KEY `orderId` (`orderId`),
+  KEY `commitDate` (`commitDate`),
+  KEY `operator` (`operator`),
+  CONSTRAINT `OrderDetail_ibfk_1` FOREIGN KEY (`orderId`) REFERENCES `Orders` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OrderItem`
+--
+
+DROP TABLE IF EXISTS `OrderItem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OrderItem` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `orderId` int(11) DEFAULT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `unit` varchar(10) DEFAULT NULL,
+  `quantity` double DEFAULT '1',
+  `amount` decimal(20,4) DEFAULT '0.0000',
+  PRIMARY KEY (`id`),
+  KEY `orderId` (`orderId`),
+  KEY `productId` (`productId`),
+  KEY `quantity` (`quantity`),
+  KEY `amount` (`amount`),
+  CONSTRAINT `OrderItem_ibfk_1` FOREIGN KEY (`orderId`) REFERENCES `Orders` (`id`),
+  CONSTRAINT `OrderItem_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Orders`
+--
+
+DROP TABLE IF EXISTS `Orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Orders` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `number` varchar(50) DEFAULT 'NULL',
+  `byDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `account` varchar(50) DEFAULT 'NULL',
+  PRIMARY KEY (`id`),
+  KEY `number` (`number`),
+  KEY `byDate` (`byDate`),
+  KEY `account` (`account`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Product`
+--
+
+DROP TABLE IF EXISTS `Product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Product` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `typeId` int(11) DEFAULT NULL,
+  `name` varchar(100) DEFAULT 'NULL',
+  `code` varchar(50) DEFAULT 'NULL',
+  `brand` varchar(100) DEFAULT 'NULL',
+  `placeOfOrigin` varchar(100) DEFAULT 'NULL',
+  `manufacturers` varchar(100) DEFAULT 'NULL',
+  `releaseDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `upDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `downDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `shelfLife` double DEFAULT '0',
+  `costPrice` decimal(20,4) DEFAULT '0.0000',
+  `retailPrice` decimal(20,4) DEFAULT '0.0000',
+  `memberPrice` decimal(20,4) DEFAULT '0.0000',
+  `wholesalePrices` decimal(20,4) DEFAULT '0.0000',
+  `specialPrice` decimal(20,4) DEFAULT '0.0000',
+  `description` varchar(255) DEFAULT 'NULL',
+  PRIMARY KEY (`id`),
+  KEY `typeId` (`typeId`),
+  KEY `name` (`name`),
+  KEY `code` (`code`),
+  KEY `placeOfOrigin` (`placeOfOrigin`),
+  KEY `brand` (`brand`),
+  KEY `manufacturers` (`manufacturers`),
+  KEY `releaseDate` (`releaseDate`),
+  KEY `upDate` (`upDate`),
+  KEY `downDate` (`downDate`),
+  KEY `costPrice` (`costPrice`),
+  KEY `retailPrice` (`retailPrice`),
+  KEY `memberPrice` (`memberPrice`),
+  KEY `wholesalePrices` (`wholesalePrices`),
+  KEY `specialPrice` (`specialPrice`),
+  CONSTRAINT `Product_ibfk_1` FOREIGN KEY (`typeId`) REFERENCES `mycozShared`.`ProductType` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ProductImage`
+--
+
+DROP TABLE IF EXISTS `ProductImage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProductImage` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `productId` int(11) DEFAULT NULL,
+  `path` varchar(100) DEFAULT 'NULL',
+  `name` varchar(20) DEFAULT 'NULL',
+  PRIMARY KEY (`id`),
+  KEY `productId` (`productId`),
+  KEY `path` (`path`),
+  KEY `name` (`name`),
+  CONSTRAINT `ProductImage_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `Product` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -376,6 +605,46 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `Warehouse`
+--
+
+DROP TABLE IF EXISTS `Warehouse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Warehouse` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `batchCode` varchar(50) DEFAULT 'NULL',
+  `commitDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `operator` varchar(50) DEFAULT 'NULL',
+  `typeIO` enum('Import','Export') DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `batchCode` (`batchCode`),
+  KEY `commitDate` (`commitDate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `WarehouseDetail`
+--
+
+DROP TABLE IF EXISTS `WarehouseDetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `WarehouseDetail` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `warehouseId` int(11) DEFAULT NULL,
+  `productId` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `warehouseId` (`warehouseId`),
+  KEY `productId` (`productId`),
+  KEY `quantity` (`quantity`),
+  CONSTRAINT `WarehouseDetail_ibfk_1` FOREIGN KEY (`warehouseId`) REFERENCES `WarehouseDetail` (`id`),
+  CONSTRAINT `WarehouseDetail_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `Product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping routines for database 'mycozBranch'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -388,4 +657,4 @@ CREATE TABLE `UserInfo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-25 12:48:44
+-- Dump completed on 2010-11-26 11:12:08

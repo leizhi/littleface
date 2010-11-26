@@ -85,6 +85,33 @@ INSERT INTO `GroupMember` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6)
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `JobAccounting`
+--
+
+LOCK TABLES `JobAccounting` WRITE;
+/*!40000 ALTER TABLE `JobAccounting` DISABLE KEYS */;
+/*!40000 ALTER TABLE `JobAccounting` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `JobJournal`
+--
+
+LOCK TABLES `JobJournal` WRITE;
+/*!40000 ALTER TABLE `JobJournal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `JobJournal` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `JobNote`
+--
+
+LOCK TABLES `JobNote` WRITE;
+/*!40000 ALTER TABLE `JobNote` DISABLE KEYS */;
+/*!40000 ALTER TABLE `JobNote` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `Message`
 --
 
@@ -92,6 +119,60 @@ LOCK TABLES `Message` WRITE;
 /*!40000 ALTER TABLE `Message` DISABLE KEYS */;
 INSERT INTO `Message` VALUES (1,1,1,'ffffffff','ffffffff','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,1),(2,1,1,'dddddddd','dsafdsa','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,1),(3,1,1,'sdafasd','sadfsdaf','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,1),(4,2,1,'太好了','我就喜欢','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,1),(5,2,1,'给大家一个好地址','ftp://cxrd.mooo.com','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,1),(6,2,1,'好家伙','http://localhost/good','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,1),(7,3,8,'up','good , i love here','2010-10-03 00:00:00','2010-10-03 00:00:00','N',0,8),(8,5,8,'like LFS','up like LFS, i like too.','2010-10-04 00:00:00','2010-10-04 00:00:00','N',0,8),(9,1,8,'yy','yyy','2010-10-08 09:03:14','2010-10-08 09:03:14','N',0,8),(10,3,8,'test','test test','2010-10-08 09:15:36','2010-10-08 09:15:36','N',0,8),(11,1,8,'sdfsa','safdsaf','2010-10-08 12:35:31','2010-10-08 12:35:31','N',0,8),(12,1,8,'ffff','ffff','2010-10-08 12:36:34','2010-10-08 12:36:34','N',0,8),(13,2,8,'顶起','顶起顶起顶起顶起','2010-10-08 19:02:50','2010-10-08 19:02:50','N',0,8),(14,1,2,'sadfdsaf','sfdasdfsa','2010-10-08 19:05:53','2010-10-08 19:05:53','N',0,2),(15,6,2,'linux安装方法','1.首先安装tomcat或者其他服务器\r\n2.把源代码放在$CATALINA_HOME/webapps\r\n3.执行$./compile.sh编译项目 或者$ant\r\n4.WEB-INF/src/scripts/下导入数据库 例如:\r\n./backup-mycoz xpc-jkt 101008 [database Password]\r\n5.WEB-INF/src/mypool.xml配置数据库和一些基本信息\r\n6.启动tomcat\r\n7.测试http://localhost:8080/项目名称','2010-10-15 08:59:33','2010-10-15 08:59:33','N',0,2),(16,7,2,'1#','sysctl -a 打印内核全部参数','2010-10-18 08:35:55','2010-10-18 08:35:55','N',0,2),(17,7,2,'2#','cat sysctl.conf \r\n#Instal Oracle Config\r\nfs.aio-max-nr = 1048576\r\nfs.file-max = 6815744\r\nkernel.shmall = 2097152\r\nkernel.shmmax = 2147483648\r\nkernel.shmmni = 4096\r\nkernel.sem = 250 32000 100 128\r\nnet.ipv4.ip_local_port_range = 9000 65500\r\nnet.core.rmem_default = 262144\r\nnet.core.rmem_max = 4194304\r\nnet.core.wmem_default = 262144\r\nnet.core.wmem_max = 1048576\r\nvm.swappiness = 10','2010-10-18 08:36:37','2010-10-18 08:36:37','N',0,2),(18,7,2,'#3','sysctl -p 配置文件生效','2010-10-18 08:37:06','2010-10-18 08:37:06','N',0,2),(19,7,2,'#4','sysctl -w net.ipv4.route.flush=1 生效','2010-10-18 08:43:15','2010-10-18 08:43:15','N',0,2),(20,4,8,'NULL',NULL,'2010-10-27 17:52:38','2010-10-27 17:52:38','N',0,8),(21,8,3,'NULL',NULL,'2010-10-29 09:20:27','2010-10-29 09:20:27','N',0,3),(22,8,8,'师傅来了','徒弟很不错的','2010-10-29 09:21:36','2010-10-29 09:21:36','N',0,8),(23,8,3,'NULL','我是顶顶大名人见人爱花见花开江湖人称小魔女的师傅的徒弟，哈哈','2010-10-29 09:21:44','2010-10-29 09:21:44','N',0,3),(24,8,8,':-)','^_^ 多谢夸讲','2010-10-29 09:24:05','2010-10-29 09:24:05','N',0,8),(25,9,8,'bug修复','修复空回复和发表','2010-10-29 13:34:52','2010-10-29 13:34:52','N',0,8),(26,9,8,'bug1 修复','文件上传日期 显示 错误','2010-10-29 14:21:37','2010-10-29 14:21:37','N',0,8),(27,10,8,'太好了','是真的吗','2010-10-31 17:30:48','2010-10-31 17:30:48','N',0,8),(28,2,28,'sdfasdf','sdf','2010-11-16 16:21:36','2010-11-16 16:21:36','N',0,28),(29,12,28,'dfasd','sdfasdf','2010-11-16 16:22:45','2010-11-16 16:22:45','N',0,28);
 /*!40000 ALTER TABLE `Message` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `NoteDetail`
+--
+
+LOCK TABLES `NoteDetail` WRITE;
+/*!40000 ALTER TABLE `NoteDetail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `NoteDetail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `OrderDetail`
+--
+
+LOCK TABLES `OrderDetail` WRITE;
+/*!40000 ALTER TABLE `OrderDetail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `OrderDetail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `OrderItem`
+--
+
+LOCK TABLES `OrderItem` WRITE;
+/*!40000 ALTER TABLE `OrderItem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `OrderItem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `Orders`
+--
+
+LOCK TABLES `Orders` WRITE;
+/*!40000 ALTER TABLE `Orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `Product`
+--
+
+LOCK TABLES `Product` WRITE;
+/*!40000 ALTER TABLE `Product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `ProductImage`
+--
+
+LOCK TABLES `ProductImage` WRITE;
+/*!40000 ALTER TABLE `ProductImage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ProductImage` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -151,6 +232,24 @@ LOCK TABLES `UserInfo` WRITE;
 INSERT INTO `UserInfo` VALUES (1,1,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N','gg@gmail.com',NULL),(2,2,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(3,3,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(4,4,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(5,5,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(6,6,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(7,7,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(8,8,2,'198.00',1,'55.00',1,'2010-10-31 03:38:26',1,1,1,'2334','N','das@gmail.com',NULL),(9,9,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(10,10,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(11,11,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(12,12,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(13,13,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(14,14,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(15,15,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(16,16,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N','gg1@gmail.com',NULL),(17,17,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(18,18,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,NULL),(19,19,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N','2134','2010-11-02 09:55:41'),(20,20,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,'2010-11-03 11:08:00'),(21,21,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,'2010-11-03 19:23:07'),(22,22,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,'2010-11-03 19:36:50'),(23,23,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,'2010-11-03 19:50:38'),(24,24,2,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,'2010-11-03 20:03:50'),(25,25,1,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,'2010-11-08 11:50:55'),(26,26,1,'198.00',1,'55.00',1,'2010-10-31 19:38:26',1,1,1,'2334','N',NULL,'2010-11-08 15:30:29'),(27,27,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N',NULL,'2010-11-15 16:00:29'),(28,28,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N',NULL,'2010-11-16 16:18:14'),(29,29,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N',NULL,'2010-11-19 14:54:13'),(30,30,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'N',NULL,'2010-11-23 10:59:01');
 /*!40000 ALTER TABLE `UserInfo` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping data for table `Warehouse`
+--
+
+LOCK TABLES `Warehouse` WRITE;
+/*!40000 ALTER TABLE `Warehouse` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Warehouse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `WarehouseDetail`
+--
+
+LOCK TABLES `WarehouseDetail` WRITE;
+/*!40000 ALTER TABLE `WarehouseDetail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `WarehouseDetail` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -161,4 +260,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-11-25 12:48:44
+-- Dump completed on 2010-11-26 11:12:08
