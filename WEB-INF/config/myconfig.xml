@@ -91,35 +91,45 @@
 		</action>
 
 		<action	name="Accounting" default="menu"
-			class="com.mooo.mycoz.action.setup.account.AccountingAction">
-			<result name="menu">/jsp/setup/account/defPage.jsp</result>
+			class="com.mooo.mycoz.action.setup.AccountingAction">
+			<result name="menu">/jsp/setup/defPage.jsp</result>
 		</action>
 				
 		<action	name="AccountElement" default="list"
-			class="com.mooo.mycoz.action.setup.account.AccountElementAction">
-			<result name="list">/jsp/setup/account/listAccountElement.jsp</result>
+			class="com.mooo.mycoz.action.setup.AccountElementAction">
+			<result name="list">/jsp/setup/listAccountElement.jsp</result>
 		</action>
 		
 		<action	name="AccountCategory" default="list"
-			class="com.mooo.mycoz.action.setup.account.AccountCategoryAction">
-			<result name="list">/jsp/setup/account/listAccountCategory.jsp</result>
+			class="com.mooo.mycoz.action.setup.AccountCategoryAction">
+			<result name="list">/jsp/setup/listAccountCategory.jsp</result>
 		</action>
 		
 		<action	name="AccountType" default="list"
-			class="com.mooo.mycoz.action.setup.account.AccountTypeAction">
-			<result name="list">/jsp/setup/account/listAccountType.jsp</result>
+			class="com.mooo.mycoz.action.setup.AccountTypeAction">
+			<result name="list">/jsp/setup/listAccountType.jsp</result>
 		</action>
 		
 		<action	name="AccountGroup" default="list"
-			class="com.mooo.mycoz.action.setup.account.AccountGroupAction">
-			<result name="list">/jsp/setup/account/listAccountGroup.jsp</result>
+			class="com.mooo.mycoz.action.setup.AccountGroupAction">
+			<result name="list">/jsp/setup/listAccountGroup.jsp</result>
 		</action>
 		
 		<action	name="Account" default="list"
-			class="com.mooo.mycoz.action.setup.account.AccountAction">
-			<result name="list">/jsp/setup/account/listAccount.jsp</result>
+			class="com.mooo.mycoz.action.setup.AccountAction">
+			<result name="list">/jsp/setup/listAccount.jsp</result>
 		</action>
 		
+		<action	name="ProductCatalog" default="execute"
+			class="com.mooo.mycoz.action.setup.ProductCatalogAction">
+			<result name="execute">/jsp/setup/listAuthGroup.jsp</result>
+		</action>
+		
+		<action	name="ProductType" default="execute"
+			class="com.mooo.mycoz.action.setup.ProductTypeAction">
+			<result name="execute">/jsp/setup/listProductType.jsp</result>
+		</action>
+				
 		<!-- Administrator -->
 		<action	name="User" default="listUser"
 			class="com.mooo.mycoz.action.admin.UserAction">
@@ -139,6 +149,13 @@
 		<action	name="AuthGroup" default="listAuthGroup"
 			class="com.mooo.mycoz.action.admin.AuthGroupAction">
 			<result name="listAuthGroup">/jsp/admin/listAuthGroup.jsp</result>
+		</action>
+		<!-- Transaction -->
+		<action	name="Transaction" default="execute"
+			class="com.mooo.mycoz.action.operation.transaction.TransactionAction">
+			<result name="execute">/jsp/transaction/transaction.jsp</result>
+			<result name="sale">/jsp/transaction/sale.jsp</result>
+			<result name="buy">/jsp/transaction/buy.jsp</result>
 		</action>
 	</package>
 </littleface>

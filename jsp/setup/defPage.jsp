@@ -19,6 +19,7 @@
 <%@ include file="../incl/g_top.jsp" %>
 <%@ include file="../incl/g_block.jsp" %>
 
+<%@ include file="config.jsp" %>
 <%@ include file="../incl/g_bar.jsp" %>
 
 <div id="container">

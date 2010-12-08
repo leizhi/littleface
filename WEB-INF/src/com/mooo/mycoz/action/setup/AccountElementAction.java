@@ -1,4 +1,4 @@
-package com.mooo.mycoz.action.setup.account;
+package com.mooo.mycoz.action.setup;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

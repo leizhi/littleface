@@ -1,4 +1,4 @@
-package com.mooo.mycoz.action.setup.account;
+package com.mooo.mycoz.action.setup;
 
 import java.util.HashMap;
 import java.util.Map;
