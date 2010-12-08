@@ -71,7 +71,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Action` WRITE;
 /*!40000 ALTER TABLE `Action` DISABLE KEYS */;
-INSERT INTO `Action` VALUES (1,'User','User'),(2,'Login','Login'),(3,'Operation','Operation'),(4,'My','My'),(5,'AccountCategory','AccountCategory'),(6,'File','File'),(7,'Account','Account'),(8,'Profile','Profile'),(9,'Setup','Setup'),(10,'Accounting','Accounting'),(11,'AccountGroup','AccountGroup'),(12,'Main','Main'),(13,'UserGroup','UserGroup'),(14,'Index','Index'),(15,'Activity','Activity'),(16,'ForumThread','ForumThread'),(17,'AccountElement','AccountElement'),(18,'AuthGroup','AuthGroup'),(19,'GroupMember','GroupMember'),(20,'AccountType','AccountType');
+INSERT INTO `Action` VALUES (1,'User','User'),(2,'Login','Login'),(3,'ProductCatalog','ProductCatalog'),(4,'Operation','Operation'),(5,'Transaction','Transaction'),(6,'My','My'),(7,'AccountCategory','AccountCategory'),(8,'File','File'),(9,'Account','Account'),(10,'Profile','Profile'),(11,'Setup','Setup'),(12,'Accounting','Accounting'),(13,'AccountGroup','AccountGroup'),(14,'Main','Main'),(15,'UserGroup','UserGroup'),(16,'Index','Index'),(17,'Activity','Activity'),(18,'ForumThread','ForumThread'),(19,'AccountElement','AccountElement'),(20,'ProductType','ProductType'),(21,'AuthGroup','AuthGroup'),(22,'GroupMember','GroupMember'),(23,'AccountType','AccountType');
 /*!40000 ALTER TABLE `Action` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +81,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `AuthGroup` WRITE;
 /*!40000 ALTER TABLE `AuthGroup` DISABLE KEYS */;
-INSERT INTO `AuthGroup` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),(13,1,13),(14,1,14),(15,1,15),(16,1,16),(17,1,17),(18,1,18),(19,1,19),(20,1,20),(21,1,21),(22,1,22),(23,1,23),(24,1,24),(25,1,25),(26,1,26),(27,1,27),(28,1,28),(29,1,29),(30,1,30),(31,1,31),(32,1,32),(33,1,33),(34,1,34),(35,1,35),(36,1,36),(37,1,37),(38,1,38),(39,1,39),(40,1,40),(41,1,41),(42,1,42),(43,1,43),(44,1,44);
+INSERT INTO `AuthGroup` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(5,1,5),(6,1,6),(7,1,7),(8,1,8),(9,1,9),(10,1,10),(11,1,11),(12,1,12),(13,1,13),(14,1,14),(15,1,15),(16,1,16),(17,1,17),(18,1,18),(19,1,19),(20,1,20),(21,1,21),(22,1,22),(23,1,23),(24,1,24),(25,1,25),(26,1,26),(27,1,27),(28,1,28),(29,1,29),(30,1,30),(31,1,31),(32,1,32),(33,1,33),(34,1,34),(35,1,35),(36,1,36),(37,1,37),(38,1,38),(39,1,39),(40,1,40),(41,1,41),(42,1,42),(43,1,43),(44,1,44),(45,1,45),(46,1,46),(47,1,47),(48,1,48),(49,1,49);
 /*!40000 ALTER TABLE `AuthGroup` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,7 +190,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `Method` WRITE;
 /*!40000 ALTER TABLE `Method` DISABLE KEYS */;
-INSERT INTO `Method` VALUES (1,1,'listUser','listUser','Y'),(2,2,'processRegister','processRegister','Y'),(3,2,'processLogin','processLogin','Y'),(4,2,'promptRegister','promptRegister','Y'),(5,2,'processLogout','processLogout','Y'),(6,2,'promptLogin','promptLogin','Y'),(7,3,'menu','menu','Y'),(8,4,'general','general','Y'),(9,4,'promptChangePassword','promptChangePassword','Y'),(10,4,'promptUploadImages','promptUploadImages','Y'),(11,4,'edit','edit','Y'),(12,4,'processUploadImages','processUploadImages','Y'),(13,4,'update','update','Y'),(14,5,'list','list','Y'),(15,6,'tree','tree','Y'),(16,6,'download','download','Y'),(17,6,'callXML','callXML','Y'),(18,6,'ajaxUpload','ajaxUpload','Y'),(19,6,'mkdir','mkdir','Y'),(20,6,'retrieve','retrieve','Y'),(21,6,'delete','delete','Y'),(22,7,'list','list','Y'),(23,8,'menu','menu','Y'),(24,9,'menu','menu','Y'),(25,10,'menu','menu','Y'),(26,11,'list','list','Y'),(27,12,'menu','menu','Y'),(28,13,'listUserGroup','listUserGroup','Y'),(29,14,'promptLogin','promptLogin','Y'),(30,14,'promptIndex','promptIndex','Y'),(31,15,'forum','forum','Y'),(32,15,'search','search','Y'),(33,15,'message','message','Y'),(34,15,'blog','blog','Y'),(35,15,'talk','talk','Y'),(36,16,'listThread','listThread','Y'),(37,16,'promptCreateThread','promptCreateThread','Y'),(38,16,'createMessage','createMessage','Y'),(39,16,'listMessage','listMessage','Y'),(40,16,'processCreateThread','processCreateThread','Y'),(41,17,'list','list','Y'),(42,18,'listAuthGroup','listAuthGroup','Y'),(43,19,'listGroupMember','listGroupMember','Y'),(44,20,'list','list','Y');
+INSERT INTO `Method` VALUES (1,1,'listUser','listUser','Y'),(2,2,'processRegister','processRegister','Y'),(3,2,'processLogin','processLogin','Y'),(4,2,'promptRegister','promptRegister','Y'),(5,2,'processLogout','processLogout','Y'),(6,2,'promptLogin','promptLogin','Y'),(7,3,'execute','execute','Y'),(8,4,'menu','menu','Y'),(9,5,'buy','buy','Y'),(10,5,'execute','execute','Y'),(11,5,'sale','sale','Y'),(12,6,'general','general','Y'),(13,6,'promptChangePassword','promptChangePassword','Y'),(14,6,'promptUploadImages','promptUploadImages','Y'),(15,6,'edit','edit','Y'),(16,6,'processUploadImages','processUploadImages','Y'),(17,6,'update','update','Y'),(18,7,'list','list','Y'),(19,8,'tree','tree','Y'),(20,8,'download','download','Y'),(21,8,'callXML','callXML','Y'),(22,8,'ajaxUpload','ajaxUpload','Y'),(23,8,'mkdir','mkdir','Y'),(24,8,'retrieve','retrieve','Y'),(25,8,'delete','delete','Y'),(26,9,'list','list','Y'),(27,10,'menu','menu','Y'),(28,11,'menu','menu','Y'),(29,12,'menu','menu','Y'),(30,13,'list','list','Y'),(31,14,'menu','menu','Y'),(32,15,'listUserGroup','listUserGroup','Y'),(33,16,'promptLogin','promptLogin','Y'),(34,16,'promptIndex','promptIndex','Y'),(35,17,'forum','forum','Y'),(36,17,'search','search','Y'),(37,17,'message','message','Y'),(38,17,'blog','blog','Y'),(39,17,'talk','talk','Y'),(40,18,'listThread','listThread','Y'),(41,18,'promptCreateThread','promptCreateThread','Y'),(42,18,'createMessage','createMessage','Y'),(43,18,'listMessage','listMessage','Y'),(44,18,'processCreateThread','processCreateThread','Y'),(45,19,'list','list','Y'),(46,20,'execute','execute','Y'),(47,21,'listAuthGroup','listAuthGroup','Y'),(48,22,'listGroupMember','listGroupMember','Y'),(49,23,'list','list','Y');
 /*!40000 ALTER TABLE `Method` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,4 +270,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-12-08 12:27:34
+-- Dump completed on 2010-12-08 17:51:30
