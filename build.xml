@@ -6,8 +6,8 @@ directory with the processing instruction <?eclipse.ant.import?>
 as the first entry and export the buildfile again. -->
 
 <!-- name:对应工程的名字；default:需要的缺省任务(运行"ant"不指明任务时执行的任务) -->
-<project name="sdweather" default="dist" basedir=".">
-	<!-- 建立目录结构
+<project name="littleface" default="dist" basedir=".">
+<!-- 建立目录结构
 project
 ... src JAVA 源码编辑目录
 ... WebRoot web文件存放地方
@@ -23,13 +23,19 @@ project
 	<property name="webRoot.dir" value="." />
 	<property name="web-inf.dir" value="${webRoot.dir}/WEB-INF" />
 
-	<property name="build.dir" value="build" />
+	<property name="build.dir" value="WEB-INF" />
 	<property name="dist.dir" value="dist" />
+	<property environment="env"/> 
+	<property name="tomcat.home" value="${env.CATALINA_HOME}"/>
 
 	<!-- 初始化 classpath -->
 	<path id="project.classpath">
 		<fileset dir="${webRoot.dir}/${lib.dir}">
 			<include name="**/*.jar" />
+		</fileset>
+
+		<fileset dir="${tomcat.home}/lib">
+			<include name="**/*.jar"/>
 		</fileset>
 
 		<pathelement location="${build.dir}/classes" />
@@ -50,28 +56,37 @@ project
 
 	<!-- 编译Java代码 -->
 	<target name="compile" depends="init" description="compile java source">
-		<javac srcdir="${src.dir}" destdir="${build.dir}/classes">
+		<javac srcdir="${src.dir}" destdir="${build.dir}/classes" encoding="utf-8">
 			<classpath refid="project.classpath" />
 		</javac>
 
-		<copy todir="${build.dir}">
+		<copy todir="${build.dir}/classes">
 			<fileset dir="${src.dir}">
-				<include name="**/*.xml" />
-				<include name="**/*.jar" />
+				<include name="*.xml" />
+				<include name="*.jar" />
+				<include name="**/*.properties" />
 			</fileset>
 		</copy>
 	</target>
 
+	<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
+		<mkdir dir="${dist.dir}/docs/api" />
+		<javadoc sourcepath="${src.dir}" charset="utf-8"  encoding="utf-8" source="1.6" destdir="${dist.dir}/docs/api">
+			<classpath refid="compile.classpath" />
+		</javadoc>
+		<echo>javadoc is complete!</echo>
+	</target>
+
 	<!-- 将class文件打成 jar包 -->
 	<!--
-<target name="pack" depends="compile">
-<jar jarfile="${build.dir}/${ant.project.name}.jar">
-<fileset dir="${build.dir}/classes">
-<include name="**/*.class"/>
-</fileset>
-</jar>
-</target>
--->
+	<target name="pack" depends="compile">
+		<jar jarfile="${build.dir}/${ant.project.name}.jar">
+			<fileset dir="${build.dir}/classes">
+				<include name="**/*.class"/>
+			</fileset>
+		</jar>
+	</target>
+	-->
 
 	<!-- 打成war包, 名称默认为 项目名 -->
 	<target name="dist" depends="compile">
