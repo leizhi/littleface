@@ -157,15 +157,12 @@
 			<result name="sale">/jsp/transaction/sale.jsp</result>
 			<result name="buy">/jsp/transaction/buy.jsp</result>
 		</action>
-<<<<<<< HEAD
+
 		<action	name="Warehouse" default="execute"
 			class="com.mooo.mycoz.action.operation.warehouse.WarehouseAction">
 			<result name="execute">/jsp/warehouse/warehouse.jsp</result>
 			<result name="sale">/jsp/warehouse/sale.jsp</result>
 			<result name="buy">/jsp/warehouse/buy.jsp</result>
 		</action>
-		
-=======
->>>>>>> ef3ee84a0ca1c083f101a23fc0aab081662805d4
 	</package>
 </littleface>
