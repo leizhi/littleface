@@ -74,22 +74,6 @@ li {
 </ul>
 </c:if>
 
-<!-- Warehouse -->
-<c:if test="${!empty Warehouse && Warehouse==true}">
-
-<c:url value="/Warehouse.do" var="warehouse">
-	<c:param name="bar">0</c:param>
-	<c:param name="subbar">0</c:param>
-</c:url>
-
-<ul>
-<li class="title"><fmt:message key="Warehouse"/></li>
-
-<li><a href="${warehouse}" target="main"><fmt:message key="Search"/></a></li>
-
-</ul>
-</c:if>
-
 <!-- File -->
 <c:if test="${!empty File && File==true}">
 

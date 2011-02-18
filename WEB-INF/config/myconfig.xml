@@ -158,11 +158,5 @@
 			<result name="buy">/jsp/transaction/buy.jsp</result>
 		</action>
 
-		<action	name="Warehouse" default="execute"
-			class="com.mooo.mycoz.action.operation.warehouse.WarehouseAction">
-			<result name="execute">/jsp/warehouse/warehouse.jsp</result>
-			<result name="sale">/jsp/warehouse/sale.jsp</result>
-			<result name="buy">/jsp/warehouse/buy.jsp</result>
-		</action>
 	</package>
 </littleface>
