@@ -50,6 +50,11 @@ li {
 	<c:param name="subbar">2</c:param>
 </c:url>
 
+<c:url value="/Transaction.do" var="transactionSetup">
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">2</c:param>
+</c:url>
+
 <ul>
 <li class="title"><fmt:message key="Setup"/></li>
 <!-- Accounting -->
@@ -60,6 +65,27 @@ li {
 <c:if test="${!empty Security && Security==true}">
 <li><a href="${security}" target="main"><fmt:message key="Security"/></a></li>
 </c:if>
+
+<!-- Transaction -->
+<c:if test="${!empty Transaction && Transaction==true}">
+<li><a href="${security}" target="main"><fmt:message key="Transaction"/></a></li>
+</c:if>
+
+</ul>
+</c:if>
+
+<!-- Warehouse -->
+<c:if test="${!empty Warehouse && Warehouse==true}">
+
+<c:url value="/Warehouse.do" var="warehouse">
+	<c:param name="bar">0</c:param>
+	<c:param name="subbar">0</c:param>
+</c:url>
+
+<ul>
+<li class="title"><fmt:message key="Warehouse"/></li>
+
+<li><a href="${warehouse}" target="main"><fmt:message key="Search"/></a></li>
 
 </ul>
 </c:if>
@@ -107,11 +133,63 @@ li {
 <c:if test="${!empty Search && Search==true}">
 <li><a href="${searchAccount}" target="main"><fmt:message key="Search"/></a></li>
 </c:if>
-<!-- Administrator -->
+<!-- Forum -->
 <c:if test="${!empty Forum && Forum==true}">
 <li><a href="${forumAccount}" target="main"><fmt:message key="Forum"/></a></li>
 </c:if>
 
+</ul>
+</c:if>
+
+<!-- Transaction -->
+<c:if test="${!empty Transaction && Transaction==true}">
+
+<c:url value="/Transaction.do" var="buyURL">
+	<c:param name="method">buy</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">0</c:param>
+</c:url>
+
+<c:url value="/Transaction.do" var="saleURL">
+	<c:param name="method">sale</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">0</c:param>
+</c:url>
+
+<c:url value="/Transaction.do" var="accountingURL">
+	<c:param name="method">buy</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">0</c:param>
+</c:url>
+
+<c:url value="/Transaction.do" var="reportsURL">
+	<c:param name="method">buy</c:param>
+	<c:param name="bar">1</c:param>
+	<c:param name="subbar">0</c:param>
+</c:url>
+
+<ul>
+<li class="title"><fmt:message key="Transaction"/></li>
+
+<!-- Buy -->
+<c:if test="${!empty Buy && Buy==true}">
+<li><a href="${buyURL}" target="main"><fmt:message key="Buy"/></a></li>
+</c:if>
+
+<!-- Sale -->
+<c:if test="${!empty Sale && Sale==true}">
+<li><a href="${saleURL}" target="main"><fmt:message key="Sale"/></a></li>
+</c:if>
+
+<!-- Accounting -->
+<c:if test="${Accounting==true}">
+<li><a href="${accountingURL}" target="main"><fmt:message key="Accounting"/></a></li>
+</c:if>
+
+<!-- Reports -->
+<c:if test="${Reports==true}">
+<li><a href="${reportsURL}" target="main"><fmt:message key="Reports"/></a></li>
+</c:if>
 </ul>
 </c:if>
 

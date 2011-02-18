@@ -31,6 +31,12 @@ public class MainAction extends BaseSupport {
 			request.setAttribute("Search", true);
 			request.setAttribute("Forum", true);
 			
+			request.setAttribute("Transaction", true);
+			request.setAttribute("Buy", true);
+			request.setAttribute("Sale", true);
+			request.setAttribute("Accounting", true);
+			request.setAttribute("Reports", true);
+
 			request.setAttribute("Profile", true);
 			request.setAttribute("General", true);
 

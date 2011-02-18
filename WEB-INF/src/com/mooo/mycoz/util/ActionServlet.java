@@ -194,6 +194,9 @@ public class ActionServlet extends HttpServlet {
 		} catch (NoSuchMethodException e) {
 			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
 			e.printStackTrace();
+			
+			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			response.setHeader("Location",request.getContextPath()+"/jsp/error.jsp");
 		} catch (InvocationTargetException e) {
 			if(log.isErrorEnabled()) log.error("InvocationTargetException:"+e.getMessage());
 			e.printStackTrace();
