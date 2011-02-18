@@ -71,6 +71,7 @@ li {
 <li><a href="${security}" target="main"><fmt:message key="Transaction"/></a></li>
 </c:if>
 
+<<<<<<< HEAD
 </ul>
 </c:if>
 
@@ -87,6 +88,8 @@ li {
 
 <li><a href="${warehouse}" target="main"><fmt:message key="Search"/></a></li>
 
+=======
+>>>>>>> ef3ee84a0ca1c083f101a23fc0aab081662805d4
 </ul>
 </c:if>
 
