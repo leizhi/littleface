@@ -157,6 +157,11 @@
 			<result name="sale">/jsp/transaction/sale.jsp</result>
 			<result name="buy">/jsp/transaction/buy.jsp</result>
 		</action>
-
+		
+		<sample type="session" key="UserSessionKey" enable="true">
+			<allow name="" method=""/>
+		</sample>
+		
+		<plugins name="Auth" enable="true"/>
 	</package>
 </littleface>

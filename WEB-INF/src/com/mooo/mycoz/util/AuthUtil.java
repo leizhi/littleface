@@ -42,11 +42,18 @@ public class AuthUtil {
 		}
 		return factory;
 	}
+	
+	private boolean enable = false;
+	private ConfigureUtil conf = ConfigureUtil.getInstance();
 
 	private AuthUtil() {
-		parseXML();
-		parseDatabase();
-		refresh();
+		enable = conf.isEnableAuth();
+		
+		if(enable){
+			parseXML();
+			parseDatabase();
+			refresh();
+		}
 	}
 
 	private Map<String, ActionNode> xmlMap;
@@ -293,7 +300,7 @@ public class AuthUtil {
 	public Boolean checkAuth(Integer userId,String action,String method) {
 		try {
 
-			if (userId == 1)
+			if ( !enable || userId == 1)
 				return true;
 
 			MultiDBObject mdobject = new MultiDBObject();

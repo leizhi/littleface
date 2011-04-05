@@ -20,9 +20,12 @@ public class CacheManager {
     
     protected int cacheSize=0;
 
+    private ConfigureUtil conf;
+    
     private CacheManager() {
-
-    	caches = ConfigureUtil.getInstance().confCache();
+    	conf = ConfigureUtil.getInstance();
+    	
+    	caches = conf.getCaches();
     	System.out.println("caches.size="+caches.size());
 		caches.put((caches.size()+1)+"", new UserPermsCache(128 * K,1 * HOUR));
     }

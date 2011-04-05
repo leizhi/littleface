@@ -3,8 +3,6 @@ package com.mooo.mycoz.util;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
-//import java.util.regex.Matcher;
-//import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,9 +60,7 @@ public class ActionServlet extends HttpServlet {
 		conf = ConfigureUtil.getInstance();
 		conf.setCacheFile(prefix + confDir +"/myconfig.xml");
 		conf.setMvcFile(prefix +  confDir +"/myconfig.xml");
-
-		conf.conf();
-		conf.confCache();
+		conf.configure();
 		
 		// get mvc configure
 		actionMap = conf.getActionMap();
@@ -90,37 +86,64 @@ public class ActionServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		
 		try {
+			String accessPath = "";
+			String execPath = "";
+
 			String execAction = "";
 			String execResult = "";
 			String execMethod = "";
 			String resultMethod ="";
 			
-			String accessPath = request.getServletPath();
-			
-			if(log.isDebugEnabled())log.debug("accessPath:" + accessPath);
-			
-			String execPath = ActionUtil.execPath(accessPath);
-
-			//check sample action
-			HttpSession session = request.getSession(true);
-			Integer userId = (Integer) session.getAttribute(USER_SESSION_KEY);
-			boolean isAuthenticated = (null != userId);
-			
-			if (!isAuthenticated) {
-				if(!execPath.equals("Login") || !execPath.equals("Index"))
-					execPath="Login";
-			}
-			
-			//if (execPath == null)
-			//	execPath = request.getParameter("action");
+			accessPath = request.getServletPath();
+			execPath = ActionUtil.execPath(accessPath);
 			execMethod = request.getParameter("method");
+
+			if(log.isDebugEnabled())log.debug("accessPath:" + accessPath);
 			if(log.isDebugEnabled())log.debug("execPath:" + execPath);
 			if(log.isDebugEnabled())log.debug("execMethod:" + execMethod);
 
-			// check advanced permissions
-			if(isAuthenticated){
-				if(!auth.checkAuth(userId, execPath, execMethod) && (!execPath.equals("Login") || !execPath.equals("Index")) ){
-					execPath="Login";
+			//check allow url
+			boolean allow = false;
+			
+			if(execPath.equals("Login") || execPath.equals("Index")){
+				allow = true;
+			}
+			
+			//check sample action for configure
+			if(conf.isEnableSample() && !allow){
+				HttpSession session = request.getSession(true);
+				Object sampleValue = session.getAttribute(conf.getSampleKey());
+				if(log.isDebugEnabled())log.debug("sampleValue:" + sampleValue);
+
+				boolean allowSample = sampleValue != null;
+				
+				if (!allowSample) {
+					execPath = "Login";
+					execMethod = "promptLogin";
+				}
+				//
+				
+				if(log.isDebugEnabled())log.debug("execPath:" + execPath);
+				if(log.isDebugEnabled())log.debug("execMethod:" + execMethod);
+
+				// check advanced permissions
+				if(conf.isEnableAuth() && allowSample){
+					Integer userId = (Integer) sampleValue;
+					
+					if(log.isDebugEnabled())log.debug("userId:" + userId);
+					if(log.isDebugEnabled())log.debug("execPath Login:" + execPath.equals("Login"));
+					if(log.isDebugEnabled())log.debug("execPath Index:" + execPath.equals("Index"));
+					if(log.isDebugEnabled())log.debug("checkAuth:" + !auth.checkAuth(userId, execPath, execMethod));
+
+					if(!auth.checkAuth(userId, execPath, execMethod) ){
+						if(log.isDebugEnabled())log.debug("Note Auth!");
+
+						execPath="Login";
+						execMethod="promptLogin";
+						
+						response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+						response.setHeader("Location",request.getContextPath()+"/jsp/error.jsp");
+					}
 				}
 			}
 			
@@ -161,7 +184,9 @@ public class ActionServlet extends HttpServlet {
 			execResult = results.get(execMethod);
 
 			if(log.isDebugEnabled())log.debug("========exec end=======");
-			
+			if(log.isDebugEnabled())log.debug("resultMethod="+resultMethod);
+			if(log.isDebugEnabled())log.debug("execResult="+execResult);
+
 			if(resultMethod != null){
 				// not success then exec return method and fowward jsp		
 				if(!resultMethod.equals("success")) {
@@ -188,15 +213,15 @@ public class ActionServlet extends HttpServlet {
 					
 				//}
 			}
+			//getServletContext().getRequestDispatcher("/jsp/error.jsp").forward(request,response);
+			//response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			//response.setHeader("Location",request.getContextPath()+"/Login.do");
 		} catch (NullPointerException e) {
 			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			if(log.isErrorEnabled()) log.error("NullPointerException:"+e.getMessage());
 			e.printStackTrace();
-			
-			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			response.setHeader("Location",request.getContextPath()+"/jsp/error.jsp");
 		} catch (InvocationTargetException e) {
 			if(log.isErrorEnabled()) log.error("InvocationTargetException:"+e.getMessage());
 			e.printStackTrace();
@@ -209,10 +234,6 @@ public class ActionServlet extends HttpServlet {
 		} catch (Throwable e) {
 			if(log.isErrorEnabled()) log.error("Throwable:"+e.getMessage());
 			e.printStackTrace();
-		}finally{
-			//getServletContext().getRequestDispatcher("/jsp/error.jsp").forward(request,response);
-			//response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-			//response.setHeader("Location",request.getContextPath()+"/Login.do");
 		}
 	}
 

@@ -16,7 +16,7 @@
             </layout>
     </appender>
     
-	<appender name="actionLog" class="org.apache.log4j.FileAppender">
+	<appender name="mycozLog" class="org.apache.log4j.FileAppender">
 		<param name="File" value="logs/action.log"/>
 		<param name="Append" value="true"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -41,9 +41,9 @@
 	</category>
 	
     <!-- The root for struts -->
-    <category name="com.mooo.mycoz.action" additivity="false">
+    <category name="com.mooo.mycoz" additivity="false">
         <priority value="debug"/>
-        <appender-ref ref="actionLog"/>
+        <appender-ref ref="mycozLog"/>
     </category>
 
 	<!-- the one and only root category -->

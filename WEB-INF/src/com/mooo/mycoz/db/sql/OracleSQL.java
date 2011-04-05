@@ -83,4 +83,9 @@ public class OracleSQL extends AbstractSQL{
 			setLimitBy(new StringBuilder(" rownum >="+offsetRecord+" AND rownum <="+maxRecords+offsetRecord));
 			setByLimit(true);
 	}
+	
+	public void refresh(Object entity,String prefix){
+		refresh(null,StringUtils.upperToPrefix(entity.getClass().getSimpleName(),prefix));
+		entityFillField(entity);
+	}
 }

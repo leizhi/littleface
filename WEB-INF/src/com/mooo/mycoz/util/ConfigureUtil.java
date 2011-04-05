@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,6 +35,17 @@ public class ConfigureUtil {
 	private String mvcFile = "/myconfig.xml";
 	//private String poolFile = "/mypool.xml";
 
+	private HashMap<String, Cache> caches;
+	
+	private boolean enableAuth;
+	
+	private Map<String, ActionNode> actionMap;
+	
+	private boolean enableSample;
+	private String sampleKey = "UserSessionKey";
+	
+	private Vector <String> allowUrl = new Vector<String>();
+	
 	public static ConfigureUtil getInstance() {
 
 		if (factory == null) {
@@ -48,18 +60,11 @@ public class ConfigureUtil {
 
 	private ConfigureUtil() {
 		flush();
+		
+		enableAuth = false;
+		enableSample = false;
 	}
-
-	public void flush() {
-		try {
-			cacheStream = new FileInputStream(cacheFile);
-			mvcStream = new FileInputStream(mvcFile);
-		} catch (FileNotFoundException e) {
-			cacheStream = getClass().getResourceAsStream(cacheFile);
-			mvcStream = getClass().getResourceAsStream(mvcFile);
-		}
-	}
-
+	
 	public String getCacheFile() {
 		return cacheFile;
 	}
@@ -76,8 +81,65 @@ public class ConfigureUtil {
 		this.mvcFile = mvcFile;
 	}
 
-	public HashMap<String, Cache> confCache() {
-		HashMap<String, Cache> caches = new HashMap<String, Cache>();
+	public HashMap<String, Cache> getCaches() {
+		return caches;
+	}
+
+	public void setCaches(HashMap<String, Cache> caches) {
+		this.caches = caches;
+	}
+
+	public boolean isEnableAuth() {
+		return enableAuth;
+	}
+
+	public void setEnableAuth(boolean enableAuth) {
+		this.enableAuth = enableAuth;
+	}
+
+	public Map<String, ActionNode> getActionMap() {
+		return actionMap;
+	}
+
+	public void setActionMap(Map<String, ActionNode> actionMap) {
+		this.actionMap = actionMap;
+	}
+
+	public String getSampleKey() {
+		return sampleKey;
+	}
+
+	public void setSampleKey(String sampleKey) {
+		this.sampleKey = sampleKey;
+	}
+
+	public Vector<String> getAllowUrl() {
+		return allowUrl;
+	}
+
+	public void setAllowUrl(Vector<String> allowUrl) {
+		this.allowUrl = allowUrl;
+	}
+
+	public boolean isEnableSample() {
+		return enableSample;
+	}
+
+	public void setEnableSample(boolean enableSample) {
+		this.enableSample = enableSample;
+	}
+
+	public void flush() {
+		try {
+			cacheStream = new FileInputStream(cacheFile);
+			mvcStream = new FileInputStream(mvcFile);
+		} catch (FileNotFoundException e) {
+			cacheStream = getClass().getResourceAsStream(cacheFile);
+			mvcStream = getClass().getResourceAsStream(mvcFile);
+		}
+	}
+
+	public void configure() {
 		try {
 			flush();
 
@@ -92,10 +154,17 @@ public class ConfigureUtil {
 							return null;
 						}
 					});
+			if(log.isDebugEnabled()) log.debug("SAXReader start");
 			
-			Document doc = saxReader.read(cacheStream);
-			Element root = doc.getRootElement();
-
+			Document doc;
+			Element root;
+			
+			// cache configure
+			doc = saxReader.read(cacheFile);
+			root = doc.getRootElement();
+			
+			caches = new HashMap<String, Cache>();
+			
 			Iterator<?> itrCache = root.selectNodes("package/cache").iterator();
 			Element cacheNode;
 			String value = "K";
@@ -125,47 +194,14 @@ public class ConfigureUtil {
 				caches.put(cacheNode.attributeValue("name"), new Cache(size,time));
 			}
 
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
-		return caches;
-	}
-
-	private Map<String, ActionNode> actionMap;
-
-	public Map<String, ActionNode> getActionMap() {
-		return actionMap;
-	}
-
-	public void conf() {
-		try {
-			if (log.isDebugEnabled())
-				log.debug("ConfigureUtil conf loading..");
-			if (log.isDebugEnabled())
-				log.debug("ConfigureUtil conf patch:" + getMvcFile());
-
-			flush();
-
-			SAXReader saxReader = new SAXReader();
-			saxReader.setEntityResolver(
-					new EntityResolver() {
-						public InputSource resolveEntity(String publicId,String systemId) {
-							if (publicId.equals("-//Apache Software Foundation//DTD Struts Configuration 2.0//EN")) {
-								InputStream in = getClass().getResourceAsStream("/struts-2.0.dtd");
-								return new InputSource(in);
-							}
-							return null;
-						}
-					});
-			
-			Document doc = saxReader.read(mvcStream);
-			Element root = doc.getRootElement();
+			//mvc configure
+			doc = saxReader.read(mvcStream);
+			root = doc.getRootElement();
 
 			// parse action methods
 			actionMap = new HashMap<String, ActionNode>();
 			// String clzName = null;
-			Iterator<?> itrAction = root.selectNodes("package/action")
-					.iterator();
+			Iterator<?> itrAction = root.selectNodes("package/action").iterator();
 
 			Element actionNode;
 			Element methodNode;
@@ -184,20 +220,78 @@ public class ConfigureUtil {
 				for (Iterator<?> itrResult = actionNode.selectNodes("result")
 						.iterator(); itrResult.hasNext();) {
 					methodNode = (Element) itrResult.next();
-					aNode.addResult(methodNode.attributeValue("name"),
-							methodNode.getTextTrim());
+					aNode.addResult(methodNode.attributeValue("name"),methodNode.getTextTrim());
 					// String forwardName = methodNode.attributeValue("name");
 					// System.out.println(methodNode.getTextTrim());
 					// System.out.println(methodNode.getStringValue());
 				}
 				actionMap.put(action, aNode);
 			}
+			
+			// auth configure
+//			doc = saxReader.read(mvcStream);
+//			root = doc.getRootElement();
+
+			Iterator<?> itrAuth = root.selectNodes("package/plugins").iterator();
+			Element plugNode;
+			String plugName;
+			while (itrAuth.hasNext()) {
+				plugNode = (Element) itrAuth.next();
+				plugName = plugNode.attributeValue("name");
+				if(plugName.equals("Auth")){
+					value = plugNode.attributeValue("enable");
+					if(value.equals("true")){
+						enableAuth = true;
+					}else{
+						enableAuth = false;
+					}
+				}
+			}
+			
+			// sample configure
+//			doc = saxReader.read(cacheStream);
+//			root = doc.getRootElement();
+
+			itrCache = root.selectNodes("package/sample").iterator();
+			Element node;
+			String typeName;
+			String url="";
+
+			while (itrCache.hasNext()) {
+				node = (Element) itrCache.next();
+				typeName = node.attributeValue("type");
+				
+				value = node.attributeValue("enable");
+				if(value.equals("true")){
+					enableSample = true;
+				}else{
+					enableSample = false;
+				}
+				
+				if(typeName.equals("session")){
+					sampleKey = node.attributeValue("key");
+					Iterator<?> itrAllow = node.selectNodes("allow").iterator();
+					while (itrAllow.hasNext()) {
+						Element allow = (Element) itrAllow.next();;
+						value = allow.attributeValue("name");
+						
+						if(value !=null && !value.equals("")){
+							url=value;
+							if(url !=null && !url.equals("")){
+								value = allow.attributeValue("method");
+								if(value !=null && !value.equals("")){
+									url += "?"+value;
+								}
+							}
+						}
+					}
+				}
+			}
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-
 	}
-
+	
 	public void printConf() {
 		try {
 			Iterator<?> iterator;

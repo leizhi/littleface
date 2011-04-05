@@ -17,13 +17,15 @@ import javax.servlet.http.HttpSession;
 public class JspFilter implements Filter {
 
 	public static final String USER_SESSION_KEY = "UserSessionKey";
+	private static ConfigureUtil conf;
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		filterConfig.getInitParameter(USER_SESSION_KEY);
+		conf = ConfigureUtil.getInstance();
 	}
 
 	public void destroy() {
-
+		conf = null;
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response,
@@ -43,26 +45,40 @@ public class JspFilter implements Filter {
 				Pattern p = Pattern.compile("\\.jsp");
 				Matcher m = p.matcher(accessPath);
 				boolean isJsp = m.find();
+				
+				boolean isAuthenticated = true;
 
-				Integer userID = (Integer) session.getAttribute(USER_SESSION_KEY);
-				boolean isAuthenticated = (null != userID && userID >0);
-
-				System.out.println("--------filter start-------------");
-				System.out.println("filter contextPath:" + contextPath);
-				System.out.println("filter accessPath:" + accessPath);
-				System.out.println("filter execPath:" + ActionUtil.execPath(accessPath));
-				System.out.println("filter isJsp:" + isJsp);
-				System.out.println("--------filter end-------------");
-
+				//check sample action for configure
+				if(conf.isEnableSample()){
+//					Object sampleValue = session.getAttribute(conf.getSampleKey());
+//					if (sampleValue == null) {
+//						isAuthenticated = false;
+//					}
+//
+//					// check advanced permissions
+//					if(conf.isEnableAuth() ){
+//						Integer userId = (Integer) session.getAttribute(conf.getSampleKey());
+//						isAuthenticated = (null != userId && userId >0);
+//					}
+	
+					Integer userId = (Integer) session.getAttribute(conf.getSampleKey());
+					isAuthenticated = (null != userId && userId >0);
+					
+					System.out.println("--------filter start-------------");
+					System.out.println("filter contextPath:" + contextPath);
+					System.out.println("filter accessPath:" + accessPath);
+					System.out.println("filter execPath:" + ActionUtil.execPath(accessPath));
+					System.out.println("filter isJsp:" + isJsp);
+					System.out.println("--------filter end-------------");
+				}
+				
 				if (!isAuthenticated) {
 					hResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 					if (isJsp) {
 						hResponse.setHeader("Location", contextPath + "/Login.do");
 					}
 				}
-
 			}
-			
 		} catch (Exception e) {
 			System.out.println("Exception:" + e.getMessage());
 			e.printStackTrace();

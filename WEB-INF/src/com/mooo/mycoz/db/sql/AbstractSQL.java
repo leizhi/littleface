@@ -136,12 +136,14 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		searchSql = new StringBuilder("SELECT * FROM ");
 		countSql = new StringBuilder("SELECT COUNT(*) AS total FROM ");
 
-		saveSql.append(catalog + ".");
-		updateSql.append(catalog + ".");
-		deleteSql.append(catalog + ".");
-		searchSql.append(catalog + ".");
-		countSql.append(catalog + ".");
-
+		if(catalog != null) {
+			saveSql.append(catalog + ".");
+			updateSql.append(catalog + ".");
+			deleteSql.append(catalog + ".");
+			searchSql.append(catalog + ".");
+			countSql.append(catalog + ".");
+		}
+		
 		saveSql.append(table);
 		updateSql.append(table + " SET ");
 		deleteSql.append(table);
