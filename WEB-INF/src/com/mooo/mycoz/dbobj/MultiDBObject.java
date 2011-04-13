@@ -30,7 +30,7 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 		return searchAndRetrieveList(null);
 	}
 	
-	public List searchAndRetrieveListMap(Connection connection) throws SQLException{
+	public List<Object> searchAndRetrieveListMap(Connection connection) throws SQLException{
 		long startTime = System.currentTimeMillis();
 
 		List<Object> retrieveList = null;
@@ -74,7 +74,7 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 					int type = DbUtil.type(myConn, catalog, table,StringUtils.upperToPrefix(column, null));
 
 					if(allRow.containsKey(StringUtils.toLowerFirst(table))){
-						Map bean = (Map)allRow.get(StringUtils.toLowerFirst(table));
+						Map<Object,Object> bean = (Map<Object,Object>) allRow.get(StringUtils.toLowerFirst(table));
 						
 						if(type == Types.TIMESTAMP){
 							bean.put(rsmd.getColumnName(i), result.getTimestamp(i));
@@ -148,7 +148,7 @@ public class MultiDBObject extends DbMultiBulildSQL implements MultiSQLProcess{
 			while (result.next()) {
 				
 				Map<String, Object> allRow = new HashMap<String, Object>();
-				for (Entry<String, Class>  entry:objs.entrySet()) {
+				for (Entry<String, Class<?>>  entry:objs.entrySet()) {
 					key = entry.getKey();
 					
 					Class<?> cls = objs.get(key);

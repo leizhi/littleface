@@ -63,7 +63,7 @@ public class BeanUtil {
 			Object valueObj = valueOf.invoke(cl, new Object[] { value });
 			setMethod.invoke(bean, new Object[] { valueObj });
 		} else if(cl == java.util.Date.class || cl == java.sql.Date.class){
-			Object bindDate = new Date(value);
+			Object bindDate = new Date( new Long(value));
 			setMethod.invoke(bean, new Object[] { bindDate });
 		}
 	}
@@ -144,7 +144,8 @@ public class BeanUtil {
 		
 		if (cls == java.util.Date.class || cls == java.sql.Date.class) {
 			// 设置普通系统对象的属性
-			Date dateObj = new Date(value);
+			Object dateObj = new Date( new Long(value));
+
 			Method setMethod = bean.getClass().getMethod("set" + funName,new Class[] { cls });
 			// 把对象填充
 			setMethod.invoke(bean, new Object[] { dateObj });
