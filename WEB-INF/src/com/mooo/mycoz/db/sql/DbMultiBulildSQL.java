@@ -2,10 +2,8 @@ package com.mooo.mycoz.db.sql;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,14 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.util.BeanUtil;
-import com.mooo.mycoz.util.DbUtil;
 import com.mooo.mycoz.util.StringUtils;
 
 public class DbMultiBulildSQL implements MultiSQLProcess {
 
 	public String catalog;
-	public Map<String,Class> objs;
+	public Map<String,Class<?>> objs;
 	public Map<String,String> tables;
 	public List<String> whereKey;
 	public List<String> retrieveFields;
@@ -32,7 +28,7 @@ public class DbMultiBulildSQL implements MultiSQLProcess {
 	
 	public DbMultiBulildSQL() {
 		catalog = null;
-		objs = new HashMap<String,Class>();
+		objs = new HashMap<String,Class<?>>();
 		tables = new HashMap<String,String>();
 		whereKey = new ArrayList<String>();
 		retrieveFields = new ArrayList<String>();

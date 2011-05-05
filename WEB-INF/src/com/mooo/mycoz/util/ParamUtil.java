@@ -83,11 +83,11 @@ public class ParamUtil {
 		}
 	}
 
-	public static void bindData(HttpServletRequest request, Map beans) {
+	public static void bindData(HttpServletRequest request, Map<Object,Object> beans) {
 		bindData(request, beans, null, null);
 	}
 	
-	public static void bindData(HttpServletRequest request, Map beans,
+	public static void bindData(HttpServletRequest request, Map<Object,Object> beans,
 			List<?> excludes, String prefix) {
 		
 		Enumeration<?> enums = request.getParameterNames();
@@ -119,11 +119,11 @@ public class ParamUtil {
 					String objName = name.substring(0, start);
 					String propertyName = name.substring(start + 1, name.length());
 					
-					Map subMap = (Map) beans.get(objName);
+					Map<Object,Object> subMap = (Map<Object,Object>) beans.get(objName);
 					if(subMap != null){
 						subMap.put(propertyName, value);
 					} else {
-						subMap = new HashMap();
+						subMap = new HashMap<Object,Object>();
 						subMap.put(propertyName, value);
 						
 						beans.put(objName, subMap);
