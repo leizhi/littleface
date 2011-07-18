@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mooo.mycoz.common.StringUtils;
+import com.mooo.mycoz.db.Transaction;
 import com.mooo.mycoz.dbobj.mycozBranch.AccessLog;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.GroupMember;
@@ -18,8 +20,6 @@ import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
 import com.mooo.mycoz.util.SessionCounter;
-import com.mooo.mycoz.util.StringUtils;
-import com.mooo.mycoz.util.Transaction;
 
 public class LoginAction extends BaseSupport {
 

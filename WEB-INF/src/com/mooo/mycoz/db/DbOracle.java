@@ -9,10 +9,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mooo.mycoz.common.StringUtils;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.OracleSQL;
-import com.mooo.mycoz.util.BeanUtil;
-import com.mooo.mycoz.util.StringUtils;
 
 public class DbOracle extends OracleSQL implements DbProcess{
 
@@ -64,13 +63,13 @@ public class DbOracle extends OracleSQL implements DbProcess{
 					type = rsmd.getColumnType(i);
 					
 					if(type == Types.TIMESTAMP){
-						BeanUtil.bindProperty(bean,
-								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
+						DbBridgingBean.bindProperty(bean,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),"_"),
 								result.getTimestamp(i));
 					}else {
-						BeanUtil.bindProperty(bean,
-								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
-								result.getString(i));	
+						DbBridgingBean.bindProperty(bean,
+								StringUtils.prefixToUpper(rsmd.getColumnName(i),"_"),
+								result.getString(i));
 					}
 
 				}
@@ -336,11 +335,11 @@ public class DbOracle extends OracleSQL implements DbProcess{
 					type = rsmd.getColumnType(i);
 					
 					if(type == Types.TIMESTAMP){
-						BeanUtil.bindProperty(entity,
+						DbBridgingBean.bindProperty(entity,
 								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
 								result.getTimestamp(i));
 					}else {
-						BeanUtil.bindProperty(entity,
+						DbBridgingBean.bindProperty(entity,
 								StringUtils.prefixToUpper(rsmd.getColumnName(i),null),
 								result.getString(i));
 					}

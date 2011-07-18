@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.xml.DOMConfigurator;
 
 import com.mooo.mycoz.cache.CacheManager;
+import com.mooo.mycoz.common.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

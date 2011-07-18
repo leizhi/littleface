@@ -58,7 +58,7 @@ import java.sql.*;
 import javax.sql.DataSource;
 import javax.naming.InitialContext;
 
-import com.mooo.mycoz.util.PropertyManager;
+import com.mooo.mycoz.db.DbConfig;
 
 /**
  * Central manager of database connections. All methods are static so that they
@@ -71,7 +71,7 @@ public class DbConnectionManager {
     private static boolean AppServerPooler = false;
     private static boolean checkedPooler = false;
     private static DataSource appServerSource;
-    public static final String CONTEXT_JDBC_NAME=PropertyManager.getProperty("JNDI.dataprovider");
+    public static final String CONTEXT_JDBC_NAME=DbConfig.getProperty("JNDI.dataprovider");
 
     /**
      * Returns a database connection from the currently active connection
@@ -96,7 +96,7 @@ public class DbConnectionManager {
                     //Attempt to load the connection provider classname as
                     //a Yazd property.
                     String className =
-                        PropertyManager.getProperty("connectionProvider.className");
+                        DbConfig.getProperty("connectionProvider.className");
                     if (className != null) {
                         //Attempt to load the class.
                         try {

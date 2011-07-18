@@ -1,14 +1,12 @@
 package com.mooo.mycoz.db;
 
-import com.mooo.mycoz.util.PropertyManager;
-
 public class DbFactory {
 //	private static Object initLock = new Object();
 	private static String className = "com.mooo.mycoz.db.DbMysql";
 	private static DbProcess factory = null;
 
 	public static DbProcess getInstance() {
-		String classNameProp = PropertyManager.getProperty("DbFactory.className");
+		String classNameProp = DbConfig.getProperty("DbFactory.className");
 		if (classNameProp != null) {
 			className = classNameProp;
 		}

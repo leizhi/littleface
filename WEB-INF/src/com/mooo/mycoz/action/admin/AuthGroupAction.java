@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.component.Page;
-import com.mooo.mycoz.dbobj.MultiDBObject;
+import com.mooo.mycoz.db.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozShared.Action;
 import com.mooo.mycoz.dbobj.mycozShared.AuthGroup;
 import com.mooo.mycoz.dbobj.mycozShared.Method;

@@ -12,6 +12,7 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.util.Date;
 
+import com.mooo.mycoz.common.StringUtils;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 
 public class BeanUtil {

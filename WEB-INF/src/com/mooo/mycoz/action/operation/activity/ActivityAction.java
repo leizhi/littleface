@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mooo.mycoz.action.BaseSupport;
 import com.mooo.mycoz.component.Page;
-import com.mooo.mycoz.dbobj.MultiDBObject;
+import com.mooo.mycoz.db.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.Forum;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;

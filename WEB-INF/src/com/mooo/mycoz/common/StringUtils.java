@@ -54,7 +54,7 @@
  * individuals on behalf of CoolServlets.com. For more information
  * on CoolServlets.com, please see <http://www.Yasna.com>.
  */
-package com.mooo.mycoz.util;
+package com.mooo.mycoz.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -14,11 +14,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.common.StringUtils;
+import com.mooo.mycoz.db.Transaction;
 import com.mooo.mycoz.dbobj.mycozBranch.FileInfo;
 import com.mooo.mycoz.dbobj.mycozBranch.FileTree;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.StringUtils;
-import com.mooo.mycoz.util.Transaction;
 import com.mooo.mycoz.util.TreeUtil;
 import com.mooo.mycoz.util.UploadFile;
 

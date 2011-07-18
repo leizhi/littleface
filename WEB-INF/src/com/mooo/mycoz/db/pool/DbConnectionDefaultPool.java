@@ -114,7 +114,7 @@ import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mooo.mycoz.util.PropertyManager;
+import com.mooo.mycoz.db.DbConfig;
 
 /**
  * Default Yazd connection provider. It uses the excellent connection pool
@@ -310,21 +310,21 @@ public class DbConnectionDefaultPool extends DbConnectionProvider {
 	 * Load whatever properties that already exist.
 	 */
 	private void loadProperties() {
-		String driver = PropertyManager
+		String driver = DbConfig
 				.getProperty("DbConnectionDefaultPool.driver");
-		String server = PropertyManager
+		String server = DbConfig
 				.getProperty("DbConnectionDefaultPool.server");
-		String username = PropertyManager
+		String username = DbConfig
 				.getProperty("DbConnectionDefaultPool.username");
-		String password = PropertyManager
+		String password = DbConfig
 				.getProperty("DbConnectionDefaultPool.password");
-		String minConnections = PropertyManager
+		String minConnections = DbConfig
 				.getProperty("DbConnectionDefaultPool.minConnections");
-		String maxConnections = PropertyManager
+		String maxConnections = DbConfig
 				.getProperty("DbConnectionDefaultPool.maxConnections");
-		String logPath = PropertyManager
+		String logPath = DbConfig
 				.getProperty("DbConnectionDefaultPool.logPath");
-		String connectionTimeout = PropertyManager
+		String connectionTimeout = DbConfig
 				.getProperty("DbConnectionDefaultPool.connectionTimeout");
 
 		if (driver != null) {
@@ -354,21 +354,21 @@ public class DbConnectionDefaultPool extends DbConnectionProvider {
 	}
 
 	private void saveProperties() {
-		PropertyManager.setProperty("DbConnectionDefaultPool.driver",
+		DbConfig.setProperty("DbConnectionDefaultPool.driver",
 				props.getProperty("driver"));
-		PropertyManager.setProperty("DbConnectionDefaultPool.server",
+		DbConfig.setProperty("DbConnectionDefaultPool.server",
 				props.getProperty("server"));
-		PropertyManager.setProperty("DbConnectionDefaultPool.username",
+		DbConfig.setProperty("DbConnectionDefaultPool.username",
 				props.getProperty("username"));
-		PropertyManager.setProperty("DbConnectionDefaultPool.password",
+		DbConfig.setProperty("DbConnectionDefaultPool.password",
 				props.getProperty("password"));
-		PropertyManager.setProperty("DbConnectionDefaultPool.minConnections",
+		DbConfig.setProperty("DbConnectionDefaultPool.minConnections",
 				props.getProperty("minConnections"));
-		PropertyManager.setProperty("DbConnectionDefaultPool.maxConnections",
+		DbConfig.setProperty("DbConnectionDefaultPool.maxConnections",
 				props.getProperty("maxConnections"));
-		PropertyManager.setProperty("DbConnectionDefaultPool.logPath",
+		DbConfig.setProperty("DbConnectionDefaultPool.logPath",
 				props.getProperty("logPath"));
-		PropertyManager.setProperty(
+		DbConfig.setProperty(
 				"DbConnectionDefaultPool.connectionTimeout",
 				props.getProperty("connectionTimeout"));
 	}

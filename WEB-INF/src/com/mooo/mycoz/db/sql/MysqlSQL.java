@@ -4,13 +4,14 @@ package com.mooo.mycoz.db.sql;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mooo.mycoz.util.DbUtil;
-import com.mooo.mycoz.util.ReflectUtil;
-import com.mooo.mycoz.util.StringUtils;
+import com.mooo.mycoz.common.ReflectUtil;
+import com.mooo.mycoz.common.StringUtils;
+import com.mooo.mycoz.db.DbUtil;
 
 public class MysqlSQL extends AbstractSQL {
 
@@ -89,5 +90,12 @@ public class MysqlSQL extends AbstractSQL {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void refresh(Object entity){
+		refresh(entity,null);
+	}
+	
+	public String selfDateSQL(Date date) {
+		return "date'"+new SimpleDateFormat("yyyy-MM-dd").format(date) +"',";
+	}
 }

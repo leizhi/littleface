@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mooo.mycoz.common.StringUtils;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
-import com.mooo.mycoz.util.StringUtils;
 
 public class DbMultiBulildSQL implements MultiSQLProcess {
 

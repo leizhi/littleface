@@ -2,14 +2,14 @@ package com.mooo.mycoz.test;
 
 import java.util.Date;
 
+import com.mooo.mycoz.common.StringUtils;
 import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.db.Transaction;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserInfo;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.StringUtils;
-import com.mooo.mycoz.util.Transaction;
 
 public class InTest {
 

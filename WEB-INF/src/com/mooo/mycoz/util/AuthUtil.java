@@ -13,7 +13,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.db.DbFactory;
 import com.mooo.mycoz.db.DbProcess;
-import com.mooo.mycoz.dbobj.MultiDBObject;
+import com.mooo.mycoz.db.MultiDBObject;
+import com.mooo.mycoz.db.Transaction;
 import com.mooo.mycoz.dbobj.mycozBranch.GroupMember;
 import com.mooo.mycoz.dbobj.mycozBranch.RoleMember;
 import com.mooo.mycoz.dbobj.mycozBranch.User;

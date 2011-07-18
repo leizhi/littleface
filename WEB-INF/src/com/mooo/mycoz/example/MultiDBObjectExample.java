@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mooo.mycoz.component.Page;
-import com.mooo.mycoz.dbobj.MultiDBObject;
+import com.mooo.mycoz.db.MultiDBObject;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.dbobj.mycozBranch.UserImage;

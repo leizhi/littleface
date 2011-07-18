@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.mooo.mycoz.util.StringUtils;
+import com.mooo.mycoz.common.StringUtils;
 
 /**
 * 功能说明：访问指定的URL并检查返回结果。

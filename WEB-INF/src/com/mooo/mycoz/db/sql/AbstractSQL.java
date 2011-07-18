@@ -11,10 +11,10 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mooo.mycoz.common.StringUtils;
+import com.mooo.mycoz.db.DbUtil;
 import com.mooo.mycoz.db.ExtentField;
 import com.mooo.mycoz.db.Field;
-import com.mooo.mycoz.util.DbUtil;
-import com.mooo.mycoz.util.StringUtils;
 
 public abstract class AbstractSQL implements SQLProcess, Serializable{
 	
@@ -55,6 +55,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 	private Map<String, Object> columnValues;
 	
 	private Map<String, ExtentField<?>> extentValues;
+
+	private String prefix;
 
 	//////////////////////////////
 	public String getCatalog() {
@@ -97,10 +99,15 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		this.columnValues = columnValues;
 	}
 	
-	///////////////////////////
-	public void refresh(Object entity){
-		refresh(entity,null);
+	public String getPrefix() {
+		return prefix;
 	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	abstract public void refresh(Object entity);
 	
 	public void refresh(Object entity,String prefix){
 		refresh(StringUtils.getCatalog(entity.getClass(),1),
@@ -314,6 +321,8 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 		byOrder = true;
 	}
 	
+	abstract public String selfDateSQL(Date date);
+
 	public String addSQL(Object entity) {
 		refresh(entity);
 		
@@ -341,7 +350,7 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 					if(field.getType()==Types.TIMESTAMP){
 						saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(((Date)obj)) +"',");
 					} else {
-						saveValue.append("date'"+new SimpleDateFormat("yyyy-MM-dd ").format(((Date)obj)) +"',");
+						saveValue.append(selfDateSQL((Date)obj));
 					}
 				}else if(obj.getClass().isAssignableFrom(Double.class)){
 					saveValue.append(obj+",");
@@ -561,8 +570,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			for(String eKey: extentValues.keySet()){
 				byWhere = true;
 
-				System.out.println("eKey="+eKey);
-				
 				ExtentField<?> extentField = extentValues.get(eKey);
 				obj = extentField.getStart();
 
@@ -720,8 +727,6 @@ public abstract class AbstractSQL implements SQLProcess, Serializable{
 			for(String eKey: extentValues.keySet()){
 				byWhere = true;
 
-				System.out.println("eKey="+eKey);
-				
 				ExtentField<?> extentField = extentValues.get(eKey);
 				obj = extentField.getStart();
 

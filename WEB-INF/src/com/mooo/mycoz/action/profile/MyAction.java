@@ -16,6 +16,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.common.StringUtils;
+import com.mooo.mycoz.db.Transaction;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.db.sql.DbMultiBulildSQL;
 import com.mooo.mycoz.dbobj.mycozBranch.AddressBook;
@@ -34,8 +36,6 @@ import com.mooo.mycoz.dbobj.mycozShared.WeightUnit;
 import com.mooo.mycoz.util.BeanUtil;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
-import com.mooo.mycoz.util.StringUtils;
-import com.mooo.mycoz.util.Transaction;
 import com.mooo.mycoz.util.UploadFile;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.mooo.mycoz.util;
+package com.mooo.mycoz.common;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

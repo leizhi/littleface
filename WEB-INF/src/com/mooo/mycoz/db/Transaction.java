@@ -1,4 +1,4 @@
-package com.mooo.mycoz.util;
+package com.mooo.mycoz.db;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -14,15 +14,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.action.BaseSupport;
+import com.mooo.mycoz.common.StringUtils;
 import com.mooo.mycoz.component.Page;
 import com.mooo.mycoz.db.DbProcess;
+import com.mooo.mycoz.db.Transaction;
 import com.mooo.mycoz.dbobj.mycozBranch.ForumThread;
 import com.mooo.mycoz.dbobj.mycozBranch.Message;
 import com.mooo.mycoz.dbobj.mycozBranch.User;
 import com.mooo.mycoz.util.IDGenerator;
 import com.mooo.mycoz.util.ParamUtil;
-import com.mooo.mycoz.util.StringUtils;
-import com.mooo.mycoz.util.Transaction;
 
 public class ForumThreadAction extends BaseSupport{
 	private static Log log = LogFactory.getLog(ForumThreadAction.class);

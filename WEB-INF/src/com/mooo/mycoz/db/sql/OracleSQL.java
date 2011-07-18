@@ -3,13 +3,14 @@ package com.mooo.mycoz.db.sql;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mooo.mycoz.util.DbUtil;
-import com.mooo.mycoz.util.ReflectUtil;
-import com.mooo.mycoz.util.StringUtils;
+import com.mooo.mycoz.common.ReflectUtil;
+import com.mooo.mycoz.common.StringUtils;
+import com.mooo.mycoz.db.DbUtil;
 
 public class OracleSQL extends AbstractSQL{
 
@@ -17,6 +18,10 @@ public class OracleSQL extends AbstractSQL{
 	 * 
 	 */
 	private static final long serialVersionUID = -3500897378220229889L;
+	
+	public OracleSQL(){
+		setPrefix("_");
+	}
 	
 	public String searchSQL(Object entity) {
 		return searchSQL(entity,"_");
@@ -84,8 +89,13 @@ public class OracleSQL extends AbstractSQL{
 			setByLimit(true);
 	}
 	
-	public void refresh(Object entity,String prefix){
-		refresh(null,StringUtils.upperToPrefix(entity.getClass().getSimpleName(),prefix));
+	public void refresh(Object entity){
+		refresh(null,StringUtils.upperToPrefix(entity.getClass().getSimpleName(),"_"));
 		entityFillField(entity);
 	}
+	
+	public String selfDateSQL(Date date) {
+		return "to_date('"+new SimpleDateFormat("yyyy-MM-dd").format(date) +"','yyyy-MM-dd'),";
+	}
+
 }

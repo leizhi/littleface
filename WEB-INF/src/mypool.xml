@@ -8,19 +8,26 @@
 <entry key="serverPort">10000</entry>
 
 <!-- configure mysql database -->
+ 
 <entry key="DbConnectionDefaultPool.driver">org.gjt.mm.mysql.Driver</entry>
 <entry key="DbConnectionDefaultPool.server">jdbc:mysql://127.0.0.1/mycozBranch?useUnicode=true&amp;characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;transformedBitIsBoolean=true</entry>
 <entry key="DbConnectionDefaultPool.username">mycoz</entry>
 <entry key="DbConnectionDefaultPool.password">xmlpj0#</entry>
 <entry key="DbFactory.className">com.mooo.mycoz.db.DbMysql</entry>
- 
-<!-- configure oracle database
+
+<!-- configure oracle database  -->
+<!-- 
 <entry key="DbConnectionDefaultPool.driver">oracle.jdbc.driver.OracleDriver</entry>
-<entry key="DbConnectionDefaultPool.server">jdbc:oracle:thin:@192.168.0.101:1521:orcl</entry>
-<entry key="DbConnectionDefaultPool.username">marketmoniter</entry>
-<entry key="DbConnectionDefaultPool.password">marketmonit</entry>
+<entry key="DbConnectionDefaultPool.server">jdbc:oracle:thin:@192.168.0.241:1521:orcl</entry>
+<entry key="DbConnectionDefaultPool.username">sddb</entry>
+<entry key="DbConnectionDefaultPool.password">weather</entry>
 <entry key="DbFactory.className">com.mooo.mycoz.db.DbOracle</entry>
  -->
+ 
+<entry key="Db.case">true</entry>
+<!-- choose for _,case default case-->
+<entry key="Db.humpInterval">_</entry>
+
 <entry key="yazdMailSubject">Default Yazd Subject</entry>
 <entry key="yazdMailSMTPServer">127.0.0.1</entry>
 <entry key="DbSearchIndexer.lastIndexed">1236019783316</entry>

@@ -16,13 +16,13 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mooo.mycoz.db.DbProcess;
 import com.mooo.mycoz.db.DbFactory;
+import com.mooo.mycoz.db.Transaction;
 import com.mooo.mycoz.db.pool.DbConnectionManager;
 import com.mooo.mycoz.dbobj.marketmoniter.BufferPrice;
 import com.mooo.mycoz.dbobj.marketmoniter.BufferTraffic;
 import com.mooo.mycoz.dbobj.marketmoniter.BusRemotes;
 import com.mooo.mycoz.dbobj.marketmoniter.BusSamples;
 import com.mooo.mycoz.util.IDGenerator;
-import com.mooo.mycoz.util.Transaction;
 
 public class CxrdTools {
 	private static Log log = LogFactory.getLog(CxrdTools.class);
